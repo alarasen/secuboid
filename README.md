@@ -1,5 +1,3 @@
-[![Java CI with Maven](https://github.com/Tabinol/secuboid-minecraft-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/Tabinol/secuboid-minecraft-plugin/actions/workflows/maven.yml)
-
 # For Secuboid 1.x.x
 [Secuboid 1 (stable) documentation](https://tabinol.github.io/secuboid-minecraft-plugin/)
 
