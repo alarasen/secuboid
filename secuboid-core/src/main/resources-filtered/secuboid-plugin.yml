@@ -1,28 +1,28 @@
 component-classes:
   # Commands
-  - me.tabinol.secuboid.core.commands.exec.CommandCancel
-  - me.tabinol.secuboid.core.commands.exec.CommandCreate
-  - me.tabinol.secuboid.core.commands.exec.CommandInfo
-  - me.tabinol.secuboid.core.commands.exec.CommandReload
-  - me.tabinol.secuboid.core.commands.exec.CommandSelect
-  - me.tabinol.secuboid.core.commands.exec.CommandSelectCuboid
-  - me.tabinol.secuboid.core.commands.exec.CommandSelectHere
-  - me.tabinol.secuboid.core.commands.exec.CommandTool
+  - app.secuboid.core.commands.exec.CommandCancel
+  - app.secuboid.core.commands.exec.CommandCreate
+  - app.secuboid.core.commands.exec.CommandInfo
+  - app.secuboid.core.commands.exec.CommandReload
+  - app.secuboid.core.commands.exec.CommandSelect
+  - app.secuboid.core.commands.exec.CommandSelectCuboid
+  - app.secuboid.core.commands.exec.CommandSelectHere
+  - app.secuboid.core.commands.exec.CommandTool
 
   # Flags
-  - me.tabinol.secuboid.core.flags.FlagDeclarations
+  - app.secuboid.core.flags.FlagDeclarations
 
   # Parameter values
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueEntityClass
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueEntityType
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueEverybody
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueEverything
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueNobody
-  - me.tabinol.secuboid.api.parameters.values.ParameterValuePlayer
-  - me.tabinol.secuboid.api.parameters.values.ParameterValueResident
+  - app.secuboid.api.parameters.values.ParameterValueEntityClass
+  - app.secuboid.api.parameters.values.ParameterValueEntityType
+  - app.secuboid.api.parameters.values.ParameterValueEverybody
+  - app.secuboid.api.parameters.values.ParameterValueEverything
+  - app.secuboid.api.parameters.values.ParameterValueNobody
+  - app.secuboid.api.parameters.values.ParameterValuePlayer
+  - app.secuboid.api.parameters.values.ParameterValueResident
 
   # Tables
-  - me.tabinol.secuboid.core.storage.tables.FlagTable
-  - me.tabinol.secuboid.core.storage.tables.LandTable
-  - me.tabinol.secuboid.core.storage.tables.ParameterValueTable
-  - me.tabinol.secuboid.core.storage.tables.ResidentTable
+  - app.secuboid.core.storage.tables.FlagTable
+  - app.secuboid.core.storage.tables.LandTable
+  - app.secuboid.core.storage.tables.ParameterValueTable
+  - app.secuboid.core.storage.tables.ResidentTable

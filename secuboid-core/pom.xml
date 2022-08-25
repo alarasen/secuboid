@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>me.tabinol.secuboid</groupId>
+        <groupId>app.secuboid</groupId>
         <artifactId>secuboid-parent</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
@@ -23,7 +23,7 @@
 
         <!-- Internal -->
         <dependency>
-            <groupId>me.tabinol.secuboid</groupId>
+            <groupId>app.secuboid</groupId>
             <artifactId>secuboid-api</artifactId>
         </dependency>
         <!-- Internal End -->
@@ -125,7 +125,7 @@
         <plugins>
 
             <plugin>
-                <groupId>me.tabinol.secuboid</groupId>
+                <groupId>app.secuboid</groupId>
                 <artifactId>secuboid-generator-maven-plugin</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
                 <executions>
@@ -138,10 +138,10 @@
                         <configuration>
                             <configSource>${project.basedir}/src/main/resources-filtered/config.yml</configSource>
                             <configJavaTemplate>
-                                ${project.basedir}/src-template/main/java/me/tabinol/secuboid/core/config/Config.java.template
+                                ${project.basedir}/src-template/main/java/app/secuboid/core/config/Config.java.template
                             </configJavaTemplate>
                             <configJavaTarget>
-                                ${project.basedir}/src-gen/main/java/me/tabinol/secuboid/core/config/Config.java
+                                ${project.basedir}/src-gen/main/java/app/secuboid/core/config/Config.java
                             </configJavaTarget>
                         </configuration>
                     </execution>
@@ -154,10 +154,10 @@
                         <configuration>
                             <messagesSource>${project.basedir}/src/main/resources-filtered/lang/en.yml</messagesSource>
                             <messagesJavaTemplate>
-                                ${project.basedir}/src-template/main/java/me/tabinol/secuboid/core/messages/MessagePaths.java.template
+                                ${project.basedir}/src-template/main/java/app/secuboid/core/messages/MessagePaths.java.template
                             </messagesJavaTemplate>
                             <messagesJavaTarget>
-                                ${project.basedir}/src-gen/main/java/me/tabinol/secuboid/core/messages/MessagePaths.java
+                                ${project.basedir}/src-gen/main/java/app/secuboid/core/messages/MessagePaths.java
                             </messagesJavaTarget>
                         </configuration>
                     </execution>
@@ -170,10 +170,10 @@
                         <configuration>
                             <flagsSource>${project.basedir}/src-template/generator/flags.yml</flagsSource>
                             <flagsJavaTemplate>
-                                ${project.basedir}/src-template/main/java/me/tabinol/secuboid/core/flags/FlagDeclarations.java.template
+                                ${project.basedir}/src-template/main/java/app/secuboid/core/flags/FlagDeclarations.java.template
                             </flagsJavaTemplate>
                             <flagsJavaTarget>
-                                ${project.basedir}/src-gen/main/java/me/tabinol/secuboid/core/flags/FlagDeclarations.java
+                                ${project.basedir}/src-gen/main/java/app/secuboid/core/flags/FlagDeclarations.java
                             </flagsJavaTarget>
                             <languageToTarget>
                                 <en>${project.basedir}/src-gen/main/resources/lang/flags-en.yml</en>
@@ -217,7 +217,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>me.tabinol.secuboid:secuboid-api</include>
+                            <include>app.secuboid:secuboid-api</include>
                             <include>org.bstats:*</include>
                             <include>com.google.code.gson:gson</include>
                             <include>org.hsqldb:hsqldb</include>
@@ -228,23 +228,23 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>me.tabinol.secuboid.bstats</shadedPattern>
+                            <shadedPattern>app.secuboid.bstats</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.google.gson</pattern>
-                            <shadedPattern>me.tabinol.secuboid.gson</shadedPattern>
+                            <shadedPattern>app.secuboid.gson</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.hsqldb</pattern>
-                            <shadedPattern>me.tabinol.secuboid.hsqldb</shadedPattern>
+                            <shadedPattern>app.secuboid.hsqldb</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.mariadb.jdbc</pattern>
-                            <shadedPattern>me.tabinol.secuboid.mariadb.jdbc</shadedPattern>
+                            <shadedPattern>app.secuboid.mariadb.jdbc</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>me.tabinol.secuboid.hikari</shadedPattern>
+                            <shadedPattern>app.secuboid.hikari</shadedPattern>
                         </relocation>
                     </relocations>
 

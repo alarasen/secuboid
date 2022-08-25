@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/bukkit-plugin.json
 name: SecuboidCore
-main: me.tabinol.secuboid.core.SecuboidCorePluginImpl
+main: app.secuboid.core.SecuboidCorePluginImpl
 version: ${project.version}
 description: "Lands and grief protection plugin"
 authors: [Tabinol, Kaz00, Ouaou]
