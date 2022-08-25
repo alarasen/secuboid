@@ -1,0 +1,27 @@
+general:
+  test: This is a test message [{{argument-1}},{{argument-2}}]
+  pre-reload: Secuboid is about to be reloaded... Risk of severe lags!
+  reload: Secuboid is now reloaded.
+  inventory-full: Your inventory is full.
+selection:
+  scoreboard:
+    title-create: Creating a new land...
+    selection-type: "Selection type: {{selection-type}}"
+    selection-types:
+      passive: "-passive-"
+      expand: "<-expand->"
+      retract: "->retract<-"
+      move: "->move->"
+    volume: "Volume: {{volume}} cube(s)"
+    type-when-done: 'Type: "{{command-when-done}}" when done.'
+  cancel: The selection is canceled.
+  empty: No area or land selected.
+tool:
+  name: Secuboid tool
+  lore-1: "Left Click: SELECT or CREATE"
+  lore-2: "Right Click: INFO or CANCEL"
+  done: You have now the Secuboid tool.
+  already: You have already the Secuboid tool.
+area:
+  cuboid: "cuboid: ({{x1}},{{y1}},{{z1}})-({{x2}},{{y2}},{{z2}})"
+  cylinder: "cylinder: (h:{{origin-h}},k:{{origin-k}}) (rx:{{rx}},rz:{{rz}})"

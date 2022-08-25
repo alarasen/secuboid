@@ -1,0 +1,3 @@
+component-classes:
+  # Parameter values
+  - me.tabinol.secuboid.permission.group.parameters.values.ParameterValuePermissionGroup
