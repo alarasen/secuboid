@@ -22,12 +22,13 @@ import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
 import app.secuboid.core.thread.QueueThreadImpl;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class NewInstanceImpl implements NewInstance {
 
     @Override
-    public <T, R> QueueThread<T, R> newQueueThread(Plugin plugin, String threadName,
-                                                   QueueProcessor<T, R> queueProcessor) {
+    public @NotNull <T, R> QueueThread<T, R> newQueueThread(@NotNull Plugin plugin, @NotNull String threadName,
+                                                            @NotNull QueueProcessor<T, R> queueProcessor) {
         return new QueueThreadImpl<>(plugin, threadName, queueProcessor);
     }
 }

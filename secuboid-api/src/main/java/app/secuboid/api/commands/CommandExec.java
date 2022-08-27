@@ -17,8 +17,9 @@
  */
 package app.secuboid.api.commands;
 
-import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.reflection.CommandRegistered;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * If you create a command for Secuboid, you should implement this interface and
@@ -26,38 +27,38 @@ import app.secuboid.api.players.CommandSenderInfo;
  * secuboid-plugin.yml. You have a choice of three constructors: Secuboid,
  * YourPlugin, Secuboid and YourPlugin. YourPlugin is the class of your own
  * plugin that extends JavaPlugin.
- * 
+ *
  * <pre>
  * public MyCommandExec(Secuboid secuboid) {
  *     this.secuboid = secuboid;
  * }
  *
  * // or
- * 
+ *
  * public MyCommandExec(MyPlugin myPlugin) {
  *     this.myPlugin = myPlugin;
  * }
  *
  * // or
- * 
+ *
  * public MyCommandExec(Secuboid secuboid, MyPlugin myPlugin) {
  *     this.secuboid = secuboid;
  *     this.myPlugin = myPlugin;
  * }
  * </pre>
- * 
+ * <p>
  * Any other constructors will be ignored.
- * 
+ *
  * @see CommandRegistered
  */
 public interface CommandExec {
 
     /**
      * Where the command is executed.
-     * 
+     *
      * @param commandSenderInfo the command sender secuboid information (player or
      *                          console)
      * @param subArgs           the argument array (excude the command itself)
      */
-    void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs);
+    void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs);
 }

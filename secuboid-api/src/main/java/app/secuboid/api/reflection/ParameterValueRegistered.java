@@ -17,6 +17,8 @@
  */
 package app.secuboid.api.reflection;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,17 +36,17 @@ public @interface ParameterValueRegistered {
     /**
      * The parameter name (not the value). Ex: player, everybody, etc.
      */
-    String name();
+    @NotNull String name();
 
     /**
      * The short name for chat and save. Must be unique. Ex: p, everybody, etc.
      */
-    String shortName();
+    @NotNull String shortName();
 
     /**
      * The chat color code.
      */
-    String chatColor();
+    @NotNull String chatColor();
 
     /**
      * The priority, higher is returned before the lowest if there is a match.

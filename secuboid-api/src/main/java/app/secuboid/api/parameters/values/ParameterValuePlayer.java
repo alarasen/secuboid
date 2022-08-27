@@ -17,11 +17,7 @@
  */
 package app.secuboid.api.parameters.values;
 
-import static java.lang.String.format;
-
-import java.util.Objects;
-import java.util.UUID;
-
+import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.api.storage.tables.RowWithId;
@@ -29,8 +25,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import java.util.Objects;
+import java.util.UUID;
+
+import static java.lang.String.format;
 
 /**
  * Represents a player with a uuid.
@@ -48,15 +48,15 @@ public class ParameterValuePlayer implements ParameterValue {
 
     private final UUID uuid;
 
-    private int id;
+    private long id;
 
-    public ParameterValuePlayer(UUID uuid) {
+    public ParameterValuePlayer(@NotNull UUID uuid) {
         this.uuid = uuid;
         id = RowWithId.ID_NON_CREATED_VALUE;
     }
 
     // Needed for load from database
-    public static ParameterValuePlayer newInstance(String value) throws ParameterValueException {
+    public static ParameterValuePlayer newInstance(@NotNull String value) throws ParameterValueException {
         UUID uuid;
 
         try {
@@ -72,18 +72,18 @@ public class ParameterValuePlayer implements ParameterValue {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     /**
      * Gets the player Minecraft unique id.
-     * 
+     *
      * @return the player Minecraft unique id
      */
     public UUID getUUID() {
@@ -93,7 +93,7 @@ public class ParameterValuePlayer implements ParameterValue {
     /**
      * Gets the player name from Bukkit server. If the player doesn't has played
      * before, it will return the uuid.
-     * 
+     *
      * @return the player name or the uuid
      */
     public String getPlayerName() {
@@ -107,17 +107,17 @@ public class ParameterValuePlayer implements ParameterValue {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return NAME;
     }
 
     @Override
-    public String getShortName() {
+    public @NotNull String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
-    public String getChatColor() {
+    public @NotNull String getChatColor() {
         return CHAT_COLOR;
     }
 
@@ -127,12 +127,12 @@ public class ParameterValuePlayer implements ParameterValue {
     }
 
     @Override
-    public String getValue() {
+    public @NotNull String getValue() {
         return uuid.toString();
     }
 
     @Override
-    public boolean hasAccess(Entity entity) {
+    public boolean hasAccess(@NotNull Entity entity) {
         if (entity instanceof Player player) {
             return player.getUniqueId().equals(uuid);
         }
@@ -141,7 +141,7 @@ public class ParameterValuePlayer implements ParameterValue {
     }
 
     @Override
-    public boolean hasAccess(Entity entity, Land originLand) {
+    public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
     }
 
@@ -157,10 +157,10 @@ public class ParameterValuePlayer implements ParameterValue {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ParameterValuePlayer)) {
+        if (!(o instanceof ParameterValuePlayer parameterValuePlayer)) {
             return false;
         }
-        ParameterValuePlayer parameterValuePlayer = (ParameterValuePlayer) o;
+
         return Objects.equals(uuid, parameterValuePlayer.uuid) && id == parameterValuePlayer.id;
     }
 

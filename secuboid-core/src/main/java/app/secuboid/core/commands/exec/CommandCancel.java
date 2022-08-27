@@ -28,6 +28,7 @@ import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
         pluginClass = SecuboidCorePlugin.class, //
@@ -42,7 +43,7 @@ public class CommandCancel implements CommandExec {
     }
 
     @Override
-    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
         // TODO cancel command
 
         SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();

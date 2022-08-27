@@ -26,6 +26,8 @@ import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.thread.QueueThreadImpl;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -64,7 +66,7 @@ public class StorageManagerImpl implements StorageManager {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R extends Row> Set<R> selectAllSync(Class<R> classRow) {
+    public @NotNull <R extends Row> Set<R> selectAllSync(@NotNull Class<R> classRow) {
         Table<Row> table = storageInit.getTableFromClassRow(classRow);
         StorageElement element = new StorageElement(table, null, SQLRequestType.SELECT_ALL_SYNC);
         queueThread.addElement(element, resultQueue);
@@ -80,21 +82,21 @@ public class StorageManagerImpl implements StorageManager {
     }
 
     @Override
-    public void insert(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback) {
+    public void insert(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.INSERT);
         queueThread.addElement(element, sender, callback);
     }
 
     @Override
-    public void update(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback) {
+    public void update(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.UPDATE);
         queueThread.addElement(element, sender, callback);
     }
 
     @Override
-    public void delete(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback) {
+    public void delete(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.DELETE);
         queueThread.addElement(element, sender, callback);

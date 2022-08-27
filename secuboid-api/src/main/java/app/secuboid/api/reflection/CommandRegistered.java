@@ -17,12 +17,13 @@
  */
 package app.secuboid.api.reflection;
 
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The Interface CommandRegistered. Annotation used for commands. If you make
@@ -35,18 +36,18 @@ public @interface CommandRegistered {
     /**
      * Your plugin class that extends JavaPlugin.
      */
-    Class<? extends JavaPlugin> pluginClass();
+    @NotNull Class<? extends JavaPlugin> pluginClass();
 
     /**
      * The command name lowercase. If this command is a child from a parent, type
-     * "parent/thiscommand".
+     * "parent/this command".
      */
-    String name();
+    @NotNull String name();
 
     /**
      * Aliases if the command can be called with a short alias. Lowercase.
      */
-    String[] aliases() default {};
+    @NotNull String[] aliases() default {};
 
     /**
      * Allowing from console? Default true. Must be false only when the command
@@ -64,11 +65,11 @@ public @interface CommandRegistered {
      * The Bukkit permission(s) needed to do this command. Only one needed to be
      * true.
      */
-    String[] permissions() default {};
+    @NotNull String[] permissions() default {};
 
     /**
      * Name array of Source Action flags needed for your command.
      * SourceActionFlagType accpeted only. Only one needed to be true.
      */
-    String[] sourceActionFlags() default {};
+    @NotNull String[] sourceActionFlags() default {};
 }

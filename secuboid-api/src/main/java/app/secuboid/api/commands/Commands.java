@@ -18,6 +18,7 @@
 package app.secuboid.api.commands;
 
 import app.secuboid.api.players.CommandSenderInfo;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class where the commands to be executed can be found.
@@ -27,10 +28,10 @@ public interface Commands {
     /**
      * Executes the command from it class. The args array should not contains the
      * command call, just the arguments.
-     * 
-     * @param clazz            the command exec class
-     * @param senderSenderInfo the command sender Secuboid info (console or player)
-     * @param subArgs          the args without the command call
+     *
+     * @param clazz             the command exec class
+     * @param commandSenderInfo the command sender Secuboid info (console or player)
+     * @param subArgs           the args without the command call
      */
-    void executeCommandClass(Class<? extends CommandExec> clazz, CommandSenderInfo commandSenderInfo, String[] subArgs);
+    void executeCommandClass(@NotNull Class<? extends CommandExec> clazz, @NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs);
 }

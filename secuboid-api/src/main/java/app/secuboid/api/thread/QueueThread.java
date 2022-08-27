@@ -17,14 +17,16 @@
  */
 package app.secuboid.api.thread;
 
-import static app.secuboid.api.SecuboidCorePlugin.secuboid;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.BiConsumer;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
+import static app.secuboid.api.SecuboidCorePlugin.secuboid;
 
 /**
  * This is a class to create a waiting queue thread.
@@ -36,10 +38,9 @@ public interface QueueThread<T, R> {
      *
      * @param plugin         the actual plugin
      * @param threadName     the name of the thread
-     * @param QueueProcessor the queue processor
+     * @param queueProcessor the queue processor
      */
-    public static <T, R> QueueThread<T, R> newQueueThread(Plugin plugin, String threadName,
-            QueueProcessor<T, R> queueProcessor) {
+    public static <T, R> @NotNull QueueThread<T, R> newQueueThread(@NotNull Plugin plugin, @NotNull String threadName, @NotNull QueueProcessor<T, R> queueProcessor) {
         return secuboid().getNewInstance().newQueueThread(plugin, threadName, queueProcessor);
     }
 
@@ -50,34 +51,34 @@ public interface QueueThread<T, R> {
 
     /**
      * Checks if the queue is alive.
-     * 
+     *
      * @return true if the queue is alive
      */
     boolean isAlive();
 
     /**
      * Adds an element without callback.
-     * 
+     *
      * @param t the element to send
      */
     void addElement(T t);
 
     /**
      * Adds an element and blocking queue for sync.
-     * 
+     *
      * @param t           the element to send
      * @param resultQueue the blocking queue for result
      */
-    void addElement(T t, BlockingQueue<Set<R>> resultQueue);
+    void addElement(T t, @NotNull BlockingQueue<Set<R>> resultQueue);
 
     /**
      * Adds an element with callback.
-     * 
+     *
      * @param t        the element to send
      * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void addElement(T t, CommandSender sender, BiConsumer<CommandSender, R> callback);
+    void addElement(T t, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, R> callback);
 
     /**
      * Waits for the last element and stop.

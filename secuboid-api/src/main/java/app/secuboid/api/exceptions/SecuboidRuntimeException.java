@@ -17,17 +17,19 @@
  */
 package app.secuboid.api.exceptions;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Used only when something major breaks Secuboid execution. Most of the time,
  * we should not throw this exception.
  */
 public class SecuboidRuntimeException extends RuntimeException {
 
-    public SecuboidRuntimeException(String message) {
+    public SecuboidRuntimeException(@NotNull String message) {
         super(message);
     }
 
-    public SecuboidRuntimeException(String message, Throwable cause) {
+    public SecuboidRuntimeException(@NotNull String message, @NotNull Throwable cause) {
         super(message, cause);
     }
 }

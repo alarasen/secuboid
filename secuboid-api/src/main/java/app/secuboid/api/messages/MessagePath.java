@@ -17,28 +17,30 @@
  */
 package app.secuboid.api.messages;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * This is the record to gets a message from the yaml. The goal here is to
- * evitate a message to an unexisting path.
- * 
+ * avoid a message to a not existing path.
+ *
  * @param yamlPath     the yaml path
  * @param replacedTags the tags to replace
  * @param args         the arguments to put in place of tags
  */
-public record MessagePath(String yamlPath, String[] replacedTags, Object[] args) {
+public record MessagePath(
+        @NotNull String yamlPath,
+        @NotNull String[] replacedTags,
+        @NotNull Object[] args) {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        MessagePath messagePath = (MessagePath) o;
-        return Objects.equals(yamlPath, messagePath.yamlPath) && Arrays.equals(replacedTags, messagePath.replacedTags)
-                && Arrays.equals(args, messagePath.args);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MessagePath that = (MessagePath) o;
+        return yamlPath.equals(that.yamlPath) && Arrays.equals(replacedTags, that.replacedTags) && Arrays.equals(args, that.args);
     }
 
     @Override
@@ -52,7 +54,7 @@ public record MessagePath(String yamlPath, String[] replacedTags, Object[] args)
     @Override
     public String toString() {
         return "MessagePath{" +
-                "yamlPath=" + yamlPath +
+                "yamlPath='" + yamlPath + '\'' +
                 ", replacedTags=" + Arrays.toString(replacedTags) +
                 ", args=" + Arrays.toString(args) +
                 '}';

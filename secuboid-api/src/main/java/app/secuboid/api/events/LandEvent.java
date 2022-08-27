@@ -17,10 +17,10 @@
  */
 package app.secuboid.api.events;
 
+import app.secuboid.api.lands.Land;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import app.secuboid.api.lands.Land;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Class LandEvent. Just for inheritance.
@@ -35,7 +35,7 @@ public abstract class LandEvent extends Event {
      *
      * @param land the land
      */
-    protected LandEvent(Land land) {
+    protected LandEvent(@NotNull Land land) {
         this.land = land;
     }
 
@@ -44,16 +44,19 @@ public abstract class LandEvent extends Event {
      *
      * @return the land
      */
+    @NotNull
     public Land getLand() {
         return land;
     }
 
     @Override
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }
 
     @SuppressWarnings("java:S4144")
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }

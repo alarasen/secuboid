@@ -27,13 +27,14 @@ import app.secuboid.core.lands.ConfigurationSetImpl;
 import app.secuboid.core.lands.LandImpl;
 import app.secuboid.core.lands.WorldLandImpl;
 import app.secuboid.core.messages.Log;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static app.secuboid.core.config.Config.config;
 import static java.lang.String.format;
@@ -48,46 +49,46 @@ public class LandTable implements Table<LandComponent> {
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
             + "CREATE TABLE IF NOT EXISTS %1$sland ("
-            + " id INT NOT NULL {{AUTOINCREMENT}},"
+            + " id BIGINT NOT NULL {{AUTOINCREMENT}},"
             + " name VARCHAR(45) NOT NULL,"
             + " type CHAR(1) NOT NULL,"
-            + " parent_id INT NULL,"
+            + " parent_id BIGINT NULL,"
             + " PRIMARY KEY (id),"
             + " CONSTRAINT fk_land_parent_id FOREIGN KEY (parent_id) REFERENCES %1$sland (id)"
             + ")";
 
     @Override
-    public Set<LandComponent> selectAll(Connection conn) throws SQLException {
+    public @NotNull Set<LandComponent> selectAll(@NotNull Connection conn) throws SQLException {
         String prefix = config().databasePrefix();
         String sql = format(""
                 + "SELECT id, name, type, parent_id FROM %1$sland", prefix);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()) {
-                Map<Integer, LandComponent> idToLandComponent = new HashMap<>();
-                Map<LandComponent, Integer> landCoponentToParentId = new HashMap<>();
+                Map<Long, LandComponent> idToLandComponent = new HashMap<>();
+                Map<LandComponent, Long> landCoponentToParentId = new HashMap<>();
 
                 while (rs.next()) {
                     LandComponent landComponent = getLandComponent(rs);
                     idToLandComponent.put(landComponent.getId(), landComponent);
-                    Integer parentId = getParentId(rs);
+                    Long parentId = getParentId(rs);
                     if (parentId != null) {
                         landCoponentToParentId.put(landComponent, parentId);
                     }
                 }
 
-                for (Entry<LandComponent, Integer> entry : landCoponentToParentId.entrySet()) {
+                for (Entry<LandComponent, Long> entry : landCoponentToParentId.entrySet()) {
                     LandComponent landComponent = entry.getKey();
-                    int parentId = entry.getValue();
+                    long parentId = entry.getValue();
                     setParent(idToLandComponent, landComponent, parentId);
                 }
 
-                return idToLandComponent.values().stream().collect(Collectors.toSet());
+                return new HashSet<>(idToLandComponent.values());
             }
         }
     }
 
-    private void setParent(Map<Integer, LandComponent> idToLandComponent, LandComponent landComponent, int parentId) {
+    private void setParent(Map<Long, LandComponent> idToLandComponent, LandComponent landComponent, long parentId) {
 
         if (landComponent instanceof AreaLand areaLand) {
             LandComponent parent = idToLandComponent.get(parentId);
@@ -120,12 +121,12 @@ public class LandTable implements Table<LandComponent> {
         return landComponent;
     }
 
-    private Integer getParentId(ResultSet rs) throws SQLException {
-        return DbUtils.getNullable(rs, "parent_id", rs::getInt);
+    private Long getParentId(ResultSet rs) throws SQLException {
+        return DbUtils.getNullable(rs, "parent_id", rs::getLong);
     }
 
     @Override
-    public LandComponent insert(Connection conn, LandComponent landComponent) throws SQLException {
+    public @NotNull LandComponent insert(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
         String prefix = config().databasePrefix();
         String sql = format(""
                 + "INSERT INTO %1$sland(name, type, parent_id)"
@@ -134,7 +135,7 @@ public class LandTable implements Table<LandComponent> {
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, landComponent.getName());
             stmt.setString(2, getLandType(landComponent));
-            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setInt);
+            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setLong);
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 rs.next();
@@ -146,7 +147,7 @@ public class LandTable implements Table<LandComponent> {
     }
 
     @Override
-    public LandComponent update(Connection conn, LandComponent landComponent) throws SQLException {
+    public @NotNull LandComponent update(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
         String prefix = config().databasePrefix();
         String sql = format(""
                 + "UPDATE %1$sland"
@@ -156,7 +157,7 @@ public class LandTable implements Table<LandComponent> {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, landComponent.getName());
             stmt.setString(2, getLandType(landComponent));
-            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setInt);
+            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setLong);
             stmt.setLong(4, landComponent.getId());
 
             stmt.executeUpdate();
@@ -166,7 +167,7 @@ public class LandTable implements Table<LandComponent> {
     }
 
     @Override
-    public LandComponent delete(Connection conn, LandComponent landComponent) throws SQLException {
+    public @NotNull LandComponent delete(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
         String prefix = config().databasePrefix();
         String sql = format(""
                 + "DELETE FROM %1$sland"
@@ -198,7 +199,7 @@ public class LandTable implements Table<LandComponent> {
                 "Class not yet implemented in LandTable: " + landComponent.getClass().getName());
     }
 
-    private Integer getParentId(LandComponent landComponent) {
+    private Long getParentId(LandComponent landComponent) {
         if (landComponent instanceof AreaLand areaLand) {
             Land parent = areaLand.getParent();
             if (parent != null) {

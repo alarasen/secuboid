@@ -17,40 +17,23 @@
  */
 package app.secuboid.api.utilities;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.sql.*;
 import java.util.Calendar;
 
 public class DbUtils {
 
-    @FunctionalInterface
-    public interface SqlBiConsumer<T, U> {
-        void accept(T t, U u) throws SQLException;
-    }
-
-    @FunctionalInterface
-    public interface SqlFunction<T, R> {
-        R apply(T t) throws SQLException;
-    }
-
-    @FunctionalInterface
-    public interface SqlConsumer<T> {
-        void accept(T t) throws SQLException;
-    }
-
     private DbUtils() {
     }
 
-    public static void setCalendar(PreparedStatement stmt, int parameterIndex, Calendar calendar)
-            throws SQLException {
+    public static void setCalendar(@NotNull PreparedStatement stmt, int parameterIndex, @NotNull Calendar calendar) throws SQLException {
         Timestamp timestamp = new Timestamp(calendar.getTimeInMillis());
         stmt.setTimestamp(parameterIndex, timestamp);
     }
 
-    public static Calendar getCalendar(ResultSet rs, String columnLabel) throws SQLException {
+    public static Calendar getCalendar(@NotNull ResultSet rs, @NotNull String columnLabel) throws SQLException {
         Timestamp timestamp = rs.getTimestamp(columnLabel);
 
         if (timestamp == null) {
@@ -62,8 +45,7 @@ public class DbUtils {
         return calendar;
     }
 
-    public static <U> void setNullable(PreparedStatement stmt, int parameterIndex, U uNullable,
-            SqlBiConsumer<Integer, U> consumer) throws SQLException {
+    public static <U> void setNullable(@NotNull PreparedStatement stmt, int parameterIndex, @Nullable U uNullable, @NotNull SqlBiConsumer<Integer, U> consumer) throws SQLException {
         if (uNullable != null) {
             consumer.accept(parameterIndex, uNullable);
         } else {
@@ -71,12 +53,26 @@ public class DbUtils {
         }
     }
 
-    public static <R> R getNullable(ResultSet rs, String columnLabel, SqlFunction<String, R> function)
-            throws SQLException {
+    public static <R> R getNullable(ResultSet rs, String columnLabel, SqlFunction<String, R> function) throws SQLException {
         R r = function.apply(columnLabel);
         if (rs.wasNull()) {
             return null;
         }
         return r;
+    }
+
+    @FunctionalInterface
+    public interface SqlBiConsumer<T, U> {
+        void accept(@NotNull T t, @NotNull U u) throws SQLException;
+    }
+
+    @FunctionalInterface
+    public interface SqlFunction<T, R> {
+        @NotNull R apply(@NotNull T t) throws SQLException;
+    }
+
+    @FunctionalInterface
+    public interface SqlConsumer<T> {
+        void accept(@NotNull T t) throws SQLException;
     }
 }

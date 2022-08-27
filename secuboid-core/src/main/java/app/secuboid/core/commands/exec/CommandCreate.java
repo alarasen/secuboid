@@ -24,6 +24,7 @@ import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.Lands;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
         pluginClass = SecuboidCorePlugin.class, //
@@ -39,7 +40,7 @@ public class CommandCreate implements CommandExec {
     }
 
     @Override
-    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
         Lands lands = secuboid.getLands();
 
         // TODO: create land and callback

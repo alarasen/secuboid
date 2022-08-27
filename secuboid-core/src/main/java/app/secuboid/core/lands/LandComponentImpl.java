@@ -31,7 +31,7 @@ public class LandComponentImpl implements LandComponent {
     private final Flags flags;
     private final Residents residents;
 
-    private int id;
+    private long id;
 
     protected LandComponentImpl(String name) {
         this.name = name;
@@ -42,12 +42,12 @@ public class LandComponentImpl implements LandComponent {
     }
 
     @Override
-    public final int getId() {
+    public final long getId() {
         return id;
     }
 
     @Override
-    public final void setId(int id) {
+    public final void setId(long id) {
         this.id = id;
     }
 

@@ -17,13 +17,14 @@
  */
 package app.secuboid.api.storage;
 
+import app.secuboid.api.storage.tables.Row;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.function.BiConsumer;
-
-import org.bukkit.command.CommandSender;
-
-import app.secuboid.api.storage.tables.Row;
 
 /**
  * The sync/async class where everything is loaded/saved.
@@ -35,42 +36,42 @@ public interface StorageManager {
      */
     @FunctionalInterface
     public interface BiFunctionSQL<T, U, R> {
-        R apply(T t, U u) throws SQLException;
+        @NotNull R apply(@NotNull T t, @NotNull U u) throws SQLException;
     }
 
     /**
      * Get (select) multiple values sync.
-     * 
+     *
      * @param <R>      the row
      * @param classRow the row class
      * @return the result set
      */
-    <R extends Row> Set<R> selectAllSync(Class<R> classRow);
+    <R extends Row> @NotNull Set<R> selectAllSync(@NotNull Class<R> classRow);
 
     /**
      * Insert to the database.
-     * 
+     *
      * @param row      the row
      * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void insert(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback);
+    void insert(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback);
 
     /**
      * Update to the database.
-     * 
+     *
      * @param row      the row
      * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void update(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback);
+    void update(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback);
 
     /**
      * Delete from the database.
-     * 
+     *
      * @param row      the row
      * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void delete(Row row, CommandSender sender, BiConsumer<CommandSender, Row> callback);
+    void delete(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback);
 }

@@ -21,6 +21,7 @@ import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.flagtypes.FlagTypes;
 import app.secuboid.api.reflection.FlagRegistered;
 import app.secuboid.core.reflection.PluginLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class FlagTypesImpl implements FlagTypes {
     }
 
     @Override
-    public Set<String> getFlagTypeNames() {
+    public @NotNull Set<String> getFlagTypeNames() {
         return nameToFlagType.keySet();
     }
 }

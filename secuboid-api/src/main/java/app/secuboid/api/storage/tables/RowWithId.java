@@ -23,19 +23,19 @@ package app.secuboid.api.storage.tables;
  */
 public interface RowWithId extends Row {
 
-    public static final int ID_NON_CREATED_VALUE = -1;
+    public static final long ID_NON_CREATED_VALUE = -1;
 
     /**
      * Gets the row id.
-     * 
+     *
      * @return the row id or 0 if it is not yet created to the database
      */
-    int getId();
+    long getId();
 
     /**
      * DO NOT SET THE ROW ID!!! It will be set by the database.
-     * 
+     *
      * @param id the id
      */
-    void setId(int id);
+    void setId(long id);
 }

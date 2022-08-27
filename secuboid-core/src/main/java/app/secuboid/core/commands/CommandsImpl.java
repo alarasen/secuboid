@@ -27,6 +27,7 @@ import app.secuboid.core.messages.Log;
 import app.secuboid.core.reflection.PluginLoader;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -77,7 +78,7 @@ public class CommandsImpl implements Commands {
     }
 
     @Override
-    public void executeCommandClass(Class<? extends CommandExec> clazz, CommandSenderInfo commandSenderInfo,
+    public void executeCommandClass(@NotNull Class<? extends CommandExec> clazz, @NotNull CommandSenderInfo commandSenderInfo,
                                     String[] subArgs) {
 
         CommandContainer commandContainer = classToCommand.get(clazz);

@@ -17,13 +17,14 @@
  */
 package app.secuboid.api.reflection;
 
+import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.tables.Table;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import app.secuboid.api.storage.tables.Row;
-import app.secuboid.api.storage.tables.Table;
 
 /**
  * Every table should has this anotation, added in secuboid-plugin.yml and
@@ -36,11 +37,11 @@ public @interface TableRegistered {
     /**
      * The row class associated to this table
      */
-    Class<? extends Row> row();
+    @NotNull Class<? extends Row> row();
 
     /**
      * What this table depends on (foreing key)
      */
     @SuppressWarnings("java:S1452")
-    Class<? extends Table<?>>[] dependsOn() default {};
+    @NotNull Class<? extends Table<?>>[] dependsOn() default {};
 }

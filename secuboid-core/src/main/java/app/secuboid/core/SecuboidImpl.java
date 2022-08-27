@@ -19,7 +19,7 @@ package app.secuboid.core;
 
 import app.secuboid.api.NewInstance;
 import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidCoponent;
+import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.SecuboidCorePlugin;
 import app.secuboid.api.commands.Commands;
 import app.secuboid.api.flagtypes.FlagTypes;
@@ -42,12 +42,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 import static app.secuboid.core.config.Config.config;
 
-public class SecuboidImpl implements Secuboid, SecuboidCoponent {
+public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     private static SecuboidImpl secuboidImpl;
     private static SecuboidCorePlugin secuboidCorePlugin;
@@ -164,32 +165,32 @@ public class SecuboidImpl implements Secuboid, SecuboidCoponent {
     }
 
     @Override
-    public PlayerInfos getPlayerInfos() {
+    public @NotNull PlayerInfos getPlayerInfos() {
         return playerInfos;
     }
 
     @Override
-    public Commands getCommands() {
+    public @NotNull Commands getCommands() {
         return commands;
     }
 
     @Override
-    public FlagTypes getFlagTypes() {
+    public @NotNull FlagTypes getFlagTypes() {
         return flags;
     }
 
     @Override
-    public Lands getLands() {
+    public @NotNull Lands getLands() {
         return lands;
     }
 
     @Override
-    public StorageManager getStorageManager() {
+    public @NotNull StorageManager getStorageManager() {
         return storageManager;
     }
 
     @Override
-    public NewInstance getNewInstance() {
+    public @NotNull NewInstance getNewInstance() {
         return newInstance;
     }
 

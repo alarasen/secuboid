@@ -18,15 +18,15 @@
 package app.secuboid.api;
 
 /**
- * Only for secuboid coponent plugin (SecuboidCorePlugin, SecuboidEconomyPlugin,
+ * Only for secuboid component plugin (SecuboidCorePlugin, SecuboidEconomyPlugin,
  * ...)
  */
-public interface SecuboidCoponent {
+public interface SecuboidComponent {
 
     /**
      * Loads the plugin. An unload must be done before if the server is already
      * running.
-     * 
+     *
      * @param isServerBoot Is it from server start?
      */
     void load(boolean isServerBoot);

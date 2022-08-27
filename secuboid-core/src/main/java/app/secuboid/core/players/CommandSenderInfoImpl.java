@@ -20,6 +20,7 @@ package app.secuboid.core.players;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
 
@@ -30,12 +31,12 @@ public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
     }
 
     @Override
-    public CommandSender getSender() {
+    public @NotNull CommandSender getSender() {
         return sender;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return sender.getName();
     }
 

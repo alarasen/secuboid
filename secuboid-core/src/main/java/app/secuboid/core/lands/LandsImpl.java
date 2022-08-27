@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 public class LandsImpl implements Lands {
 
     private final Map<String, WorldLand> worldNameToWorldLand;
-    private final Map<Integer, LandComponent> idToLandComponent;
+    private final Map<Long, LandComponent> idToLandComponent;
 
     public LandsImpl() {
         worldNameToWorldLand = new HashMap<>();

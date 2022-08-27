@@ -18,10 +18,11 @@
 package app.secuboid.api;
 
 import app.secuboid.api.commands.Commands;
+import app.secuboid.api.flagtypes.FlagTypes;
 import app.secuboid.api.lands.Lands;
 import app.secuboid.api.players.PlayerInfos;
 import app.secuboid.api.storage.StorageManager;
-import app.secuboid.api.flagtypes.FlagTypes;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Secuboid main api interface.
@@ -33,40 +34,40 @@ public interface Secuboid {
      *
      * @return the player information
      */
-    PlayerInfos getPlayerInfos();
+    @NotNull PlayerInfos getPlayerInfos();
 
     /**
      * Gets the commands class instance.
      *
      * @return the commands class instance
      */
-    Commands getCommands();
+    @NotNull Commands getCommands();
 
     /**
      * Gets the flag definitions instance.
      *
      * @return the flags instance
      */
-    FlagTypes getFlagTypes();
+    @NotNull FlagTypes getFlagTypes();
 
     /**
      * Gets lands.
      *
      * @return the lands
      */
-    Lands getLands();
+    @NotNull Lands getLands();
 
     /**
      * Gets the storage manager.
      *
      * @return the storage manager
      */
-    StorageManager getStorageManager();
+    @NotNull StorageManager getStorageManager();
 
     /**
      * For internal use only.
-     * 
+     *
      * @return the new instance
      */
-    NewInstance getNewInstance();
+    @NotNull NewInstance getNewInstance();
 }

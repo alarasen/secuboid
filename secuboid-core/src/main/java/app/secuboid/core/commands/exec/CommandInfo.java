@@ -22,6 +22,7 @@ import app.secuboid.api.SecuboidCorePlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
         pluginClass = SecuboidCorePlugin.class, //
@@ -36,7 +37,7 @@ public class CommandInfo implements CommandExec {
     }
 
     @Override
-    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
         // TODO Info
     }
 }

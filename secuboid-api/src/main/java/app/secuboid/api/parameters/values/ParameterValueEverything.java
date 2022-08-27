@@ -17,13 +17,14 @@
  */
 package app.secuboid.api.parameters.values;
 
-import java.util.Objects;
-
-import app.secuboid.api.lands.Land;
-import org.bukkit.entity.Entity;
-
 import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.reflection.ParameterValueRegistered;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Represents every players en entities.
@@ -44,7 +45,7 @@ public class ParameterValueEverything implements ParameterValue {
     private static final int PRIORITY = ParameterValueEverything.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private int id;
+    private long id;
 
     private ParameterValueEverything() {
         id = ID_NON_CREATED_VALUE;
@@ -55,33 +56,33 @@ public class ParameterValueEverything implements ParameterValue {
     }
 
     // Needed for load from database
-    @SuppressWarnings({ "java:S1172", "java:S1130" })
-    public static ParameterValueEverything newInstance(String value) throws ParameterValueException {
+    @SuppressWarnings({"java:S1172", "java:S1130"})
+    public static ParameterValueEverything newInstance(@Nullable String value) throws ParameterValueException {
         return INSTANCE;
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return NAME;
     }
 
     @Override
-    public String getShortName() {
+    public @NotNull String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
-    public String getChatColor() {
+    public @NotNull String getChatColor() {
         return CHAT_COLOR;
     }
 
@@ -91,17 +92,17 @@ public class ParameterValueEverything implements ParameterValue {
     }
 
     @Override
-    public String getValue() {
+    public @Nullable String getValue() {
         return null;
     }
 
     @Override
-    public boolean hasAccess(Entity entity) {
+    public boolean hasAccess(@NotNull Entity entity) {
         return true;
     }
 
     @Override
-    public boolean hasAccess(Entity entity, Land originLand) {
+    public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return true;
     }
 
@@ -116,10 +117,10 @@ public class ParameterValueEverything implements ParameterValue {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ParameterValueEverything)) {
+        if (!(o instanceof ParameterValueEverything parameterValueEverything)) {
             return false;
         }
-        ParameterValueEverything parameterValueEverything = (ParameterValueEverything) o;
+
         return id == parameterValueEverything.id;
     }
 

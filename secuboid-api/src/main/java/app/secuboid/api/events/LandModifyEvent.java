@@ -17,9 +17,10 @@
  */
 package app.secuboid.api.events;
 
-import org.bukkit.event.HandlerList;
-
 import app.secuboid.api.lands.Land;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * When a land is modified. When there is a change in a land.
@@ -89,7 +90,7 @@ public class LandModifyEvent extends LandEvent {
      * @param landModifyReason the land modify reason
      * @param newObject        the new object
      */
-    public LandModifyEvent(Land land, LandModifyReason landModifyReason, Object newObject) {
+    public LandModifyEvent(@NotNull Land land, @NotNull LandModifyReason landModifyReason, @Nullable Object newObject) {
         super(land);
         this.newObject = newObject;
         this.landModifyReason = landModifyReason;
@@ -100,6 +101,7 @@ public class LandModifyEvent extends LandEvent {
      *
      * @return the land modify reason
      */
+    @NotNull
     public LandModifyReason getLandModifyReason() {
         return landModifyReason;
     }
@@ -110,16 +112,19 @@ public class LandModifyEvent extends LandEvent {
      *
      * @return the new object
      */
+    @Nullable
     public Object getNewObject() {
         return newObject;
     }
 
     @Override
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }
 
     @SuppressWarnings("java:S4144")
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }

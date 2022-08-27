@@ -17,12 +17,14 @@
  */
 package app.secuboid.api.messages;
 
-import java.lang.reflect.InvocationTargetException;
-
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.flagtypes.FlagType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Message manager for language files inside the plugin jar. At least,
@@ -32,17 +34,17 @@ public interface MessageManager {
 
     /**
      * Creates a new instance of MessageManager.
-     * 
+     *
      * @return the new instance
      */
-    public static MessageManager newMessageManager() {
+    public static @NotNull MessageManager newMessageManager() {
         try {
             return (MessageManager) Class
                     .forName("app.secuboid.core.messages.MessageManagerImpl")
                     .getConstructor()
                     .newInstance();
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+                 | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
             throw new SecuboidRuntimeException("Unable to get the instance of MessageManagerImpl", e);
         }
     }
@@ -50,50 +52,50 @@ public interface MessageManager {
     /**
      * Loads the messages from the plugin. This is needed to be executed once before
      * the get method.
-     * 
+     *
      * @param plugin the plugin the load the messages from
      */
-    public void load(Plugin plugin);
+    public void load(@Nullable Plugin plugin);
 
     /**
      * Gets the message from a yaml path.
-     * 
+     *
      * @param messageType the message type
      * @param path        the yaml path with arguments
      * @return the message
      */
-    String get(MessageType messageType, MessagePath path);
+    @NotNull String get(@NotNull MessageType messageType, @NotNull MessagePath path);
 
     /**
      * Sends a messsage to this sender.
-     * 
+     *
      * @param sender      the command sender (player or console)
      * @param messageType the message type
      * @param path        the yaml path with arguments
      */
-    void sendMessage(CommandSender sender, MessageType messageType, MessagePath path);
+    void sendMessage(@NotNull CommandSender sender, @NotNull MessageType messageType, @NotNull MessagePath path);
 
     /**
      * Broadcasts a message to all connected players.
-     * 
+     *
      * @param messageType the message type
      * @param path        the yaml path with arguments
      */
-    void broadcastMessage(MessageType messageType, MessagePath path);
+    void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path);
 
     /**
      * Gets the flag description.
-     * 
+     *
      * @param flagType the flag type
      * @return the flag description
      */
-    String getFlagDescription(FlagType flagType);
+    @Nullable String getFlagDescription(@NotNull FlagType flagType);
 
     /**
      * Sends a the flag description to this sender.
-     * 
+     *
      * @param sender   the command sender (player or console)
      * @param flagType the flag type
      */
-    void sendFlagDescription(CommandSender sender, FlagType flagType);
+    void sendFlagDescription(@NotNull CommandSender sender, @NotNull FlagType flagType);
 }

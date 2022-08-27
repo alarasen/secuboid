@@ -18,14 +18,14 @@
 package app.secuboid.api.messages;
 
 /**
- * Implements this interface if you want to create your own formater and pass it
- * as a message formater parameter.
+ * Implements this interface if you want to create your own formatter and pass it
+ * as a message formatter parameter.
  */
-public interface MessageFormater {
+public interface MessageFormatter {
 
     /**
      * Gets the specific parameter format with colors.
-     * 
+     *
      * @return the parameter format
      */
     String format();

@@ -17,10 +17,10 @@
  */
 package app.secuboid.api.events;
 
-import org.bukkit.event.HandlerList;
-
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This events is called when a player container is added to a disallow inside a
@@ -29,7 +29,7 @@ import app.secuboid.api.parameters.values.ParameterValue;
 public class LandAddNoEnterEvent extends LandEvent {
 
     private static final HandlerList handlers = new HandlerList();
-    
+
     private ParameterValue parameterValue;
 
     /**
@@ -38,7 +38,7 @@ public class LandAddNoEnterEvent extends LandEvent {
      * @param land           the land
      * @param parameterValue the parameter value added
      */
-    public LandAddNoEnterEvent(Land land, final ParameterValue parameterValue) {
+    public LandAddNoEnterEvent(@NotNull Land land, @NotNull ParameterValue parameterValue) {
         super(land);
         this.parameterValue = parameterValue;
     }
@@ -48,16 +48,18 @@ public class LandAddNoEnterEvent extends LandEvent {
      *
      * @return the parameter value
      */
-    public ParameterValue getParameterValue() {
+    public @NotNull ParameterValue getParameterValue() {
         return parameterValue;
     }
 
     @Override
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }
 
     @SuppressWarnings("java:S4144")
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }

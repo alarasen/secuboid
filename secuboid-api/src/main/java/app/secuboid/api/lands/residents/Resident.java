@@ -17,16 +17,20 @@
  */
 package app.secuboid.api.lands.residents;
 
-import app.secuboid.api.storage.tables.Row;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.storage.tables.Row;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a resident.
- * 
+ *
  * @param landComponent  the land component
  * @param parameterValue the parameter value
  * @param level          the level
  */
-public record Resident(LandComponent landComponent, ParameterValue parameterValue, int level) implements Row {
+public record Resident(
+        @NotNull LandComponent landComponent,
+        @NotNull ParameterValue parameterValue,
+        int level) implements Row {
 }

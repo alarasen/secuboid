@@ -23,6 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,7 +52,7 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public void load(Plugin plugin) {
+    public void load(@Nullable Plugin plugin) {
         this.plugin = plugin;
 
         if (plugin != null) {
@@ -70,7 +72,7 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public String get(MessageType messageType, MessagePath path) {
+    public @NotNull String get(@NotNull MessageType messageType, @NotNull MessagePath path) {
         String yamlPath = path.yamlPath();
         String format = fileConfiguration.getString(yamlPath);
 
@@ -86,19 +88,19 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public void sendMessage(CommandSender sender, MessageType messageType, MessagePath path) {
+    public void sendMessage(@NotNull CommandSender sender, @NotNull MessageType messageType, @NotNull MessagePath path) {
         String message = get(messageType, path);
         sender.sendMessage(message);
     }
 
     @Override
-    public void broadcastMessage(MessageType messageType, MessagePath path) {
+    public void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path) {
         String message = get(messageType, path);
         plugin.getServer().broadcastMessage(message);
     }
 
     @Override
-    public String getFlagDescription(FlagType flagType) {
+    public @Nullable String getFlagDescription(@NotNull FlagType flagType) {
         String name = flagType.name();
         String descrition = fileConfigurationFlags.getString(name);
         if (descrition == null) {
@@ -111,7 +113,7 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public void sendFlagDescription(CommandSender sender, FlagType flagType) {
+    public void sendFlagDescription(@NotNull CommandSender sender, @NotNull FlagType flagType) {
         String description = getFlagDescription(flagType);
         sender.sendMessage(description);
     }
@@ -190,7 +192,7 @@ public class MessageManagerImpl implements MessageManager {
             return Objects.toString(arg);
         }
 
-        if (arg instanceof MessageFormater formater) {
+        if (arg instanceof MessageFormatter formater) {
             return formater + color;
         }
 

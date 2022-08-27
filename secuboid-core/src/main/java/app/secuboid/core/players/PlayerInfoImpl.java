@@ -25,6 +25,7 @@ import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -49,18 +50,18 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public ParameterValuePlayer getParameterValue() {
+    public @NotNull ParameterValuePlayer getParameterValue() {
         // TODO Parameter value redesign
         return null;
     }
 
     @Override
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 
     @Override
-    public UUID getUUID() {
+    public @NotNull UUID getUUID() {
         return player.getUniqueId();
     }
 
@@ -116,7 +117,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public Land getLastLand() {
+    public @NotNull Land getLastLand() {
         // TODO Generated
         return null;
     }

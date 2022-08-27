@@ -26,6 +26,7 @@ import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.Message;
 import app.secuboid.core.messages.MessagePaths;
+import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
         pluginClass = SecuboidCorePlugin.class, //
@@ -42,7 +43,7 @@ public class CommandReload implements CommandExec {
     }
 
     @Override
-    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
         Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalPreReload());
         ((SecuboidImpl) secuboid).reload();
         Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalReload());

@@ -27,10 +27,10 @@ public class FlagTable implements Table<Flag> {
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
             + "CREATE TABLE IF NOT EXISTS %1$sflag ("
-            + " land_id INT NOT NULL,"
+            + " land_id BIGINT NOT NULL,"
             + " flag_type VARCHAR(45) NOT NULL,"
-            + " source_parameter_value_id INT NULL,"
-            + " target_parameter_value_id INT NULL,"
+            + " source_parameter_value_id BIGINT NULL,"
+            + " target_parameter_value_id BIGINT NULL,"
             + " metadata {{TINYTEXT}} NULL,"
             + " PRIMARY KEY (land_id, flag_type, source_parameter_value_id, target_parameter_value_id),"
             + " CONSTRAINT fk_flag_land_id FOREIGN KEY (land_id) REFERENCES %1$sland (id),"

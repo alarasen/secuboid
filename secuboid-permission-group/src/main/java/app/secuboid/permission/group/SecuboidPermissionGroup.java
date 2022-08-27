@@ -17,12 +17,12 @@
  */
 package app.secuboid.permission.group;
 
-import app.secuboid.api.SecuboidCoponent;
+import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-public class SecuboidPermissionGroup implements SecuboidCoponent {
+public class SecuboidPermissionGroup implements SecuboidComponent {
 
     private final SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin;
 

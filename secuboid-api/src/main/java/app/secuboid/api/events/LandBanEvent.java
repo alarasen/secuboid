@@ -17,10 +17,10 @@
  */
 package app.secuboid.api.events;
 
-import org.bukkit.event.HandlerList;
-
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This events is called when a player is banned from a land.
@@ -35,9 +35,9 @@ public class LandBanEvent extends LandEvent {
      * Instantiates a new land ban events.
      *
      * @param land           the land
-     * @param ParameterValue parameterValue
+     * @param parameterValue parameterValue
      */
-    public LandBanEvent(Land land, final ParameterValue parameterValue) {
+    public LandBanEvent(@NotNull Land land, @NotNull ParameterValue parameterValue) {
         super(land);
         this.parameterValue = parameterValue;
     }
@@ -47,16 +47,19 @@ public class LandBanEvent extends LandEvent {
      *
      * @return the parameter value
      */
+    @NotNull
     public ParameterValue getParameterValue() {
         return parameterValue;
     }
 
     @Override
+    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }
 
     @SuppressWarnings("java:S4144")
+    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }

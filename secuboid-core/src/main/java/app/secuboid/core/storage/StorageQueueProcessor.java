@@ -22,6 +22,7 @@ import app.secuboid.api.storage.tables.Row;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.core.messages.Log;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
 
     @Override
     @SuppressWarnings("unchecked")
-    public Row process(StorageElement element) {
+    public @NotNull Row process(@NotNull StorageElement element) {
         SQLRequestType requestType = element.requestType();
         Table<Row> table = (Table<Row>) element.table();
         Row row = element.row();
@@ -59,7 +60,7 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Row> processMultipleSync(StorageElement element) {
+    public @NotNull Set<Row> processMultipleSync(@NotNull StorageElement element) {
         SQLRequestType requestType = element.requestType();
         Table<Row> table = (Table<Row>) element.table();
 

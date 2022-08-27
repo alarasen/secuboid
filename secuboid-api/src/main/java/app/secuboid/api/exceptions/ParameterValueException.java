@@ -17,16 +17,18 @@
  */
 package app.secuboid.api.exceptions;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * When there is a problem with a creation of a parameter value.
  */
 public class ParameterValueException extends Exception {
 
-    public ParameterValueException(String message) {
+    public ParameterValueException(@NotNull String message) {
         super(message);
     }
 
-    public ParameterValueException(String message, Throwable cause) {
+    public ParameterValueException(@NotNull String message, @NotNull Throwable cause) {
         super(message, cause);
     }
 }

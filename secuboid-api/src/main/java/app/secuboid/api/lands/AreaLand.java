@@ -17,12 +17,14 @@
  */
 package app.secuboid.api.lands;
 
+import app.secuboid.api.lands.areas.Area;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
-import app.secuboid.api.lands.areas.Area;
-import org.bukkit.entity.Player;
 
 /**
  * Represents a land with a number of areas.
@@ -50,7 +52,7 @@ public interface AreaLand extends Land {
      * @param area the area
      * @return true, if successful
      */
-    boolean removeArea(Area area);
+    boolean removeArea(@NotNull Area area);
 
     /**
      * Replace area.
@@ -59,7 +61,7 @@ public interface AreaLand extends Land {
      * @param newArea the new area
      * @return true, if successful
      */
-    boolean replaceArea(int key, Area newArea);
+    boolean replaceArea(int key, @NotNull Area newArea);
 
     /**
      * Gets the area.
@@ -67,50 +69,50 @@ public interface AreaLand extends Land {
      * @param key the key
      * @return the area
      */
-    Area getArea(int key);
+    @Nullable Area getArea(int key);
 
     /**
      * Gets the area key.
      *
      * @param area the area
-     * @return the area key
+     * @return the area key or null if the area is not member of this land
      */
-    Integer getAreaKey(Area area);
+    @Nullable Integer getAreaKey(@NotNull Area area);
 
     /**
      * Gets the area keys.
      *
      * @return the area keys
      */
-    Set<Integer> getAreaKeys();
+    @NotNull Set<Integer> getAreaKeys();
 
     /**
      * Gets the ids and areas map.
      *
      * @return the ids and areas map
      */
-    Map<Integer, Area> getIdToArea();
+    @NotNull Map<Integer, Area> getIdToArea();
 
     /**
      * Gets the areas.
      *
      * @return the areas
      */
-    Collection<Area> getAreas();
+    @NotNull Collection<Area> getAreas();
 
     /**
      * Gets the parent.
      *
-     * @return the parent or null if the actual land is a world
+     * @return the parent or the land is a world
      */
-    Land getParent();
+    @NotNull Land getParent();
 
     /**
      * Sets the land parent. Set a null and the world become the parent
      *
      * @param newParent the land parent
      */
-    void setParent(AreaLand newParent);
+    void setParent(@Nullable AreaLand newParent);
 
     /**
      * Checks if the land is parent, grand-parent or ancestor.
@@ -118,7 +120,7 @@ public interface AreaLand extends Land {
      * @param land the land
      * @return true, if is ancestor
      */
-    boolean isParentOrAncestor(Land land);
+    boolean isParentOrAncestor(@NotNull Land land);
 
     /**
      * Checks if is player in land. No parent verify.
@@ -126,5 +128,5 @@ public interface AreaLand extends Land {
      * @param player the player
      * @return true, if is player in land
      */
-    boolean isPlayerInLand(Player player);
+    boolean isPlayerInLand(@NotNull Player player);
 }

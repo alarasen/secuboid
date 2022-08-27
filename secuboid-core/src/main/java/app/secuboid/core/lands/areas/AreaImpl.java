@@ -22,6 +22,7 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -50,7 +51,7 @@ public class AreaImpl implements Area {
     }
 
     @Override
-    public AreaLand getLand() {
+    public @NotNull AreaLand getLand() {
         return land;
     }
 
@@ -92,7 +93,7 @@ public class AreaImpl implements Area {
         return areaForm.isLocationInside(x, y, z);
     }
 
-    public boolean isLocationInside(Location loc) {
+    public boolean isLocationInside(@NotNull Location loc) {
         return areaForm.isLocationInside(loc);
     }
 
@@ -101,7 +102,7 @@ public class AreaImpl implements Area {
         return areaForm.isLocationInsideSquare(x, z);
     }
 
-    public MessagePath getMessagePath() {
+    public @NotNull MessagePath getMessagePath() {
         return areaForm.getMessagePath();
     }
 

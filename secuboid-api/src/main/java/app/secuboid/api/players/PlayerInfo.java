@@ -17,11 +17,11 @@
  */
 package app.secuboid.api.players;
 
-import java.util.UUID;
-
-import org.bukkit.entity.Player;
-
 import app.secuboid.api.lands.Land;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 /**
  * Contains informations for a specific player.
@@ -33,18 +33,18 @@ public interface PlayerInfo extends CommandSenderInfo {
      *
      * @return the player (or null for the console)
      */
-    Player getPlayer();
+    @NotNull Player getPlayer();
 
     /**
      * Gets the player UUID.
-     * 
+     *
      * @return the player UUID
      */
-    UUID getUUID();
+    @NotNull UUID getUUID();
 
     /**
      * Sets the player in Admin Mode
-     * 
+     *
      * @param value true for Admin Mode
      */
     void setAdminMode(boolean value);
@@ -54,18 +54,18 @@ public interface PlayerInfo extends CommandSenderInfo {
      *
      * @return the last land
      */
-    Land getLastLand();
+    @NotNull Land getLastLand();
 
     /**
      * Gets the selection in Y top.
-     * 
+     *
      * @return the Y to
      */
     int getSelectionTop();
 
     /**
      * Gets the selection in Y bottom.
-     * 
+     *
      * @return the Y bottom
      */
     int getSelectionBottom();

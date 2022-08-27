@@ -17,6 +17,8 @@
  */
 package app.secuboid.api.messages;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Message type for message manager.
  */
@@ -42,10 +44,10 @@ public enum MessageType {
      */
     NO_COLOR("", "");
 
-    public final String prefix;
-    public final String color;
+    public final @NotNull String prefix;
+    public final @NotNull String color;
 
-    private MessageType(String prefix, String color) {
+    private MessageType(@NotNull String prefix, @NotNull String color) {
         this.prefix = prefix;
         this.color = color;
     }

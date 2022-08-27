@@ -24,6 +24,7 @@ import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -44,40 +45,40 @@ public class ParameterValuePermissionGroup implements ParameterValue {
 
     private final String group;
 
-    private int id;
+    private long id;
 
-    public ParameterValuePermissionGroup(String group) {
+    public ParameterValuePermissionGroup(@NotNull String group) {
         this.group = group;
         id = ID_NON_CREATED_VALUE;
     }
 
     // Needed for load from database
-    public static ParameterValuePermissionGroup newInstance(String value) throws ParameterValueException {
+    public static ParameterValuePermissionGroup newInstance(@NotNull String value) throws ParameterValueException {
         return new ParameterValuePermissionGroup(value);
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return NAME;
     }
 
     @Override
-    public String getShortName() {
+    public @NotNull String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
-    public String getChatColor() {
+    public @NotNull String getChatColor() {
         return CHAT_COLOR;
     }
 
@@ -87,12 +88,12 @@ public class ParameterValuePermissionGroup implements ParameterValue {
     }
 
     @Override
-    public String getValue() {
+    public @NotNull String getValue() {
         return group;
     }
 
     @Override
-    public boolean hasAccess(Entity entity) {
+    public boolean hasAccess(@NotNull Entity entity) {
         if (entity instanceof Player player) {
             return SecuboidPermissionGroupPlugin.getPermission().playerInGroup(player, group);
         }
@@ -101,7 +102,7 @@ public class ParameterValuePermissionGroup implements ParameterValue {
     }
 
     @Override
-    public boolean hasAccess(Entity entity, Land originLand) {
+    public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
     }
 
@@ -117,10 +118,10 @@ public class ParameterValuePermissionGroup implements ParameterValue {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ParameterValuePermissionGroup)) {
+        if (!(o instanceof ParameterValuePermissionGroup parameterValuePermissionGroup)) {
             return false;
         }
-        ParameterValuePermissionGroup parameterValuePermissionGroup = (ParameterValuePermissionGroup) o;
+
         return Objects.equals(group, parameterValuePermissionGroup.group) && id == parameterValuePermissionGroup.id;
     }
 

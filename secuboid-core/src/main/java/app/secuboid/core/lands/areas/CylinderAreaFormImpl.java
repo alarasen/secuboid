@@ -22,6 +22,7 @@ import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.utilities.LocalMath;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -110,7 +111,7 @@ public class CylinderAreaFormImpl extends AreaFormImpl implements CylinderAreaFo
     }
 
     @Override
-    public MessagePath getMessagePath() {
+    public @NotNull MessagePath getMessagePath() {
         return MessagePaths.areaCylinder(originH, originK, rX, rZ);
     }
 

@@ -24,6 +24,7 @@ import app.secuboid.api.players.PlayerInfos;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class PlayerInfosImpl implements PlayerInfos {
     }
 
     @Override
-    public Collection<CommandSenderInfo> getAll() {
+    public @NotNull Collection<CommandSenderInfo> getAll() {
         return senderToInfo.values();
     }
 

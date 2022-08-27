@@ -17,9 +17,9 @@
  */
 package app.secuboid.api.players;
 
-import org.bukkit.command.CommandSender;
-
 import app.secuboid.api.parameters.values.ParameterValuePlayer;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains informations for a command sender.
@@ -31,21 +31,21 @@ public interface CommandSenderInfo {
      *
      * @return the command sender
      */
-    CommandSender getSender();
+    @NotNull CommandSender getSender();
 
     /**
      * Gets the player name.
-     * 
+     *
      * @return the player name
      */
-    String getName();
+    @NotNull String getName();
 
     /**
      * Gets the parameter value for this player.
      *
      * @return the player container
      */
-    ParameterValuePlayer getParameterValue();
+    @NotNull ParameterValuePlayer getParameterValue();
 
     /**
      * Is the player admin mode?

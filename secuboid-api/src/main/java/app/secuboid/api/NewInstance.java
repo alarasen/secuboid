@@ -20,11 +20,12 @@ package app.secuboid.api;
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This interface is only for internal use.
  */
 public interface NewInstance {
 
-    <T, R> QueueThread<T, R> newQueueThread(Plugin plugin, String threadName, QueueProcessor<T, R> queueProcessor);
+    <T, R> @NotNull QueueThread<T, R> newQueueThread(@NotNull Plugin plugin, @NotNull String threadName, @NotNull QueueProcessor<T, R> queueProcessor);
 }

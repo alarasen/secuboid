@@ -18,7 +18,7 @@
 
 package app.secuboid.it;
 
-import app.secuboid.api.SecuboidCoponent;
+import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.core.SecuboidCorePluginImpl;
 import app.secuboid.core.SecuboidImpl;
@@ -52,15 +52,15 @@ public class MinecraftServer {
 
     private final File pluginTempDir;
 
-    private final List<SecuboidCoponent> secuboidComponents;
+    private final List<SecuboidComponent> secuboidComponents;
     private final List<JavaPlugin> plugins;
 
-    public MinecraftServer(File pluginTempDir, List<Class<? extends SecuboidCoponent>> secuboidComponentImplClasses) {
+    public MinecraftServer(File pluginTempDir, List<Class<? extends SecuboidComponent>> secuboidComponentImplClasses) {
         this.pluginTempDir = pluginTempDir;
         secuboidComponents = new ArrayList<>();
         plugins = new ArrayList<>();
 
-        for (Class<? extends SecuboidCoponent> implClass : secuboidComponentImplClasses) {
+        for (Class<? extends SecuboidComponent> implClass : secuboidComponentImplClasses) {
 
             if (implClass.isAssignableFrom(SecuboidImpl.class)) {
                 SecuboidCorePluginImpl secuboidCorePlugin = mockSecuboidCorePluginImpl();
@@ -80,24 +80,24 @@ public class MinecraftServer {
     }
 
     public void load() {
-        for (SecuboidCoponent secuboidCoponent : secuboidComponents) {
-            secuboidCoponent.load(true);
+        for (SecuboidComponent secuboidComponent : secuboidComponents) {
+            secuboidComponent.load(true);
         }
     }
 
     public void unload() {
-        List<SecuboidCoponent> secuboidComponentsCopy = secuboidComponents.subList(0, secuboidComponents.size());
+        List<SecuboidComponent> secuboidComponentsCopy = secuboidComponents.subList(0, secuboidComponents.size());
         Collections.reverse(secuboidComponentsCopy);
-        for (SecuboidCoponent secuboidCoponent : secuboidComponentsCopy) {
-            secuboidCoponent.unload();
+        for (SecuboidComponent secuboidComponent : secuboidComponentsCopy) {
+            secuboidComponent.unload();
         }
     }
 
     @SuppressWarnings("unchecked")
     public <C> C getSecuboidComponent(Class<C> secuboidComponentImplClasses) {
-        for (SecuboidCoponent secuboidCoponent : secuboidComponents) {
-            if (secuboidComponentImplClasses.isAssignableFrom(secuboidCoponent.getClass())) {
-                return (C) secuboidCoponent;
+        for (SecuboidComponent secuboidComponent : secuboidComponents) {
+            if (secuboidComponentImplClasses.isAssignableFrom(secuboidComponent.getClass())) {
+                return (C) secuboidComponent;
             }
         }
 

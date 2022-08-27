@@ -22,6 +22,7 @@ import app.secuboid.api.storage.tables.Row;
 import app.secuboid.api.storage.tables.RowWithId;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.reflection.PluginLoader;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -118,15 +119,15 @@ class StorageInitTest {
 
     static class Test1Row implements RowWithId {
 
-        private int id = 0;
+        private long id = 0;
 
         @Override
-        public int getId() {
+        public long getId() {
             return id;
         }
 
         @Override
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
     }
@@ -135,19 +136,19 @@ class StorageInitTest {
     static class Test1Table implements Table<Test1Row> {
 
         @Override
-        public Test1Row insert(Connection conn, Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row insert(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
             // Empty for test
             return test1Row;
         }
 
         @Override
-        public Test1Row update(Connection conn, Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row update(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
             // Empty for test
             return test1Row;
         }
 
         @Override
-        public Test1Row delete(Connection conn, Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row delete(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
             // Empty for test
             return test1Row;
         }
@@ -160,19 +161,19 @@ class StorageInitTest {
     static class Test2Table implements Table<Test2Row> {
 
         @Override
-        public Test2Row insert(Connection conn, Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row insert(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
             // Empty for test
             return test2Row;
         }
 
         @Override
-        public Test2Row update(Connection conn, Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row update(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
             // Empty for test
             return test2Row;
         }
 
         @Override
-        public Test2Row delete(Connection conn, Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row delete(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
             // Empty for test
             return test2Row;
         }

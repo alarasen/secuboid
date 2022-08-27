@@ -17,16 +17,15 @@
  */
 package app.secuboid.api.parameters.values;
 
-import static java.lang.String.format;
+import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.reflection.ParameterValueRegistered;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-import app.secuboid.api.lands.Land;
-import app.secuboid.api.reflection.ParameterValueRegistered;
-import app.secuboid.api.storage.tables.RowWithId;
-import org.bukkit.entity.Entity;
-
-import app.secuboid.api.exceptions.ParameterValueException;
+import static java.lang.String.format;
 
 /**
  * Represents an entity class from the Bukkit Java source code.
@@ -47,15 +46,15 @@ public class ParameterValueEntityClass implements ParameterValue {
 
     private final Class<? extends Entity> entityClass;
 
-    private int id;
+    private long id;
 
-    public ParameterValueEntityClass(Class<? extends Entity> entityClass) {
+    public ParameterValueEntityClass(@NotNull Class<? extends Entity> entityClass) {
         this.entityClass = entityClass;
-        id = RowWithId.ID_NON_CREATED_VALUE;
+        id = ID_NON_CREATED_VALUE;
     }
 
     // Needed for load from database
-    public static ParameterValueEntityClass newInstance(String value) throws ParameterValueException {
+    public static ParameterValueEntityClass newInstance(@NotNull String value) throws ParameterValueException {
         String entityClassStr;
         if (value.contains(".")) {
             entityClassStr = value;
@@ -89,27 +88,27 @@ public class ParameterValueEntityClass implements ParameterValue {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return NAME;
     }
 
     @Override
-    public String getShortName() {
+    public @NotNull String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
-    public String getChatColor() {
+    public @NotNull String getChatColor() {
         return CHAT_COLOR;
     }
 
@@ -119,7 +118,7 @@ public class ParameterValueEntityClass implements ParameterValue {
     }
 
     @Override
-    public String getValue() {
+    public @NotNull String getValue() {
         String className = entityClass.getName();
 
         if (className.startsWith(ENTITY_PREFIX)) {
@@ -130,12 +129,12 @@ public class ParameterValueEntityClass implements ParameterValue {
     }
 
     @Override
-    public boolean hasAccess(Entity entity) {
+    public boolean hasAccess(@NotNull Entity entity) {
         return entityClass.isAssignableFrom(entity.getClass());
     }
 
     @Override
-    public boolean hasAccess(Entity entity, Land originLand) {
+    public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
     }
 
@@ -151,10 +150,10 @@ public class ParameterValueEntityClass implements ParameterValue {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ParameterValueEntityClass)) {
+        if (!(o instanceof ParameterValueEntityClass parameterValueEntityClass)) {
             return false;
         }
-        ParameterValueEntityClass parameterValueEntityClass = (ParameterValueEntityClass) o;
+
         return Objects.equals(entityClass, parameterValueEntityClass.entityClass) && id == parameterValueEntityClass.id;
     }
 

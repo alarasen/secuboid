@@ -25,6 +25,7 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.reflection.PluginLoader;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -88,7 +89,7 @@ class CommandsTest {
         }
 
         @Override
-        public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
+        public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
             CommandSender sender = commandSenderInfo.getSender();
             sender.sendMessage("done!");
         }
@@ -103,17 +104,17 @@ class CommandsTest {
         }
 
         @Override
-        public CommandSender getSender() {
+        public @NotNull CommandSender getSender() {
             return sender;
         }
 
         @Override
-        public String getName() {
+        public @NotNull String getName() {
             return "sender";
         }
 
         @Override
-        public ParameterValuePlayer getParameterValue() {
+        public @NotNull ParameterValuePlayer getParameterValue() {
             // Not implemented
             return null;
         }

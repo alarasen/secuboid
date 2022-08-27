@@ -17,9 +17,10 @@
  */
 package app.secuboid.api.thread;
 
-import java.util.Set;
-
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * Interface for queue processor with a type T to send and a return R if needed.
@@ -32,7 +33,7 @@ public interface QueueProcessor<T, R> {
      * @param t the t
      * @return the value for the return (or callback)
      */
-    R process(T t);
+    @NotNull R process(@NotNull T t);
 
     /**
      * Process (set) and sync what it should execute inside the loop.
@@ -40,7 +41,7 @@ public interface QueueProcessor<T, R> {
      * @param t the t
      * @return the value for the return (or callback)
      */
-    default Set<R> processMultipleSync(T t) {
+    default @NotNull Set<R> processMultipleSync(@NotNull T t) {
         throw new SecuboidRuntimeException("processMultiple Not implemented!");
     }
 }

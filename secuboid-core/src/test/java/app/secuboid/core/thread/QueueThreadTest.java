@@ -24,6 +24,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +47,7 @@ class QueueThreadTest {
     private static class TestQueueProcessor implements QueueProcessor<Duration, Integer> {
 
         @Override
-        public Integer process(Duration duration) {
+        public @NotNull Integer process(@NotNull Duration duration) {
             if (!duration.isZero()) {
                 Awaitility.await().during(duration);
             }
@@ -54,7 +55,7 @@ class QueueThreadTest {
         }
 
         @Override
-        public Set<Integer> processMultipleSync(Duration duration) {
+        public @NotNull Set<Integer> processMultipleSync(@NotNull Duration duration) {
             if (!duration.isZero()) {
                 Awaitility.await().during(duration);
             }

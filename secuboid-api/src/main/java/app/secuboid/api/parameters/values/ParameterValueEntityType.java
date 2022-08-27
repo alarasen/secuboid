@@ -17,16 +17,16 @@
  */
 package app.secuboid.api.parameters.values;
 
-import static java.lang.String.format;
-
-import java.util.Objects;
-
+import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import java.util.Objects;
+
+import static java.lang.String.format;
 
 /**
  * Represents a specific entity type.
@@ -45,15 +45,15 @@ public class ParameterValueEntityType implements ParameterValue {
 
     private final EntityType entityType;
 
-    private int id;
+    private long id;
 
-    public ParameterValueEntityType(EntityType entityType) {
+    public ParameterValueEntityType(@NotNull EntityType entityType) {
         this.entityType = entityType;
         id = ID_NON_CREATED_VALUE;
     }
 
     // Needed for load from database
-    public static ParameterValueEntityType newInstance(String value) throws ParameterValueException {
+    public static ParameterValueEntityType newInstance(@NotNull String value) throws ParameterValueException {
         EntityType entityType;
 
         try {
@@ -70,27 +70,27 @@ public class ParameterValueEntityType implements ParameterValue {
     }
 
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return NAME;
     }
 
     @Override
-    public String getShortName() {
+    public @NotNull String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
-    public String getChatColor() {
+    public @NotNull String getChatColor() {
         return CHAT_COLOR;
     }
 
@@ -100,17 +100,17 @@ public class ParameterValueEntityType implements ParameterValue {
     }
 
     @Override
-    public String getValue() {
+    public @NotNull String getValue() {
         return entityType.name();
     }
 
     @Override
-    public boolean hasAccess(Entity entity) {
+    public boolean hasAccess(@NotNull Entity entity) {
         return entity.getType() == entityType;
     }
 
     @Override
-    public boolean hasAccess(Entity entity, Land originLand) {
+    public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
     }
 
@@ -126,10 +126,10 @@ public class ParameterValueEntityType implements ParameterValue {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof ParameterValueEntityType)) {
+        if (!(o instanceof ParameterValueEntityType parameterValueEntityType)) {
             return false;
         }
-        ParameterValueEntityType parameterValueEntityType = (ParameterValueEntityType) o;
+
         return Objects.equals(entityType, parameterValueEntityType.entityType) && id == parameterValueEntityType.id;
     }
 

@@ -21,6 +21,7 @@ import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,13 +56,13 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public boolean removeArea(Area area) {
+    public boolean removeArea(@NotNull Area area) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean replaceArea(int key, Area newArea) {
+    public boolean replaceArea(int key, @NotNull Area newArea) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -73,31 +74,31 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public Integer getAreaKey(Area area) {
+    public Integer getAreaKey(@NotNull Area area) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Set<Integer> getAreaKeys() {
+    public @NotNull Set<Integer> getAreaKeys() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Map<Integer, Area> getIdToArea() {
+    public @NotNull Map<Integer, Area> getIdToArea() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Collection<Area> getAreas() {
+    public @NotNull Collection<Area> getAreas() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Land getParent() {
+    public @NotNull Land getParent() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -110,13 +111,13 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public boolean isParentOrAncestor(Land land) {
+    public boolean isParentOrAncestor(@NotNull Land land) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean isPlayerInLand(Player player) {
+    public boolean isPlayerInLand(@NotNull Player player) {
         // TODO Auto-generated method stub
         return false;
     }

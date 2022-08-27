@@ -28,8 +28,8 @@ public class ResidentTable implements Table<Resident> {
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
             + "CREATE TABLE IF NOT EXISTS %1$sresident ("
-            + " land_id INT NOT NULL,"
-            + " parameter_value_id INT NOT NULL,"
+            + " land_id BIGINT NOT NULL,"
+            + " parameter_value_id BIGINT NOT NULL,"
             + " level INT NOT NULL,"
             + " PRIMARY KEY (land_id, parameter_value_id),"
             + " CONSTRAINT fk_resident_land_id FOREIGN KEY (land_id) REFERENCES %1$sland (id),"

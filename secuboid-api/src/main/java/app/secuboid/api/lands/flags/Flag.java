@@ -17,24 +17,26 @@
  */
 package app.secuboid.api.lands.flags;
 
-import app.secuboid.api.storage.tables.Row;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.storage.tables.Row;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represent a flag with a value.
- * 
- * @param LandComponent the affected land
+ *
+ * @param landComponent the affected land
  * @param flagType      the flag type
  * @param source        the parameter value source if needed or null
  * @param target        the parameter value target if needed or null
  * @param metadata      the metadata if needed or null
  */
 public record Flag(
-        LandComponent land,
-        FlagType flagType,
-        ParameterValue source,
-        ParameterValue target,
-        String metadata) implements Row {
+        @NotNull LandComponent landComponent,
+        @NotNull FlagType flagType,
+        @Nullable ParameterValue source,
+        @Nullable ParameterValue target,
+        @Nullable String metadata) implements Row {
 }

@@ -17,10 +17,12 @@
  */
 package app.secuboid.api.players;
 
-import java.util.Collection;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * Contains the player informations.
@@ -28,25 +30,25 @@ import org.bukkit.entity.Player;
 public interface PlayerInfos {
 
     /**
-     * Gets the informations for a command sender.
+     * Gets the information for a command sender.
      *
      * @param sender the command sender
      * @return the command sender information
      */
-    CommandSenderInfo get(CommandSender sender);
+    @Nullable CommandSenderInfo get(CommandSender sender);
 
     /**
-     * Gets the informations for a specific player.
+     * Gets the information for a specific player.
      *
      * @param player the player
      * @return the player information
      */
-    PlayerInfo getPlayerInfo(Player player);
+    @Nullable PlayerInfo getPlayerInfo(Player player);
 
     /**
-     * Gets the informations for all command senders.
+     * Gets the information for all command senders.
      *
-     * @return the player informations
+     * @return the player information
      */
-    Collection<CommandSenderInfo> getAll();
+    @NotNull Collection<CommandSenderInfo> getAll();
 }

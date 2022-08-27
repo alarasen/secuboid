@@ -23,6 +23,7 @@ import app.secuboid.core.messages.Log;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.Set;
@@ -80,7 +81,7 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
     }
 
     @Override
-    public void addElement(T t, BlockingQueue<Set<R>> resultQueue) {
+    public void addElement(T t, @NotNull BlockingQueue<Set<R>> resultQueue) {
         Element<T, R> element = new Element<>(t, null, resultQueue, null);
         taskQueue.add(element);
     }
