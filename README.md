@@ -1,16 +1,23 @@
+[![Java CI with Maven](https://github.com/secuboid/secuboid/actions/workflows/maven.yml/badge.svg)](https://github.com/secuboid/secuboid/actions/workflows/maven.yml)
+
 # For Secuboid 1.x.x
+
 [Secuboid 1 (stable) documentation](https://tabinol.github.io/secuboid-minecraft-plugin/)
 
 # Secuboid 2 (Upcoming version INCOMPLETE NOT FOR PRODUCTION)
 
-Secuboid is a complete land (region) protection plugin. It has a lot of functionalities. You can make cuboid lands, cylinder lands. The player can make his own land with economy, rent or sell his land. There is also a very complete list of flags and permissions.
+Secuboid is a complete land (region) protection plugin. It has a lot of functionalities. You can make cuboid lands,
+cylinder lands. The player can make his own land with economy, rent or sell his land. There is also a very complete list
+of flags and permissions.
 
 ## Help needed
+
 The help is welcome for development and language typos.
 
 ## Metrics
 
-This plugin utilises bStats plugin metrics system, which means that the following information is collected and sent to bstats.org:
+This plugin utilises bStats plugin metrics system, which means that the following information is collected and sent to
+bstats.org:
 
 * A unique identifier
 * The server's version of Java
@@ -27,7 +34,9 @@ Opting out of this service can be done by editing plugins/Plugin Metrics/config.
 
 # History
 
-The Secuboid project began in 2014 on the "Factoid" name. The goal was to have a complete protection plugin with an unlimited possibilities of configuration for lands and worlds. We also wanted to add an inventory system for lands, worlds and game modes.
+The Secuboid project began in 2014 on the "Factoid" name. The goal was to have a complete protection plugin with an
+unlimited possibilities of configuration for lands and worlds. We also wanted to add an inventory system for lands,
+worlds and game modes.
 
 ## Former developers
 
