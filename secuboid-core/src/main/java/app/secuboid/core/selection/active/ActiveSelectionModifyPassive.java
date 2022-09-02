@@ -15,28 +15,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.WorldLand;
-import org.bukkit.command.CommandSender;
+import app.secuboid.api.players.PlayerInfo;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelection {
+public class ActiveSelectionModifyPassive extends ActiveSelectionModify {
 
-    protected final WorldLand worldLand;
-
-    protected final CommandSender commandSender;
-
-    public ActiveSelection(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender) {
-        this.worldLand = worldLand;
-        this.commandSender = commandSender;
+    public ActiveSelectionModifyPassive(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
+        super(worldLand, playerInfo, selectionForm);
     }
 
-    public final @NotNull WorldLand getWorldLand() {
-        return worldLand;
-    }
-
-    public final @NotNull CommandSender getCommandSender() {
-        return commandSender;
+    @Override
+    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
+        return false;
     }
 }

@@ -15,28 +15,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.Area;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelection {
+public class ActiveSelectionArea extends ActiveSelection {
 
-    protected final WorldLand worldLand;
+    protected final Area area;
 
-    protected final CommandSender commandSender;
-
-    public ActiveSelection(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender) {
-        this.worldLand = worldLand;
-        this.commandSender = commandSender;
-    }
-
-    public final @NotNull WorldLand getWorldLand() {
-        return worldLand;
-    }
-
-    public final @NotNull CommandSender getCommandSender() {
-        return commandSender;
+    ActiveSelectionArea(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender, @NotNull Area area) {
+        super(worldLand, commandSender);
+        this.area = area;
     }
 }

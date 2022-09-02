@@ -18,20 +18,19 @@
 package app.secuboid.core.selection;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
+import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
+import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
 import app.secuboid.core.lands.areas.CylinderAreaFormImpl;
-import app.secuboid.core.selection.active.VisualSelection;
-import app.secuboid.core.selection.active.VisualSelectionCuboid;
-import app.secuboid.core.selection.active.VisualSelectionCylinder;
+import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static app.secuboid.core.config.Config.config;
 
@@ -41,22 +40,36 @@ public class PlayerSelection extends SenderSelection {
     protected static final Material SEL_COLLISION = Material.REDSTONE_BLOCK;
     protected static final Material SEL_PASSIVE = Material.IRON_BLOCK;
 
+    private final PlayerInfo playerInfo;
     private final Player player;
 
-    private SelectionMoveType moveType;
-    private SelectionScoreboard selectionScoreboard;
-
-    public PlayerSelection(@NotNull Player player) {
+    public PlayerSelection(@NotNull PlayerInfo playerInfo) {
         super();
-        this.player = player;
-
-        selectionScoreboard = null;
-        moveType = null;
+        this.playerInfo = playerInfo;
+        this.player = playerInfo.getPlayer();
     }
 
-    public void createVisualSelection(@NotNull Class<? extends AreaForm> areaFormClass, @NotNull SelectionMoveType newMoveType) {
-        moveType = newMoveType;
+    public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull Class<? extends AreaForm> areaFormClass) {
+        SelectionForm selectionForm = createActiveSelection(areaFormClass);
+        activeSelection = new ActiveSelectionModifyExpand(worldLand, playerInfo, selectionForm);
+    }
 
+    public void updateSelectionFromLocation() {
+        if (activeSelection instanceof ActiveSelectionModify activeSelectionModify) {
+            activeSelectionModify.playerMoveSelection();
+        }
+    }
+
+    @Override
+    public boolean removeSelection() {
+        if (activeSelection instanceof ActiveSelectionModify activeSelectionModify) {
+            activeSelectionModify.removeSelection();
+        }
+
+        return super.removeSelection();
+    }
+
+    private SelectionForm createActiveSelection(@NotNull Class<? extends AreaForm> areaFormClass) {
         int selectionDefaultStartDiameter = config().selectionDefaultStartDiameter();
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
@@ -72,51 +85,20 @@ public class PlayerSelection extends SenderSelection {
         int z2 = z1 + selectionDefaultStartDiameter;
 
         AreaForm areaForm;
+        SelectionForm selectionForm;
+
         if (areaFormClass.isAssignableFrom(CuboidAreaForm.class)) {
             areaForm = new CuboidAreaFormImpl(x1, y1, z1, x2, y2, z2);
-            activeSelection = new VisualSelectionCuboid(world, (CuboidAreaForm) areaForm, null, player);
+            selectionForm = new SelectionFormCuboid((CuboidAreaForm) areaForm, player, null, null);
         } else if (areaFormClass.isAssignableFrom(CylinderAreaForm.class)) {
             areaForm = new CylinderAreaFormImpl(x1, y1, z1, x2, y2, z2);
-            activeSelection = new VisualSelectionCylinder(world, (CylinderAreaForm) areaForm, null, player);
+            selectionForm = new SelectionFormCylinder((CylinderAreaForm) areaForm, player, null, null);
         } else {
             throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
         }
 
         // TODO passive
 
-        selectionScoreboard = new SelectionScoreboard(player, areaForm, moveType);
-    }
-
-    public void updateSelectionFromLocation() {
-        if (activeSelection instanceof VisualSelection visualSelection) {
-            visualSelection.playerMoveSelection(moveType);
-
-            if (moveType != SelectionMoveType.PASSIVE) {
-                selectionScoreboard.update();
-            }
-        }
-    }
-
-    @Nullable
-    public AreaForm getAreaForm() {
-        if (activeSelection instanceof VisualSelection visualSelection) {
-            return visualSelection.getAreaForm();
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean removeSelection() {
-        if (activeSelection instanceof VisualSelection visualSelection) {
-            visualSelection.removeSelection();
-        }
-
-        if (selectionScoreboard != null) {
-            selectionScoreboard.hide();
-            selectionScoreboard = null;
-        }
-
-        return super.removeSelection();
+        return selectionForm;
     }
 }

@@ -18,6 +18,7 @@
 package app.secuboid.api.players;
 
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.WorldLand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,11 +51,18 @@ public interface PlayerInfo extends CommandSenderInfo {
     void setAdminMode(boolean value);
 
     /**
-     * Gets the last land where the player was.
+     * Gets the land where the player is.
      *
      * @return the last land
      */
-    @NotNull Land getLastLand();
+    @NotNull Land getLand();
+
+    /**
+     * Gets the world land where the player is.
+     *
+     * @return the last world land
+     */
+    @NotNull WorldLand getWorldLand();
 
     /**
      * Gets the selection in Y top.

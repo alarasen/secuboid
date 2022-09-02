@@ -17,27 +17,17 @@
  */
 package app.secuboid.core.selection.active;
 
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class VisualSelectionCylinder extends VisualSelection {
+public class SelectionFormCylinder extends SelectionForm {
 
-    public VisualSelectionCylinder(World world, CylinderAreaForm areaForm, Area originArea, Player player) {
-        super(world, areaForm, originArea, player);
-    }
-
-    @Override
-    public boolean hasCollision() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void removeSelection() {
-        // TODO Auto-generated method stub
-
+    public SelectionFormCylinder(@NotNull CylinderAreaForm cylinderAreaForm, @NotNull Player player, @Nullable Land originLand, @Nullable Area originArea) {
+        super(cylinderAreaForm, player, originLand, originArea);
     }
 
     @Override

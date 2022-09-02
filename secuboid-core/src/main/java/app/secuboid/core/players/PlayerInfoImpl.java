@@ -18,6 +18,7 @@
 package app.secuboid.core.players;
 
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.parameters.values.ParameterValuePlayer;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.selection.PlayerSelection;
@@ -34,11 +35,11 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     private final Player player;
     private final PlayerSelection playerSelection;
 
-    private boolean adminMode = false;
+    private boolean adminMode;
 
     private long lastUpdateTimeMillis = 0;
-    private Location lastLocation = null;
-    private boolean tpCancel = false;
+    private Location lastLocation;
+    private boolean isTpCancel;
 
     private int selectionTop;
     private int selectionBottom;
@@ -46,7 +47,13 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     PlayerInfoImpl(Player player) {
         super(player);
         this.player = player;
-        playerSelection = new PlayerSelection(player);
+
+        playerSelection = new PlayerSelection(this);
+        adminMode = false;
+        lastUpdateTimeMillis = 0L;
+        lastLocation = player.getLocation();
+        isTpCancel = false;
+
     }
 
     @Override
@@ -90,16 +97,12 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         this.lastUpdateTimeMillis = lastUpdateTimeMillis;
     }
 
-    public void setLastLocation(Location lastLocation) {
-        this.lastLocation = lastLocation;
-    }
-
     public boolean hasTpCancel() {
-        return tpCancel;
+        return isTpCancel;
     }
 
     public void setTpCancel(boolean tpCancel) {
-        this.tpCancel = tpCancel;
+        this.isTpCancel = tpCancel;
     }
 
     @Override
@@ -117,10 +120,17 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public @NotNull Land getLastLand() {
+    public @NotNull Land getLand() {
         // TODO Generated
         return null;
     }
+
+    @Override
+    public @NotNull WorldLand getWorldLand() {
+        // TODO Code
+        return null;
+    }
+
 
     @Override
     public SenderSelection getSelection() {

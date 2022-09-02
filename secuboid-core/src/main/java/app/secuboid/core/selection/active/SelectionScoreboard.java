@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.selection;
+package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
@@ -23,6 +23,9 @@ import app.secuboid.api.messages.MessageType;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.SecuboidScoreboard;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 import static app.secuboid.core.messages.Message.message;
 
@@ -32,14 +35,20 @@ class SelectionScoreboard {
 
     private static final String COMMAND_CREATE = "/sd create";
 
+    private static final Map<Class<? extends ActiveSelectionModify>, String> CLASS_TO_MESSAGE_TAG = Map.of(
+            ActiveSelectionModifyExpand.class, "expand",
+            ActiveSelectionModifyMove.class, "move",
+            ActiveSelectionModifyPassive.class, "passive",
+            ActiveSelectionModifyRetract.class, "retract");
+
     private final SecuboidScoreboard scoreboard;
     private final AreaForm areaForm;
 
-    SelectionScoreboard(Player player, AreaForm areaForm, SelectionMoveType moveType) {
+    SelectionScoreboard(@NotNull Player player, @NotNull AreaForm areaForm, @NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
         this.areaForm = areaForm;
 
         String title = message().get(MessageType.TITLE, MessagePaths.selectionScoreboardTitleCreate());
-        String selectionTypeMsg = getSelectionTypeMsg(moveType);
+        String selectionTypeMsg = getSelectionTypeMsg(activeSelectionModifyClass);
         String[] lines = new String[5];
         lines[0] = message().get(MessageType.NORMAL,
                 MessagePaths.selectionScoreboardSelectionType(selectionTypeMsg));
@@ -64,8 +73,9 @@ class SelectionScoreboard {
         scoreboard.hide();
     }
 
-    private String getSelectionTypeMsg(SelectionMoveType moveType) {
-        String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + moveType.name().toLowerCase();
+    private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
+        String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
+        String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
         MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});
         return message().get(MessageType.NO_COLOR, messagePath);
     }

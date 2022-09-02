@@ -17,9 +17,11 @@
  */
 package app.secuboid.api.lands;
 
-import java.util.Collection;
-
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * All lands world relative.
@@ -68,12 +70,12 @@ public interface Land extends LandComponent {
      * @param name the land name
      * @return the child
      */
-    AreaLand getChild(String name);
+    @Nullable AreaLand getChild(String name);
 
     /**
      * Gets the children.
      *
      * @return the children
      */
-    Collection<AreaLand> getChildren();
+    @NotNull Collection<AreaLand> getChildren();
 }

@@ -20,6 +20,8 @@ package app.secuboid.core.lands;
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,12 +67,12 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public AreaLand getChild(String name) {
+    public @Nullable AreaLand getChild(String name) {
         return nameLowerToChild.get(name.toLowerCase());
     }
 
     @Override
-    public Collection<AreaLand> getChildren() {
+    public @NotNull Collection<AreaLand> getChildren() {
         return nameLowerToChild.values();
     }
 }

@@ -17,8 +17,6 @@
  */
 package app.secuboid.core.selection;
 
-import app.secuboid.api.lands.Land;
-import app.secuboid.api.lands.areas.Area;
 import app.secuboid.core.selection.active.ActiveSelection;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,23 +35,6 @@ public class SenderSelection {
 
     public final boolean hasSelection() {
         return activeSelection != null;
-    }
-
-    @Nullable
-    public final Area getOriginArea() {
-        return activeSelection != null ? activeSelection.getOriginArea() : null;
-    }
-
-    @Nullable
-    public final Land getLand() {
-        if (activeSelection != null) {
-            Area originArea = activeSelection.getOriginArea();
-            if (originArea != null) {
-                return originArea.getLand();
-            }
-        }
-
-        return null;
     }
 
     public boolean removeSelection() {

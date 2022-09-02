@@ -17,33 +17,24 @@
  */
 package app.secuboid.core.selection.active;
 
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.core.utilities.PlayerUtil;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class VisualSelectionCuboid extends VisualSelection {
+public class SelectionFormCuboid extends SelectionForm {
 
-    public VisualSelectionCuboid(World world, CuboidAreaForm areaForm, Area originArea,
-                                 Player player) {
-        super(world, areaForm, originArea, player);
+    public SelectionFormCuboid(@NotNull CuboidAreaForm cuboidAreaForm, @NotNull Player player, @Nullable Land originLand, @Nullable Area originArea) {
+        super(cuboidAreaForm, player, originLand, originArea);
     }
 
     @Override
-    public boolean hasCollision() {
-        return isCollision;
-    }
-
-    @Override
-    public void removeSelection() {
-        changedBlocks.resetBlocks();
-    }
-
-    @Override
-    protected void refreshVisualSelection() {
+    void refreshVisualSelection() {
 
         // Detect the current land from the 8 points
         // TODO No comments
@@ -94,6 +85,8 @@ public class VisualSelectionCuboid extends VisualSelection {
     }
 
     private void drawVisual() {
+        changedBlocks.resetBlocks();
+
         int stepX = getStepX();
         int stepZ = getStepZ();
 
@@ -132,7 +125,7 @@ public class VisualSelectionCuboid extends VisualSelection {
         }
     }
 
-    protected void drawVisualRelative(Location newLoc) {
+    private void drawVisualRelative(Location newLoc) {
         // LandPermissionsFlags testCuboidarea =
         // secuboid.getLands().getPermissionsFlags(newLoc);
         // TODO Collision

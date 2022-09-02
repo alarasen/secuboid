@@ -20,12 +20,13 @@ package app.secuboid.core.commands.exec;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidCorePlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.players.PlayerInfoImpl;
 import app.secuboid.core.selection.PlayerSelection;
-import app.secuboid.core.selection.SelectionMoveType;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
@@ -39,13 +40,16 @@ public class CommandSelectCuboid implements CommandExec {
 
     Secuboid secuboid;
 
-    public CommandSelectCuboid(Secuboid secuboid) {
+    public CommandSelectCuboid(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        PlayerSelection playerSelection = ((PlayerInfoImpl) commandSenderInfo).getPlayerSelection();
-        playerSelection.createVisualSelection(CuboidAreaForm.class, SelectionMoveType.EXPAND);
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+        PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
+        WorldLand worldLand = playerInfo.getWorldLand();
+        PlayerSelection playerSelection = ((PlayerInfoImpl) playerInfo).getPlayerSelection();
+
+        playerSelection.createActiveSelectionModifyExpand(worldLand, CuboidAreaForm.class);
     }
 }

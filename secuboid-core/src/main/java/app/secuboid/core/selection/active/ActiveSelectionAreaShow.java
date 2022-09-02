@@ -16,11 +16,23 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.selection;
+package app.secuboid.core.selection.active;
 
-public enum SelectionMoveType {
-    PASSIVE,
-    EXPAND,
-    RETRACT,
-    MOVE
+import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.Area;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+public class ActiveSelectionAreaShow extends ActiveSelectionArea {
+
+    private final Player player;
+
+    ActiveSelectionAreaShow(@NotNull WorldLand worldLand, @NotNull Player player, @NotNull Area area) {
+        super(worldLand, player, area);
+        this.player = player;
+    }
+
+    public @NotNull Player getPlayer() {
+        return player;
+    }
 }

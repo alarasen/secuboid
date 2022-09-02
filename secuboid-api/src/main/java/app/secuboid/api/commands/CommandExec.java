@@ -58,7 +58,7 @@ public interface CommandExec {
      *
      * @param commandSenderInfo the command sender secuboid information (player or
      *                          console)
-     * @param subArgs           the argument array (excude the command itself)
+     * @param subArgs           the argument array (exclude the command itself)
      */
     void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs);
 }
