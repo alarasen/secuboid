@@ -40,9 +40,10 @@ public abstract class ActiveSelectionModify extends ActiveSelection {
         this.playerInfo = playerInfo;
         player = playerInfo.getPlayer();
         this.selectionForm = selectionForm;
-        selectionScoreboard = new SelectionScoreboard(player, selectionForm.areaForm, this.getClass());
 
         playerLastLoc = player.getLocation();
+        selectionForm.refreshVisualSelection();
+        selectionScoreboard = new SelectionScoreboard(player, selectionForm.areaForm, this.getClass());
     }
 
     public final void playerMoveSelection() {

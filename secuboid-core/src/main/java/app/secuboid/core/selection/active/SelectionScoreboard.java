@@ -17,6 +17,7 @@
  */
 package app.secuboid.core.selection.active;
 
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.messages.MessageType;
@@ -75,6 +76,11 @@ class SelectionScoreboard {
 
     private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
         String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
+
+        if (msgTag == null) {
+            throw new SecuboidRuntimeException("Message for this class not implemented: " + activeSelectionModifyClass.getSimpleName());
+        }
+
         String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
         MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});
         return message().get(MessageType.NO_COLOR, messagePath);

@@ -27,7 +27,6 @@ import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
 import app.secuboid.core.lands.areas.CylinderAreaFormImpl;
 import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,10 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import static app.secuboid.core.config.Config.config;
 
 public class PlayerSelection extends SenderSelection {
-
-    protected static final Material SEL_ACTIVE = Material.SPONGE;
-    protected static final Material SEL_COLLISION = Material.REDSTONE_BLOCK;
-    protected static final Material SEL_PASSIVE = Material.IRON_BLOCK;
 
     private final PlayerInfo playerInfo;
     private final Player player;
@@ -50,7 +45,12 @@ public class PlayerSelection extends SenderSelection {
     }
 
     public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull Class<? extends AreaForm> areaFormClass) {
-        SelectionForm selectionForm = createActiveSelection(areaFormClass);
+        AreaForm areaForm = createAreaForm(areaFormClass);
+        createActiveSelectionModifyExpand(worldLand, areaForm);
+    }
+
+    public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
+        SelectionForm selectionForm = createSelectionForm(areaForm);
         activeSelection = new ActiveSelectionModifyExpand(worldLand, playerInfo, selectionForm);
     }
 
@@ -69,7 +69,7 @@ public class PlayerSelection extends SenderSelection {
         return super.removeSelection();
     }
 
-    private SelectionForm createActiveSelection(@NotNull Class<? extends AreaForm> areaFormClass) {
+    private @NotNull AreaForm createAreaForm(@NotNull Class<? extends AreaForm> areaFormClass) {
         int selectionDefaultStartDiameter = config().selectionDefaultStartDiameter();
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
@@ -84,21 +84,23 @@ public class PlayerSelection extends SenderSelection {
         int z1 = playerZ - (selectionDefaultStartDiameter / 2);
         int z2 = z1 + selectionDefaultStartDiameter;
 
-        AreaForm areaForm;
-        SelectionForm selectionForm;
-
         if (areaFormClass.isAssignableFrom(CuboidAreaForm.class)) {
-            areaForm = new CuboidAreaFormImpl(x1, y1, z1, x2, y2, z2);
-            selectionForm = new SelectionFormCuboid((CuboidAreaForm) areaForm, player, null, null);
+            return new CuboidAreaFormImpl(x1, y1, z1, x2, y2, z2);
         } else if (areaFormClass.isAssignableFrom(CylinderAreaForm.class)) {
-            areaForm = new CylinderAreaFormImpl(x1, y1, z1, x2, y2, z2);
-            selectionForm = new SelectionFormCylinder((CylinderAreaForm) areaForm, player, null, null);
-        } else {
-            throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
+            return new CylinderAreaFormImpl(x1, y1, z1, x2, y2, z2);
         }
 
-        // TODO passive
-
-        return selectionForm;
+        throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
     }
+
+    private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm) {
+        if (areaForm instanceof CuboidAreaForm cuboidAreaForm) {
+            return new SelectionFormCuboid(cuboidAreaForm, player, null, null);
+        } else if (areaForm instanceof CylinderAreaForm cylinderAreaForm) {
+            return new SelectionFormCylinder(cylinderAreaForm, player, null, null);
+        }
+
+        throw new SecuboidRuntimeException("Selection form not yet implemented: " + areaForm);
+    }
+
 }
