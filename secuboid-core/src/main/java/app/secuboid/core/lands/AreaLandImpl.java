@@ -36,8 +36,8 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
 
     // IMPORTANT: Please use createLand in Lands class to create a Land or it will
     // not be accessible and saved.
-    public AreaLandImpl(String name, Land parent) {
-        super(name);
+    public AreaLandImpl(long id, String name, Land parent) {
+        super(id, name);
         this.parent = parent;
 
         idToArea = new HashMap<>();

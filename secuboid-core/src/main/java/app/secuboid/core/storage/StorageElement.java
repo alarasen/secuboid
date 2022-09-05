@@ -17,7 +17,7 @@
  */
 package app.secuboid.core.storage;
 
-import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 
 public record StorageElement(Table<?> table, Row row, SQLRequestType requestType) {

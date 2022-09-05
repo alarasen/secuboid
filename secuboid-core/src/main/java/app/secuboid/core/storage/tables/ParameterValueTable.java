@@ -17,12 +17,12 @@
  */
 package app.secuboid.core.storage.tables;
 
-import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
+import app.secuboid.core.storage.rows.ParameterValueRow;
 
-@TableRegistered(row = ParameterValue.class)
-public class ParameterValueTable implements Table<ParameterValue> {
+@TableRegistered(row = ParameterValueRow.class)
+public class ParameterValueTable implements Table<ParameterValueRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""

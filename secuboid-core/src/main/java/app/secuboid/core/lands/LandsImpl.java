@@ -17,18 +17,24 @@
  */
 package app.secuboid.core.lands;
 
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.Log;
+import app.secuboid.core.storage.rows.LandRow;
 import app.secuboid.core.utilities.NameUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.*;
 import java.util.function.Consumer;
+
+import static app.secuboid.core.storage.tables.LandTable.*;
+import static java.lang.String.format;
 
 public class LandsImpl implements Lands {
 
@@ -41,17 +47,33 @@ public class LandsImpl implements Lands {
     }
 
     public void load() {
-        Collection<LandComponent> landComponents = getStorageManager().selectAllSync(LandComponent.class);
+        worldNameToWorldLand.clear();
+        idToLandComponent.clear();
 
-        for (LandComponent landComponent : landComponents) {
+        Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
+        Map<LandComponent, Long> landComponentToParentId = new HashMap<>();
+
+        for (LandRow landRow : landRows) {
+            LandComponent landComponent = getLandComponent(landRow);
+            idToLandComponent.put(landComponent.id(), landComponent);
+            Long parentId = landRow.parentId();
+
+            if (parentId != null) {
+                landComponentToParentId.put(landComponent, parentId);
+            }
+        }
+
+        for (Map.Entry<LandComponent, Long> entry : landComponentToParentId.entrySet()) {
+            LandComponent landComponent = entry.getKey();
+            long parentId = entry.getValue();
+            setParent(idToLandComponent, landComponent, parentId);
 
             if (landComponent instanceof WorldLand worldLand) {
                 worldNameToWorldLand.put(worldLand.getName(), worldLand);
             }
-
-            idToLandComponent.put(landComponent.getId(), landComponent);
         }
     }
+
 
     public void loadWorld(String worldName) {
         // TODO Load config
@@ -178,5 +200,35 @@ public class LandsImpl implements Lands {
 
     private StorageManager getStorageManager() {
         return SecuboidImpl.instance().getStorageManager();
+    }
+
+    private LandComponent getLandComponent(LandRow landRow) {
+        LandComponent landComponent;
+        long id = landRow.getId();
+        String name = landRow.name();
+        String type = landRow.type();
+
+        switch (type) {
+            case TYPE_WORLD_LAND -> landComponent = new WorldLandImpl(id, name);
+            case TYPE_AREA_LAND -> landComponent = new AreaLandImpl(id, name, null);
+            case TYPE_CONFIGURATION_SET -> landComponent = new ConfigurationSetImpl(id, name);
+            default -> throw new SecuboidRuntimeException(format("Invalid land type [name=%s, type=%s]", name, type));
+        }
+
+        return landComponent;
+    }
+
+    private void setParent(Map<Long, LandComponent> idToLandComponent, LandComponent landComponent, long parentId) {
+        if (landComponent instanceof AreaLand areaLand) {
+            LandComponent parent = idToLandComponent.get(parentId);
+            if (parent instanceof LandImpl parentLandImpl) {
+                parentLandImpl.setChild(areaLand);
+
+                return;
+            }
+        }
+
+        Log.log().warning(() -> format("This land has no parent and will be unreachable [id=%s, name=%s, parentId=%s]",
+                landComponent.id(), landComponent.getName(), parentId));
     }
 }

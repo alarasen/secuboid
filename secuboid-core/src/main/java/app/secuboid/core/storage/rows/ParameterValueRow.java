@@ -15,27 +15,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands.flags;
 
-import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.parameters.values.ParameterValue;
+package app.secuboid.core.storage.rows;
+
+import app.secuboid.api.storage.rows.RowWithId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Represent a flag with a value.
- *
- * @param landComponent the affected land
- * @param flagType      the flag type
- * @param source        the parameter value source if needed or null
- * @param target        the parameter value target if needed or null
- * @param metadata      the metadata if needed or null
- */
-public record Flag(
-        @NotNull LandComponent landComponent,
-        @NotNull FlagType flagType,
-        @Nullable ParameterValue source,
-        @Nullable ParameterValue target,
-        @Nullable String metadata) {
+public record ParameterValueRow(
+        Long id,
+        @NotNull String shortName,
+        @Nullable String value
+) implements RowWithId {
 }

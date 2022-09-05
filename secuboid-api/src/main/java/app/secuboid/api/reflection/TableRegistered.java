@@ -17,7 +17,7 @@
  */
 package app.secuboid.api.reflection;
 
-import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Every table should has this anotation, added in secuboid-plugin.yml and
+ * Every table should has this annotation, added in secuboid-plugin.yml and
  * implements Table.
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -40,7 +40,7 @@ public @interface TableRegistered {
     @NotNull Class<? extends Row> row();
 
     /**
-     * What this table depends on (foreing key)
+     * What this table depends on (foreign key)
      */
     @SuppressWarnings("java:S1452")
     @NotNull Class<? extends Table<?>>[] dependsOn() default {};

@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.storage.tables;
+package app.secuboid.api.storage.rows;
 
 /**
  * Represents a row from a table.

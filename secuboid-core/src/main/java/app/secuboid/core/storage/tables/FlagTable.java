@@ -17,12 +17,12 @@
  */
 package app.secuboid.core.storage.tables;
 
-import app.secuboid.api.lands.flags.Flag;
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
+import app.secuboid.core.storage.rows.FlagRow;
 
-@TableRegistered(row = Flag.class, dependsOn = {LandTable.class, ParameterValueTable.class})
-public class FlagTable implements Table<Flag> {
+@TableRegistered(row = FlagRow.class, dependsOn = {LandTable.class, ParameterValueTable.class})
+public class FlagTable implements Table<FlagRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""

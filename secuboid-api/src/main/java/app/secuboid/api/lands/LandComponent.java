@@ -19,16 +19,16 @@ package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.flags.Flags;
 import app.secuboid.api.lands.residents.Residents;
-import app.secuboid.api.storage.tables.RowWithId;
+import app.secuboid.api.storage.rows.WithId;
 
 /**
  * Represents every type of land, word, configuration sets, etc.
  */
-public interface LandComponent extends RowWithId {
+public interface LandComponent extends WithId {
 
     /**
      * Gets the name.
-     * 
+     *
      * @return the name
      */
     String getName();
@@ -40,14 +40,14 @@ public interface LandComponent extends RowWithId {
 
     /**
      * Gets the land flags.
-     * 
+     *
      * @return the land flags
      */
     Flags getFlags();
 
     /**
      * Gets the land residents.
-     * 
+     *
      * @return the land residents
      */
     Residents getResidents();

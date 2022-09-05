@@ -18,7 +18,7 @@
 package app.secuboid.core.storage;
 
 import app.secuboid.api.reflection.TableRegistered;
-import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.reflection.PluginLoader;
@@ -99,7 +99,6 @@ public class StorageInit {
         }
     }
 
-    @SuppressWarnings("java:S1452")
     Table<Row> getTableFromClassRow(Class<? extends Row> classRow) {
         return classRowToTable.get(classRow);
     }

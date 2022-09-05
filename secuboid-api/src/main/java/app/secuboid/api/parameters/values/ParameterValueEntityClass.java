@@ -23,15 +23,19 @@ import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static java.lang.String.format;
 
 /**
  * Represents an entity class from the Bukkit Java source code.
+ *
+ * @param id          the database id
+ * @param entityClass the entity class
  */
 @ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", priority = 40)
-public class ParameterValueEntityClass implements ParameterValue {
+public record ParameterValueEntityClass(
+        long id,
+        @NotNull Class<? extends Entity> entityClass
+) implements ParameterValue {
 
     private static final String ENTITY_PREFIX = "org.bukkit.entity.";
 
@@ -44,17 +48,8 @@ public class ParameterValueEntityClass implements ParameterValue {
     private static final int PRIORITY = ParameterValueEntityClass.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private final Class<? extends Entity> entityClass;
-
-    private long id;
-
-    public ParameterValueEntityClass(@NotNull Class<? extends Entity> entityClass) {
-        this.entityClass = entityClass;
-        id = ID_NON_CREATED_VALUE;
-    }
-
     // Needed for load from database
-    public static ParameterValueEntityClass newInstance(@NotNull String value) throws ParameterValueException {
+    public static ParameterValueEntityClass newInstance(long id, @NotNull String value) throws ParameterValueException {
         String entityClassStr;
         if (value.contains(".")) {
             entityClassStr = value;
@@ -62,10 +57,10 @@ public class ParameterValueEntityClass implements ParameterValue {
             entityClassStr = ENTITY_PREFIX + value;
         }
 
-        Class<?> entityClassUnknow;
+        Class<?> entityClassUnknown;
 
         try {
-            entityClassUnknow = Class.forName(entityClassStr);
+            entityClassUnknown = Class.forName(entityClassStr);
         } catch (ClassNotFoundException e) {
             String msg = format(
                     "Entity class not found: Wrong name in the database or Bukkit API is changed? [entityClass=%s]",
@@ -76,7 +71,7 @@ public class ParameterValueEntityClass implements ParameterValue {
         Class<? extends Entity> entityClass;
 
         try {
-            entityClass = entityClassUnknow.asSubclass(Entity.class);
+            entityClass = entityClassUnknown.asSubclass(Entity.class);
         } catch (ClassCastException e) {
             String msg = format(
                     "Not an entity class: Wrong name in the database or Bukkit API is changed? [entityClass=%s]",
@@ -84,17 +79,7 @@ public class ParameterValueEntityClass implements ParameterValue {
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueEntityClass(entityClass);
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
+        return new ParameterValueEntityClass(id, entityClass);
     }
 
     @Override
@@ -136,29 +121,5 @@ public class ParameterValueEntityClass implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " entityClass='" + entityClass + "'" +
-                ", id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValueEntityClass parameterValueEntityClass)) {
-            return false;
-        }
-
-        return Objects.equals(entityClass, parameterValueEntityClass.entityClass) && id == parameterValueEntityClass.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(entityClass, id);
     }
 }

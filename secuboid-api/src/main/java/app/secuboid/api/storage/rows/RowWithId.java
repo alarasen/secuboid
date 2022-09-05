@@ -15,27 +15,35 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.storage.tables;
+
+package app.secuboid.api.storage.rows;
+
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a row with an ID. A row must be created with a id=-1 first, then,
- * the database sets it to the correct value.
+ * Represents a row with an ID. The id can be null only before the insert to database.
  */
 public interface RowWithId extends Row {
 
-    public static final long ID_NON_CREATED_VALUE = -1;
+    /**
+     * Gets the row id. Can be null only before the insert.
+     *
+     * @return the row id or null
+     */
+    @Nullable Long id();
 
     /**
-     * Gets the row id.
+     * Gets the row id. This method will fail with an exception if it is called before the insert.
      *
-     * @return the row id or 0 if it is not yet created to the database
+     * @return the row id
      */
-    long getId();
+    default long getId() {
+        Long id = id();
+        if (id == null) {
+            throw new SecuboidRuntimeException("A requested ID for a row should not be null: " + this);
+        }
 
-    /**
-     * DO NOT SET THE ROW ID!!! It will be set by the database.
-     *
-     * @param id the id
-     */
-    void setId(long id);
+        return id;
+    }
 }

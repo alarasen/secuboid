@@ -19,7 +19,7 @@ package app.secuboid.api.parameters.values;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.reflection.ParameterValueRegistered;
-import app.secuboid.api.storage.tables.RowWithId;
+import app.secuboid.api.storage.rows.WithId;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,21 +28,21 @@ import org.jetbrains.annotations.Nullable;
  * Represents a parameter value (ex: entity, mob, players, ...) If you
  * implements a new parameter value, you need to add the annotation
  * ParameterValueRegistered and add it to secuboid-plugin.yml. You need also to
- * create a static method for a new instance with a throw if something goes
+ * create a static method for a new instance from the database with a throw if something goes
  * wrong:
  *
  * <pre>
- * public static ParamaterValueMy newInstance(String value) throws ParameterValueException {
+ * public static ParameterValueMy newInstance(long id, String value) throws ParameterValueException {
  *     // return INSTANCE; // If single instance with no value
  *     return new ParameterValueMy(value);
- *     // SecuboidRuntimeException will be catched be the requester
+ *     // ParameterValueException will be caught be the requester
  * }
  * </pre>
  */
-public interface ParameterValue extends RowWithId {
+public interface ParameterValue extends WithId {
 
     /**
-     * Gets the parameter name (not the value). Ex: PLAYER, ENTITYTYPE, etc. It's
+     * Gets the parameter name (not the value). Ex: player, entity-type, etc. It's
      * recommended to override this method with a static value for speed.
      *
      * @return the parameter name

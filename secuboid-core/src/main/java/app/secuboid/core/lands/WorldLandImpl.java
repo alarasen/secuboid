@@ -26,8 +26,8 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
 
     // A generated id, not the uuid of the world because it changes on world
     // regen.
-    public WorldLandImpl(String worldName) {
-        super(worldName);
+    public WorldLandImpl(long id, String worldName) {
+        super(id, worldName);
         areas = new Areas();
     }
 }

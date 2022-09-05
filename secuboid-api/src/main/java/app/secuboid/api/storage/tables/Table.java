@@ -19,6 +19,7 @@
 package app.secuboid.api.storage.tables;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
+import app.secuboid.api.storage.rows.Row;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;

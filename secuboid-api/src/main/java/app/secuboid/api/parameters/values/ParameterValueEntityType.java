@@ -24,15 +24,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static java.lang.String.format;
 
 /**
  * Represents a specific entity type.
+ *
+ * @param id         the database id
+ * @param entityType the entity type
  */
 @ParameterValueRegistered(name = "entity-type", shortName = "et", chatColor = "\u00A75", priority = 60)
-public class ParameterValueEntityType implements ParameterValue {
+public record ParameterValueEntityType(
+        long id,
+        @NotNull EntityType entityType
+) implements ParameterValue {
 
     private static final String NAME = ParameterValueEntityType.class.getAnnotation(ParameterValueRegistered.class)
             .name();
@@ -43,17 +47,9 @@ public class ParameterValueEntityType implements ParameterValue {
     private static final int PRIORITY = ParameterValueEntityType.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private final EntityType entityType;
-
-    private long id;
-
-    public ParameterValueEntityType(@NotNull EntityType entityType) {
-        this.entityType = entityType;
-        id = ID_NON_CREATED_VALUE;
-    }
 
     // Needed for load from database
-    public static ParameterValueEntityType newInstance(@NotNull String value) throws ParameterValueException {
+    public static ParameterValueEntityType newInstance(long id, @NotNull String value) throws ParameterValueException {
         EntityType entityType;
 
         try {
@@ -66,18 +62,9 @@ public class ParameterValueEntityType implements ParameterValue {
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueEntityType(entityType);
+        return new ParameterValueEntityType(id, entityType);
     }
 
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
 
     @Override
     public @NotNull String getName() {
@@ -112,29 +99,5 @@ public class ParameterValueEntityType implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " entityType='" + entityType + "'" +
-                ", id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValueEntityType parameterValueEntityType)) {
-            return false;
-        }
-
-        return Objects.equals(entityType, parameterValueEntityType.entityType) && id == parameterValueEntityType.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(entityType, id);
     }
 }

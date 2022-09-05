@@ -26,13 +26,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /**
  * Represents any players member of the specific Bukkit permission system group.
  */
 @ParameterValueRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", priority = 70)
-public class ParameterValuePermissionGroup implements ParameterValue {
+public record ParameterValuePermissionGroup(
+        long id,
+        @NotNull String group
+) implements ParameterValue {
 
     private static final String NAME = ParameterValuePermissionGroup.class.getAnnotation(ParameterValueRegistered.class)
             .name();
@@ -43,28 +44,10 @@ public class ParameterValuePermissionGroup implements ParameterValue {
     private static final int PRIORITY = ParameterValuePermissionGroup.class
             .getAnnotation(ParameterValueRegistered.class).priority();
 
-    private final String group;
-
-    private long id;
-
-    public ParameterValuePermissionGroup(@NotNull String group) {
-        this.group = group;
-        id = ID_NON_CREATED_VALUE;
-    }
-
     // Needed for load from database
-    public static ParameterValuePermissionGroup newInstance(@NotNull String value) throws ParameterValueException {
-        return new ParameterValuePermissionGroup(value);
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
+    @SuppressWarnings("java:S1130")
+    public static ParameterValuePermissionGroup newInstance(long id, @NotNull String value) throws ParameterValueException {
+        return new ParameterValuePermissionGroup(id, value);
     }
 
     @Override
@@ -104,29 +87,5 @@ public class ParameterValuePermissionGroup implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " group='" + group + "'" +
-                ", id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValuePermissionGroup parameterValuePermissionGroup)) {
-            return false;
-        }
-
-        return Objects.equals(group, parameterValuePermissionGroup.group) && id == parameterValuePermissionGroup.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(group, id);
     }
 }

@@ -15,21 +15,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands.residents;
 
-import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.parameters.values.ParameterValue;
-import org.jetbrains.annotations.NotNull;
+package app.secuboid.core.storage.rows;
 
-/**
- * Represents a resident.
- *
- * @param landComponent  the land component
- * @param parameterValue the parameter value
- * @param level          the level
- */
-public record Resident(
-        @NotNull LandComponent landComponent,
-        @NotNull ParameterValue parameterValue,
-        int level) {
+import app.secuboid.api.storage.rows.Row;
+
+public record ResidentRow(
+        long landId,
+        long parameterValueId,
+        int level
+) implements Row {
 }

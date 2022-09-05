@@ -24,15 +24,15 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 /**
  * Represents nothing including no player.
+ *
+ * @param id the database id
  */
 @ParameterValueRegistered(name = "nobody", shortName = "nobody", chatColor = "\u00A78")
-public class ParameterValueNobody implements ParameterValue {
-
-    public static final ParameterValueNobody INSTANCE = new ParameterValueNobody();
+public record ParameterValueNobody(
+        long id
+) implements ParameterValue {
 
     private static final String NAME = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class).name();
     private static final String SHORT_NAME = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class)
@@ -42,30 +42,10 @@ public class ParameterValueNobody implements ParameterValue {
     private static final int PRIORITY = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private long id;
-
-    private ParameterValueNobody() {
-        id = ID_NON_CREATED_VALUE;
-    }
-
-    public static ParameterValueNobody getInstance() {
-        return INSTANCE;
-    }
-
     // Needed for load from database
     @SuppressWarnings({"java:S1172", "java:S1130"})
-    public static ParameterValueNobody newInstance(@Nullable String value) throws ParameterValueException {
-        return INSTANCE;
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
+    public static ParameterValueNobody newInstance(long id, @Nullable String value) throws ParameterValueException {
+        return new ParameterValueNobody(id);
     }
 
     @Override
@@ -101,28 +81,5 @@ public class ParameterValueNobody implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValueNobody parameterValueNobody)) {
-            return false;
-        }
-
-        return id == parameterValueNobody.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

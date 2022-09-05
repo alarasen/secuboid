@@ -17,34 +17,26 @@
  */
 package app.secuboid.core.storage.tables;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.api.lands.*;
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.api.utilities.DbUtils;
-import app.secuboid.core.lands.AreaLandImpl;
-import app.secuboid.core.lands.ConfigurationSetImpl;
-import app.secuboid.core.lands.LandImpl;
-import app.secuboid.core.lands.WorldLandImpl;
-import app.secuboid.core.messages.Log;
+import app.secuboid.core.storage.rows.LandRow;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
+import static app.secuboid.api.utilities.DbUtils.getNullable;
 import static app.secuboid.core.config.Config.config;
 import static java.lang.String.format;
 
-@TableRegistered(row = LandComponent.class)
-public class LandTable implements Table<LandComponent> {
+@TableRegistered(row = LandRow.class)
+public class LandTable implements Table<LandRow> {
 
-    private static final String TYPE_WORLD_LAND = "W";
-    private static final String TYPE_AREA_LAND = "L";
-    private static final String TYPE_CONFIGURATION_SET = "S";
+    public static final String TYPE_WORLD_LAND = "W";
+    public static final String TYPE_AREA_LAND = "L";
+    public static final String TYPE_CONFIGURATION_SET = "S";
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
@@ -58,155 +50,71 @@ public class LandTable implements Table<LandComponent> {
             + ")";
 
     @Override
-    public @NotNull Set<LandComponent> selectAll(@NotNull Connection conn) throws SQLException {
+    public @NotNull Set<LandRow> selectAll(@NotNull Connection conn) throws SQLException {
         String prefix = config().databasePrefix();
-        String sql = format(""
-                + "SELECT id, name, type, parent_id FROM %1$sland", prefix);
+        String sql = format("SELECT id, name, type, parent_id FROM %1$sland", prefix);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()) {
-                Map<Long, LandComponent> idToLandComponent = new HashMap<>();
-                Map<LandComponent, Long> landCoponentToParentId = new HashMap<>();
+                Set<LandRow> result = new HashSet<>();
 
                 while (rs.next()) {
-                    LandComponent landComponent = getLandComponent(rs);
-                    idToLandComponent.put(landComponent.getId(), landComponent);
-                    Long parentId = getParentId(rs);
-                    if (parentId != null) {
-                        landCoponentToParentId.put(landComponent, parentId);
-                    }
+                    long id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String type = rs.getString("type");
+                    Long parentId = getNullable(rs, "parent_id", rs::getLong);
+                    result.add(new LandRow(id, name, type, parentId));
                 }
 
-                for (Entry<LandComponent, Long> entry : landCoponentToParentId.entrySet()) {
-                    LandComponent landComponent = entry.getKey();
-                    long parentId = entry.getValue();
-                    setParent(idToLandComponent, landComponent, parentId);
-                }
-
-                return new HashSet<>(idToLandComponent.values());
+                return result;
             }
         }
-    }
-
-    private void setParent(Map<Long, LandComponent> idToLandComponent, LandComponent landComponent, long parentId) {
-
-        if (landComponent instanceof AreaLand areaLand) {
-            LandComponent parent = idToLandComponent.get(parentId);
-            if (parent instanceof LandImpl parentLandImpl) {
-                parentLandImpl.setChild(areaLand);
-
-                return;
-            }
-        }
-
-        Log.log().warning(() -> format("This land has no parent and will be unreachable [id=%s, name=%s, parentId=%s]",
-                landComponent.getId(), landComponent.getName(), parentId));
-    }
-
-    private LandComponent getLandComponent(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        String name = rs.getString("name");
-        String type = rs.getString("type");
-
-        LandComponent landComponent;
-        switch (type) {
-            case TYPE_WORLD_LAND -> landComponent = new WorldLandImpl(name);
-            case TYPE_AREA_LAND -> landComponent = new AreaLandImpl(name, null);
-            case TYPE_CONFIGURATION_SET -> landComponent = new ConfigurationSetImpl(name);
-            default -> throw new SecuboidRuntimeException(format("Invalid land type [name=%s, type=%s]", name, type));
-        }
-
-        landComponent.setId(id);
-
-        return landComponent;
-    }
-
-    private Long getParentId(ResultSet rs) throws SQLException {
-        return DbUtils.getNullable(rs, "parent_id", rs::getLong);
     }
 
     @Override
-    public @NotNull LandComponent insert(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
+    public @NotNull LandRow insert(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
         String prefix = config().databasePrefix();
-        String sql = format(""
-                + "INSERT INTO %1$sland(name, type, parent_id)"
-                + " VALUES(?, ?)", prefix);
+        String sql = format("INSERT INTO %1$sland(name, type, parent_id) VALUES(?, ?)", prefix);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, landComponent.getName());
-            stmt.setString(2, getLandType(landComponent));
-            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setLong);
+            stmt.setString(1, landRow.name());
+            stmt.setString(2, landRow.type());
+            DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 rs.next();
-                landComponent.setId(rs.getInt(1));
+                return new LandRow(rs.getLong(1), landRow.name(), landRow.type(), landRow.parentId());
             }
         }
-
-        return landComponent;
     }
 
     @Override
-    public @NotNull LandComponent update(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
+    public @NotNull LandRow update(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
         String prefix = config().databasePrefix();
-        String sql = format(""
-                + "UPDATE %1$sland"
-                + " SET name = ?, type = ?, parent_id = ?"
-                + " WHERE id = ?", prefix);
+        String sql = format("UPDATE %1$sland SET name = ?, type = ?, parent_id = ? WHERE id = ?", prefix);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, landComponent.getName());
-            stmt.setString(2, getLandType(landComponent));
-            DbUtils.setNullable(stmt, 3, getParentId(landComponent), stmt::setLong);
-            stmt.setLong(4, landComponent.getId());
+            stmt.setString(1, landRow.name());
+            stmt.setString(2, landRow.type());
+            DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
+            stmt.setLong(4, landRow.getId());
 
             stmt.executeUpdate();
         }
 
-        return landComponent;
+        return landRow;
     }
 
     @Override
-    public @NotNull LandComponent delete(@NotNull Connection conn, @NotNull LandComponent landComponent) throws SQLException {
+    public @NotNull LandRow delete(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
         String prefix = config().databasePrefix();
-        String sql = format(""
-                + "DELETE FROM %1$sland"
-                + " WHERE id = ?", prefix);
+        String sql = format("DELETE FROM %1$sland WHERE id = ?", prefix);
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, landComponent.getId());
-
+            stmt.setLong(1, landRow.getId());
             stmt.executeUpdate();
         }
 
-        return landComponent;
-    }
-
-    private String getLandType(LandComponent landComponent) {
-        if (landComponent instanceof WorldLand) {
-            return TYPE_WORLD_LAND;
-        }
-
-        if (landComponent instanceof AreaLand) {
-            return TYPE_AREA_LAND;
-        }
-
-        if (landComponent instanceof ConfigurationSet) {
-            return TYPE_CONFIGURATION_SET;
-        }
-
-        throw new SecuboidRuntimeException(
-                "Class not yet implemented in LandTable: " + landComponent.getClass().getName());
-    }
-
-    private Long getParentId(LandComponent landComponent) {
-        if (landComponent instanceof AreaLand areaLand) {
-            Land parent = areaLand.getParent();
-            if (parent != null) {
-                return parent.getId();
-            }
-        }
-
-        return null;
+        return landRow;
     }
 }

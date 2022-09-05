@@ -33,8 +33,8 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
 
     // IMPORTANT: Please use createLand in Lands class to create a Land or it will
     // not be accessible and saved.
-    LandImpl(String name) {
-        super(name);
+    LandImpl(long id, String name) {
+        super(id, name);
         nameLowerToChild = new HashMap<>();
     }
 

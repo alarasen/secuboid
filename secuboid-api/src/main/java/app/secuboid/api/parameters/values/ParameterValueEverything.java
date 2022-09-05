@@ -24,15 +24,15 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 /**
  * Represents every players en entities.
+ *
+ * @param id the database id
  */
 @ParameterValueRegistered(name = "everything", shortName = "everything", chatColor = "\u00A7F", priority = 30)
-public class ParameterValueEverything implements ParameterValue {
-
-    public static final ParameterValueEverything INSTANCE = new ParameterValueEverything();
+public record ParameterValueEverything(
+        long id
+) implements ParameterValue {
 
     private static final String NAME = ParameterValueEverything.class.getAnnotation(ParameterValueRegistered.class)
             .name();
@@ -45,30 +45,10 @@ public class ParameterValueEverything implements ParameterValue {
     private static final int PRIORITY = ParameterValueEverything.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private long id;
-
-    private ParameterValueEverything() {
-        id = ID_NON_CREATED_VALUE;
-    }
-
-    public static ParameterValueEverything getInstance() {
-        return INSTANCE;
-    }
-
     // Needed for load from database
     @SuppressWarnings({"java:S1172", "java:S1130"})
-    public static ParameterValueEverything newInstance(@Nullable String value) throws ParameterValueException {
-        return INSTANCE;
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
+    public static ParameterValueEverything newInstance(long id, @Nullable String value) throws ParameterValueException {
+        return new ParameterValueEverything(id);
     }
 
     @Override
@@ -104,28 +84,5 @@ public class ParameterValueEverything implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValueEverything parameterValueEverything)) {
-            return false;
-        }
-
-        return id == parameterValueEverything.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

@@ -27,28 +27,21 @@ import java.util.Objects;
 
 public class LandComponentImpl implements LandComponent {
 
+    private final long id;
     protected final String name;
     private final Flags flags;
     private final Residents residents;
 
-    private long id;
-
-    protected LandComponentImpl(String name) {
+    protected LandComponentImpl(long id, String name) {
+        this.id = id;
         this.name = name;
         flags = new FlagsImpl(this);
         residents = new ResidentsImpl(this);
-
-        id = ID_NON_CREATED_VALUE;
     }
 
     @Override
-    public final long getId() {
+    public final long id() {
         return id;
-    }
-
-    @Override
-    public final void setId(long id) {
-        this.id = id;
     }
 
     @Override

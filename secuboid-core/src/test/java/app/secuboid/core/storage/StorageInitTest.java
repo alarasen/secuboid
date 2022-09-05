@@ -18,8 +18,8 @@
 package app.secuboid.core.storage;
 
 import app.secuboid.api.reflection.TableRegistered;
-import app.secuboid.api.storage.tables.Row;
-import app.secuboid.api.storage.tables.RowWithId;
+import app.secuboid.api.storage.rows.Row;
+import app.secuboid.api.storage.rows.RowWithId;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.reflection.PluginLoader;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,7 +79,7 @@ class StorageInitTest {
     void when_database_prefix_then_concat() {
         String sql = storageInit.getSql(CREATE_TABLE_SQL);
 
-        assertEquals(true, sql.contains("secuboid_player"));
+        assertTrue(sql.contains("secuboid_player"));
     }
 
     @Test
@@ -119,16 +118,9 @@ class StorageInitTest {
 
     static class Test1Row implements RowWithId {
 
-        private long id = 0;
-
         @Override
-        public long getId() {
-            return id;
-        }
-
-        @Override
-        public void setId(long id) {
-            this.id = id;
+        public Long id() {
+            return 0L;
         }
     }
 
@@ -136,19 +128,19 @@ class StorageInitTest {
     static class Test1Table implements Table<Test1Row> {
 
         @Override
-        public @NotNull Test1Row insert(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row insert(@NotNull Connection conn, @NotNull Test1Row test1Row) {
             // Empty for test
             return test1Row;
         }
 
         @Override
-        public @NotNull Test1Row update(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row update(@NotNull Connection conn, @NotNull Test1Row test1Row) {
             // Empty for test
             return test1Row;
         }
 
         @Override
-        public @NotNull Test1Row delete(@NotNull Connection conn, @NotNull Test1Row test1Row) throws SQLException {
+        public @NotNull Test1Row delete(@NotNull Connection conn, @NotNull Test1Row test1Row) {
             // Empty for test
             return test1Row;
         }
@@ -161,19 +153,19 @@ class StorageInitTest {
     static class Test2Table implements Table<Test2Row> {
 
         @Override
-        public @NotNull Test2Row insert(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row insert(@NotNull Connection conn, @NotNull Test2Row test2Row) {
             // Empty for test
             return test2Row;
         }
 
         @Override
-        public @NotNull Test2Row update(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row update(@NotNull Connection conn, @NotNull Test2Row test2Row) {
             // Empty for test
             return test2Row;
         }
 
         @Override
-        public @NotNull Test2Row delete(@NotNull Connection conn, @NotNull Test2Row test2Row) throws SQLException {
+        public @NotNull Test2Row delete(@NotNull Connection conn, @NotNull Test2Row test2Row) {
             // Empty for test
             return test2Row;
         }

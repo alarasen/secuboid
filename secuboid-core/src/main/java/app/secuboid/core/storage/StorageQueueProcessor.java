@@ -18,11 +18,12 @@
 package app.secuboid.core.storage;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.core.messages.Log;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,7 +37,7 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Row process(@NotNull StorageElement element) {
+    public @Nullable Row process(@NotNull StorageElement element) {
         SQLRequestType requestType = element.requestType();
         Table<Row> table = (Table<Row>) element.table();
         Row row = element.row();

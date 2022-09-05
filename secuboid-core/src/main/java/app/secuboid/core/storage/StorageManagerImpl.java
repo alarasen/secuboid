@@ -18,7 +18,7 @@
 package app.secuboid.core.storage;
 
 import app.secuboid.api.storage.StorageManager;
-import app.secuboid.api.storage.tables.Row;
+import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.api.thread.QueueThread;
 import app.secuboid.core.messages.Log;

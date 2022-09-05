@@ -17,13 +17,12 @@
  */
 package app.secuboid.core.storage.tables;
 
-import app.secuboid.api.lands.residents.Resident;
-import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
+import app.secuboid.core.storage.rows.ResidentRow;
 
-@TableRegistered(row = ParameterValue.class, dependsOn = {LandTable.class, ParameterValueTable.class})
-public class ResidentTable implements Table<Resident> {
+@TableRegistered(row = ResidentRow.class, dependsOn = {LandTable.class, ParameterValueTable.class})
+public class ResidentTable implements Table<ResidentRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""

@@ -19,6 +19,7 @@ package app.secuboid.api.thread;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public interface QueueProcessor<T, R> {
      * @param t the t
      * @return the value for the return (or callback)
      */
-    @NotNull R process(@NotNull T t);
+    @Nullable R process(@NotNull T t);
 
     /**
      * Process (set) and sync what it should execute inside the loop.

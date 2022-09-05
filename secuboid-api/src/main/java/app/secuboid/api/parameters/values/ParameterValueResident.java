@@ -23,15 +23,19 @@ import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static java.lang.String.format;
 
 /**
  * Represents a land resident.
+ *
+ * @param id    the database id
+ * @param level the resident level
  */
 @ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", priority = 60)
-public class ParameterValueResident implements ParameterValue {
+public record ParameterValueResident(
+        long id,
+        int level
+) implements ParameterValue {
 
     private static final String NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
             .name();
@@ -42,37 +46,18 @@ public class ParameterValueResident implements ParameterValue {
     private static final int PRIORITY = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private final int level;
-
-    private long id;
-
-    public ParameterValueResident(int level) {
-        this.level = level;
-        id = ID_NON_CREATED_VALUE;
-    }
-
     // Needed for load from database
-    public static ParameterValueResident newInstance(@NotNull String value) throws ParameterValueException {
+    public static ParameterValueResident newInstance(long id, @NotNull String value) throws ParameterValueException {
         int level;
 
         try {
             level = Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            String msg = format("Non parseable level number for a resident [level=%s]", value);
+            String msg = format("Non parsable level number for a resident [level=%s]", value);
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueResident(level);
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
+        return new ParameterValueResident(id, level);
     }
 
     @Override
@@ -109,29 +94,5 @@ public class ParameterValueResident implements ParameterValue {
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         // TODO Auto-generated method stub
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " level='" + level + "'" +
-                ", id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValueResident parameterValueResident)) {
-            return false;
-        }
-
-        return level == parameterValueResident.level && id == parameterValueResident.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(level, id);
     }
 }

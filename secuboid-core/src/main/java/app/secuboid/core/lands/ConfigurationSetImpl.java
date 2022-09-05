@@ -21,8 +21,8 @@ import app.secuboid.api.lands.ConfigurationSet;
 
 public class ConfigurationSetImpl extends LandComponentImpl implements ConfigurationSet {
 
-    public ConfigurationSetImpl(String name) {
-        super(name);
+    public ConfigurationSetImpl(long id, String name) {
+        super(id, name);
         // TODO Auto-generated constructor stub
     }
 }

@@ -20,23 +20,27 @@ package app.secuboid.api.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.reflection.ParameterValueRegistered;
-import app.secuboid.api.storage.tables.RowWithId;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.String.format;
 
 /**
  * Represents a player with a uuid.
+ *
+ * @param id   the database id
+ * @param uuid the player id
  */
 @ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", priority = 80)
-public class ParameterValuePlayer implements ParameterValue {
+public record ParameterValuePlayer(
+        long id,
+        @NotNull UUID uuid
+) implements ParameterValue {
 
     private static final String NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class).name();
     private static final String SHORT_NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
@@ -46,17 +50,8 @@ public class ParameterValuePlayer implements ParameterValue {
     private static final int PRIORITY = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
-    private final UUID uuid;
-
-    private long id;
-
-    public ParameterValuePlayer(@NotNull UUID uuid) {
-        this.uuid = uuid;
-        id = RowWithId.ID_NON_CREATED_VALUE;
-    }
-
     // Needed for load from database
-    public static ParameterValuePlayer newInstance(@NotNull String value) throws ParameterValueException {
+    public static ParameterValuePlayer newInstance(long id, @NotNull String value) throws ParameterValueException {
         UUID uuid;
 
         try {
@@ -68,26 +63,7 @@ public class ParameterValuePlayer implements ParameterValue {
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValuePlayer(uuid);
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets the player Minecraft unique id.
-     *
-     * @return the player Minecraft unique id
-     */
-    public UUID getUUID() {
-        return uuid;
+        return new ParameterValuePlayer(id, uuid);
     }
 
     /**
@@ -99,7 +75,7 @@ public class ParameterValuePlayer implements ParameterValue {
     public String getPlayerName() {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 
-        if (offlinePlayer == null || !offlinePlayer.hasPlayedBefore()) {
+        if (!offlinePlayer.hasPlayedBefore()) {
             return uuid.toString();
         }
 
@@ -143,29 +119,5 @@ public class ParameterValuePlayer implements ParameterValue {
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
         return hasAccess(entity);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " uuid='" + uuid + "'" +
-                ", id='" + getId() + "'" +
-                "}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ParameterValuePlayer parameterValuePlayer)) {
-            return false;
-        }
-
-        return Objects.equals(uuid, parameterValuePlayer.uuid) && id == parameterValuePlayer.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, id);
     }
 }
