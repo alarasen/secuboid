@@ -19,13 +19,14 @@
 package app.secuboid.core.storage.rows;
 
 import app.secuboid.api.storage.rows.RowWithId;
+import app.secuboid.core.storage.types.LandType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record LandRow(
         @Nullable Long id,
         @NotNull String name,
-        @NotNull String type,
+        @NotNull LandType type,
         @Nullable Long parentId
 ) implements RowWithId {
 }

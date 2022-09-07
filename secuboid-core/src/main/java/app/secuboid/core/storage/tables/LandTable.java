@@ -21,6 +21,7 @@ import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.api.utilities.DbUtils;
 import app.secuboid.core.storage.rows.LandRow;
+import app.secuboid.core.storage.types.LandType;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -29,7 +30,9 @@ import java.util.Set;
 
 import static app.secuboid.api.utilities.DbUtils.getNullable;
 import static app.secuboid.core.config.Config.config;
+import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
+import static java.util.logging.Level.WARNING;
 
 @TableRegistered(row = LandRow.class)
 public class LandTable implements Table<LandRow> {
@@ -61,9 +64,14 @@ public class LandTable implements Table<LandRow> {
                 while (rs.next()) {
                     long id = rs.getInt("id");
                     String name = rs.getString("name");
-                    String type = rs.getString("type");
-                    Long parentId = getNullable(rs, "parent_id", rs::getLong);
-                    result.add(new LandRow(id, name, type, parentId));
+
+                    try {
+                        LandType type = LandType.fromValue(rs.getString("type"));
+                        Long parentId = getNullable(rs, "parent_id", rs::getLong);
+                        result.add(new LandRow(id, name, type, parentId));
+                    } catch (IllegalArgumentException e) {
+                        log().log(WARNING, e, () -> format("Unable to load a land from the database [id=%s, name=%s]", id, name));
+                    }
                 }
 
                 return result;
@@ -78,7 +86,7 @@ public class LandTable implements Table<LandRow> {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, landRow.name());
-            stmt.setString(2, landRow.type());
+            stmt.setString(2, landRow.type().value);
             DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -95,7 +103,7 @@ public class LandTable implements Table<LandRow> {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, landRow.name());
-            stmt.setString(2, landRow.type());
+            stmt.setString(2, landRow.type().value);
             DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
             stmt.setLong(4, landRow.getId());
 
