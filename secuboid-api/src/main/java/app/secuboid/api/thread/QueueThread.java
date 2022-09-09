@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.BiConsumer;
 
-import static app.secuboid.api.SecuboidCorePlugin.secuboid;
+import static app.secuboid.api.SecuboidPlugin.secuboid;
 
 /**
  * This is a class to create a waiting queue thread.

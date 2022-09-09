@@ -17,26 +17,29 @@
  */
 package app.secuboid.api;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 /**
- * Only for secuboid component plugin (SecuboidPlugin, SecuboidEconomyPlugin, ...)
+ * This abstract class is used only when we need to access Secuboid main class
+ * from java plugin.
  */
-public interface SecuboidComponent {
+public abstract class SecuboidPlugin extends JavaPlugin {
+
+    protected static Secuboid secuboid;
 
     /**
-     * Loads the plugin. An unload must be done before if the server is already
-     * running.
+     * Gets the Secuboid main instance from static way.
      *
-     * @param isServerBoot Is it from server start?
+     * @return the Secuboid main instance
      */
-    void load(boolean isServerBoot);
+    public static Secuboid secuboid() {
+        return secuboid;
+    }
 
     /**
-     * Unloads the plugin.
+     * Gets the Secuboid main instance.
+     *
+     * @return the Secuboid main instance
      */
-    void unload();
-
-    /**
-     * Reload the configuration.
-     */
-    void reload();
+    public abstract Secuboid getSecuboid();
 }

@@ -20,8 +20,8 @@ package app.secuboid.it;
 
 import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.core.SecuboidCorePluginImpl;
 import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.SecuboidPluginImpl;
 import app.secuboid.core.messages.Log;
 import app.secuboid.permission.group.SecuboidPermissionGroup;
 import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
@@ -63,11 +63,11 @@ public class MinecraftServer {
         for (Class<? extends SecuboidComponent> implClass : secuboidComponentImplClasses) {
 
             if (implClass.isAssignableFrom(SecuboidImpl.class)) {
-                SecuboidCorePluginImpl secuboidCorePlugin = mockSecuboidCorePluginImpl();
-                SecuboidImpl secuboid = new SecuboidImpl(secuboidCorePlugin);
+                SecuboidPluginImpl secuboidPlugin = mockSecuboidPluginImpl();
+                SecuboidImpl secuboid = new SecuboidImpl(secuboidPlugin);
 
                 secuboidComponents.add(secuboid);
-                plugins.add(secuboidCorePlugin);
+                plugins.add(secuboidPlugin);
             } else if (implClass.isAssignableFrom(SecuboidPermissionGroup.class)) {
                 SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin = mockPermissionGroupPlugin();
                 SecuboidPermissionGroup secuboidPermissionGroup = new SecuboidPermissionGroup(
@@ -104,12 +104,12 @@ public class MinecraftServer {
         throw new SecuboidRuntimeException("Invalid class");
     }
 
-    private SecuboidCorePluginImpl mockSecuboidCorePluginImpl() {
-        String pluginName = "SecuboidCore";
-        String mainClass = "app.secuboid.core.SecuboidCorePluginImpl";
-        File secuboidPluginYmlFile = new File("../secuboid-core/src/main/resources-filtered/secuboid-plugin.yml");
+    private SecuboidPluginImpl mockSecuboidPluginImpl() {
+        String pluginName = "Secuboid";
+        String mainClass = "app.secuboid.core.SecuboidPluginImpl";
+        File secuboidPluginYmlFile = new File("../secuboid/src/main/resources-filtered/secuboid-plugin.yml");
 
-        return pluginCommunMock(SecuboidCorePluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
+        return pluginCommunMock(SecuboidPluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
     }
 
     private SecuboidPermissionGroupPlugin mockPermissionGroupPlugin() {

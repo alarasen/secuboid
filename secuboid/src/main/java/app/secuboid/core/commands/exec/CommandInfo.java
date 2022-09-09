@@ -15,28 +15,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api;
+package app.secuboid.core.commands.exec;
 
-/**
- * Only for secuboid component plugin (SecuboidPlugin, SecuboidEconomyPlugin, ...)
- */
-public interface SecuboidComponent {
+import app.secuboid.api.Secuboid;
+import app.secuboid.api.SecuboidPlugin;
+import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.reflection.CommandRegistered;
+import org.jetbrains.annotations.NotNull;
 
-    /**
-     * Loads the plugin. An unload must be done before if the server is already
-     * running.
-     *
-     * @param isServerBoot Is it from server start?
-     */
-    void load(boolean isServerBoot);
+@CommandRegistered( //
+        pluginClass = SecuboidPlugin.class, //
+        name = "info" //
+)
+public class CommandInfo implements CommandExec {
 
-    /**
-     * Unloads the plugin.
-     */
-    void unload();
+    Secuboid secuboid;
 
-    /**
-     * Reload the configuration.
-     */
-    void reload();
+    public CommandInfo(Secuboid secuboid) {
+        this.secuboid = secuboid;
+    }
+
+    @Override
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+        // TODO Info
+    }
 }

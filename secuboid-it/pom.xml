@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>app.secuboid</groupId>
-            <artifactId>secuboid-core</artifactId>
+            <artifactId>secuboid</artifactId>
         </dependency>
 
         <dependency>
