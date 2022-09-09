@@ -2,33 +2,24 @@
 # Secuboid configuration file #
 ###############################
 
-# "en" (Engish) or "fr" (french) currently supported
+# "en" (English) or "fr" (french) currently supported
 lang: en
 
 # Database section: If you don't have access to a database, keep the default
 # configuration (save to local file).
-# IMPORTANT: Need a complete stop and start after a modificaton in this
+# IMPORTANT: Need a complete stop and start after a modification in this
 # section.
 database:
-  # Driver:
-  # Use "hsqldb" to save to local file (default).
-  # Use "mariadb" to connect to MariaDB or MySQL.
-  driver: hsqldb
+  # Save to local file (default).
+  url: "jdbc:hsqldb:file:{{plugin-path}}/storage/db"
+  # Use this url bellow if you have access to a MySQL/MariaDB database
+  # (recommended). Change "server" for your server url and "secuboid" for the
+  # database name. Keep "jdbc:mariadb" if you have MySQL.
+  #url: "jdbc:mariadb://server:3306/secuboid"
+
+  # The database username and password.
   user: secuboid
   password: secuboid
-
-  # If you are using a database (non save to file), change it to "secuboid"
-  # or the database name: "database: secuboid"
-  database: "file:{{plugin-path}}/storage/db" # Save to file hsqldb
-  #database: secuboid # Save to database MariaDB or MySQL
-
-  # For non save to file, server name and port number.
-  server-name: localhost
-  port-number: 3306
-
-  # The prefix is usefull when you are sharing the database with other
-  # plugins. Otherwise, you can use "".
-  prefix: secuboid_
 
 selection:
   default-start-diameter: 3

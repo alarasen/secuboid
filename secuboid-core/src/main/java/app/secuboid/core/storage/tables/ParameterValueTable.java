@@ -26,8 +26,8 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS %1$sparameter_value ("
-            + " id BIGINT NOT NULL {{AUTOINCREMENT}},"
+            + "CREATE TABLE IF NOT EXISTS secuboid_parameter_value ("
+            + " id BIGINT NOT NULL AUTO_INCREMENT,"
             + " short_name VARCHAR(10) NOT NULL,"
             + " value VARCHAR(45) NULL,"
             + " PRIMARY KEY (id),"

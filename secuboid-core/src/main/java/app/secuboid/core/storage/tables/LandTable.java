@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static app.secuboid.api.utilities.DbUtils.getNullable;
-import static app.secuboid.core.config.Config.config;
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.logging.Level.WARNING;
@@ -37,25 +36,20 @@ import static java.util.logging.Level.WARNING;
 @TableRegistered(row = LandRow.class)
 public class LandTable implements Table<LandRow> {
 
-    public static final String TYPE_WORLD_LAND = "W";
-    public static final String TYPE_AREA_LAND = "L";
-    public static final String TYPE_CONFIGURATION_SET = "S";
-
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS %1$sland ("
-            + " id BIGINT NOT NULL {{AUTOINCREMENT}},"
+            + "CREATE TABLE IF NOT EXISTS secuboid_land ("
+            + " id BIGINT NOT NULL AUTO_INCREMENT,"
             + " name VARCHAR(45) NOT NULL,"
             + " type CHAR(1) NOT NULL,"
             + " parent_id BIGINT NULL,"
             + " PRIMARY KEY (id),"
-            + " CONSTRAINT fk_land_parent_id FOREIGN KEY (parent_id) REFERENCES %1$sland (id)"
+            + " CONSTRAINT fk_land_parent_id FOREIGN KEY (parent_id) REFERENCES secuboid_land (id)"
             + ")";
 
     @Override
     public @NotNull Set<LandRow> selectAll(@NotNull Connection conn) throws SQLException {
-        String prefix = config().databasePrefix();
-        String sql = format("SELECT id, name, type, parent_id FROM %1$sland", prefix);
+        String sql = "SELECT id, name, type, parent_id FROM secuboid_land";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()) {
@@ -81,8 +75,7 @@ public class LandTable implements Table<LandRow> {
 
     @Override
     public @NotNull LandRow insert(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
-        String prefix = config().databasePrefix();
-        String sql = format("INSERT INTO %1$sland(name, type, parent_id) VALUES(?, ?)", prefix);
+        String sql = "INSERT INTO secuboid_land(name, type, parent_id) VALUES(?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, landRow.name());
@@ -98,8 +91,7 @@ public class LandTable implements Table<LandRow> {
 
     @Override
     public @NotNull LandRow update(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
-        String prefix = config().databasePrefix();
-        String sql = format("UPDATE %1$sland SET name = ?, type = ?, parent_id = ? WHERE id = ?", prefix);
+        String sql = "UPDATE secuboid_land SET name = ?, type = ?, parent_id = ? WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, landRow.name());
@@ -115,8 +107,7 @@ public class LandTable implements Table<LandRow> {
 
     @Override
     public @NotNull LandRow delete(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
-        String prefix = config().databasePrefix();
-        String sql = format("DELETE FROM %1$sland WHERE id = ?", prefix);
+        String sql = "DELETE FROM secuboid_land WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, landRow.getId());

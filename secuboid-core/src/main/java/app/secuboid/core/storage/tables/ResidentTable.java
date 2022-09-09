@@ -26,13 +26,13 @@ public class ResidentTable implements Table<ResidentRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS %1$sresident ("
+            + "CREATE TABLE IF NOT EXISTS secuboid_resident ("
             + " land_id BIGINT NOT NULL,"
             + " parameter_value_id BIGINT NOT NULL,"
             + " level INT NOT NULL,"
             + " PRIMARY KEY (land_id, parameter_value_id),"
-            + " CONSTRAINT fk_resident_land_id FOREIGN KEY (land_id) REFERENCES %1$sland (id),"
-            + " CONSTRAINT fk_resident_parameter_value_id FOREIGN KEY (parameter_value_id) REFERENCES %1$sparameter_value (id)"
+            + " CONSTRAINT fk_resident_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id),"
+            + " CONSTRAINT fk_resident_parameter_value_id FOREIGN KEY (parameter_value_id) REFERENCES secuboid_parameter_value (id)"
             + ")";
 
 }

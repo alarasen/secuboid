@@ -29,20 +29,20 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class StorageInitTest {
 
     static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS %1$splayer ("
-            + "  id INT NOT NULL {{AUTOINCREMENT}},"
+            + "CREATE TABLE IF NOT EXISTS secuboid_player ("
+            + "  id INT NOT NULL AUTO_INCREMENT,"
             + "  uuid CHAR(36) NOT NULL,"
             + "  name VARCHAR(45) NOT NULL,"
-            + "  tinytext {{TINYTEXT}} NOT NULL,"
-            + "  text {{TEXT}} NOT NULL,"
-            + "  mediumtext {{MEDIUMTEXT}} NOT NULL,"
+            + "  tinytext TINYTEXT NOT NULL,"
+            + "  text TEXT NOT NULL,"
+            + "  mediumtext MEDIUMTEXT NOT NULL,"
             + "  PRIMARY KEY (id),"
             + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
             + ")";
@@ -73,38 +73,6 @@ class StorageInitTest {
 
         verify(storageInit).createDatabase(Test1Table.class);
         verify(storageInit).createDatabase(Test2Table.class);
-    }
-
-    @Test
-    void when_database_prefix_then_concat() {
-        String sql = storageInit.getSql(CREATE_TABLE_SQL);
-
-        assertTrue(sql.contains("secuboid_player"));
-    }
-
-    @Test
-    void when_database_is_mariadb_then_append() {
-        doReturn(ConnectionManager.DRIVER_MARIADB).when(storageInit).getDbDriver();
-        String sql = storageInit.getSql(CREATE_TABLE_SQL);
-
-        assertTrue(sql.contains(StorageInit.AUTOINCREMENT_MARIADB));
-        assertTrue(sql.contains(StorageInit.TINYTEXT_MARIADB));
-        assertTrue(sql.contains(StorageInit.TEXT_MARIADB));
-        assertTrue(sql.contains(StorageInit.MEDIUMTEXT_MARIADB));
-        assertFalse(sql.contains(StorageInit.AUTOINCREMENT_TAG));
-        assertTrue(sql.contains(StorageInit.MARIADB_CREATE_SQL_SUFFIX));
-    }
-
-    @Test
-    void when_database_is_hsql_then_no_append() {
-        doReturn(ConnectionManager.DRIVER_HSQLDB).when(storageInit).getDbDriver();
-        String sql = storageInit.getSql(CREATE_TABLE_SQL);
-
-        assertTrue(sql.contains(StorageInit.AUTOINCREMENT_HSQLDB));
-        assertTrue(sql.contains(StorageInit.TINYTEXT_HSQLDB));
-        assertTrue(sql.contains(StorageInit.TEXT_HSQLDB));
-        assertTrue(sql.contains(StorageInit.MEDIUMTEXT_HSQLDB));
-        assertFalse(sql.contains(StorageInit.MARIADB_CREATE_SQL_SUFFIX));
     }
 
     @Test

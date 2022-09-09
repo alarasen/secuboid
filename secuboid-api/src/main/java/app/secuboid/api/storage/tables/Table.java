@@ -32,21 +32,12 @@ import java.util.Set;
  *
  * <pre>
  * public static final String CREATE_TABLE_SQL = ""
- *         + "CREATE TABLE IF NOT EXISTS %1$stable_name ("
- *         + "  id INT NOT NULL {{AUTOINCREMENT}},"
+ *         + "CREATE TABLE IF NOT EXISTS secuboid_table_name ("
+ *         + "  id INT NOT NULL AUTO_INCREMENT,"
  *         + "  name VARCHAR(45) NOT NULL,"
  *         + "  PRIMARY KEY (id),"
  *         + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
  *         + ")";
- * </pre>
- * <p>
- * The sql syntax for create table. "%1$s" will be replaced with the prefix.
- * MariaDB concats "CHARACTER SET 'utf8' COLLATE 'utf8_general_ci ENGINE =
- * InnoDB".
- *
- * <pre>
- * Other remplacements:
- * {{AUTOINCREMENT}}: The auto increment instruction for the database
  * </pre>
  */
 public interface Table<R extends Row> {

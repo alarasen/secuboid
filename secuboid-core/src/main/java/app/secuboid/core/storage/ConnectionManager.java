@@ -28,7 +28,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import static app.secuboid.core.config.Config.config;
 import static java.util.logging.Level.SEVERE;
@@ -36,82 +35,54 @@ import static java.util.logging.Level.SEVERE;
 public class ConnectionManager {
 
     // Also used in Config class
-    public static final String DRIVER_HSQLDB = "hsqldb";
-    public static final String DRIVER_MARIADB = "mariadb";
+    public static final String DRIVER_HSQLDB = "jdbc:hsqldb";
+    public static final String DRIVER_MARIADB = "jdbc:mariadb";
 
-    private static final String DATASOURCE_CLASS_NAME_HSQLDB = "org.hsqldb.jdbc.JDBCDataSource";
+    private static final String DATASOURCE_DRIVER_CLASS_NAME_HSQLDB = "org.hsqldb.jdbc.JDBCDataSource";
     private static final String DATASOURCE_DRIVER_CLASS_NAME_MARIADB = "org.mariadb.jdbc.Driver";
 
     private static final String POOL_NAME_HSQLDB = "Secuboid-HikariPool-HSQL";
     private static final String POOL_NAME_MARIADB = "Secuboid-HikariPool-ariaDB";
 
-    private static final String PROPERTY_NAME_POOL_NAME = "poolName";
-    private static final String PROPERTY_NAME_CLASS_NAME = "dataSourceClassName";
-    private static final String PROPERTY_NAME_USER = "dataSource.user";
-    private static final String PROPERTY_NAME_PASSWORD = "dataSource.password";
-    private static final String PROPERTY_NAME_DATABASE_NAME = "dataSource.databaseName";
-    private static final String PROPERTY_NAME_SERVER_NAME = "dataSource.serverName";
-    private static final String PROPERTY_NAME_PORT_NUMBER = "dataSource.portNumber";
-
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 
     private static HikariDataSource dataSource;
-    private static boolean isLocalHSQL;
+    private static boolean isLocalHSQL = false;
 
     private ConnectionManager() {
     }
 
     protected static void init() {
         Config config = config();
-        String driver = config.databaseDriver();
-        String user = config.databaseUser();
-        String password = config.databasePassword();
         JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
         String dataFolderStr = javaPlugin.getDataFolder().getAbsolutePath();
-        String database = config.databaseDatabase().replace(TAG_PLUGIN_PATH, dataFolderStr);
-        String portStr = Integer.toString(config.databasePortNumber());
-        String server = config.databaseServerName();
+        String url = config.databaseUrl().replace(TAG_PLUGIN_PATH, dataFolderStr);
+        String user = config.databaseUser();
+        String password = config.databasePassword();
+        HikariConfig hikariConfig = new HikariConfig();
 
-        switch (driver) {
-
-            case DRIVER_HSQLDB -> {
-                Properties props = new Properties();
-                props.setProperty(PROPERTY_NAME_POOL_NAME, POOL_NAME_HSQLDB);
-                props.setProperty(PROPERTY_NAME_CLASS_NAME, DATASOURCE_CLASS_NAME_HSQLDB);
-                props.setProperty(PROPERTY_NAME_DATABASE_NAME, database);
-                props.setProperty(PROPERTY_NAME_USER, user);
-                props.setProperty(PROPERTY_NAME_PASSWORD, password);
-
-                if (database.startsWith("file:")) {
-                    isLocalHSQL = true;
-                } else {
-                    isLocalHSQL = false;
-                    props.setProperty(PROPERTY_NAME_SERVER_NAME, server);
-                    props.setProperty(PROPERTY_NAME_PORT_NUMBER, portStr);
-                }
-
-                HikariConfig hikariConfig = new HikariConfig(props);
-                dataSource = new HikariDataSource(hikariConfig);
+        if (url.contains(DRIVER_HSQLDB)) {
+            if (url.startsWith("jdbc:hsqldb:file:")) {
+                isLocalHSQL = true;
             }
 
-            case DRIVER_MARIADB -> {
-                isLocalHSQL = false;
-                dataSource = new HikariDataSource();
-                dataSource.setPoolName(POOL_NAME_MARIADB);
-                dataSource.setDriverClassName(DATASOURCE_DRIVER_CLASS_NAME_MARIADB);
-                String url = String.format("jdbc:mariadb://%s:%s/%s", server, portStr, database);
-                dataSource.setJdbcUrl(url);
-                dataSource.addDataSourceProperty("user", user);
-                dataSource.addDataSourceProperty("password", password);
-                dataSource.setAutoCommit(true);
-            }
+            hikariConfig.setPoolName(POOL_NAME_HSQLDB);
+            hikariConfig.setDriverClassName(DATASOURCE_DRIVER_CLASS_NAME_HSQLDB);
+            hikariConfig.addDataSourceProperty("sql.syntax_mys", true);
 
-            default -> {
-                isLocalHSQL = false;
-                throw new SecuboidRuntimeException(
-                        "Database driver \"mariadb\" (also for MySQL support) and \"hsqldb\" are the only supported");
-            }
+        } else if (url.contains(DRIVER_MARIADB)) {
+            hikariConfig.setPoolName(POOL_NAME_MARIADB);
+            hikariConfig.setDriverClassName(DATASOURCE_DRIVER_CLASS_NAME_MARIADB);
+            hikariConfig.setAutoCommit(true);
+        } else {
+            isLocalHSQL = false;
+            throw new SecuboidRuntimeException("Database driver \"mariadb\" (also for MySQL support) and \"hsqldb\" are the only supported");
         }
+
+        hikariConfig.setJdbcUrl(url);
+        hikariConfig.setUsername(user);
+        hikariConfig.setPassword(password);
+        dataSource = new HikariDataSource(hikariConfig);
     }
 
     public static Connection getConnection() throws SQLException {

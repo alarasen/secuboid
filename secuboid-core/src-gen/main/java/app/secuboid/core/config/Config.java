@@ -25,13 +25,9 @@ public class Config {
     private static final Config INSTANCE = new Config();
 
     private String lang;
-    private String databaseDriver;
+    private String databaseUrl;
     private String databaseUser;
     private String databasePassword;
-    private String databaseDatabase;
-    private String databaseServerName;
-    private int databasePortNumber;
-    private String databasePrefix;
     private int selectionDefaultStartDiameter;
 
     private Config() {
@@ -48,8 +44,8 @@ public class Config {
         return lang;
     }
 
-    public String databaseDriver() {
-        return databaseDriver;
+    public String databaseUrl() {
+        return databaseUrl;
     }
 
     public String databaseUser() {
@@ -60,22 +56,6 @@ public class Config {
         return databasePassword;
     }
 
-    public String databaseDatabase() {
-        return databaseDatabase;
-    }
-
-    public String databaseServerName() {
-        return databaseServerName;
-    }
-
-    public int databasePortNumber() {
-        return databasePortNumber;
-    }
-
-    public String databasePrefix() {
-        return databasePrefix;
-    }
-
     public int selectionDefaultStartDiameter() {
         return selectionDefaultStartDiameter;
     }
@@ -83,20 +63,12 @@ public class Config {
     public void load(FileConfiguration fileConfiguration) {
         fileConfiguration.addDefault("lang", "en");
         lang = fileConfiguration.getString("lang");
-        fileConfiguration.addDefault("database.driver", "hsqldb");
-        databaseDriver = fileConfiguration.getString("database.driver");
+        fileConfiguration.addDefault("database.url", "jdbc:hsqldb:file:{{plugin-path}}/storage/db");
+        databaseUrl = fileConfiguration.getString("database.url");
         fileConfiguration.addDefault("database.user", "secuboid");
         databaseUser = fileConfiguration.getString("database.user");
         fileConfiguration.addDefault("database.password", "secuboid");
         databasePassword = fileConfiguration.getString("database.password");
-        fileConfiguration.addDefault("database.database", "file:{{plugin-path}}/storage/db");
-        databaseDatabase = fileConfiguration.getString("database.database");
-        fileConfiguration.addDefault("database.server-name", "localhost");
-        databaseServerName = fileConfiguration.getString("database.server-name");
-        fileConfiguration.addDefault("database.port-number", 3306);
-        databasePortNumber = fileConfiguration.getInt("database.port-number");
-        fileConfiguration.addDefault("database.prefix", "secuboid_");
-        databasePrefix = fileConfiguration.getString("database.prefix");
         fileConfiguration.addDefault("selection.default-start-diameter", 3);
         selectionDefaultStartDiameter = fileConfiguration.getInt("selection.default-start-diameter");
     }

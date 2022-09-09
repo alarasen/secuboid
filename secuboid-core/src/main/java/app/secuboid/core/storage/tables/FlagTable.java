@@ -26,15 +26,15 @@ public class FlagTable implements Table<FlagRow> {
 
     // Needed for automatic table create
     public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS %1$sflag ("
+            + "CREATE TABLE IF NOT EXISTS secuboid_flag ("
             + " land_id BIGINT NOT NULL,"
             + " flag_type VARCHAR(45) NOT NULL,"
             + " source_parameter_value_id BIGINT NULL,"
             + " target_parameter_value_id BIGINT NULL,"
-            + " metadata {{TINYTEXT}} NULL,"
+            + " metadata TINYTEXT NULL,"
             + " PRIMARY KEY (land_id, flag_type, source_parameter_value_id, target_parameter_value_id),"
-            + " CONSTRAINT fk_flag_land_id FOREIGN KEY (land_id) REFERENCES %1$sland (id),"
-            + " CONSTRAINT fk_flag_source_parameter_value_id FOREIGN KEY (source_parameter_value_id) REFERENCES %1$sparameter_value (id),"
-            + " CONSTRAINT fk_flag_target_parameter_value_id FOREIGN KEY (target_parameter_value_id) REFERENCES %1$sparameter_value (id)"
+            + " CONSTRAINT fk_flag_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id),"
+            + " CONSTRAINT fk_flag_source_parameter_value_id FOREIGN KEY (source_parameter_value_id) REFERENCES secuboid_parameter_value (id),"
+            + " CONSTRAINT fk_flag_target_parameter_value_id FOREIGN KEY (target_parameter_value_id) REFERENCES secuboid_parameter_value (id)"
             + ")";
 }
