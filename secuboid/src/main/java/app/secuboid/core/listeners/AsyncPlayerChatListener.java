@@ -15,33 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.listeners;
 
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.SecuboidImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import static org.bukkit.event.EventPriority.MONITOR;
+import static org.bukkit.event.EventPriority.LOWEST;
 
-public class PlayerConnectionListener extends AbstractListener {
+public class AsyncPlayerChatListener implements Listener {
 
-    PlayerConnectionListener() {
-    }
-
-    @EventHandler(priority = MONITOR, ignoreCancelled = true)
-    public void onPlayerJoinMonitor(PlayerJoinEvent event) {
+    @EventHandler(priority = LOWEST, ignoreCancelled = true)
+    public void onAsyncPlayerChatLowest(AsyncPlayerChatEvent event) {
+        SecuboidImpl secuboidImpl = SecuboidImpl.instance();
         Player player = event.getPlayer();
-        getPlayerInfosImpl().addPlayer(player);
-    }
+        PlayerInfo playerInfo = secuboidImpl.getPlayerInfos().getPlayerInfo(player);
 
-    @EventHandler(priority = MONITOR)
-    public void onPlayerQuitMonitor(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        PlayerInfo playerInfo = getPlayerInfosImpl().getPlayerInfo(player);
-        SecuboidImpl.instance().getChatGetter().remove(playerInfo);
-        getPlayerInfosImpl().removePlayer(player);
+        if (playerInfo != null) {
+            String message = event.getMessage();
+            if (secuboidImpl.getChatGetter().checkAnswerAndCallBackIfNeeded(playerInfo, message)) {
+                event.setCancelled(true);
+            }
+        }
     }
 }

@@ -24,7 +24,6 @@ import app.secuboid.core.selection.PlayerSelection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -33,6 +32,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.bukkit.event.EventPriority.NORMAL;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
@@ -41,7 +41,7 @@ public class SecuboidToolListener extends AbstractListener {
     SecuboidToolListener() {
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = NORMAL)
     public void onPlayerInteractNormal(@NotNull PlayerInteractEvent event) {
         ItemStack itemStack = event.getItem();
 
@@ -63,7 +63,7 @@ public class SecuboidToolListener extends AbstractListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = NORMAL)
     public void onEntityDamageByEntityEventNormal(@NotNull EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 

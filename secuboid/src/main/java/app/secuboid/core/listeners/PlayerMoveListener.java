@@ -18,17 +18,18 @@
 package app.secuboid.core.listeners;
 
 import app.secuboid.api.messages.MessageType;
+import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.PlayerInfoImpl;
 import app.secuboid.core.selection.PlayerSelection;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static app.secuboid.core.messages.Message.message;
+import static org.bukkit.event.EventPriority.MONITOR;
 
 public class PlayerMoveListener extends AbstractListener {
 
@@ -37,7 +38,7 @@ public class PlayerMoveListener extends AbstractListener {
     PlayerMoveListener() {
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerMoveMonitor(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
@@ -65,7 +66,7 @@ public class PlayerMoveListener extends AbstractListener {
         playerInfoImpl.updatePosInfo(event, loc);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerTeleportMonitor(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
@@ -76,6 +77,7 @@ public class PlayerMoveListener extends AbstractListener {
         PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
         PlayerSelection playerSelection = playerInfoImpl.getPlayerSelection();
         playerSelection.removeSelection();
+        SecuboidImpl.instance().getChatGetter().remove(playerInfoImpl);
         message().sendMessage(player, MessageType.NORMAL, MessagePaths.selectionCancel());
     }
 }

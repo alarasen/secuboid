@@ -23,7 +23,10 @@ import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.Lands;
 import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.ChatGetterResult;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
@@ -40,14 +43,40 @@ public class CommandCreate implements CommandExec {
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        Lands lands = secuboid.getLands();
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+        if (subArgs.length == 0) {
+            if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
+                // TODO Message you need parameter
+                return;
+            }
 
-        // TODO: create land and callback
-        // lands.createLand(worldLand, landName, owner, area, callback);
+            ((SecuboidImpl) secuboid).getChatGetter().put(commandSenderInfo, this::chatLandNameCallBack);
+            return;
+        }
+
+        if (subArgs.length > 1) {
+            // TODO message no space in name
+            return;
+        }
+
+        createLand(commandSenderInfo, subArgs[0]);
     }
 
-    public void callBack(LandResult landResult) {
+    public void chatLandNameCallBack(@NotNull ChatGetterResult chatGetterResult) {
+        createLand(chatGetterResult.commandSenderInfo(), chatGetterResult.message());
+    }
 
+    private void createLand(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String landName) {
+        if (landName.contains(" ")) {
+            // TODO message no space in name
+            return;
+        }
+
+        Lands lands = secuboid.getLands();
+        //lands.createLand(worldLand, landName, owner, area, this::landCreationCallBack);
+
+    }
+
+    public void landCreationCallBack(@NotNull LandResult landResult) {
     }
 }

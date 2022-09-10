@@ -32,6 +32,7 @@ import app.secuboid.core.commands.items.SecuboidTool;
 import app.secuboid.core.flagtypes.FlagTypesImpl;
 import app.secuboid.core.lands.LandsImpl;
 import app.secuboid.core.listeners.Listeners;
+import app.secuboid.core.messages.ChatGetter;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.messages.Message;
 import app.secuboid.core.players.PlayerInfosImpl;
@@ -62,6 +63,8 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     private final SecuboidTool secuboidTool;
     private final Listeners listeners;
     private final StorageManager storageManager;
+
+    private final ChatGetter chatGetter;
 
     public static SecuboidImpl instance() {
         return secuboidImpl;
@@ -96,6 +99,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         listeners = new Listeners();
         commandListener = new CommandListener((CommandsImpl) commands, playerInfos);
         storageManager = new StorageManagerImpl(secuboidPlugin);
+        chatGetter = new ChatGetter();
 
         lands = new LandsImpl();
     }
@@ -126,8 +130,9 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
             ((CommandsImpl) commands).init(pluginLoader);
             commandListener.init();
             ((StorageManagerImpl) storageManager).init(pluginLoader);
+        } else {
+            chatGetter.reset();
         }
-
         playerInfos.addConsoleCommandSender(secuboidPlugin.getServer().getConsoleSender());
 
         // Load
@@ -196,5 +201,9 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     public SecuboidTool getSecuboidTool() {
         return secuboidTool;
+    }
+
+    public ChatGetter getChatGetter() {
+        return chatGetter;
     }
 }

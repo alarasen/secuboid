@@ -24,12 +24,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Listeners {
 
     public void register() {
+        AsyncPlayerChatListener asyncPlayerChatListener = new AsyncPlayerChatListener();
         PlayerConnectionListener playerConnectionListener = new PlayerConnectionListener();
         PlayerMoveListener playerMoveListener = new PlayerMoveListener();
         SecuboidToolListener secuboidToolListener = new SecuboidToolListener();
 
         PluginManager pluginManager = SecuboidImpl.getPluginManager();
         JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
+        pluginManager.registerEvents(asyncPlayerChatListener, javaPlugin);
         pluginManager.registerEvents(playerConnectionListener, javaPlugin);
         pluginManager.registerEvents(playerMoveListener, javaPlugin);
         pluginManager.registerEvents(secuboidToolListener, javaPlugin);
