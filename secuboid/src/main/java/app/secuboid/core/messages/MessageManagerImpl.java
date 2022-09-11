@@ -33,6 +33,7 @@ import java.util.logging.Level;
 
 import static app.secuboid.core.config.Config.config;
 import static java.lang.String.format;
+import static java.util.logging.Level.WARNING;
 
 public class MessageManagerImpl implements MessageManager {
 
@@ -78,7 +79,7 @@ public class MessageManagerImpl implements MessageManager {
 
         if (format == null) {
             String message = format("Message path not found path=%s", path);
-            Log.log().log(Level.WARNING, () -> format("[Plugin:%s] %s", pluginName, message));
+            Log.log().log(WARNING, () -> format("[Plugin:%s] %s", pluginName, message));
             return message;
         }
 
@@ -105,7 +106,7 @@ public class MessageManagerImpl implements MessageManager {
         String descrition = fileConfigurationFlags.getString(name);
         if (descrition == null) {
             String message = format("Flag description not found: %s", name);
-            Log.log().log(Level.WARNING, () -> format("[Plugin:%s] %s", pluginName, message));
+            Log.log().log(WARNING, () -> format("[Plugin:%s] %s", pluginName, message));
             return message;
         }
 
@@ -130,7 +131,7 @@ public class MessageManagerImpl implements MessageManager {
         InputStream inputStream = getInputStream(plugin, langFilename);
 
         if (inputStream == null) {
-            Log.log().log(Level.WARNING,
+            Log.log().log(WARNING,
                     () -> format("[Plugin:%s] Switch to default because this language is not found: %s:%s", pluginName,
                             lang, langFilename));
             inputStream = getInputStream(plugin, defaultLangFilename);

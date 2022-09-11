@@ -29,11 +29,14 @@ import app.secuboid.core.storage.types.LandType;
 import app.secuboid.core.utilities.NameUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
 
+import static app.secuboid.core.storage.types.LandType.WORLD_LAND;
 import static java.lang.String.format;
+import static java.util.logging.Level.SEVERE;
 
 public class LandsImpl implements Lands {
 
@@ -71,11 +74,29 @@ public class LandsImpl implements Lands {
                 worldNameToWorldLand.put(worldLand.getName(), worldLand);
             }
         }
+
+        for (World world : SecuboidImpl.getJavaPLugin().getServer().getWorlds()) {
+            loadWorldSync(world);
+        }
     }
 
 
-    public void loadWorld(String worldName) {
-        // TODO Load config
+    public void loadWorldSync(@NotNull World world) {
+        String worldName = world.getName();
+
+        if (worldNameToWorldLand.containsKey(worldName)) {
+            return;
+        }
+
+        LandRow inputLandRow = new LandRow(null, worldName, WORLD_LAND, null);
+        LandRow landRow = getStorageManager().insertSync(inputLandRow, null);
+        if (landRow == null) {
+            Log.log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database", worldName);
+            return;
+        }
+
+        WorldLand worldLand = new WorldLandImpl(landRow.getId(), worldName);
+        worldNameToWorldLand.put(worldName, worldLand);
     }
 
     @Override

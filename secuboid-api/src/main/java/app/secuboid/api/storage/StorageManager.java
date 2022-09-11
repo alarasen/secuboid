@@ -49,6 +49,15 @@ public interface StorageManager {
     <R extends Row> @NotNull Set<R> selectAllSync(@NotNull Class<R> classRow);
 
     /**
+     * Insert to the database sync.
+     *
+     * @param <R>    the row
+     * @param row    the row
+     * @param sender the sender or null
+     */
+    <R extends Row> @Nullable R insertSync(@NotNull R row, @Nullable CommandSender sender);
+
+    /**
      * Insert to the database.
      *
      * @param row      the row

@@ -28,6 +28,7 @@ public class Listeners {
         PlayerConnectionListener playerConnectionListener = new PlayerConnectionListener();
         PlayerMoveListener playerMoveListener = new PlayerMoveListener();
         SecuboidToolListener secuboidToolListener = new SecuboidToolListener();
+        WorldListener worldListener = new WorldListener();
 
         PluginManager pluginManager = SecuboidImpl.getPluginManager();
         JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
@@ -35,5 +36,6 @@ public class Listeners {
         pluginManager.registerEvents(playerConnectionListener, javaPlugin);
         pluginManager.registerEvents(playerMoveListener, javaPlugin);
         pluginManager.registerEvents(secuboidToolListener, javaPlugin);
+        pluginManager.registerEvents(worldListener, javaPlugin);
     }
 }

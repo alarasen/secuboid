@@ -22,7 +22,6 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.BiConsumer;
 
@@ -61,15 +60,16 @@ public interface QueueThread<T, R> {
      *
      * @param t the element to send
      */
-    void addElement(T t);
+    void addElement(@NotNull T t);
 
     /**
      * Adds an element and blocking queue for sync.
      *
      * @param t           the element to send
      * @param resultQueue the blocking queue for result
+     * @param isSet       is only one or a set?
      */
-    void addElement(T t, @NotNull BlockingQueue<Set<R>> resultQueue);
+    void addElement(@NotNull T t, @NotNull BlockingQueue<Object> resultQueue, boolean isSet);
 
     /**
      * Adds an element with callback.
@@ -78,7 +78,7 @@ public interface QueueThread<T, R> {
      * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void addElement(T t, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, R> callback);
+    void addElement(@NotNull T t, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, R> callback);
 
     /**
      * Waits for the last element and stop.

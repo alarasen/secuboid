@@ -31,7 +31,7 @@ import java.util.Set;
 import static app.secuboid.api.utilities.DbUtils.getNullable;
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.SEVERE;
 
 @TableRegistered(row = LandRow.class)
 public class LandTable implements Table<LandRow> {
@@ -64,7 +64,7 @@ public class LandTable implements Table<LandRow> {
                         Long parentId = getNullable(rs, "parent_id", rs::getLong);
                         result.add(new LandRow(id, name, type, parentId));
                     } catch (IllegalArgumentException e) {
-                        log().log(WARNING, e, () -> format("Unable to load a land from the database [id=%s, name=%s]", id, name));
+                        log().log(SEVERE, e, () -> format("Unable to load a land from the database [id=%s, name=%s]", id, name));
                     }
                 }
 

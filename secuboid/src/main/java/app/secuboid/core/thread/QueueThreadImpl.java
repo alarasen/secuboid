@@ -19,11 +19,11 @@ package app.secuboid.core.thread;
 
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
-import app.secuboid.core.messages.Log;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.Set;
@@ -33,7 +33,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
+import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
+import static java.util.Collections.emptySet;
 
 public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
 
@@ -59,7 +61,7 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
         scheduler = plugin.getServer().getScheduler();
 
         if (isAlive()) {
-            Log.log().log(Level.WARNING,
+            log().log(Level.WARNING,
                     () -> format("Thread \"%s\" is already started and it shouldn't!", threadName));
         }
 
@@ -75,20 +77,20 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
     }
 
     @Override
-    public void addElement(T t) {
-        Element<T, R> element = new Element<>(t, null, null, null);
+    public void addElement(@NotNull T t) {
+        Element<T, R> element = new Element<>(t, null, null, null, false);
         taskQueue.add(element);
     }
 
     @Override
-    public void addElement(T t, @NotNull BlockingQueue<Set<R>> resultQueue) {
-        Element<T, R> element = new Element<>(t, null, resultQueue, null);
+    public void addElement(@NotNull T t, @NotNull BlockingQueue<Object> resultQueue, boolean isSet) {
+        Element<T, R> element = new Element<>(t, null, resultQueue, null, isSet);
         taskQueue.add(element);
     }
 
     @Override
-    public void addElement(T t, CommandSender sender, BiConsumer<CommandSender, R> callback) {
-        Element<T, R> element = new Element<>(t, sender, null, callback);
+    public void addElement(@NotNull T t, CommandSender sender, BiConsumer<CommandSender, R> callback) {
+        Element<T, R> element = new Element<>(t, sender, null, callback, false);
         taskQueue.add(element);
     }
 
@@ -96,19 +98,20 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
     public void stop() {
         // Check if the thread is not death
         if (thread == null || !thread.isAlive()) {
-            Log.log().log(Level.SEVERE, () -> format("Thread \"%s\" is already stopped!", threadName));
+            log().log(Level.SEVERE, () -> format("Thread \"%s\" is already stopped!", threadName));
             return;
         }
 
         // Send shutdown thread request
-        addElement(null);
+        Element<T, R> element = new Element<>(null, null, null, null, false);
+        taskQueue.add(element);
 
         // Waiting for thread
         waitForThread();
 
         // If the thread is not stopped
         if (thread.isAlive()) {
-            Log.log().log(Level.WARNING, () -> format("Unable to stop gracefully the thread \"%s\"!", threadName));
+            log().log(Level.WARNING, () -> format("Unable to stop gracefully the thread \"%s\"!", threadName));
             thread.interrupt();
             waitForThread();
         }
@@ -116,15 +119,19 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
         thread = null;
     }
 
-    private static record Element<T, R>(T t, CommandSender sender, BlockingQueue<Set<R>> resultQueue,
-                                        BiConsumer<CommandSender, R> callback) {
+    private static record Element<T, R>(@Nullable T t,
+                                        @Nullable CommandSender sender,
+                                        @Nullable BlockingQueue<Object> resultQueue,
+                                        @Nullable BiConsumer<CommandSender, R> callback,
+                                        boolean isSet
+    ) {
     }
 
     private void waitForThread() {
         try {
             thread.join(TIME_WAITING_THREAD_MILLIS);
         } catch (InterruptedException e) {
-            Log.log().log(Level.WARNING, e, () -> format("Thread \"%s\" interrupted!", threadName));
+            log().log(Level.WARNING, e, () -> format("Thread \"%s\" interrupted!", threadName));
             Thread.currentThread().interrupt();
         }
     }
@@ -136,7 +143,7 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
             try {
                 loopQueue();
             } catch (InterruptedException e) {
-                Log.log().log(Level.WARNING, e, () -> format("Interruption requested for thread \"%s\".", getName()));
+                log().log(Level.WARNING, e, () -> format("Interruption requested for thread \"%s\".", getName()));
                 Thread.currentThread().interrupt();
             }
         }
@@ -146,39 +153,55 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
 
             // Loop unit there is no empty (stop thread request) queueProcessor.
             while ((element = taskQueue.take()).t != null) {
-                if (element.resultQueue != null) {
-                    processElementsSync(element);
+
+                Object result;
+                if (element.isSet) {
+                    result = processElements(element);
                 } else {
-                    processElement(element);
+                    result = processElement(element);
+                }
+
+
+                if (result != null && element.resultQueue != null) {
+                    element.resultQueue.put(result);
                 }
             }
         }
 
-        private void processElement(Element<T, R> element) {
+        private @Nullable R processElement(@NotNull Element<T, R> element) {
             CommandSender sender = element.sender;
             T t = element.t;
             BiConsumer<CommandSender, R> callback = element.callback;
 
-            R r = queueProcessor.process(t);
-
-            if (callback == null) {
-                return;
+            if (t == null) {
+                log().log(Level.SEVERE, "An element in thread has a 't' null: {}", element);
+                return null;
             }
 
-            Callable<Void> callableCallback = () -> {
-                callback.accept(sender, r);
-                return null;
-            };
+            R r = queueProcessor.process(t);
 
-            scheduler.callSyncMethod(plugin, callableCallback);
+            if (callback != null) {
+
+                Callable<Void> callableCallback = () -> {
+                    callback.accept(sender, r);
+                    return null;
+                };
+
+                scheduler.callSyncMethod(plugin, callableCallback);
+            }
+
+            return r;
         }
 
-        private void processElementsSync(Element<T, R> element) throws InterruptedException {
+        private @NotNull Set<R> processElements(Element<T, R> element) throws InterruptedException {
             T t = element.t;
 
-            Set<R> result = queueProcessor.processMultipleSync(t);
+            if (t == null) {
+                log().log(Level.SEVERE, "An element in thread has a 't' null: {}", element);
+                return emptySet();
+            }
 
-            element.resultQueue.put(result);
+            return queueProcessor.processMultiple(t);
         }
     }
 }

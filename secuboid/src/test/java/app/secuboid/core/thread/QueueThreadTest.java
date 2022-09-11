@@ -55,7 +55,7 @@ class QueueThreadTest {
         }
 
         @Override
-        public @NotNull Set<Integer> processMultipleSync(@NotNull Duration duration) {
+        public @NotNull Set<Integer> processMultiple(@NotNull Duration duration) {
             if (!duration.isZero()) {
                 Awaitility.await().during(duration);
             }
@@ -150,16 +150,30 @@ class QueueThreadTest {
     }
 
     @Test
-    void when_sync_then_return_result() throws InterruptedException {
+    @SuppressWarnings("unchecked")
+    void when_sync_set_then_return_result() throws InterruptedException {
         Duration element1 = Duration.ofMillis(0L);
-        BlockingQueue<Set<Integer>> resultQueue = new LinkedBlockingDeque<>(1);
+        BlockingQueue<Object> resultQueue = new LinkedBlockingDeque<>(1);
 
         queueThread.start();
-        queueThread.addElement(element1, resultQueue);
-        Set<Integer> result = resultQueue.take();
+        queueThread.addElement(element1, resultQueue, true);
+        Set<Integer> result = (Set<Integer>) resultQueue.take();
         queueThread.stop();
 
         assertEquals(1, result.size());
         assertEquals(2, result.iterator().next());
+    }
+
+    @Test
+    void when_sync_integer_then_return_result() throws InterruptedException {
+        Duration element1 = Duration.ofMillis(0L);
+        BlockingQueue<Object> resultQueue = new LinkedBlockingDeque<>(1);
+
+        queueThread.start();
+        queueThread.addElement(element1, resultQueue, false);
+        Integer result = (Integer) resultQueue.take();
+        queueThread.stop();
+
+        assertEquals(1, result);
     }
 }

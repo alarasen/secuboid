@@ -37,12 +37,12 @@ public interface QueueProcessor<T, R> {
     @Nullable R process(@NotNull T t);
 
     /**
-     * Process (set) and sync what it should execute inside the loop.
+     * Process (set) and what it should execute inside the loop.
      *
      * @param t the t
      * @return the value for the return (or callback)
      */
-    default @NotNull Set<R> processMultipleSync(@NotNull T t) {
+    default @NotNull Set<R> processMultiple(@NotNull T t) {
         throw new SecuboidRuntimeException("processMultiple Not implemented!");
     }
 }

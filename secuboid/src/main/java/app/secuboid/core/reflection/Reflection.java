@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import static app.secuboid.core.messages.Log.log;
+import static java.util.logging.Level.SEVERE;
 
 class Reflection {
 
@@ -37,15 +37,14 @@ class Reflection {
                 Class<?> clazz = Class.forName(name);
                 result.add(clazz);
             } catch (ClassNotFoundException e) {
-                log().log(Level.WARNING, e, () -> "Component class not found: " + name);
+                log().log(SEVERE, e, () -> "Component class not found: " + name);
             }
         }
 
         return result;
     }
 
-    <T, A extends Annotation> Map<Class<? extends T>, A> getClassToAnnotation(Set<Class<?>> classes,
-                                                                              Class<A> annotationClass, Class<T> wantedClass) {
+    <T, A extends Annotation> Map<Class<? extends T>, A> getClassToAnnotation(Set<Class<?>> classes, Class<A> annotationClass, Class<T> wantedClass) {
         Map<Class<? extends T>, A> returnedClasses = new HashMap<>();
 
         for (Class<?> clazz : classes) {
@@ -56,10 +55,7 @@ class Reflection {
                     A annotation = clazz.getAnnotation(annotationClass);
                     returnedClasses.put(classT, annotation);
                 } catch (ClassCastException e) {
-                    log().log(Level.WARNING, e,
-                            () -> String.format(
-                                    "A component will not work because the class is incorrect type: [class=%s, wantedClass=%s]",
-                                    clazz, wantedClass));
+                    log().log(SEVERE, e, () -> String.format("A component will not work because the class is incorrect type: [class=%s, wantedClass=%s]", clazz, wantedClass));
                 }
             }
         }
@@ -102,10 +98,7 @@ class Reflection {
                     T constant = (T) field.get(null);
                     result.add(constant);
                 } catch (IllegalArgumentException | IllegalAccessException | ClassCastException e) {
-                    log().log(Level.WARNING, e,
-                            () -> String.format(
-                                    "A component will not work because the field is not public or incorrect type: [fieldClass=%s, wantedClass=%s]",
-                                    fieldClass, wantedClass));
+                    log().log(SEVERE, e, () -> String.format("A component will not work because the field is not public or incorrect type: [fieldClass=%s, wantedClass=%s]", fieldClass, wantedClass));
                 }
             }
         }

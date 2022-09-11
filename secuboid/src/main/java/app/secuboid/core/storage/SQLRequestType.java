@@ -18,7 +18,7 @@
 package app.secuboid.core.storage;
 
 public enum SQLRequestType {
-    SELECT_ALL_SYNC,
+    SELECT_ALL,
     INSERT,
     UPDATE,
     DELETE

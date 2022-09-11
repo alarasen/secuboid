@@ -35,7 +35,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+
+import static java.util.logging.Level.SEVERE;
 
 public class CommandsImpl implements Commands {
 
@@ -68,7 +69,7 @@ public class CommandsImpl implements Commands {
                         registerCommand(clazz, commandRegistered);
                     } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                              | InvocationTargetException | SecurityException e) {
-                        Log.log().log(Level.WARNING, e,
+                        Log.log().log(SEVERE, e,
                                 () -> "CommandExec constructor not visible or contains wrong parameters: " + clazz);
                     }
                 }
@@ -126,7 +127,7 @@ public class CommandsImpl implements Commands {
         CommandExec commandExec = newInstance(clazz, pluginClass);
 
         if (commandExec == null) {
-            Log.log().log(Level.WARNING, () -> "No valid constructor for this commmand class: " + clazz);
+            Log.log().log(SEVERE, () -> "No valid constructor for this command class: " + clazz);
             return;
         }
 
@@ -139,8 +140,7 @@ public class CommandsImpl implements Commands {
         while (i < nameSplit.length - 1) {
             CommandContainer curCommandContainer = curNameToCommand.get(nameSplit[0]);
             if (curCommandContainer == null) {
-                Log.log().log(Level.WARNING,
-                        () -> "There is an error on registered command parent name: " + commandName);
+                Log.log().log(SEVERE, () -> "There is an error on registered command parent name: " + commandName);
                 return;
             }
             curNameToCommand = curCommandContainer.nameToSubCommand();

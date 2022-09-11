@@ -18,27 +18,23 @@
 
 package app.secuboid.core.listeners;
 
-import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.SecuboidImpl;
-import org.bukkit.entity.Player;
+import app.secuboid.core.lands.LandsImpl;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 
-import static org.bukkit.event.EventPriority.LOWEST;
+import static org.bukkit.event.EventPriority.MONITOR;
 
-public class AsyncPlayerChatListener extends AbstractListener {
+public class WorldListener extends AbstractListener {
 
-    @EventHandler(priority = LOWEST, ignoreCancelled = true)
-    public void onAsyncPlayerChatLowest(AsyncPlayerChatEvent event) {
-        SecuboidImpl secuboidImpl = SecuboidImpl.instance();
-        Player player = event.getPlayer();
-        PlayerInfo playerInfo = getPlayerInfoImpl(player);
 
-        if (playerInfo != null) {
-            String message = event.getMessage();
-            if (secuboidImpl.getChatGetter().checkAnswerAndCallBackIfNeeded(playerInfo, message)) {
-                event.setCancelled(true);
-            }
-        }
+    @EventHandler(priority = MONITOR, ignoreCancelled = true)
+    public void onWorldLoadMonitor(WorldLoadEvent event) {
+        World world = event.getWorld();
+
+        // This is synced because the Minecraft world load is not async (with lags) and we cannot take the risk to have
+        // world damages (ex: fire, explosion or player destroy)
+        ((LandsImpl) SecuboidImpl.instance().getLands()).loadWorldSync(world);
     }
 }

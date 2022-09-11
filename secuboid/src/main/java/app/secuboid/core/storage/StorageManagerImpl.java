@@ -41,14 +41,12 @@ public class StorageManagerImpl implements StorageManager {
     private static final String THREAD_NAME = "Secuboid Storage";
 
     private final StorageInit storageInit;
-    private final StorageQueueProcessor queueProcessor;
     private final QueueThread<StorageElement, Row> queueThread;
-    private final BlockingQueue<Set<Row>> resultQueue;
+    private final BlockingQueue<Object> resultQueue;
 
     public StorageManagerImpl(Plugin plugin) {
         storageInit = new StorageInit();
-        queueProcessor = new StorageQueueProcessor();
-        queueThread = new QueueThreadImpl<>(plugin, THREAD_NAME, queueProcessor);
+        queueThread = new QueueThreadImpl<>(plugin, THREAD_NAME, new StorageQueueProcessor());
         resultQueue = new LinkedBlockingDeque<>(1);
     }
 
@@ -68,8 +66,8 @@ public class StorageManagerImpl implements StorageManager {
     @SuppressWarnings("unchecked")
     public @NotNull <R extends Row> Set<R> selectAllSync(@NotNull Class<R> classRow) {
         Table<Row> table = storageInit.getTableFromClassRow(classRow);
-        StorageElement element = new StorageElement(table, null, SQLRequestType.SELECT_ALL_SYNC);
-        queueThread.addElement(element, resultQueue);
+        StorageElement element = new StorageElement(table, null, SQLRequestType.SELECT_ALL);
+        queueThread.addElement(element, resultQueue, true);
 
         try {
             return (Set<R>) resultQueue.take();
@@ -79,6 +77,23 @@ public class StorageManagerImpl implements StorageManager {
         }
 
         return Collections.emptySet();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <R extends Row> @Nullable R insertSync(@NotNull R row, @Nullable CommandSender sender) {
+        Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
+        StorageElement element = new StorageElement(table, row, SQLRequestType.INSERT);
+        queueThread.addElement(element, resultQueue, false);
+
+        try {
+            return (R) resultQueue.take();
+        } catch (InterruptedException e) {
+            Log.log().log(Level.SEVERE, "Thread \"%s\" interrupted!", e);
+            Thread.currentThread().interrupt();
+        }
+
+        return null;
     }
 
     @Override

@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
 
+import static app.secuboid.core.storage.SQLRequestType.SELECT_ALL;
 import static java.lang.String.format;
 
 public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row> {
@@ -61,7 +62,7 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull Set<Row> processMultipleSync(@NotNull StorageElement element) {
+    public @NotNull Set<Row> processMultiple(@NotNull StorageElement element) {
         SQLRequestType requestType = element.requestType();
         Table<Row> table = (Table<Row>) element.table();
 
@@ -83,8 +84,7 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
         return Collections.emptySet();
     }
 
-    private Row processDatabase(Connection conn, SQLRequestType requestType, Table<Row> table, Row row)
-            throws SQLException {
+    private Row processDatabase(Connection conn, SQLRequestType requestType, Table<Row> table, Row row) throws SQLException {
         switch (requestType) {
             case INSERT -> {
                 return table.insert(conn, row);
@@ -99,13 +99,11 @@ public class StorageQueueProcessor implements QueueProcessor<StorageElement, Row
         }
     }
 
-    private Set<Row> processDatabaseMultiple(Connection conn, SQLRequestType requestType, Table<Row> table)
-            throws SQLException {
-        switch (requestType) {
-            case SELECT_ALL_SYNC -> {
-                return table.selectAll(conn);
-            }
-            default -> throw new SecuboidRuntimeException("No storage instruction");
+    private Set<Row> processDatabaseMultiple(Connection conn, SQLRequestType requestType, Table<Row> table) throws SQLException {
+        if (requestType == SELECT_ALL) {
+            return table.selectAll(conn);
         }
+
+        throw new SecuboidRuntimeException("No storage instruction");
     }
 }
