@@ -20,6 +20,7 @@ package app.secuboid.api;
 import app.secuboid.api.commands.Commands;
 import app.secuboid.api.flagtypes.FlagTypes;
 import app.secuboid.api.lands.Lands;
+import app.secuboid.api.parameters.values.ParameterValues;
 import app.secuboid.api.players.PlayerInfos;
 import app.secuboid.api.storage.StorageManager;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,13 @@ public interface Secuboid {
      * @return the flags instance
      */
     @NotNull FlagTypes getFlagTypes();
+
+    /**
+     * Gets the parameter values instance.
+     *
+     * @return the parameter values instance
+     */
+    @NotNull ParameterValues getParameterValues();
 
     /**
      * Gets lands.

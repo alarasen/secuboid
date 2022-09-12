@@ -41,7 +41,7 @@ public class FlagTypesImpl implements FlagTypes {
         }
 
         Set<FlagType> flagTypes = pluginLoader.getAnnotatedConstants(FlagRegistered.class, FlagType.class);
-        flagTypes.stream().forEach(f -> nameToFlagType.put(f.name(), f));
+        flagTypes.forEach(f -> nameToFlagType.put(f.name(), f));
 
     }
 

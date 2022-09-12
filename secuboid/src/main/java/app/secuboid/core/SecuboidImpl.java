@@ -24,6 +24,7 @@ import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.Commands;
 import app.secuboid.api.flagtypes.FlagTypes;
 import app.secuboid.api.lands.Lands;
+import app.secuboid.api.parameters.values.ParameterValues;
 import app.secuboid.api.players.PlayerInfos;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.commands.CommandListener;
@@ -35,6 +36,7 @@ import app.secuboid.core.listeners.Listeners;
 import app.secuboid.core.messages.ChatGetter;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.messages.Message;
+import app.secuboid.core.parameters.values.ParameterValuesImpl;
 import app.secuboid.core.players.PlayerInfosImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.storage.ConnectionManager;
@@ -57,6 +59,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     private final NewInstance newInstance;
     private final Commands commands;
     private final CommandListener commandListener;
+    private final ParameterValues parameterValues;
     private final Lands lands;
     private final FlagTypes flags;
     private final PlayerInfosImpl playerInfos;
@@ -101,6 +104,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         storageManager = new StorageManagerImpl(secuboidPlugin);
         chatGetter = new ChatGetter();
 
+        parameterValues = new ParameterValuesImpl();
         lands = new LandsImpl();
     }
 
@@ -128,6 +132,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
             pluginLoader.init(pluginManager);
             ((FlagTypesImpl) flags).init(pluginLoader);
             ((CommandsImpl) commands).init(pluginLoader);
+            ((ParameterValuesImpl) parameterValues).init(pluginLoader);
             commandListener.init();
             ((StorageManagerImpl) storageManager).init(pluginLoader);
         } else {
@@ -137,13 +142,14 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
         // Load
         ((StorageManagerImpl) storageManager).start();
+        ((ParameterValuesImpl) parameterValues).load();
         ((LandsImpl) lands).load();
 
         if (isServerBoot) {
             listeners.register();
         }
 
-        // Reload players, not only on "sd reload" because there is also de bukkit
+        // Reload players, not only on "sd reload" because there is also the bukkit
         // "reload" command.
         for (Player player : secuboidPlugin.getServer().getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
@@ -182,6 +188,11 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     @Override
     public @NotNull FlagTypes getFlagTypes() {
         return flags;
+    }
+
+    @Override
+    public @NotNull ParameterValues getParameterValues() {
+        return parameterValues;
     }
 
     @Override

@@ -20,6 +20,14 @@ package app.secuboid.core.storage.tables;
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.storage.rows.ParameterValueRow;
+import org.jetbrains.annotations.NotNull;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 @TableRegistered(row = ParameterValueRow.class)
 public class ParameterValueTable implements Table<ParameterValueRow> {
@@ -33,4 +41,24 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
             + " PRIMARY KEY (id),"
             + " CONSTRAINT parameter_value_short_name_value_unique UNIQUE (short_name, value)"
             + ")";
+
+    @Override
+    public @NotNull Set<ParameterValueRow> selectAll(@NotNull Connection conn) throws SQLException {
+        String sql = "SELECT id, short_name, value FROM secuboid_parameter_value";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                Set<ParameterValueRow> result = new HashSet<>();
+
+                while (rs.next()) {
+                    long id = rs.getInt("id");
+                    String shortName = rs.getString("short_name");
+                    String value = rs.getString("value");
+                    result.add(new ParameterValueRow(id, shortName, value));
+                }
+
+                return result;
+            }
+        }
+    }
 }

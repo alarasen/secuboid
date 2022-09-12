@@ -19,6 +19,7 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.storage.StorageManager;
@@ -30,6 +31,7 @@ import app.secuboid.core.utilities.NameUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -91,7 +93,8 @@ public class LandsImpl implements Lands {
         LandRow inputLandRow = new LandRow(null, worldName, WORLD_LAND, null);
         LandRow landRow = getStorageManager().insertSync(inputLandRow, null);
         if (landRow == null) {
-            Log.log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database", worldName);
+            Log.log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database",
+                    worldName);
             return;
         }
 
@@ -100,14 +103,15 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public void createLand(Land parent, String landName, ParameterValue owner, Area area,
-                           CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void createLand(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
+                           @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
+                           @Nullable Consumer<LandResult> callback) {
         String nameLower = landName;
 
         LandResultCode code = validateName(parent, nameLower);
         if (code != null) {
             if (callback != null) {
-                LandResult landResult = new LandResult(commandSenderInfo, code, null, area);
+                LandResult landResult = new LandResult(commandSenderInfo, code, null, null);
                 callback.accept(landResult);
             }
             return;

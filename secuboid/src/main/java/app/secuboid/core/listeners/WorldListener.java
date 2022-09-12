@@ -28,7 +28,6 @@ import static org.bukkit.event.EventPriority.MONITOR;
 
 public class WorldListener extends AbstractListener {
 
-
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onWorldLoadMonitor(WorldLoadEvent event) {
         World world = event.getWorld();
