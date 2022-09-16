@@ -25,6 +25,7 @@ import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.storage.rows.ParameterValueRow;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -46,7 +47,7 @@ public class ParameterValuesImpl implements ParameterValues {
         classToValueToParameterValue = new HashMap<>();
     }
 
-    public void init(PluginLoader pluginLoader) {
+    public void init(@NotNull PluginLoader pluginLoader) {
         // TODO unit test
         if (!shortNameToClass.isEmpty()) {
             return;
@@ -69,7 +70,7 @@ public class ParameterValuesImpl implements ParameterValues {
         }
     }
 
-    private void loadParameterValueRow(ParameterValueRow parameterValueRow) {
+    private void loadParameterValueRow(@NotNull ParameterValueRow parameterValueRow) {
         Class<? extends ParameterValue> clazz = shortNameToClass.get(parameterValueRow.shortName());
         if (clazz == null) {
             log().log(SEVERE, "Unable to load the parameter value with this non existing short name: {}",
@@ -94,7 +95,7 @@ public class ParameterValuesImpl implements ParameterValues {
         classToValueToParameterValueAdd(parameterValue);
     }
 
-    private void classToValueToParameterValueAdd(ParameterValue parameterValue) {
+    private void classToValueToParameterValueAdd(@NotNull ParameterValue parameterValue) {
         classToValueToParameterValue.computeIfAbsent(parameterValue.getClass(), k -> new HashMap<>()).put(parameterValue.getValue(), parameterValue);
     }
 

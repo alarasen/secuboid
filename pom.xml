@@ -5,11 +5,13 @@
     <groupId>app.secuboid</groupId>
     <artifactId>secuboid-parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <name>Secuboid Parent</name>
     <description>Parent for Secuboid Minecraft project</description>
 
     <properties>
+        <revision>2.0.0-SNAPSHOT</revision>
+
         <spigot.plugin.api.version>1.19</spigot.plugin.api.version>
         <spigot.version>1.19.1</spigot.version>
         <spigot.suffixversion>-R0.1-SNAPSHOT</spigot.suffixversion>
@@ -73,19 +75,19 @@
             <dependency>
                 <groupId>app.secuboid</groupId>
                 <artifactId>secuboid-api</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>app.secuboid</groupId>
                 <artifactId>secuboid</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
                 <groupId>app.secuboid</groupId>
                 <artifactId>secuboid-permission-group</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <!-- Internal End -->
 
@@ -93,7 +95,7 @@
             <dependency>
                 <groupId>app.secuboid</groupId>
                 <artifactId>secuboid-it-lib</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>${revision}</version>
             </dependency>
             <!-- Test Internal End -->
 
