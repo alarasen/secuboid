@@ -19,7 +19,6 @@ package app.secuboid.core.players;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.parameters.values.ParameterValuePlayer;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.selection.PlayerSelection;
 import app.secuboid.core.selection.SenderSelection;
@@ -54,12 +53,6 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         lastLocation = player.getLocation();
         isTpCancel = false;
 
-    }
-
-    @Override
-    public @NotNull ParameterValuePlayer getParameterValue() {
-        // TODO Parameter value redesign
-        return null;
     }
 
     @Override

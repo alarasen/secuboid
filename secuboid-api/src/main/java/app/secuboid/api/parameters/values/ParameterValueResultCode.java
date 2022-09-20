@@ -16,13 +16,30 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.messages;
+package app.secuboid.api.parameters.values;
 
-import app.secuboid.api.players.CommandSenderInfo;
-import org.jetbrains.annotations.NotNull;
+/**
+ * Returned code for a parameter value command.
+ */
+public enum ParameterValueResultCode {
 
-public record ChatGetterResult(
-        @NotNull CommandSenderInfo commandSenderInfo,
-        @NotNull String message
-) {
+    /**
+     * success
+     */
+    SUCCESS,
+
+    /**
+     * player not found
+     */
+    PLAYER_NOT_FOUND,
+
+    /**
+     * Invalid parameter
+     */
+    INVALID_PARAMETER,
+
+    /**
+     * Invalid value
+     */
+    INVALID_VALUE
 }

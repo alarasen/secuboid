@@ -18,10 +18,22 @@
 
 package app.secuboid.api.parameters.values;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
+
 /**
  * Access to parameter values.
  */
 public interface ParameterValues {
 
-
+    /**
+     * Grabs a parameter value.
+     *
+     * @param name     the name or short name
+     * @param value    the value or null if the parameter value doesn't accept values
+     * @param callback the returned answer in callback
+     */
+    void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValue> callback);
 }

@@ -28,8 +28,7 @@ public class SenderSelection {
         activeSelection = null;
     }
 
-    @Nullable
-    public final ActiveSelection getVisualSelection() {
+    public final @Nullable ActiveSelection getActiveSelection() {
         return activeSelection;
     }
 

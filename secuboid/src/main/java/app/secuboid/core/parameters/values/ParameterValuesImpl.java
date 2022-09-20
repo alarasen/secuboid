@@ -26,12 +26,14 @@ import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.storage.rows.ParameterValueRow;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
@@ -68,6 +70,13 @@ public class ParameterValuesImpl implements ParameterValues {
         for (ParameterValueRow parameterValueRow : parameterValueRows) {
             loadParameterValueRow(parameterValueRow);
         }
+    }
+
+
+    @Override
+    public void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValue> callback) {
+        // TODO implement
+        return;
     }
 
     private void loadParameterValueRow(@NotNull ParameterValueRow parameterValueRow) {

@@ -15,35 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.players;
 
-import org.bukkit.command.CommandSender;
+package app.secuboid.api.parameters.values;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Contains informations for a command sender.
+ * Used for callback method when a parameter value is created.
+ *
+ * @param code           the parameter value result code
+ * @param parameterValue the parameter value if success
  */
-public interface CommandSenderInfo {
-
-    /**
-     * Gets the command sender for this player.
-     *
-     * @return the command sender
-     */
-    @NotNull CommandSender getSender();
-
-    /**
-     * Gets the player name.
-     *
-     * @return the player name
-     */
-    @NotNull String getName();
-
-    /**
-     * Is the player admin mode?
-     *
-     * @return true if the player is admin mode
-     */
-    boolean isAdminMode();
-
+public record ParameterValueResult(@NotNull ParameterValueResultCode code, @Nullable ParameterValue parameterValue) {
 }

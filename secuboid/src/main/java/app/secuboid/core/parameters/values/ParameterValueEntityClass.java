@@ -15,22 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.parameters.values;
 
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import static java.lang.String.format;
 
-/**
- * Represents an entity class from the Bukkit Java source code.
- *
- * @param id          the database id
- * @param entityClass the entity class
- */
 @ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", priority = 40)
 public record ParameterValueEntityClass(
         long id,

@@ -13,13 +13,13 @@ component-classes:
   - app.secuboid.core.flags.FlagDeclarations
 
   # Parameter values
-  - app.secuboid.api.parameters.values.ParameterValueEntityClass
-  - app.secuboid.api.parameters.values.ParameterValueEntityType
-  - app.secuboid.api.parameters.values.ParameterValueEverybody
-  - app.secuboid.api.parameters.values.ParameterValueEverything
-  - app.secuboid.api.parameters.values.ParameterValueNobody
-  - app.secuboid.api.parameters.values.ParameterValuePlayer
-  - app.secuboid.api.parameters.values.ParameterValueResident
+  - app.secuboid.core.parameters.values.ParameterValueEntityClass
+  - app.secuboid.core.parameters.values.ParameterValueEntityType
+  - app.secuboid.core.parameters.values.ParameterValueEverybody
+  - app.secuboid.core.parameters.values.ParameterValueEverything
+  - app.secuboid.core.parameters.values.ParameterValueNobody
+  - app.secuboid.core.parameters.values.ParameterValuePlayer
+  - app.secuboid.core.parameters.values.ParameterValueResident
 
   # Tables
   - app.secuboid.core.storage.tables.FlagTable

@@ -20,7 +20,6 @@ package app.secuboid.core.commands;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
-import app.secuboid.api.parameters.values.ParameterValuePlayer;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.reflection.PluginLoader;
@@ -111,12 +110,6 @@ class CommandsTest {
         @Override
         public @NotNull String getName() {
             return "sender";
-        }
-
-        @Override
-        public @NotNull ParameterValuePlayer getParameterValue() {
-            // Not implemented
-            return null;
         }
 
         @Override

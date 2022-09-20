@@ -26,7 +26,9 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.messages.ChatGetterResult;
+import app.secuboid.core.players.CommandSenderInfoImpl;
+import app.secuboid.core.selection.SenderSelection;
+import app.secuboid.core.selection.active.ActiveSelection;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered( //
@@ -44,13 +46,22 @@ public class CommandCreate implements CommandExec {
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+        SenderSelection selection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
+        ActiveSelection activeSelection = selection.getActiveSelection();
+
+        if (activeSelection == null) {
+            // TODO message need active selection
+            return;
+        }
+
         if (subArgs.length == 0) {
             if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
-                // TODO Message you need parameter
+                // TODO message you need parameter
                 return;
             }
 
-            ((SecuboidImpl) secuboid).getChatGetter().put(commandSenderInfo, this::chatLandNameCallBack);
+            ((SecuboidImpl) secuboid).getChatGetter().put(commandSenderInfo, s -> createLand(commandSenderInfo,
+                    activeSelection, s));
             return;
         }
 
@@ -59,14 +70,11 @@ public class CommandCreate implements CommandExec {
             return;
         }
 
-        createLand(commandSenderInfo, subArgs[0]);
+        createLand(commandSenderInfo, activeSelection, subArgs[0]);
     }
 
-    public void chatLandNameCallBack(@NotNull ChatGetterResult chatGetterResult) {
-        createLand(chatGetterResult.commandSenderInfo(), chatGetterResult.message());
-    }
-
-    private void createLand(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String landName) {
+    private void createLand(@NotNull CommandSenderInfo commandSenderInfo,
+                            @NotNull ActiveSelection activeSelection, @NotNull String landName) {
         if (landName.contains(" ")) {
             // TODO message no space in name
             return;

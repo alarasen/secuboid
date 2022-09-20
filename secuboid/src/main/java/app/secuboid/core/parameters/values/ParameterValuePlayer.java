@@ -15,49 +15,65 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.parameters.values;
 
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.reflection.ParameterValueRegistered;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 import static java.lang.String.format;
 
-/**
- * Represents a land resident.
- *
- * @param id    the database id
- * @param level the resident level
- */
-@ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", priority = 60)
-public record ParameterValueResident(
+public record ParameterValuePlayer(
         long id,
-        int level
+        @NotNull UUID uuid
 ) implements ParameterValue {
 
-    private static final String NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
-            .name();
-    private static final String SHORT_NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
+    private static final String NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class).name();
+    private static final String SHORT_NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
             .shortName();
-    private static final String CHAT_COLOR = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
+    private static final String CHAT_COLOR = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
             .chatColor();
-    private static final int PRIORITY = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
+    private static final int PRIORITY = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
     // Needed for load from database
-    public static ParameterValueResident newInstance(long id, @NotNull String value) throws ParameterValueException {
-        int level;
+    public static ParameterValuePlayer newInstance(long id, @NotNull String value) throws ParameterValueException {
+        UUID uuid;
 
         try {
-            level = Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            String msg = format("Non parsable level number for a resident [level=%s]", value);
+            uuid = UUID.fromString(value);
+        } catch (IllegalArgumentException e) {
+            String msg = format(
+                    "Not a player UUID: Wrong name in the database or Bukkit API is changed? [uuid=%s]",
+                    value);
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueResident(id, level);
+        return new ParameterValuePlayer(id, uuid);
+    }
+
+    /**
+     * Gets the player name from Bukkit server. If the player doesn't has played
+     * before, it will return the uuid.
+     *
+     * @return the player name or the uuid
+     */
+    public String getPlayerName() {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        if (!offlinePlayer.hasPlayedBefore()) {
+            return uuid.toString();
+        }
+
+        return offlinePlayer.getName();
     }
 
     @Override
@@ -82,17 +98,20 @@ public record ParameterValueResident(
 
     @Override
     public @NotNull String getValue() {
-        return Integer.toString(level);
+        return uuid.toString();
     }
 
     @Override
     public boolean hasAccess(@NotNull Entity entity) {
+        if (entity instanceof Player player) {
+            return player.getUniqueId().equals(uuid);
+        }
+
         return false;
     }
 
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
-        // TODO Auto-generated method stub
-        return false;
+        return hasAccess(entity);
     }
 }

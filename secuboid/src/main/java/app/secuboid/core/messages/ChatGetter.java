@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 
 public class ChatGetter {
 
-    private final ConcurrentMap<CommandSenderInfo, Consumer<ChatGetterResult>> commandSenderInfoToCallback;
+    private final ConcurrentMap<CommandSenderInfo, Consumer<String>> commandSenderInfoToCallback;
 
     public ChatGetter() {
         commandSenderInfoToCallback = new ConcurrentHashMap<>();
@@ -43,16 +43,16 @@ public class ChatGetter {
     }
 
 
-    public void put(@NotNull CommandSenderInfo commandSenderInfo, @NotNull Consumer<ChatGetterResult> callback) {
-        commandSenderInfoToCallback.put(commandSenderInfo, callback);
+    public void put(@NotNull CommandSenderInfo commandSenderInfo, @NotNull Consumer<String> callback) {
+        this.commandSenderInfoToCallback.put(commandSenderInfo, callback);
     }
 
     public boolean checkAnswerAndCallBackIfNeeded(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String message) {
-        Consumer<ChatGetterResult> callback = commandSenderInfoToCallback.remove(commandSenderInfo);
+        Consumer<String> callback = this.commandSenderInfoToCallback.remove(commandSenderInfo);
 
         if (callback != null) {
             SecuboidImpl.getJavaPLugin().getServer().getScheduler().callSyncMethod(SecuboidImpl.getJavaPLugin(), () -> {
-                callback.accept(new ChatGetterResult(commandSenderInfo, message));
+                callback.accept(message);
                 return null;
             });
             return true;

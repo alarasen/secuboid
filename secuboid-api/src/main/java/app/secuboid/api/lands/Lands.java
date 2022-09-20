@@ -43,9 +43,9 @@ public interface Lands {
      * @param commandSenderInfo the command sender information (player or console)
      * @param callback          the method to call back if success or not
      */
-    void createLand(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
-                    @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
-                    @Nullable Consumer<LandResult> callback);
+    void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
+                @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
+                @Nullable Consumer<LandResult> callback);
 
     /**
      * Removes the land and force if the land has children. The children will be
@@ -55,7 +55,7 @@ public interface Lands {
      * @param commandSenderInfo the command sender information (player or console)
      * @param callback          the method to call back if success or not
      */
-    void removeLandForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void removeForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
 
     /**
      * Removes the land and children recursively.
@@ -64,7 +64,7 @@ public interface Lands {
      * @param commandSenderInfo the command sender information (player or console)
      * @param callback          the method to call back if success or not
      */
-    void removeLandRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void removeRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
 
     /**
      * Removes the land.
@@ -73,7 +73,7 @@ public interface Lands {
      * @param commandSenderInfo the command sender information (player or console)
      * @param callback          the method to call back if success or not
      */
-    void removeLand(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void remove(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
 
     /**
      * Rename land.
@@ -83,8 +83,8 @@ public interface Lands {
      * @param commandSenderInfo the command sender information (player or console)
      * @param callback          the method to call back if success or not
      */
-    void renameLand(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
-                    Consumer<LandResult> callback);
+    void rename(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
+                Consumer<LandResult> callback);
 
     /**
      * Gets the land.
@@ -92,7 +92,7 @@ public interface Lands {
      * @param landName the land name
      * @return the land
      */
-    AreaLand getLand(String landName);
+    AreaLand get(String landName);
 
     /**
      * Gets the land.
@@ -100,7 +100,7 @@ public interface Lands {
      * @param id the id
      * @return the land
      */
-    AreaLand getLand(int id);
+    AreaLand get(int id);
 
     /**
      * Gets the land.
@@ -108,7 +108,7 @@ public interface Lands {
      * @param loc the loc
      * @return the land
      */
-    AreaLand getLand(Location loc);
+    AreaLand get(Location loc);
 
     /**
      * Gets the lands.

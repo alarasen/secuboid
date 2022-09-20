@@ -15,37 +15,44 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.parameters.values;
 
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents nothing including no player.
- *
- * @param id the database id
- */
-@ParameterValueRegistered(name = "nobody", shortName = "nobody", chatColor = "\u00A78")
-public record ParameterValueNobody(
-        long id
+import static java.lang.String.format;
+
+@ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", priority = 60)
+public record ParameterValueResident(
+        long id,
+        int level
 ) implements ParameterValue {
 
-    private static final String NAME = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class).name();
-    private static final String SHORT_NAME = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class)
+    private static final String NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
+            .name();
+    private static final String SHORT_NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
             .shortName();
-    private static final String CHAT_COLOR = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class)
+    private static final String CHAT_COLOR = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
             .chatColor();
-    private static final int PRIORITY = ParameterValueNobody.class.getAnnotation(ParameterValueRegistered.class)
+    private static final int PRIORITY = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
             .priority();
 
     // Needed for load from database
-    @SuppressWarnings({"java:S1172", "java:S1130"})
-    public static ParameterValueNobody newInstance(long id, @Nullable String value) throws ParameterValueException {
-        return new ParameterValueNobody(id);
+    public static ParameterValueResident newInstance(long id, @NotNull String value) throws ParameterValueException {
+        int level;
+
+        try {
+            level = Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            String msg = format("Non parsable level number for a resident [level=%s]", value);
+            throw new ParameterValueException(msg, e);
+        }
+
+        return new ParameterValueResident(id, level);
     }
 
     @Override
@@ -69,8 +76,8 @@ public record ParameterValueNobody(
     }
 
     @Override
-    public @Nullable String getValue() {
-        return null;
+    public @NotNull String getValue() {
+        return Integer.toString(level);
     }
 
     @Override
@@ -80,6 +87,7 @@ public record ParameterValueNobody(
 
     @Override
     public boolean hasAccess(@NotNull Entity entity, @NotNull Land originLand) {
+        // TODO Auto-generated method stub
         return false;
     }
 }

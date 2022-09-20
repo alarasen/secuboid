@@ -103,15 +103,15 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public void createLand(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
-                           @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
-                           @Nullable Consumer<LandResult> callback) {
-        String nameLower = landName;
+    public void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
+                       @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
+                       @Nullable Consumer<LandResult> callback) {
+        String nameLower = landName.toLowerCase();
 
         LandResultCode code = validateName(parent, nameLower);
         if (code != null) {
             if (callback != null) {
-                LandResult landResult = new LandResult(commandSenderInfo, code, null, null);
+                LandResult landResult = new LandResult(code, null, null);
                 callback.accept(landResult);
             }
             return;
@@ -125,44 +125,44 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public void removeLandForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void removeForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeLandRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void removeRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeLand(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void remove(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void renameLand(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
-                           Consumer<LandResult> callback) {
+    public void rename(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
+                       Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public AreaLand getLand(String landName) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public AreaLand getLand(int id) {
+    public AreaLand get(String landName) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public AreaLand getLand(Location loc) {
+    public AreaLand get(int id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AreaLand get(Location loc) {
         // TODO Auto-generated method stub
         return null;
     }

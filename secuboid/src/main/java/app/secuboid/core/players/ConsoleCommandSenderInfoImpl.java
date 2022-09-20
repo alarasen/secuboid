@@ -17,11 +17,9 @@
  */
 package app.secuboid.core.players;
 
-import app.secuboid.api.parameters.values.ParameterValuePlayer;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.ConsoleCommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implements ConsoleCommandSenderInfo {
 
@@ -30,12 +28,6 @@ public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implemen
     public ConsoleCommandSenderInfoImpl(ConsoleCommandSender consoleCommandSender) {
         super(consoleCommandSender);
         selection = new SenderSelection();
-    }
-
-    @Override
-    public @NotNull ParameterValuePlayer getParameterValue() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
