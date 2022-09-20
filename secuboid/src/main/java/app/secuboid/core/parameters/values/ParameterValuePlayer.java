@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
+@ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", priority = 80)
 public record ParameterValuePlayer(
         long id,
         @NotNull UUID uuid
