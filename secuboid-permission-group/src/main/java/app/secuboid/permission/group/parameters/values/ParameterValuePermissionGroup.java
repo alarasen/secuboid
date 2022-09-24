@@ -29,45 +29,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents any players member of the specific Bukkit permission system group.
  */
-@ParameterValueRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", priority = 70)
+@ParameterValueRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", needsValue = true,
+        priority = 70)
 public record ParameterValuePermissionGroup(
         long id,
         @NotNull String group
 ) implements ParameterValue {
 
-    private static final String NAME = ParameterValuePermissionGroup.class.getAnnotation(ParameterValueRegistered.class)
-            .name();
-    private static final String SHORT_NAME = ParameterValuePermissionGroup.class
-            .getAnnotation(ParameterValueRegistered.class).shortName();
-    private static final String CHAT_COLOR = ParameterValuePermissionGroup.class
-            .getAnnotation(ParameterValueRegistered.class).chatColor();
-    private static final int PRIORITY = ParameterValuePermissionGroup.class
-            .getAnnotation(ParameterValueRegistered.class).priority();
-
     // Needed for load from database
     @SuppressWarnings("java:S1130")
     public static ParameterValuePermissionGroup newInstance(long id, @NotNull String value) throws ParameterValueException {
         return new ParameterValuePermissionGroup(id, value);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return NAME;
-    }
-
-    @Override
-    public @NotNull String getShortName() {
-        return SHORT_NAME;
-    }
-
-    @Override
-    public @NotNull String getChatColor() {
-        return CHAT_COLOR;
-    }
-
-    @Override
-    public int getPriority() {
-        return PRIORITY;
     }
 
     @Override

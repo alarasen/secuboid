@@ -18,7 +18,10 @@
 
 package app.secuboid.core.parameters.values;
 
+import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueResult;
+import app.secuboid.api.parameters.values.ParameterValueResultCode;
 import app.secuboid.api.parameters.values.ParameterValues;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.api.storage.StorageManager;
@@ -35,34 +38,42 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static app.secuboid.api.parameters.values.ParameterValueResultCode.*;
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 
 public class ParameterValuesImpl implements ParameterValues {
 
-    private final Map<String, Class<? extends ParameterValue>> shortNameToClass;
+    private final Map<String, Class<? extends ParameterValue>> nameLowerToClass;
+
+    private final Map<Class<? extends ParameterValue>, ParameterValueRegistered> classToAnnotation;
     private final Map<Class<? extends ParameterValue>, Map<String, ParameterValue>> classToValueToParameterValue;
 
     public ParameterValuesImpl() {
-        shortNameToClass = new HashMap<>();
+        nameLowerToClass = new HashMap<>();
+        classToAnnotation = new HashMap<>();
         classToValueToParameterValue = new HashMap<>();
     }
 
     public void init(@NotNull PluginLoader pluginLoader) {
         // TODO unit test
-        if (!shortNameToClass.isEmpty()) {
+        if (!nameLowerToClass.isEmpty()) {
             return;
         }
 
-        Map<Class<? extends ParameterValue>, ParameterValueRegistered> classToAnnotation =
-                pluginLoader.getClassToAnnotation(ParameterValueRegistered.class, ParameterValue.class);
-        classToAnnotation.forEach((c, a) -> shortNameToClass.put(a.shortName(), c));
+        classToAnnotation.putAll(pluginLoader.getClassToAnnotation(ParameterValueRegistered.class,
+                ParameterValue.class));
+        classToAnnotation.forEach((c, a) -> {
+            nameLowerToClass.put(a.shortName(), c);
+            nameLowerToClass.put(a.name(), c);
+        });
     }
 
     public void load() {
         // TODO unit test
-        shortNameToClass.clear();
+        nameLowerToClass.clear();
+        classToAnnotation.clear();
         classToValueToParameterValue.clear();
 
         Set<ParameterValueRow> parameterValueRows = getStorageManager().selectAllSync(ParameterValueRow.class);
@@ -74,34 +85,79 @@ public class ParameterValuesImpl implements ParameterValues {
 
 
     @Override
-    public void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValue> callback) {
+    public void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValueResult> callback) {
         // TODO implement
         return;
     }
 
     private void loadParameterValueRow(@NotNull ParameterValueRow parameterValueRow) {
-        Class<? extends ParameterValue> clazz = shortNameToClass.get(parameterValueRow.shortName());
-        if (clazz == null) {
-            log().log(SEVERE, "Unable to load the parameter value with this non existing short name: {}",
-                    parameterValueRow);
-            return;
-        }
+        ParameterValueResult parameterValueResult = createInstanceWithResult(parameterValueRow.id(), parameterValueRow.shortName(),
+                parameterValueRow.value());
+        ParameterValueResultCode code = parameterValueResult.code();
+        ParameterValue parameterValue = parameterValueResult.parameterValue();
 
-        ParameterValue parameterValue;
-        try {
-            Method newInstance = clazz.getMethod("newInstance", long.class, String.class);
-            parameterValue = (ParameterValue) newInstance.invoke(null, parameterValueRow.getId(),
-                    parameterValueRow.value());
-        } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException e) {
-            log().log(SEVERE, e, () -> format("Unable to create the parameter value instance: %s", parameterValueRow));
-            return;
-        } catch (InvocationTargetException e) {
-            log().log(SEVERE, e, () -> format("There is an error with this existing parameter value: %s",
-                    parameterValueRow));
+        if (parameterValue == null || code != SUCCESS) {
+            String msg = format("Unable to load the parameter value [parameterValueResult=%s]", parameterValueResult);
+            log().log(SEVERE, () -> msg);
             return;
         }
 
         classToValueToParameterValueAdd(parameterValue);
+    }
+
+    private @NotNull ParameterValueResult createInstanceWithResult(long id, @NotNull String name,
+                                                                   @Nullable String value) {
+        String nameLower = name.toLowerCase();
+        Class<? extends ParameterValue> clazz = nameLowerToClass.get(nameLower);
+
+        if (clazz == null) {
+            return new ParameterValueResult(INVALID_PARAMETER, null);
+        }
+
+        ParameterValueRegistered annotation = classToAnnotation.get(clazz);
+
+        boolean needsValue = annotation.needsValue();
+        if ((needsValue && value == null) || (!needsValue && value != null)) {
+            return new ParameterValueResult(INVALID_VALUE, null);
+        }
+
+        String modifiedValue;
+        if (!needsValue) {
+            modifiedValue = null;
+        } else {
+            modifiedValue = switch (annotation.characterCase()) {
+                case LOWERCASE -> value.toLowerCase();
+                case UPPERCASE -> value.toUpperCase();
+                case CASE_SENSITIVE -> value;
+            };
+        }
+
+        try {
+            return new ParameterValueResult(SUCCESS, createInstance(clazz, id, modifiedValue));
+        } catch (ParameterValueException e) {
+            return new ParameterValueResult(INVALID_VALUE, null);
+        }
+    }
+
+    @SuppressWarnings("java:S2139")
+    private @NotNull ParameterValue createInstance(@NotNull Class<? extends ParameterValue> clazz, long id,
+                                                   @Nullable String value) throws ParameterValueException {
+        try {
+            Method newInstance = clazz.getMethod("newInstance", long.class, String.class);
+            return (ParameterValue) newInstance.invoke(null, id, value);
+        } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException |
+                 InvocationTargetException e) {
+            if (e instanceof InvocationTargetException invocationTargetException) {
+                Throwable cause = invocationTargetException.getCause();
+                if (cause instanceof ParameterValueException parameterValueException) {
+                    throw parameterValueException;
+                }
+            }
+            String msg = format("Unable to create the parameter value instance: [clazz=%s, id=%s, value=%s]", clazz,
+                    id, value);
+            log().log(SEVERE, e, () -> msg);
+            throw new ParameterValueException(msg, e);
+        }
     }
 
     private void classToValueToParameterValueAdd(@NotNull ParameterValue parameterValue) {

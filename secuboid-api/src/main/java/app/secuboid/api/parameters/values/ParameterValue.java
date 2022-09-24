@@ -18,7 +18,6 @@
 package app.secuboid.api.parameters.values;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.api.storage.rows.WithId;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -40,47 +39,6 @@ import org.jetbrains.annotations.Nullable;
  * </pre>
  */
 public interface ParameterValue extends WithId {
-
-    /**
-     * Gets the parameter name (not the value). Ex: player, entity-type, etc. It's
-     * recommended to override this method with a static value for speed.
-     *
-     * @return the parameter name
-     */
-    default @NotNull String getName() {
-        return this.getClass().getAnnotation(ParameterValueRegistered.class).name();
-    }
-
-    /**
-     * Gets the short name for chat and save. Must be unique. It's recommended to
-     * override this method with a static value for speed. Max 10 but please, keep 3
-     * MAX when there is a value parameter.
-     *
-     * @return the short name
-     */
-    default @NotNull String getShortName() {
-        return this.getClass().getAnnotation(ParameterValueRegistered.class).shortName();
-    }
-
-    /**
-     * Gets the chat color for this parameter value. It's recommended to override
-     * this method with a static value for speed.
-     *
-     * @return the chat color
-     */
-    default @NotNull String getChatColor() {
-        return this.getClass().getAnnotation(ParameterValueRegistered.class).chatColor();
-    }
-
-    /**
-     * Gets the priority of this parameter value. It's recommended to override this
-     * method with a static value for speed.
-     *
-     * @return the priority
-     */
-    default int getPriority() {
-        return this.getClass().getAnnotation(ParameterValueRegistered.class).priority();
-    }
 
     /**
      * Gets the extra value parameter in String format. If there is no extra value

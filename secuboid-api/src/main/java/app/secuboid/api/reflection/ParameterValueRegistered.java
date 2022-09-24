@@ -17,12 +17,15 @@
  */
 package app.secuboid.api.reflection;
 
+import app.secuboid.api.utilities.CharacterCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static app.secuboid.api.utilities.CharacterCase.LOWERCASE;
 
 /**
  * The Interface ParameterValueRegistered. Annotation used for custom parameter
@@ -47,6 +50,16 @@ public @interface ParameterValueRegistered {
      * The chat color code.
      */
     @NotNull String chatColor();
+
+    /**
+     * Value (additional parameter) needed or not?
+     */
+    boolean needsValue() default false;
+
+    /**
+     * With {@link #needsValue()} value case sensitive?
+     */
+    CharacterCase characterCase() default LOWERCASE;
 
     /**
      * The priority, higher is returned before the lowest if there is a match.

@@ -24,24 +24,17 @@ import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import static app.secuboid.api.utilities.CharacterCase.CASE_SENSITIVE;
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", priority = 40)
+@ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", needsValue = true,
+        characterCase = CASE_SENSITIVE, priority = 40)
 public record ParameterValueEntityClass(
         long id,
         @NotNull Class<? extends Entity> entityClass
 ) implements ParameterValue {
 
     private static final String ENTITY_PREFIX = "org.bukkit.entity.";
-
-    private static final String NAME = ParameterValueEntityClass.class.getAnnotation(ParameterValueRegistered.class)
-            .name();
-    private static final String SHORT_NAME = ParameterValueEntityClass.class
-            .getAnnotation(ParameterValueRegistered.class).shortName();
-    private static final String CHAT_COLOR = ParameterValueEntityClass.class
-            .getAnnotation(ParameterValueRegistered.class).chatColor();
-    private static final int PRIORITY = ParameterValueEntityClass.class.getAnnotation(ParameterValueRegistered.class)
-            .priority();
 
     // Needed for load from database
     public static ParameterValueEntityClass newInstance(long id, @NotNull String value) throws ParameterValueException {
@@ -75,26 +68,6 @@ public record ParameterValueEntityClass(
         }
 
         return new ParameterValueEntityClass(id, entityClass);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return NAME;
-    }
-
-    @Override
-    public @NotNull String getShortName() {
-        return SHORT_NAME;
-    }
-
-    @Override
-    public @NotNull String getChatColor() {
-        return CHAT_COLOR;
-    }
-
-    @Override
-    public int getPriority() {
-        return PRIORITY;
     }
 
     @Override

@@ -30,45 +30,10 @@ public record ParameterValueEverything(
         long id
 ) implements ParameterValue {
 
-    private static final String NAME = ParameterValueEverything.class.getAnnotation(ParameterValueRegistered.class)
-            .name();
-    private static final String SHORT_NAME = ParameterValueEverything.class
-            .getAnnotation(ParameterValueRegistered.class)
-            .shortName();
-    private static final String CHAT_COLOR = ParameterValueEverything.class
-            .getAnnotation(ParameterValueRegistered.class)
-            .chatColor();
-    private static final int PRIORITY = ParameterValueEverything.class.getAnnotation(ParameterValueRegistered.class)
-            .priority();
-
     // Needed for load from database
     @SuppressWarnings({"java:S1172", "java:S1130"})
     public static ParameterValueEverything newInstance(long id, @Nullable String value) throws ParameterValueException {
-        if (value != null) {
-            throw new ParameterValueException("Only null value accepted for this parameter");
-        }
-
         return new ParameterValueEverything(id);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return NAME;
-    }
-
-    @Override
-    public @NotNull String getShortName() {
-        return SHORT_NAME;
-    }
-
-    @Override
-    public @NotNull String getChatColor() {
-        return CHAT_COLOR;
-    }
-
-    @Override
-    public int getPriority() {
-        return PRIORITY;
     }
 
     @Override

@@ -16,24 +16,25 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.parameters.values;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
+package app.secuboid.api.utilities;
 
 /**
- * Access to parameter values.
+ * Defines the case type parameter for a string.
  */
-public interface ParameterValues {
+public enum CharacterCase {
 
     /**
-     * Grabs a parameter value.
-     *
-     * @param name     the name or short name
-     * @param value    the value or null if the parameter value doesn't accept values
-     * @param callback the returned answer in callback
+     * upper case
      */
-    void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValueResult> callback);
+    UPPERCASE,
+
+    /**
+     * lower case
+     */
+    LOWERCASE,
+
+    /**
+     * case sensitive
+     */
+    CASE_SENSITIVE
 }

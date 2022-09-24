@@ -31,19 +31,11 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", priority = 80)
+@ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", needsValue = true, priority = 80)
 public record ParameterValuePlayer(
         long id,
         @NotNull UUID uuid
 ) implements ParameterValue {
-
-    private static final String NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class).name();
-    private static final String SHORT_NAME = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
-            .shortName();
-    private static final String CHAT_COLOR = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
-            .chatColor();
-    private static final int PRIORITY = ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class)
-            .priority();
 
     // Needed for load from database
     public static ParameterValuePlayer newInstance(long id, @NotNull String value) throws ParameterValueException {
@@ -75,26 +67,6 @@ public record ParameterValuePlayer(
         }
 
         return offlinePlayer.getName();
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return NAME;
-    }
-
-    @Override
-    public @NotNull String getShortName() {
-        return SHORT_NAME;
-    }
-
-    @Override
-    public @NotNull String getChatColor() {
-        return CHAT_COLOR;
-    }
-
-    @Override
-    public int getPriority() {
-        return PRIORITY;
     }
 
     @Override

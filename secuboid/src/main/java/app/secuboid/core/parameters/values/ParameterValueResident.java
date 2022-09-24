@@ -26,20 +26,11 @@ import org.jetbrains.annotations.NotNull;
 
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", priority = 60)
+@ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", needsValue = true, priority = 60)
 public record ParameterValueResident(
         long id,
         int level
 ) implements ParameterValue {
-
-    private static final String NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
-            .name();
-    private static final String SHORT_NAME = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
-            .shortName();
-    private static final String CHAT_COLOR = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
-            .chatColor();
-    private static final int PRIORITY = ParameterValueResident.class.getAnnotation(ParameterValueRegistered.class)
-            .priority();
 
     // Needed for load from database
     public static ParameterValueResident newInstance(long id, @NotNull String value) throws ParameterValueException {
@@ -53,26 +44,6 @@ public record ParameterValueResident(
         }
 
         return new ParameterValueResident(id, level);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return NAME;
-    }
-
-    @Override
-    public @NotNull String getShortName() {
-        return SHORT_NAME;
-    }
-
-    @Override
-    public @NotNull String getChatColor() {
-        return CHAT_COLOR;
-    }
-
-    @Override
-    public int getPriority() {
-        return PRIORITY;
     }
 
     @Override
