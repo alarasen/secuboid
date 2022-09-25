@@ -67,6 +67,8 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
             stmt.setString(1, parameterValueRow.shortName());
             stmt.setString(2, parameterValueRow.value());
 
+            stmt.executeUpdate();
+
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 rs.next();
                 return new ParameterValueRow(rs.getLong(1), parameterValueRow.shortName(), parameterValueRow.value());

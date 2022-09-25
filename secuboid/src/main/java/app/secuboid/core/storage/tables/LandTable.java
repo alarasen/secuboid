@@ -75,12 +75,14 @@ public class LandTable implements Table<LandRow> {
 
     @Override
     public @NotNull LandRow insert(@NotNull Connection conn, @NotNull LandRow landRow) throws SQLException {
-        String sql = "INSERT INTO secuboid_land(name, type, parent_id) VALUES(?, ?)";
+        String sql = "INSERT INTO secuboid_land(name, type, parent_id) VALUES(?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, landRow.name());
             stmt.setString(2, landRow.type().value);
             DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
+
+            stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 rs.next();
