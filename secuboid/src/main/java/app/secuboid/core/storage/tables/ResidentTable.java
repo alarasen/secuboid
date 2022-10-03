@@ -22,6 +22,7 @@ import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.storage.rows.ResidentRow;
 
 @TableRegistered(row = ResidentRow.class, dependsOn = {LandTable.class, ParameterValueTable.class})
+@SuppressWarnings({"unused", "java:S1118"})
 public class ResidentTable implements Table<ResidentRow> {
 
     // Needed for automatic table create

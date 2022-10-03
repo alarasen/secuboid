@@ -34,6 +34,7 @@ import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 
 @TableRegistered(row = LandRow.class)
+@SuppressWarnings({"unused", "java:S1118"})
 public class LandTable implements Table<LandRow> {
 
     // Needed for automatic table create
@@ -99,7 +100,7 @@ public class LandTable implements Table<LandRow> {
             stmt.setString(1, landRow.name());
             stmt.setString(2, landRow.type().value);
             DbUtils.setNullable(stmt, 3, landRow.parentId(), stmt::setLong);
-            stmt.setLong(4, landRow.getId());
+            stmt.setLong(4, landRow.id());
 
             stmt.executeUpdate();
         }
@@ -112,7 +113,7 @@ public class LandTable implements Table<LandRow> {
         String sql = "DELETE FROM secuboid_land WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, landRow.getId());
+            stmt.setLong(1, landRow.id());
             stmt.executeUpdate();
         }
 

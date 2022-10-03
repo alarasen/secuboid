@@ -20,6 +20,7 @@ package app.secuboid.permission.group.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueType;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
 import org.bukkit.entity.Entity;
@@ -32,14 +33,16 @@ import org.jetbrains.annotations.NotNull;
 @ParameterValueRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", needsValue = true,
         priority = 70)
 public record ParameterValuePermissionGroup(
+        @NotNull ParameterValueType type,
         long id,
         @NotNull String group
 ) implements ParameterValue {
 
     // Needed for load from database
     @SuppressWarnings("java:S1130")
-    public static ParameterValuePermissionGroup newInstance(long id, @NotNull String value) throws ParameterValueException {
-        return new ParameterValuePermissionGroup(id, value);
+    public static ParameterValuePermissionGroup newInstance(@NotNull ParameterValueType type, long id,
+                                                            @NotNull String value) throws ParameterValueException {
+        return new ParameterValuePermissionGroup(type, id, value);
     }
 
     @Override

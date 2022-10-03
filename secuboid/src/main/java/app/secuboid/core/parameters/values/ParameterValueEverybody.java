@@ -20,6 +20,7 @@ package app.secuboid.core.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueType;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -27,14 +28,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @ParameterValueRegistered(name = "everybody", shortName = "everybody", chatColor = "\u00A7F", priority = 40)
-public record ParameterValueEverybody(
-        long id
+public record ParameterValueEverybody(@NotNull ParameterValueType type,
+                                      long id
 ) implements ParameterValue {
 
     // Needed for load from database
     @SuppressWarnings({"java:S1172", "java:S1130"})
-    public static ParameterValueEverybody newInstance(long id, @Nullable String value) throws ParameterValueException {
-        return new ParameterValueEverybody(id);
+    public static ParameterValueEverybody newInstance(@NotNull ParameterValueType type, long id,
+                                                      @Nullable String value) throws ParameterValueException {
+        return new ParameterValueEverybody(type, id);
     }
 
     @Override

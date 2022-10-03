@@ -20,6 +20,7 @@ package app.secuboid.core.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueType;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -27,13 +28,14 @@ import org.jetbrains.annotations.NotNull;
 import static java.lang.String.format;
 
 @ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", needsValue = true, priority = 60)
-public record ParameterValueResident(
-        long id,
-        int level
+public record ParameterValueResident(@NotNull ParameterValueType type,
+                                     long id,
+                                     int level
 ) implements ParameterValue {
 
     // Needed for load from database
-    public static ParameterValueResident newInstance(long id, @NotNull String value) throws ParameterValueException {
+    public static ParameterValueResident newInstance(@NotNull ParameterValueType type, long id,
+                                                     @NotNull String value) throws ParameterValueException {
         int level;
 
         try {
@@ -43,7 +45,7 @@ public record ParameterValueResident(
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueResident(id, level);
+        return new ParameterValueResident(type, id, level);
     }
 
     @Override

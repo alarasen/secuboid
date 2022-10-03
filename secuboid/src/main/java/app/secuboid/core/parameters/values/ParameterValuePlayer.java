@@ -20,6 +20,7 @@ package app.secuboid.core.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueType;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -32,13 +33,13 @@ import java.util.UUID;
 import static java.lang.String.format;
 
 @ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", needsValue = true, priority = 80)
-public record ParameterValuePlayer(
-        long id,
-        @NotNull UUID uuid
+public record ParameterValuePlayer(@NotNull ParameterValueType type,
+                                   long id,
+                                   @NotNull UUID uuid
 ) implements ParameterValue {
 
     // Needed for load from database
-    public static ParameterValuePlayer newInstance(long id, @NotNull String value) throws ParameterValueException {
+    public static ParameterValuePlayer newInstance(@NotNull ParameterValueType type, long id, @NotNull String value) throws ParameterValueException {
         UUID uuid;
 
         try {
@@ -50,15 +51,9 @@ public record ParameterValuePlayer(
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValuePlayer(id, uuid);
+        return new ParameterValuePlayer(type, id, uuid);
     }
 
-    /**
-     * Gets the player name from Bukkit server. If the player doesn't has played
-     * before, it will return the uuid.
-     *
-     * @return the player name or the uuid
-     */
     public String getPlayerName() {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 

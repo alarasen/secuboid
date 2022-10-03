@@ -28,9 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 public enum LandType {
-    WORLD_LAND("W", r -> new WorldLandImpl(r.getId(), r.name())),
-    AREA_LAND("L", r -> new AreaLandImpl(r.getId(), r.name(), null)),
-    CONFIGURATION_SET("S", r -> new ConfigurationSetImpl(r.getId(), r.name()));
+    WORLD_LAND("W", r -> new WorldLandImpl(r.id(), r.name())),
+    AREA_LAND("L", r -> new AreaLandImpl(r.id(), r.name(), null)),
+    CONFIGURATION_SET("S", r -> new ConfigurationSetImpl(r.id(), r.name()));
 
     public static @NotNull LandType fromValue(@NotNull String value) {
         for (LandType landType : LandType.values()) {

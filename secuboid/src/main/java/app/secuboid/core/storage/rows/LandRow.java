@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record LandRow(
-        @Nullable Long id,
+        long id,
         @NotNull String name,
         @NotNull LandType type,
         @Nullable Long parentId

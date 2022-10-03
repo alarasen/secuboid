@@ -24,7 +24,6 @@ import app.secuboid.api.thread.QueueThread;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.thread.QueueThreadImpl;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +32,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class StorageManagerImpl implements StorageManager {
@@ -81,7 +80,7 @@ public class StorageManagerImpl implements StorageManager {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <R extends Row> @Nullable R insertSync(@NotNull R row, @Nullable CommandSender sender) {
+    public <R extends Row> @Nullable R insertSync(@NotNull R row) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.INSERT);
         queueThread.addElement(element, resultQueue, false);
@@ -97,23 +96,26 @@ public class StorageManagerImpl implements StorageManager {
     }
 
     @Override
-    public void insert(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
+    @SuppressWarnings("unchecked")
+    public <R extends Row> void insert(@NotNull R row, @Nullable Consumer<R> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.INSERT);
-        queueThread.addElement(element, sender, callback);
+        queueThread.addElement(element, (Consumer<Row>) callback);
     }
 
     @Override
-    public void update(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
+    @SuppressWarnings("unchecked")
+    public <R extends Row> void update(@NotNull R row, @Nullable Consumer<R> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.UPDATE);
-        queueThread.addElement(element, sender, callback);
+        queueThread.addElement(element, (Consumer<Row>) callback);
     }
 
     @Override
-    public void delete(@NotNull Row row, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, Row> callback) {
+    @SuppressWarnings("unchecked")
+    public <R extends Row> void delete(@NotNull R row, @Nullable Consumer<R> callback) {
         Table<Row> table = storageInit.getTableFromClassRow(row.getClass());
         StorageElement element = new StorageElement(table, row, SQLRequestType.DELETE);
-        queueThread.addElement(element, sender, callback);
+        queueThread.addElement(element, (Consumer<Row>) callback);
     }
 }

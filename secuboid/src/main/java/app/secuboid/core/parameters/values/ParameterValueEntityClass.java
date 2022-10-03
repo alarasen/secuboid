@@ -20,6 +20,7 @@ package app.secuboid.core.parameters.values;
 import app.secuboid.api.exceptions.ParameterValueException;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.parameters.values.ParameterValueType;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -29,15 +30,16 @@ import static java.lang.String.format;
 
 @ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", needsValue = true,
         characterCase = CASE_SENSITIVE, priority = 40)
-public record ParameterValueEntityClass(
-        long id,
-        @NotNull Class<? extends Entity> entityClass
+public record ParameterValueEntityClass(@NotNull ParameterValueType type,
+                                        long id,
+                                        @NotNull Class<? extends Entity> entityClass
 ) implements ParameterValue {
 
     private static final String ENTITY_PREFIX = "org.bukkit.entity.";
 
     // Needed for load from database
-    public static ParameterValueEntityClass newInstance(long id, @NotNull String value) throws ParameterValueException {
+    public static ParameterValueEntityClass newInstance(@NotNull ParameterValueType type, long id,
+                                                        @NotNull String value) throws ParameterValueException {
         String entityClassStr;
         if (value.contains(".")) {
             entityClassStr = value;
@@ -67,7 +69,7 @@ public record ParameterValueEntityClass(
             throw new ParameterValueException(msg, e);
         }
 
-        return new ParameterValueEntityClass(id, entityClass);
+        return new ParameterValueEntityClass(type, id, entityClass);
     }
 
     @Override

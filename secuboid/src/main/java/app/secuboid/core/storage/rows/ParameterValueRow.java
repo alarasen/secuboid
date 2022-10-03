@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public record ParameterValueRow(
-        Long id,
+        long id,
         @NotNull String shortName,
         @Nullable String value
 ) implements RowWithId {

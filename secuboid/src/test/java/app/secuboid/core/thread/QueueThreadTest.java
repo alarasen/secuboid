@@ -21,7 +21,6 @@ import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
 import org.awaitility.Awaitility;
 import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,7 +123,7 @@ class QueueThreadTest {
     }
 
     @Test
-    void when_add_element_then_do_element_one_time() throws InterruptedException {
+    void when_add_element_then_do_element_one_time() {
         Duration element1 = Duration.ofMillis(0L);
         queueThread.start();
         queueThread.addElement(element1);
@@ -134,13 +133,13 @@ class QueueThreadTest {
     }
 
     @Test
-    void when_callback_is_added_then_callback() throws InterruptedException {
+    void when_callback_is_added_then_callback() {
         Duration element1 = Duration.ofMillis(0L);
         AtomicLong atomicLong = new AtomicLong(0);
-        BiConsumer<CommandSender, Integer> callback = (s, l) -> atomicLong.addAndGet(l);
+        Consumer<Integer> callback = atomicLong::addAndGet;
 
         queueThread.start();
-        queueThread.addElement(element1, null, callback);
+        queueThread.addElement(element1, callback);
 
         Awaitility.await().atMost(Duration.ofSeconds(10)).until(() -> atomicLong.get() == 1);
         queueThread.stop();

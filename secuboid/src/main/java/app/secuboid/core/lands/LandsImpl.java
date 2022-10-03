@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static app.secuboid.core.storage.types.LandType.WORLD_LAND;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
@@ -90,15 +91,15 @@ public class LandsImpl implements Lands {
             return;
         }
 
-        LandRow inputLandRow = new LandRow(null, worldName, WORLD_LAND, null);
-        LandRow landRow = getStorageManager().insertSync(inputLandRow, null);
+        LandRow inputLandRow = new LandRow(NON_EXISTING_ID, worldName, WORLD_LAND, null);
+        LandRow landRow = getStorageManager().insertSync(inputLandRow);
         if (landRow == null) {
             Log.log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database",
                     worldName);
             return;
         }
 
-        WorldLand worldLand = new WorldLandImpl(landRow.getId(), worldName);
+        WorldLand worldLand = new WorldLandImpl(landRow.id(), worldName);
         worldNameToWorldLand.put(worldName, worldLand);
     }
 

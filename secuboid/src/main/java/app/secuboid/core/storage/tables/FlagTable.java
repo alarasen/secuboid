@@ -22,6 +22,7 @@ import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.storage.rows.FlagRow;
 
 @TableRegistered(row = FlagRow.class, dependsOn = {LandTable.class, ParameterValueTable.class})
+@SuppressWarnings({"unused", "java:S1118"})
 public class FlagTable implements Table<FlagRow> {
 
     // Needed for automatic table create

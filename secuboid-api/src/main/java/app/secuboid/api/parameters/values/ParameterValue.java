@@ -31,9 +31,10 @@ import org.jetbrains.annotations.Nullable;
  * wrong:
  *
  * <pre>
- * public static ParameterValueMy newInstance(long id, String value) throws ParameterValueException {
- *     // return INSTANCE; // If single instance with no value
- *     return new ParameterValueMy(value);
+ * public static ParameterValueMy newInstance(ParameterValueType type, long id, String value)
+ *         throws ParameterValueException {
+ *     // return ParameterValueMy(type); // If single instance with no value
+ *     return new ParameterValueMy(type, value);
  *     // ParameterValueException will be caught be the requester
  * }
  * </pre>
@@ -41,8 +42,15 @@ import org.jetbrains.annotations.Nullable;
 public interface ParameterValue extends WithId {
 
     /**
+     * Gets the parameter value type.
+     *
+     * @return the parameter value type
+     */
+    @NotNull ParameterValueType type();
+
+    /**
      * Gets the extra value parameter in String format. If there is no extra value
-     * parameter, null will be returned
+     * parameter, null will be returned.
      *
      * @return the extra value parameter or null
      */

@@ -17,13 +17,12 @@
  */
 package app.secuboid.api.thread;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static app.secuboid.api.SecuboidPlugin.secuboid;
 
@@ -75,10 +74,9 @@ public interface QueueThread<T, R> {
      * Adds an element with callback.
      *
      * @param t        the element to send
-     * @param sender   the sender or null
      * @param callback the callback or null
      */
-    void addElement(@NotNull T t, @Nullable CommandSender sender, @Nullable BiConsumer<CommandSender, R> callback);
+    void addElement(@NotNull T t, @Nullable Consumer<R> callback);
 
     /**
      * Waits for the last element and stop.

@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @TableRegistered(row = ParameterValueRow.class)
+@SuppressWarnings({"unused", "java:S1118"})
 public class ParameterValueTable implements Table<ParameterValueRow> {
 
     // Needed for automatic table create

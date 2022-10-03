@@ -16,22 +16,33 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.storage.rows;
+package app.secuboid.api.parameters.values;
+
+import app.secuboid.api.reflection.ParameterValueRegistered;
+
+import java.util.Objects;
 
 /**
- * Represents a row with an ID. The id can be null only before the insert to database.
+ * Represents a parameter value type.
+ *
+ * @param clazz the class
+ * @param info  the parameter type information
  */
-public interface RowWithId extends Row {
+public record ParameterValueType(
+        Class<? extends ParameterValue> clazz,
+        ParameterValueRegistered info
+) {
 
-    /**
-     * Represents a non-existing id, when the id is not yet know.
-     */
-    public static final long NON_EXISTING_ID = -1L;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParameterValueType that = (ParameterValueType) o;
+        return Objects.equals(clazz, that.clazz);
+    }
 
-    /**
-     * Gets the row id. Can be {@link #NON_EXISTING_ID} only before the insert.
-     *
-     * @return the row id or {@link #NON_EXISTING_ID}
-     */
-    long id();
+    @Override
+    public int hashCode() {
+        return Objects.hash(clazz);
+    }
 }

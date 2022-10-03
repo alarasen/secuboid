@@ -19,10 +19,7 @@
 package app.secuboid.core.parameters.values;
 
 import app.secuboid.api.exceptions.ParameterValueException;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueResult;
-import app.secuboid.api.parameters.values.ParameterValueResultCode;
-import app.secuboid.api.parameters.values.ParameterValues;
+import app.secuboid.api.parameters.values.*;
 import app.secuboid.api.reflection.ParameterValueRegistered;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
@@ -39,42 +36,44 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import static app.secuboid.api.parameters.values.ParameterValueResultCode.*;
+import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
+import static java.util.logging.Level.WARNING;
 
 public class ParameterValuesImpl implements ParameterValues {
 
-    private final Map<String, Class<? extends ParameterValue>> nameLowerToClass;
+    private final Map<String, ParameterValueType> nameLowerToType;
 
-    private final Map<Class<? extends ParameterValue>, ParameterValueRegistered> classToAnnotation;
-    private final Map<Class<? extends ParameterValue>, Map<String, ParameterValue>> classToValueToParameterValue;
+    private final Map<ParameterValueType, ParameterValueRegistered> typeToAnnotation;
+    private final Map<ParameterValueType, Map<String, ParameterValue>> typeToValueToParameterValue;
 
     public ParameterValuesImpl() {
-        nameLowerToClass = new HashMap<>();
-        classToAnnotation = new HashMap<>();
-        classToValueToParameterValue = new HashMap<>();
+        nameLowerToType = new HashMap<>();
+        typeToAnnotation = new HashMap<>();
+        typeToValueToParameterValue = new HashMap<>();
     }
 
     public void init(@NotNull PluginLoader pluginLoader) {
         // TODO unit test
-        if (!nameLowerToClass.isEmpty()) {
+        if (!nameLowerToType.isEmpty() || !typeToAnnotation.isEmpty()) {
             return;
         }
 
-        classToAnnotation.putAll(pluginLoader.getClassToAnnotation(ParameterValueRegistered.class,
-                ParameterValue.class));
+        Map<Class<? extends ParameterValue>, ParameterValueRegistered> classToAnnotation = pluginLoader.getClassToAnnotation(ParameterValueRegistered.class, ParameterValue.class);
+
         classToAnnotation.forEach((c, a) -> {
-            nameLowerToClass.put(a.shortName(), c);
-            nameLowerToClass.put(a.name(), c);
+            ParameterValueType type = new ParameterValueType(c, a);
+            typeToAnnotation.put(type, a);
+            nameLowerToType.put(a.shortName(), type);
+            nameLowerToType.put(a.name(), type);
         });
     }
 
     public void load() {
         // TODO unit test
-        nameLowerToClass.clear();
-        classToAnnotation.clear();
-        classToValueToParameterValue.clear();
+        typeToValueToParameterValue.clear();
 
         Set<ParameterValueRow> parameterValueRows = getStorageManager().selectAllSync(ParameterValueRow.class);
 
@@ -83,16 +82,36 @@ public class ParameterValuesImpl implements ParameterValues {
         }
     }
 
-
-    @Override
     public void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValueResult> callback) {
-        // TODO implement code
-        return;
+        String nameLower = name.toLowerCase();
+
+        // Pre-validation
+        ParameterValueResult result = grabInstanceWithResult(NON_EXISTING_ID, nameLower, value);
+        if (result.code() != SUCCESS) {
+            if (callback != null) {
+                callback.accept(result);
+            } else {
+                log().log(WARNING, () -> format("Non success parameter Value [name=%s, value=%s, " +
+                        "result=%s]", name, value, result));
+            }
+            return;
+        }
+
+
+        ParameterValue parameterValue = result.parameterValue();
+        // TODO Parameter value types vs Class
+        //parameterValue.
+        ParameterValueRow parameterValueRow = new ParameterValueRow(NON_EXISTING_ID, "TO_REMOVE", "TO_REMOVE");
+        getStorageManager().insert(parameterValueRow, this::grabCallback);
+    }
+
+    private void grabCallback(@NotNull ParameterValueRow parameterValueRow) {
+
     }
 
     private void loadParameterValueRow(@NotNull ParameterValueRow parameterValueRow) {
-        ParameterValueResult parameterValueResult = createInstanceWithResult(parameterValueRow.id(), parameterValueRow.shortName(),
-                parameterValueRow.value());
+        ParameterValueResult parameterValueResult = grabInstanceWithResult(parameterValueRow.id(),
+                parameterValueRow.shortName(), parameterValueRow.value());
         ParameterValueResultCode code = parameterValueResult.code();
         ParameterValue parameterValue = parameterValueResult.parameterValue();
 
@@ -101,20 +120,17 @@ public class ParameterValuesImpl implements ParameterValues {
             log().log(SEVERE, () -> msg);
             return;
         }
-
-        classToValueToParameterValueAdd(parameterValue);
     }
 
-    private @NotNull ParameterValueResult createInstanceWithResult(long id, @NotNull String name,
-                                                                   @Nullable String value) {
-        String nameLower = name.toLowerCase();
-        Class<? extends ParameterValue> clazz = nameLowerToClass.get(nameLower);
+    private @NotNull ParameterValueResult grabInstanceWithResult(long id, @NotNull String nameLower,
+                                                                 @Nullable String value) {
+        ParameterValueType type = nameLowerToType.get(nameLower);
 
-        if (clazz == null) {
+        if (type == null) {
             return new ParameterValueResult(INVALID_PARAMETER, null);
         }
 
-        ParameterValueRegistered annotation = classToAnnotation.get(clazz);
+        ParameterValueRegistered annotation = typeToAnnotation.get(type);
 
         boolean needsValue = annotation.needsValue();
         if ((needsValue && value == null) || (!needsValue && value != null)) {
@@ -132,19 +148,35 @@ public class ParameterValuesImpl implements ParameterValues {
             };
         }
 
+        ParameterValue parameterValue = null;
+
+        if (id != NON_EXISTING_ID) {
+            parameterValue = classToValueToParameterValueGet(type, modifiedValue);
+            if (parameterValue != null) {
+                return new ParameterValueResult(SUCCESS, parameterValue);
+            }
+        }
+
         try {
-            return new ParameterValueResult(SUCCESS, createInstance(clazz, id, modifiedValue));
+            parameterValue = createInstance(type, id, modifiedValue);
         } catch (ParameterValueException e) {
             return new ParameterValueResult(INVALID_VALUE, null);
         }
+
+        if (id != NON_EXISTING_ID) {
+            typeToValueToParameterValueAdd(parameterValue);
+        }
+
+        return new ParameterValueResult(SUCCESS, parameterValue);
     }
 
     @SuppressWarnings("java:S2139")
-    private @NotNull ParameterValue createInstance(@NotNull Class<? extends ParameterValue> clazz, long id,
+    private @NotNull ParameterValue createInstance(ParameterValueType type, long id,
                                                    @Nullable String value) throws ParameterValueException {
+        Class<? extends ParameterValue> clazz = type.clazz();
         try {
-            Method newInstance = clazz.getMethod("newInstance", long.class, String.class);
-            return (ParameterValue) newInstance.invoke(null, id, value);
+            Method newInstance = clazz.getMethod("newInstance", ParameterValueType.class, long.class, String.class);
+            return (ParameterValue) newInstance.invoke(null, type, id, value);
         } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException |
                  InvocationTargetException e) {
             if (e instanceof InvocationTargetException invocationTargetException) {
@@ -160,8 +192,18 @@ public class ParameterValuesImpl implements ParameterValues {
         }
     }
 
-    private void classToValueToParameterValueAdd(@NotNull ParameterValue parameterValue) {
-        classToValueToParameterValue.computeIfAbsent(parameterValue.getClass(), k -> new HashMap<>()).put(parameterValue.getValue(), parameterValue);
+    private void typeToValueToParameterValueAdd(@NotNull ParameterValue parameterValue) {
+        typeToValueToParameterValue.computeIfAbsent(parameterValue.type(), k -> new HashMap<>()).put(parameterValue.getValue(), parameterValue);
+    }
+
+    private @Nullable ParameterValue classToValueToParameterValueGet(ParameterValueType type,
+                                                                     @Nullable String modifiedValue) {
+        Map<String, ParameterValue> valueToParameterValue = typeToValueToParameterValue.get(type);
+        if (valueToParameterValue != null) {
+            return valueToParameterValue.get(modifiedValue);
+        }
+
+        return null;
     }
 
     private StorageManager getStorageManager() {

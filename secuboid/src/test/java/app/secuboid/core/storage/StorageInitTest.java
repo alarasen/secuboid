@@ -35,6 +35,7 @@ import static org.mockito.Mockito.*;
 
 class StorageInitTest {
 
+    @SuppressWarnings("unused")
     static final String CREATE_TABLE_SQL = ""
             + "CREATE TABLE IF NOT EXISTS secuboid_player ("
             + "  id INT NOT NULL AUTO_INCREMENT,"
@@ -87,7 +88,7 @@ class StorageInitTest {
     static class Test1Row implements RowWithId {
 
         @Override
-        public Long id() {
+        public long id() {
             return 0L;
         }
     }
