@@ -87,7 +87,7 @@ public class ParameterValuesImpl implements ParameterValues {
 
         // Pre-validation
         ParameterValueResult result = grabInstanceWithResult(NON_EXISTING_ID, nameLower, value);
-        if (result.code() != SUCCESS) {
+        if (result.code() != SUCCESS || result.parameterValue() == null) {
             if (callback != null) {
                 callback.accept(result);
             } else {
@@ -99,26 +99,32 @@ public class ParameterValuesImpl implements ParameterValues {
 
 
         ParameterValue parameterValue = result.parameterValue();
-        // TODO Parameter value types vs Class
-        //parameterValue.
-        ParameterValueRow parameterValueRow = new ParameterValueRow(NON_EXISTING_ID, "TO_REMOVE", "TO_REMOVE");
-        getStorageManager().insert(parameterValueRow, this::grabCallback);
+        ParameterValueRegistered info = parameterValue.type().info();
+        String shortName = info.shortName();
+        String valueTrans = parameterValue.getValue();
+        ParameterValueRow parameterValueRow = new ParameterValueRow(NON_EXISTING_ID, shortName, valueTrans);
+
+        getStorageManager().insert(parameterValueRow, r -> grabCallback(r, callback));
     }
 
-    private void grabCallback(@NotNull ParameterValueRow parameterValueRow) {
+    private void grabCallback(@NotNull ParameterValueRow parameterValueRow, @Nullable Consumer<ParameterValueResult> callback) {
+        ParameterValueResult result = grabInstanceWithResult(parameterValueRow.id(),
+                parameterValueRow.shortName(), parameterValueRow.value());
 
+        if (callback != null) {
+            callback.accept(result);
+        }
     }
 
     private void loadParameterValueRow(@NotNull ParameterValueRow parameterValueRow) {
-        ParameterValueResult parameterValueResult = grabInstanceWithResult(parameterValueRow.id(),
+        ParameterValueResult result = grabInstanceWithResult(parameterValueRow.id(),
                 parameterValueRow.shortName(), parameterValueRow.value());
-        ParameterValueResultCode code = parameterValueResult.code();
-        ParameterValue parameterValue = parameterValueResult.parameterValue();
+        ParameterValueResultCode code = result.code();
+        ParameterValue parameterValue = result.parameterValue();
 
         if (parameterValue == null || code != SUCCESS) {
-            String msg = format("Unable to load the parameter value [parameterValueResult=%s]", parameterValueResult);
+            String msg = format("Unable to load the parameter value [result=%s]", result);
             log().log(SEVERE, () -> msg);
-            return;
         }
     }
 
@@ -148,7 +154,7 @@ public class ParameterValuesImpl implements ParameterValues {
             };
         }
 
-        ParameterValue parameterValue = null;
+        ParameterValue parameterValue;
 
         if (id != NON_EXISTING_ID) {
             parameterValue = classToValueToParameterValueGet(type, modifiedValue);

@@ -28,6 +28,14 @@ import java.util.function.Consumer;
  */
 public interface ParameterValues {
 
+    public static final String ENTITY_TYPE = "et";
+    public static final String ENTITY_CLASS = "ec";
+    public static final String PLAYER = "p";
+    public static final String RESIDENT = "res";
+    public static final String NOBODY = "nobody";
+    public static final String EVERYTHING = "everything";
+    public static final String EVERYBODY = "everybody";
+
     /**
      * Grabs a parameter value.
      *
