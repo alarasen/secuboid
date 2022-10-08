@@ -38,31 +38,43 @@ public @interface ParameterValueRegistered {
 
     /**
      * The parameter name (not the value). Ex: player, everybody, etc.
+     *
+     * @return the name
      */
     @NotNull String name();
 
     /**
      * The short name for chat and save. Must be unique. Ex: p, everybody, etc.
+     *
+     * @return the short name
      */
     @NotNull String shortName();
 
     /**
      * The chat color code.
+     *
+     * @return the chat color code
      */
     @NotNull String chatColor();
 
     /**
      * Value (additional parameter) needed or not?
+     *
+     * @return has additional parameter
      */
     boolean needsValue() default false;
 
     /**
      * With {@link #needsValue()} value case sensitive?
+     *
+     * @return the case
      */
     CharacterCase characterCase() default LOWERCASE;
 
     /**
      * The priority, higher is returned before the lowest if there is a match.
+     *
+     * @return the priority
      */
     int priority() default 50;
 }

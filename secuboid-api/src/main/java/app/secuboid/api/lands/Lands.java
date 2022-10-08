@@ -51,7 +51,7 @@ public interface Lands {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void removeForce(AreaLand land, Consumer<LandResult> callback);
+    void removeForce(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback);
 
     /**
      * Removes the land and children recursively.
@@ -59,7 +59,7 @@ public interface Lands {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void removeRecursive(AreaLand land, Consumer<LandResult> callback);
+    void removeRecursive(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback);
 
     /**
      * Removes the land.
@@ -67,7 +67,7 @@ public interface Lands {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void remove(AreaLand land, Consumer<LandResult> callback);
+    void remove(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback);
 
     /**
      * Rename land.
@@ -76,7 +76,16 @@ public interface Lands {
      * @param newName  the new name
      * @param callback the method to call back if success or not
      */
-    void rename(AreaLand land, String newName, Consumer<LandResult> callback);
+    void rename(@NotNull AreaLand land, @NotNull String newName, @Nullable Consumer<LandResult> callback);
+
+    /**
+     * Sets the land parent.
+     *
+     * @param land      the land
+     * @param newParent the land parent
+     * @param callback  the method to call back if success or not
+     */
+    void setParent(@NotNull AreaLand land, @NotNull Land newParent, @Nullable Consumer<LandResult> callback);
 
     /**
      * Gets the land.
@@ -84,7 +93,7 @@ public interface Lands {
      * @param landName the land name
      * @return the land
      */
-    AreaLand get(String landName);
+    AreaLand get(@NotNull String landName);
 
     /**
      * Gets the land.
@@ -100,14 +109,14 @@ public interface Lands {
      * @param loc the loc
      * @return the land
      */
-    AreaLand get(Location loc);
+    @Nullable AreaLand get(@NotNull Location loc);
 
     /**
      * Gets the lands.
      *
      * @return the lands
      */
-    Collection<AreaLand> getLands();
+    @NotNull Collection<AreaLand> getLands();
 
     /**
      * Gets all lands available from a 2D location.
@@ -117,7 +126,7 @@ public interface Lands {
      * @param z     the z
      * @return the lands
      */
-    Set<AreaLand> getLands(World world, int x, int z);
+    @NotNull Set<AreaLand> getLands(@NotNull World world, int x, int z);
 
     /**
      * Gets all lands available from a location.
@@ -125,7 +134,7 @@ public interface Lands {
      * @param loc the location
      * @return the lands
      */
-    Set<AreaLand> getLands(Location loc);
+    @NotNull Set<AreaLand> getLands(@NotNull Location loc);
 
     /**
      * Gets all lands from an owner.
@@ -133,7 +142,7 @@ public interface Lands {
      * @param owner the owner
      * @return the lands
      */
-    Set<AreaLand> getLands(ParameterValue owner);
+    @NotNull Set<AreaLand> getLands(@NotNull ParameterValue owner);
 
     /**
      * Gets the areas. This method ignore Y value.
@@ -143,7 +152,7 @@ public interface Lands {
      * @param z     the z
      * @return the areas
      */
-    List<Area> getAreas(World world, int x, int z);
+    @NotNull List<Area> getAreas(@NotNull World world, int x, int z);
 
     /**
      * Gets all areas from a location.
@@ -151,7 +160,7 @@ public interface Lands {
      * @param loc the loc
      * @return the areas
      */
-    List<Area> getAreas(Location loc);
+    @NotNull List<Area> getAreas(@NotNull Location loc);
 
     /**
      * Gets the active area from the location.
@@ -159,5 +168,5 @@ public interface Lands {
      * @param loc the loc
      * @return the area
      */
-    Area getArea(Location loc);
+    @Nullable Area getArea(@NotNull Location loc);
 }

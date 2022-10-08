@@ -35,41 +35,55 @@ public @interface CommandRegistered {
 
     /**
      * Your plugin class that extends JavaPlugin.
+     *
+     * @return the plugin class
      */
     @NotNull Class<? extends JavaPlugin> pluginClass();
 
     /**
      * The command name lowercase. If this command is a child from a parent, type
      * "parent/this command".
+     *
+     * @return the name
      */
     @NotNull String name();
 
     /**
      * Aliases if the command can be called with a short alias. Lowercase.
+     *
+     * @return the aliases
      */
     @NotNull String[] aliases() default {};
 
     /**
      * Allowing from console? Default true. Must be false only when the command
-     * needs absoutely an in game interaction. Note that a command typed in a
+     * needs absolutely an in game interaction. Note that a command typed in a
      * console bypass any other permission checks.
+     *
+     * @return allow console
      */
     boolean allowConsole() default true;
 
     /**
      * If a player in "admin mode" has access.
+     *
+     * @return has admin mode by pass
      */
     boolean isAdminModeByPass() default true;
 
     /**
      * The Bukkit permission(s) needed to do this command. Only one needed to be
      * true.
+     *
+     * @return the Bukkit permissions
      */
     @NotNull String[] permissions() default {};
 
     /**
      * Name array of Source Action flags needed for your command.
-     * SourceActionFlagType accpeted only. Only one needed to be true.
+     * SourceActionFlagType accepted only. Only one needed to be true.
+     *
+     * @return the source action flags
      */
     @NotNull String[] sourceActionFlags() default {};
 }

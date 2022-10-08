@@ -27,18 +27,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Every table classes must extend this class. You need also to have the
- * constant CREATE_TABLE_SQL defined:
- *
- * <pre>
- * public static final String CREATE_TABLE_SQL = ""
- *         + "CREATE TABLE IF NOT EXISTS secuboid_table_name ("
- *         + "  id INT NOT NULL AUTO_INCREMENT,"
- *         + "  name VARCHAR(45) NOT NULL,"
- *         + "  PRIMARY KEY (id),"
- *         + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
- *         + ")";
- * </pre>
+ * Every table classes must extend this class.
  */
 public interface Table<R extends Row> {
 
@@ -46,7 +35,7 @@ public interface Table<R extends Row> {
      * Select all resources and return it with the column index in the specific
      * type.
      *
-     * @param conn the connnection
+     * @param conn the connection
      * @return the set of rows
      * @throws SQLException the SQL exception
      */
@@ -55,7 +44,7 @@ public interface Table<R extends Row> {
     }
 
     /**
-     * Inserts the resource and return the it with column index in the specific
+     * Inserts the resource and return it with column index in the specific
      * type.
      *
      * @param conn the connection
@@ -68,7 +57,7 @@ public interface Table<R extends Row> {
     }
 
     /**
-     * Updates the resource from it id.
+     * Updates the resource from is id.
      *
      * @param conn the connection
      * @param row  the row
@@ -80,7 +69,7 @@ public interface Table<R extends Row> {
     }
 
     /**
-     * Deletes the resource from it id.
+     * Deletes the resource from is id.
      *
      * @param conn the connection
      * @param row  the row

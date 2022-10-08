@@ -32,8 +32,6 @@ import java.util.logging.Level;
 
 public class StorageInit {
 
-    private static final String CREATE_TABLE_SQL_FIELD = "CREATE_TABLE_SQL";
-
     private static final int MAX_LOOP_ATTEMPTS = 100;
 
     private final Map<Class<? extends Row>, Table<Row>> classRowToTable;
@@ -63,7 +61,8 @@ public class StorageInit {
                     boolean allMatch = Arrays.stream(tableRegistered.dependsOn()).allMatch(doneClasses::contains);
 
                     if (allMatch) {
-                        createDatabase(clazz);
+                        String sql = tableRegistered.createTable();
+                        createDatabase(sql);
                         Class<? extends Row> classRow = tableRegistered.row();
                         addTableToFinder(classRow, clazz);
                         doneClasses.add(clazz);
@@ -87,26 +86,14 @@ public class StorageInit {
         ConnectionManager.init();
     }
 
-    @SuppressWarnings("rawtypes")
-    void createDatabase(Class<? extends Table> clazz) {
-        String sql;
-        try {
-            sql = (String) clazz.getField(CREATE_TABLE_SQL_FIELD).get(null);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
-                 | ClassCastException e) {
-            Log.log().log(Level.SEVERE, e,
-                    () -> String.format("Unable read the static field %s due to a programming error [clazz=%s]",
-                            CREATE_TABLE_SQL_FIELD, clazz));
-            return;
-        }
-
+    void createDatabase(String sql) {
         try (Connection connection = ConnectionManager.getConnection()) {
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
             Log.log().log(Level.SEVERE, e,
-                    () -> String.format("Unable to check or create the database [clazz=%s]", clazz));
+                    () -> String.format("Unable to check or create the database [sql=%s]", sql));
         }
     }
 

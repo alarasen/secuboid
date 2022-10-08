@@ -32,7 +32,7 @@ public record ParameterValueEverything(@NotNull ParameterValueType type,
 ) implements ParameterValue {
 
     // Needed for load from database
-    @SuppressWarnings({"java:S1172", "java:S1130"})
+    @SuppressWarnings({"unused", "java:S1172", "java:S1130"})
     public static ParameterValueEverything newInstance(@NotNull ParameterValueType type, long id,
                                                        @Nullable String value) throws ParameterValueException {
         return new ParameterValueEverything(type, id);

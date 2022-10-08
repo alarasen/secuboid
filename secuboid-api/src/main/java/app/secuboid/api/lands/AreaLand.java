@@ -18,6 +18,8 @@
 package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.areas.AreaResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Represents a land with a number of areas.
@@ -34,34 +37,35 @@ public interface AreaLand extends Land {
     /**
      * Adds the area.
      *
-     * @param area the area
+     * @param areaForm the area form
+     * @param callback the method to call back if success or not
      */
-    void addArea(Area area);
+    void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback);
 
     /**
      * Removes the area.
      *
-     * @param key the key
-     * @return true, if successful
+     * @param key      the key
+     * @param callback the method to call back if success or not
      */
-    boolean removeArea(int key);
+    void removeArea(int key, @Nullable Consumer<AreaResult> callback);
 
     /**
      * Removes the area.
      *
-     * @param area the area
-     * @return true, if successful
+     * @param area     the area
+     * @param callback the method to call back if success or not
      */
-    boolean removeArea(@NotNull Area area);
+    void removeArea(@NotNull Area area, @Nullable Consumer<AreaResult> callback);
 
     /**
      * Replace area.
      *
-     * @param key     the key
-     * @param newArea the new area
-     * @return true, if successful
+     * @param key         the key
+     * @param newAreaForm the new areaForm
+     * @param callback    the method to call back if success or not
      */
-    boolean replaceArea(int key, @NotNull Area newArea);
+    void replaceArea(int key, @NotNull AreaForm newAreaForm, @Nullable Consumer<AreaResult> callback);
 
     /**
      * Gets the area.
@@ -101,21 +105,14 @@ public interface AreaLand extends Land {
     @NotNull Collection<Area> getAreas();
 
     /**
-     * Gets the parent.
+     * Gets the parent. A null value means a not yet activated land or an orphan.
      *
      * @return the parent or the land is a world
      */
-    @NotNull Land getParent();
+    @Nullable Land getParent();
 
     /**
-     * Sets the land parent. Set a null and the world become the parent
-     *
-     * @param newParent the land parent
-     */
-    void setParent(@Nullable AreaLand newParent);
-
-    /**
-     * Checks if the land is parent, grand-parent or ancestor.
+     * Checks if the land is parent, grandparent or ancestor.
      *
      * @param land the land
      * @return true, if is ancestor

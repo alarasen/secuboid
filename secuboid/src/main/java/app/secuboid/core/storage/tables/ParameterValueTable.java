@@ -26,19 +26,18 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@TableRegistered(row = ParameterValueRow.class)
-@SuppressWarnings({"unused", "java:S1118"})
+@TableRegistered(
+        row = ParameterValueRow.class,
+        createTable = ""
+                + "CREATE TABLE IF NOT EXISTS secuboid_parameter_value ("
+                + " id BIGINT NOT NULL AUTO_INCREMENT,"
+                + " short_name VARCHAR(10) NOT NULL,"
+                + " value VARCHAR(45) NULL,"
+                + " PRIMARY KEY (id),"
+                + " CONSTRAINT parameter_value_short_name_value_unique UNIQUE (short_name, value)"
+                + ")"
+)
 public class ParameterValueTable implements Table<ParameterValueRow> {
-
-    // Needed for automatic table create
-    public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS secuboid_parameter_value ("
-            + " id BIGINT NOT NULL AUTO_INCREMENT,"
-            + " short_name VARCHAR(10) NOT NULL,"
-            + " value VARCHAR(45) NULL,"
-            + " PRIMARY KEY (id),"
-            + " CONSTRAINT parameter_value_short_name_value_unique UNIQUE (short_name, value)"
-            + ")";
 
     @Override
     public @NotNull Set<ParameterValueRow> selectAll(@NotNull Connection conn) throws SQLException {

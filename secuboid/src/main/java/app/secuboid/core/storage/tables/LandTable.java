@@ -33,20 +33,19 @@ import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 
-@TableRegistered(row = LandRow.class)
-@SuppressWarnings({"unused", "java:S1118"})
+@TableRegistered(
+        row = LandRow.class,
+        createTable = ""
+                + "CREATE TABLE IF NOT EXISTS secuboid_land ("
+                + " id BIGINT NOT NULL AUTO_INCREMENT,"
+                + " name VARCHAR(45) NOT NULL,"
+                + " type CHAR(1) NOT NULL,"
+                + " parent_id BIGINT NULL,"
+                + " PRIMARY KEY (id),"
+                + " CONSTRAINT fk_land_parent_id FOREIGN KEY (parent_id) REFERENCES secuboid_land (id)"
+                + ")"
+)
 public class LandTable implements Table<LandRow> {
-
-    // Needed for automatic table create
-    public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS secuboid_land ("
-            + " id BIGINT NOT NULL AUTO_INCREMENT,"
-            + " name VARCHAR(45) NOT NULL,"
-            + " type CHAR(1) NOT NULL,"
-            + " parent_id BIGINT NULL,"
-            + " PRIMARY KEY (id),"
-            + " CONSTRAINT fk_land_parent_id FOREIGN KEY (parent_id) REFERENCES secuboid_land (id)"
-            + ")";
 
     @Override
     public @NotNull Set<LandRow> selectAll(@NotNull Connection conn) throws SQLException {

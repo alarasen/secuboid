@@ -35,19 +35,6 @@ import static org.mockito.Mockito.*;
 
 class StorageInitTest {
 
-    @SuppressWarnings("unused")
-    static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS secuboid_player ("
-            + "  id INT NOT NULL AUTO_INCREMENT,"
-            + "  uuid CHAR(36) NOT NULL,"
-            + "  name VARCHAR(45) NOT NULL,"
-            + "  tinytext TINYTEXT NOT NULL,"
-            + "  text TEXT NOT NULL,"
-            + "  mediumtext MEDIUMTEXT NOT NULL,"
-            + "  PRIMARY KEY (id),"
-            + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
-            + ")";
-
     private StorageInit storageInit;
     private PluginLoader pluginLoader;
 
@@ -72,8 +59,7 @@ class StorageInitTest {
     void when_found_tables_then_execute_create_database() {
         storageInit.init(pluginLoader);
 
-        verify(storageInit).createDatabase(Test1Table.class);
-        verify(storageInit).createDatabase(Test2Table.class);
+        verify(storageInit, times(2)).createDatabase(anyString());
     }
 
     @Test
@@ -93,7 +79,20 @@ class StorageInitTest {
         }
     }
 
-    @TableRegistered(row = Test1Row.class)
+    @TableRegistered(
+            row = Test1Row.class,
+            createTable = ""
+                    + "CREATE TABLE IF NOT EXISTS secuboid_player ("
+                    + "  id INT NOT NULL AUTO_INCREMENT,"
+                    + "  uuid CHAR(36) NOT NULL,"
+                    + "  name VARCHAR(45) NOT NULL,"
+                    + "  tinytext TINYTEXT NOT NULL,"
+                    + "  text TEXT NOT NULL,"
+                    + "  mediumtext MEDIUMTEXT NOT NULL,"
+                    + "  PRIMARY KEY (id),"
+                    + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
+                    + ")"
+    )
     static class Test1Table implements Table<Test1Row> {
 
         @Override
@@ -118,7 +117,21 @@ class StorageInitTest {
     static class Test2Row implements Row {
     }
 
-    @TableRegistered(row = Test2Row.class, dependsOn = Test1Table.class)
+    @TableRegistered(
+            row = Test2Row.class,
+            dependsOn = Test1Table.class,
+            createTable = ""
+                    + "CREATE TABLE IF NOT EXISTS secuboid_player ("
+                    + "  id INT NOT NULL AUTO_INCREMENT,"
+                    + "  uuid CHAR(36) NOT NULL,"
+                    + "  name VARCHAR(45) NOT NULL,"
+                    + "  tinytext TINYTEXT NOT NULL,"
+                    + "  text TEXT NOT NULL,"
+                    + "  mediumtext MEDIUMTEXT NOT NULL,"
+                    + "  PRIMARY KEY (id),"
+                    + "  CONSTRAINT uuid_unique UNIQUE (uuid)"
+                    + ")"
+    )
     static class Test2Table implements Table<Test2Row> {
 
         @Override

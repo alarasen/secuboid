@@ -122,31 +122,37 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public void removeForce(AreaLand land, Consumer<LandResult> callback) {
+    public void removeForce(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeRecursive(AreaLand land, Consumer<LandResult> callback) {
+    public void removeRecursive(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void remove(AreaLand land, Consumer<LandResult> callback) {
+    public void remove(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void rename(AreaLand land, String newName, Consumer<LandResult> callback) {
+    public void rename(@NotNull AreaLand land, @NotNull String newName, @Nullable Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public AreaLand get(String landName) {
+    public void setParent(@NotNull AreaLand land, @NotNull Land newParent, @Nullable Consumer<LandResult> callback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public AreaLand get(@NotNull String landName) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -158,54 +164,54 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public AreaLand get(Location loc) {
+    public @Nullable AreaLand get(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Collection<AreaLand> getLands() {
+    public @NotNull Collection<AreaLand> getLands() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Set<AreaLand> getLands(World world, int x, int z) {
+    public @NotNull Set<AreaLand> getLands(@NotNull World world, int x, int z) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Set<AreaLand> getLands(Location loc) {
+    public @NotNull Set<AreaLand> getLands(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Set<AreaLand> getLands(ParameterValue owner) {
+    public @NotNull Set<AreaLand> getLands(@NotNull ParameterValue owner) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<Area> getAreas(World world, int x, int z) {
+    public @NotNull List<Area> getAreas(@NotNull World world, int x, int z) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<Area> getAreas(Location loc) {
+    public @NotNull List<Area> getAreas(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Area getArea(Location loc) {
+    public Area getArea(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    private LandResultCode validateName(Land parent, String nameLower) {
+    private @Nullable LandResultCode validateName(@NotNull Land parent, @NotNull String nameLower) {
         if (!NameUtil.validateName(nameLower)) {
             return LandResultCode.NAME_INVALID;
         }
@@ -218,7 +224,8 @@ public class LandsImpl implements Lands {
         return null;
     }
 
-    private void setParent(Map<Long, LandComponent> idToLandComponent, LandComponent landComponent, long parentId) {
+    private void setParent(@NotNull Map<Long, LandComponent> idToLandComponent, @NotNull LandComponent landComponent,
+                           long parentId) {
         if (landComponent instanceof AreaLand areaLand) {
             LandComponent parent = idToLandComponent.get(parentId);
             if (parent instanceof LandImpl parentLandImpl) {

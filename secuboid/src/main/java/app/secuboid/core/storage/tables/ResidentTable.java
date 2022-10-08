@@ -21,19 +21,18 @@ import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.storage.rows.ResidentRow;
 
-@TableRegistered(row = ResidentRow.class, dependsOn = {LandTable.class, ParameterValueTable.class})
-@SuppressWarnings({"unused", "java:S1118"})
+@TableRegistered(
+        row = ResidentRow.class,
+        dependsOn = {LandTable.class, ParameterValueTable.class},
+        createTable = ""
+                + "CREATE TABLE IF NOT EXISTS secuboid_resident ("
+                + " land_id BIGINT NOT NULL,"
+                + " parameter_value_id BIGINT NOT NULL,"
+                + " level INT NOT NULL,"
+                + " PRIMARY KEY (land_id, parameter_value_id),"
+                + " CONSTRAINT fk_resident_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id),"
+                + " CONSTRAINT fk_resident_parameter_value_id FOREIGN KEY (parameter_value_id) REFERENCES secuboid_parameter_value (id)"
+                + ")"
+)
 public class ResidentTable implements Table<ResidentRow> {
-
-    // Needed for automatic table create
-    public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS secuboid_resident ("
-            + " land_id BIGINT NOT NULL,"
-            + " parameter_value_id BIGINT NOT NULL,"
-            + " level INT NOT NULL,"
-            + " PRIMARY KEY (land_id, parameter_value_id),"
-            + " CONSTRAINT fk_resident_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id),"
-            + " CONSTRAINT fk_resident_parameter_value_id FOREIGN KEY (parameter_value_id) REFERENCES secuboid_parameter_value (id)"
-            + ")";
-
 }

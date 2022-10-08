@@ -15,16 +15,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.api.lands.areas;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
- * Used for callback method when an area is created or modified. The area will
- * be returned only if it is a success.
- *
- * @param area the area created if success
+ * Returned code for an area command.
  */
-public record AreaResult(@NotNull AreaResultCode code, @Nullable Area area) {
+public enum AreaResultCode {
+
+    /**
+     * success
+     */
+    SUCCESS
 }

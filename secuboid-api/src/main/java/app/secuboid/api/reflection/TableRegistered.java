@@ -35,12 +35,23 @@ import java.lang.annotation.Target;
 public @interface TableRegistered {
 
     /**
-     * The row class associated to this table
+     * The row class associated to this table.
+     *
+     * @return the row clas
      */
     @NotNull Class<? extends Row> row();
 
     /**
+     * The "create table" instruction.
+     *
+     * @return create table instruction
+     */
+    @NotNull String createTable();
+
+    /**
      * What this table depends on (foreign key)
+     *
+     * @return depends on table(s)
      */
     @SuppressWarnings("java:S1452")
     @NotNull Class<? extends Table<?>>[] dependsOn() default {};

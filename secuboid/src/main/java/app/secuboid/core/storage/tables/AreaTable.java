@@ -32,25 +32,25 @@ import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 
-@TableRegistered(row = AreaRow.class, dependsOn = LandTable.class)
-@SuppressWarnings({"unused", "java:S1118"})
+@TableRegistered(
+        row = AreaRow.class,
+        dependsOn = LandTable.class,
+        createTable = ""
+                + "CREATE TABLE IF NOT EXISTS secuboid_area ("
+                + " id BIGINT NOT NULL AUTO_INCREMENT,"
+                + " land_id BIGINT NOT NULL,"
+                + " type CHAR(1) NOT NULL,"
+                + " x1 BIGINT NOT NULL,"
+                + " y1 BIGINT NOT NULL,"
+                + " z1 BIGINT NOT NULL,"
+                + " x2 BIGINT NOT NULL,"
+                + " y2 BIGINT NOT NULL,"
+                + " z2 BIGINT NOT NULL,"
+                + " PRIMARY KEY (id),"
+                + " CONSTRAINT fk_area_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id)"
+                + ")"
+)
 public class AreaTable implements Table<AreaRow> {
-
-    // Needed for automatic table create
-    public static final String CREATE_TABLE_SQL = ""
-            + "CREATE TABLE IF NOT EXISTS secuboid_area ("
-            + " id BIGINT NOT NULL AUTO_INCREMENT,"
-            + " land_id BIGINT NOT NULL,"
-            + " type CHAR(1) NOT NULL,"
-            + " x1 BIGINT NOT NULL,"
-            + " y1 BIGINT NOT NULL,"
-            + " z1 BIGINT NOT NULL,"
-            + " x2 BIGINT NOT NULL,"
-            + " y2 BIGINT NOT NULL,"
-            + " z2 BIGINT NOT NULL,"
-            + " PRIMARY KEY (id),"
-            + " CONSTRAINT fk_area_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id)"
-            + ")";
 
     @Override
     public @NotNull Set<AreaRow> selectAll(@NotNull Connection conn) throws SQLException {

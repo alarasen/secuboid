@@ -20,13 +20,17 @@ package app.secuboid.core.lands;
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.areas.AreaResult;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
@@ -36,7 +40,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
 
     // IMPORTANT: Please use createLand in Lands class to create a Land or it will
     // not be accessible and saved.
-    public AreaLandImpl(long id, String name, Land parent) {
+    public AreaLandImpl(long id, @NotNull String name, @Nullable Land parent) {
         super(id, name);
         this.parent = parent;
 
@@ -44,37 +48,34 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public void addArea(Area area) {
+    public void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public boolean removeArea(int key) {
+    public void removeArea(int key, @Nullable Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
-        return false;
     }
 
     @Override
-    public boolean removeArea(@NotNull Area area) {
+    public void removeArea(@NotNull Area area, @Nullable Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
-        return false;
     }
 
     @Override
-    public boolean replaceArea(int key, @NotNull Area newArea) {
+    public void replaceArea(int key, @NotNull AreaForm newAreaForm, @Nullable Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
-        return false;
     }
 
     @Override
-    public Area getArea(int key) {
+    public @Nullable Area getArea(int key) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Integer getAreaKey(@NotNull Area area) {
+    public @Nullable Integer getAreaKey(@NotNull Area area) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -98,16 +99,9 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public @NotNull Land getParent() {
+    public @Nullable Land getParent() {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void setParent(AreaLand newParent) {
-        // TODO Auto-generated method stub
-        // Caution : Set parent to the world if you receive a null
-
     }
 
     @Override
