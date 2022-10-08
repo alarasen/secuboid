@@ -19,13 +19,14 @@ package app.secuboid.api.lands.areas;
 
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.messages.MessagePath;
+import app.secuboid.api.storage.rows.WithId;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an area of any type.
  */
-public interface Area {
+public interface Area extends WithId {
 
     /**
      * Gets the area form.
@@ -33,13 +34,6 @@ public interface Area {
      * @return the area form
      */
     @NotNull AreaForm getAreaForm();
-
-    /**
-     * Gets the area id.
-     *
-     * @return the area id
-     */
-    int getID();
 
     /**
      * Gets the land.

@@ -57,7 +57,7 @@ public class LandTable implements Table<LandRow> {
                 Set<LandRow> result = new HashSet<>();
 
                 while (rs.next()) {
-                    long id = rs.getInt("id");
+                    long id = rs.getLong("id");
                     String name = rs.getString("name");
 
                     try {

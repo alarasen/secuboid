@@ -21,7 +21,6 @@ import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.Log;
@@ -37,6 +36,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
+import static app.secuboid.core.storage.types.LandType.AREA_LAND;
 import static app.secuboid.core.storage.types.LandType.WORLD_LAND;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
@@ -105,8 +105,7 @@ public class LandsImpl implements Lands {
 
     @Override
     public void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
-                       @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
-                       @Nullable Consumer<LandResult> callback) {
+                       @NotNull AreaForm areaForm, @Nullable Consumer<LandResult> callback) {
         String nameLower = landName.toLowerCase();
 
         LandResultCode code = validateName(parent, nameLower);
@@ -118,34 +117,30 @@ public class LandsImpl implements Lands {
             return;
         }
 
-        // TODO create area
-        // AreaLandImpl land = new AreaLandImpl(uuid, nameLower, parent);
-        // land.addArea(area);
-
-        // TODO land init
+        LandRow landRow = new LandRow(NON_EXISTING_ID, nameLower, AREA_LAND, parent.id());
+        getStorageManager().insert(landRow, r -> insertCallback(r, parent, callback));
     }
 
     @Override
-    public void removeForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void removeForce(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void removeRecursive(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void remove(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback) {
+    public void remove(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void rename(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
-                       Consumer<LandResult> callback) {
+    public void rename(AreaLand land, String newName, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
@@ -235,6 +230,16 @@ public class LandsImpl implements Lands {
 
         Log.log().warning(() -> format("This land has no parent and will be unreachable [id=%s, name=%s, parentId=%s]",
                 landComponent.id(), landComponent.getName(), parentId));
+    }
+
+    private void insertCallback(@NotNull LandRow landRow, @NotNull Land parent,
+                                @Nullable Consumer<LandResult> callback) {
+        // TODO create area
+        AreaLandImpl areaLand = new AreaLandImpl(landRow.id(), landRow.name(), parent);
+        // AreaLandImpl land = new AreaLandImpl(uuid, nameLower, parent);
+        // land.addArea(area);
+
+        // TODO land init
     }
 
     private StorageManager getStorageManager() {

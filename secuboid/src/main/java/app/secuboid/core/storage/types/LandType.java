@@ -49,7 +49,7 @@ public enum LandType {
     public final @NotNull String value;
     private final @NotNull Function<LandRow, LandComponent> creator;
 
-    private LandType(@NotNull String value, @NotNull Function<LandRow, LandComponent> creator) {
+    LandType(@NotNull String value, @NotNull Function<LandRow, LandComponent> creator) {
         this.value = value;
         this.creator = creator;
     }

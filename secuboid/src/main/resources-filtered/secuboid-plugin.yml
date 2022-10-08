@@ -22,6 +22,7 @@ component-classes:
   - app.secuboid.core.parameters.values.ParameterValueResident
 
   # Tables
+  - app.secuboid.core.storage.tables.AreaTable
   - app.secuboid.core.storage.tables.FlagTable
   - app.secuboid.core.storage.tables.LandTable
   - app.secuboid.core.storage.tables.ParameterValueTable

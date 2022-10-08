@@ -46,6 +46,10 @@ public abstract class ActiveSelectionModify extends ActiveSelection {
         selectionScoreboard = new SelectionScoreboard(player, selectionForm.areaForm, this.getClass());
     }
 
+    public @NotNull SelectionForm getSelectionForm() {
+        return selectionForm;
+    }
+
     public final void playerMoveSelection() {
         Location playerLoc = player.getLocation();
         boolean isChanged = playerMoveSelectionCheckChanged(playerLoc);

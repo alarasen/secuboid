@@ -28,26 +28,26 @@ import java.util.Objects;
 
 public class AreaImpl implements Area {
 
+    private final long id;
     private final AreaForm areaForm;
-    private final int id;
     private final AreaLand land;
 
-    public AreaImpl(AreaForm areaForm, int id, AreaLand land) {
-        this.areaForm = areaForm;
+    public AreaImpl(long id, @NotNull AreaForm areaForm, @NotNull AreaLand land) {
         this.id = id;
+        this.areaForm = areaForm;
         this.land = land;
 
         ((AreaFormImpl) areaForm).isResizable = false;
     }
 
     @Override
-    public AreaForm getAreaForm() {
-        return areaForm;
+    public long id() {
+        return id;
     }
 
     @Override
-    public int getID() {
-        return id;
+    public @NotNull AreaForm getAreaForm() {
+        return areaForm;
     }
 
     @Override
@@ -120,15 +120,14 @@ public class AreaImpl implements Area {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof AreaImpl)) {
+        if (!(o instanceof AreaImpl areaImpl)) {
             return false;
         }
-        AreaImpl areaImpl = (AreaImpl) o;
-        return Objects.equals(areaForm, areaImpl.areaForm) && id == areaImpl.id && Objects.equals(land, areaImpl.land);
+        return id == areaImpl.id && Objects.equals(areaForm, areaImpl.areaForm) && Objects.equals(land, areaImpl.land);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(areaForm, id, land);
+        return Objects.hash(id, areaForm, land);
     }
 }

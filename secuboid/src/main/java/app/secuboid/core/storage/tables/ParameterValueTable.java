@@ -49,7 +49,7 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
                 Set<ParameterValueRow> result = new HashSet<>();
 
                 while (rs.next()) {
-                    long id = rs.getInt("id");
+                    long id = rs.getLong("id");
                     String shortName = rs.getString("short_name");
                     String value = rs.getString("value");
                     result.add(new ParameterValueRow(id, shortName, value));

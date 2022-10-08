@@ -16,23 +16,21 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.selection.active;
+package app.secuboid.core.storage.rows;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.Area;
-import org.bukkit.command.CommandSender;
+import app.secuboid.api.storage.rows.RowWithId;
+import app.secuboid.core.storage.types.AreaType;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionArea extends ActiveSelection {
-
-    protected final Area area;
-
-    ActiveSelectionArea(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender, @NotNull Area area) {
-        super(worldLand, commandSender);
-        this.area = area;
-    }
-
-    public @NotNull Area getArea() {
-        return area;
-    }
+public record AreaRow(
+        long id,
+        long landId,
+        @NotNull AreaType type,
+        int x1,
+        int y1,
+        int z1,
+        int x2,
+        int y2,
+        int z2
+) implements RowWithId {
 }

@@ -17,12 +17,17 @@
  */
 package app.secuboid.core.lands.areas;
 
+import app.secuboid.api.lands.AreaLand;
+import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.core.lands.AreaLandImpl;
+import app.secuboid.core.lands.WorldLandImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
+import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AreasTest {
@@ -31,15 +36,18 @@ class AreasTest {
     private static final int ID_AREA_2 = 2;
 
     private Areas areas;
+    private AreaLand areaLand;
 
     @BeforeEach
-    void beforeEarch() {
+    void beforeEach() {
         areas = new Areas();
+        WorldLand worldLand = new WorldLandImpl(NON_EXISTING_ID, "world001");
+        areaLand = new AreaLandImpl(NON_EXISTING_ID, "test001", worldLand);
     }
 
     @Test
     void when_inside_area_then_get_it() {
-        Area area = new AreaImpl(new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), ID_AREA_1, null);
+        Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
         areas.add(area);
 
         for (int x = 0; x <= 99; x++) {
@@ -52,7 +60,7 @@ class AreasTest {
 
     @Test
     void when_area_removed_then_not_in_any_set() {
-        Area area = new AreaImpl(new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), ID_AREA_1, null);
+        Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
         areas.add(area);
         areas.remove(area);
 
@@ -66,7 +74,7 @@ class AreasTest {
 
     @Test
     void when_outside_area_then_not_get_it() {
-        Area area = new AreaImpl(new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), ID_AREA_1, null);
+        Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
         areas.add(area);
 
         Set<Area> targetAreas = areas.get(-1, 5, -1, true);
@@ -77,9 +85,9 @@ class AreasTest {
 
     @Test
     void when_add_two_areas_then_get_both() {
-        Area area = new AreaImpl(new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), ID_AREA_1, null);
+        Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
         areas.add(area);
-        Area area2 = new AreaImpl(new CuboidAreaFormImpl(98, 0, 98, 99, 255, 99), ID_AREA_2, null);
+        Area area2 = new AreaImpl(ID_AREA_2, new CuboidAreaFormImpl(98, 0, 98, 99, 255, 99), areaLand);
         areas.add(area2);
 
         Set<Area> targetAreas = areas.get(99, 5, 99, true);

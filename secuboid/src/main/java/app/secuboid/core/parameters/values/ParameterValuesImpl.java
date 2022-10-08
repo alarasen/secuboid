@@ -104,10 +104,10 @@ public class ParameterValuesImpl implements ParameterValues {
         String valueTrans = parameterValue.getValue();
         ParameterValueRow parameterValueRow = new ParameterValueRow(NON_EXISTING_ID, shortName, valueTrans);
 
-        getStorageManager().insert(parameterValueRow, r -> grabCallback(r, callback));
+        getStorageManager().insert(parameterValueRow, r -> insertCallback(r, callback));
     }
 
-    private void grabCallback(@NotNull ParameterValueRow parameterValueRow, @Nullable Consumer<ParameterValueResult> callback) {
+    private void insertCallback(@NotNull ParameterValueRow parameterValueRow, @Nullable Consumer<ParameterValueResult> callback) {
         ParameterValueResult result = grabInstanceWithResult(parameterValueRow.id(),
                 parameterValueRow.shortName(), parameterValueRow.value());
 

@@ -20,7 +20,6 @@ package app.secuboid.api.lands;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.players.CommandSenderInfo;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -36,55 +35,48 @@ public interface Lands {
     /**
      * Creates the land with parent.
      *
-     * @param parent            the parent or world
-     * @param landName          the land name
-     * @param owner             the owner
-     * @param areaForm          the area form
-     * @param commandSenderInfo the command sender information (player or console)
-     * @param callback          the method to call back if success or not
+     * @param parent   the parent or world
+     * @param landName the land name
+     * @param owner    the owner
+     * @param areaForm the area form
+     * @param callback the method to call back if success or not
      */
     void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
-                @NotNull AreaForm areaForm, @Nullable CommandSenderInfo commandSenderInfo,
-                @Nullable Consumer<LandResult> callback);
+                @NotNull AreaForm areaForm, @Nullable Consumer<LandResult> callback);
 
     /**
      * Removes the land and force if the land has children. The children will be
      * orphan.
      *
-     * @param land              the land
-     * @param commandSenderInfo the command sender information (player or console)
-     * @param callback          the method to call back if success or not
+     * @param land     the land
+     * @param callback the method to call back if success or not
      */
-    void removeForce(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void removeForce(AreaLand land, Consumer<LandResult> callback);
 
     /**
      * Removes the land and children recursively.
      *
-     * @param land              the land
-     * @param commandSenderInfo the command sender information (player or console)
-     * @param callback          the method to call back if success or not
+     * @param land     the land
+     * @param callback the method to call back if success or not
      */
-    void removeRecursive(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void removeRecursive(AreaLand land, Consumer<LandResult> callback);
 
     /**
      * Removes the land.
      *
-     * @param land              the land
-     * @param commandSenderInfo the command sender information (player or console)
-     * @param callback          the method to call back if success or not
+     * @param land     the land
+     * @param callback the method to call back if success or not
      */
-    void remove(AreaLand land, CommandSenderInfo commandSenderInfo, Consumer<LandResult> callback);
+    void remove(AreaLand land, Consumer<LandResult> callback);
 
     /**
      * Rename land.
      *
-     * @param land              the land
-     * @param newName           the new name
-     * @param commandSenderInfo the command sender information (player or console)
-     * @param callback          the method to call back if success or not
+     * @param land     the land
+     * @param newName  the new name
+     * @param callback the method to call back if success or not
      */
-    void rename(AreaLand land, String newName, CommandSenderInfo commandSenderInfo,
-                Consumer<LandResult> callback);
+    void rename(AreaLand land, String newName, Consumer<LandResult> callback);
 
     /**
      * Gets the land.
