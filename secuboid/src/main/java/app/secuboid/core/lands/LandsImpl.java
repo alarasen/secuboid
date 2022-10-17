@@ -24,6 +24,7 @@ import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.Log;
+import app.secuboid.core.storage.rows.AreaRow;
 import app.secuboid.core.storage.rows.LandRow;
 import app.secuboid.core.storage.types.LandType;
 import app.secuboid.core.utilities.NameUtil;
@@ -55,32 +56,8 @@ public class LandsImpl implements Lands {
         worldNameToWorldLand.clear();
         idToLandComponent.clear();
 
-        Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
-        Map<LandComponent, Long> landComponentToParentId = new HashMap<>();
-
-        for (LandRow landRow : landRows) {
-            LandComponent landComponent = LandType.newLandComponent(landRow);
-            idToLandComponent.put(landComponent.id(), landComponent);
-            Long parentId = landRow.parentId();
-
-            if (parentId != null) {
-                landComponentToParentId.put(landComponent, parentId);
-            }
-        }
-
-        for (Map.Entry<LandComponent, Long> entry : landComponentToParentId.entrySet()) {
-            LandComponent landComponent = entry.getKey();
-            long parentId = entry.getValue();
-            setParent(idToLandComponent, landComponent, parentId);
-
-            if (landComponent instanceof WorldLand worldLand) {
-                worldNameToWorldLand.put(worldLand.getName(), worldLand);
-            }
-        }
-
-        for (World world : SecuboidImpl.getJavaPLugin().getServer().getWorlds()) {
-            loadWorldSync(world);
-        }
+        loadLandComponents();
+        loadAreas();
     }
 
 
@@ -209,6 +186,72 @@ public class LandsImpl implements Lands {
     public Area getArea(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private void loadLandComponents() {
+        Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
+
+        while (!landRows.isEmpty()) {
+            Set<LandRow> nextLandRows = new HashSet<>();
+
+            for (LandRow landRow : landRows) {
+                if (loadLandComponentAndIsToRetry(landRow)) {
+                    nextLandRows.add(landRow);
+                }
+            }
+            landRows = nextLandRows;
+        }
+
+        for (World world : SecuboidImpl.getJavaPLugin().getServer().getWorlds()) {
+            loadWorldSync(world);
+        }
+    }
+
+    private boolean loadLandComponentAndIsToRetry(@NotNull LandRow landRow) {
+        Long parentId = landRow.parentId();
+        Land parent = null;
+
+        if (landRow.type() == AREA_LAND) {
+            if (parentId == null) {
+                Log.log().log(SEVERE, "Unable to create the land \"{}\" because it has no parent", landRow.name());
+                return false;
+            }
+
+            parent = (Land) idToLandComponent.get(parentId);
+
+            if (parent == null) {
+                return true;
+            }
+        }
+
+        LandComponent landComponent = LandType.newLandComponent(landRow, parent);
+        idToLandComponent.put(landComponent.id(), landComponent);
+
+        if (landComponent instanceof WorldLand worldLand) {
+            worldNameToWorldLand.put(worldLand.getName(), worldLand);
+        }
+
+        return false;
+    }
+
+    private void loadAreas() {
+        Set<AreaRow> areaRows = getStorageManager().selectAllSync(AreaRow.class);
+
+        for (AreaRow areaRow : areaRows) {
+            loadArea(areaRow);
+        }
+    }
+
+    private void loadArea(@NotNull AreaRow areaRow) {
+        LandComponent landComponent = idToLandComponent.get(areaRow.landId());
+
+        if (!(landComponent instanceof AreaLand)) {
+            String msg = format("Unable to add area id \"%s\" because the associated land is the wrong type [%s]"
+                    , areaRow.id(), landComponent);
+            Log.log().log(SEVERE, msg);
+            return;
+        }
+        ((AreaLandImpl) landComponent).addAreaToLand(areaRow);
     }
 
     private @Nullable LandResultCode validateName(@NotNull Land parent, @NotNull String nameLower) {

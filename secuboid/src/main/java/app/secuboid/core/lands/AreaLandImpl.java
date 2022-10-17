@@ -19,9 +19,11 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
+import app.secuboid.core.storage.rows.AreaRow;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,17 +36,23 @@ import java.util.function.Consumer;
 
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
+    private final WorldLand worldLand;
+    private final Land parent;
     private final Map<Integer, Area> idToArea;
 
-    private Land parent;
 
-    // IMPORTANT: Please use createLand in Lands class to create a Land or it will
-    // not be accessible and saved.
-    public AreaLandImpl(long id, @NotNull String name, @Nullable Land parent) {
+    public AreaLandImpl(long id, @NotNull String name, @NotNull Land parent) {
         super(id, name);
+
+        worldLand = parent.getWorldLand();
         this.parent = parent;
 
         idToArea = new HashMap<>();
+    }
+
+    @Override
+    public @NotNull WorldLand getWorldLand() {
+        return worldLand;
     }
 
     @Override
@@ -116,4 +124,8 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
         return false;
     }
 
+    public void addAreaToLand(@NotNull AreaRow areaRow) {
+        // TODO Add area to this and worldland, no save to db
+
+    }
 }

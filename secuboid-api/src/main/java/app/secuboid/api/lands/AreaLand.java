@@ -115,12 +115,12 @@ public interface AreaLand extends Land {
      * Checks if the land is parent, grandparent or ancestor.
      *
      * @param land the land
-     * @return true, if is ancestor
+     * @return true, if is parent or ancestor
      */
     boolean isParentOrAncestor(@NotNull Land land);
 
     /**
-     * Checks if is player in land. No parent verify.
+     * Checks if is player in land. No parent verified.
      *
      * @param player the player
      * @return true, if is player in land

@@ -18,19 +18,21 @@
 
 package app.secuboid.core.storage.types;
 
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.core.lands.AreaLandImpl;
 import app.secuboid.core.lands.ConfigurationSetImpl;
 import app.secuboid.core.lands.WorldLandImpl;
 import app.secuboid.core.storage.rows.LandRow;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public enum LandType {
-    WORLD_LAND("W", r -> new WorldLandImpl(r.id(), r.name())),
-    AREA_LAND("L", r -> new AreaLandImpl(r.id(), r.name(), null)),
-    CONFIGURATION_SET("S", r -> new ConfigurationSetImpl(r.id(), r.name()));
+    WORLD_LAND("W", (r, p) -> new WorldLandImpl(r.id(), r.name())),
+    AREA_LAND("L", (r, p) -> new AreaLandImpl(r.id(), r.name(), p)),
+    CONFIGURATION_SET("S", (r, p) -> new ConfigurationSetImpl(r.id(), r.name()));
 
     public static @NotNull LandType fromValue(@NotNull String value) {
         for (LandType landType : LandType.values()) {
@@ -42,14 +44,14 @@ public enum LandType {
         throw new IllegalArgumentException("Invalid land type: " + value);
     }
 
-    public static @NotNull LandComponent newLandComponent(@NotNull LandRow landRow) {
-        return landRow.type().creator.apply(landRow);
+    public static @NotNull LandComponent newLandComponent(@NotNull LandRow landRow, @Nullable Land parent) {
+        return landRow.type().creator.apply(landRow, parent);
     }
 
     public final @NotNull String value;
-    private final @NotNull Function<LandRow, LandComponent> creator;
+    private final @NotNull BiFunction<LandRow, Land, LandComponent> creator;
 
-    LandType(@NotNull String value, @NotNull Function<LandRow, LandComponent> creator) {
+    LandType(@NotNull String value, @NotNull BiFunction<LandRow, Land, LandComponent> creator) {
         this.value = value;
         this.creator = creator;
     }

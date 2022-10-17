@@ -49,7 +49,7 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public boolean isLocationInside(Location loc) {
+    public boolean isLocationInside(@NotNull Location loc) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -61,13 +61,13 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public boolean isDescendants(AreaLand areaLand) {
+    public boolean isDescendants(@NotNull AreaLand areaLand) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public @Nullable AreaLand getChild(String name) {
+    public @Nullable AreaLand getChild(@NotNull String name) {
         return nameLowerToChild.get(name.toLowerCase());
     }
 

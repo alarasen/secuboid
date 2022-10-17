@@ -19,6 +19,7 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.core.lands.areas.Areas;
+import org.jetbrains.annotations.NotNull;
 
 public class WorldLandImpl extends LandImpl implements WorldLand {
 
@@ -26,8 +27,13 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
 
     // A generated id, not the uuid of the world because it changes on world
     // regen.
-    public WorldLandImpl(long id, String worldName) {
+    public WorldLandImpl(long id, @NotNull String worldName) {
         super(id, worldName);
         areas = new Areas();
+    }
+
+    @Override
+    public @NotNull WorldLand getWorldLand() {
+        return this;
     }
 }

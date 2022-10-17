@@ -29,6 +29,13 @@ import java.util.Collection;
 public interface Land extends LandComponent {
 
     /**
+     * Gets the world land from this land (or itself if it is already a world land.
+     *
+     * @return the world land
+     */
+    @NotNull WorldLand getWorldLand();
+
+    /**
      * Check if the location is inside the land. This method does not check for Y
      * value.
      *
@@ -44,7 +51,7 @@ public interface Land extends LandComponent {
      * @param loc the location
      * @return true if inside the land
      */
-    boolean isLocationInside(Location loc);
+    boolean isLocationInside(@NotNull Location loc);
 
     /**
      * Check if the location is inside the land.
@@ -62,7 +69,7 @@ public interface Land extends LandComponent {
      * @param areaLand the area land
      * @return true, if is descendants
      */
-    boolean isDescendants(AreaLand areaLand);
+    boolean isDescendants(@NotNull AreaLand areaLand);
 
     /**
      * Gets the child.
@@ -70,7 +77,7 @@ public interface Land extends LandComponent {
      * @param name the land name
      * @return the child
      */
-    @Nullable AreaLand getChild(String name);
+    @Nullable AreaLand getChild(@NotNull String name);
 
     /**
      * Gets the children.
