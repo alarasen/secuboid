@@ -19,7 +19,6 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
-import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +30,6 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
 
     private final Map<String, AreaLand> nameLowerToChild;
 
-    // IMPORTANT: Please use createLand in Lands class to create a Land or it will
-    // not be accessible and saved.
     LandImpl(long id, String name) {
         super(id, name);
         nameLowerToChild = new HashMap<>();
@@ -40,24 +37,6 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
 
     public void setChild(AreaLand areaLand) {
         nameLowerToChild.put(areaLand.getName(), areaLand);
-    }
-
-    @Override
-    public boolean isLocationInside(int x, int z) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isLocationInside(@NotNull Location loc) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isLocationInside(int x, int y, int z) {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     @Override

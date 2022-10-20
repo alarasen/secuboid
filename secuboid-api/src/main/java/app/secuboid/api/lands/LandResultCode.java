@@ -34,5 +34,10 @@ public enum LandResultCode {
     /**
      * the name already exists
      */
-    NAME_EXIST
+    NAME_EXIST,
+
+    /**
+     * Unknown error
+     */
+    UNKNOWN
 }

@@ -109,7 +109,7 @@ public interface AreaLand extends Land {
      *
      * @return the parent or the land is a world
      */
-    @Nullable Land getParent();
+    @NotNull Land getParent();
 
     /**
      * Checks if the land is parent, grandparent or ancestor.

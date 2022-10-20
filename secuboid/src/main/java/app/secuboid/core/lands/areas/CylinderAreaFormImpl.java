@@ -20,11 +20,14 @@ package app.secuboid.core.lands.areas;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
+import app.secuboid.core.storage.types.AreaType;
 import app.secuboid.core.utilities.LocalMath;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+
+import static app.secuboid.core.storage.types.AreaType.CYLINDER;
 
 public class CylinderAreaFormImpl extends AreaFormImpl implements CylinderAreaForm {
 
@@ -119,10 +122,9 @@ public class CylinderAreaFormImpl extends AreaFormImpl implements CylinderAreaFo
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof CylinderAreaFormImpl)) {
+        if (!(o instanceof CylinderAreaFormImpl cylinderAreaFormImpl)) {
             return false;
         }
-        CylinderAreaFormImpl cylinderAreaFormImpl = (CylinderAreaFormImpl) o;
         return rX == cylinderAreaFormImpl.rX && rZ == cylinderAreaFormImpl.rZ && originH == cylinderAreaFormImpl.originH
                 && originK == cylinderAreaFormImpl.originK;
     }
@@ -130,5 +132,10 @@ public class CylinderAreaFormImpl extends AreaFormImpl implements CylinderAreaFo
     @Override
     public int hashCode() {
         return Objects.hash(rX, rZ, originH, originK);
+    }
+
+    @Override
+    public AreaType getAreaType() {
+        return CYLINDER;
     }
 }

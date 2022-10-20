@@ -20,6 +20,8 @@ package app.secuboid.core.lands;
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.areas.AreaResult;
+import app.secuboid.api.lands.areas.AreaResultCode;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
@@ -36,6 +38,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static app.secuboid.api.lands.LandResultCode.SUCCESS;
+import static app.secuboid.api.lands.LandResultCode.UNKNOWN;
 import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static app.secuboid.core.storage.types.LandType.AREA_LAND;
 import static app.secuboid.core.storage.types.LandType.WORLD_LAND;
@@ -95,7 +99,7 @@ public class LandsImpl implements Lands {
         }
 
         LandRow landRow = new LandRow(NON_EXISTING_ID, nameLower, AREA_LAND, parent.id());
-        getStorageManager().insert(landRow, r -> insertCallback(r, parent, callback));
+        getStorageManager().insert(landRow, r -> createInsertCallback(r, parent, areaForm, callback));
     }
 
     @Override
@@ -267,29 +271,29 @@ public class LandsImpl implements Lands {
         return null;
     }
 
-    private void setParent(@NotNull Map<Long, LandComponent> idToLandComponent, @NotNull LandComponent landComponent,
-                           long parentId) {
-        if (landComponent instanceof AreaLand areaLand) {
-            LandComponent parent = idToLandComponent.get(parentId);
-            if (parent instanceof LandImpl parentLandImpl) {
-                parentLandImpl.setChild(areaLand);
-
-                return;
-            }
-        }
-
-        Log.log().warning(() -> format("This land has no parent and will be unreachable [id=%s, name=%s, parentId=%s]",
-                landComponent.id(), landComponent.getName(), parentId));
+    private void createInsertCallback(@NotNull LandRow landRow, @NotNull Land parent, @NotNull AreaForm areaForm,
+                                      @Nullable Consumer<LandResult> callback) {
+        AreaLandImpl areaLand = new AreaLandImpl(landRow.id(), landRow.name(), parent);
+        areaLand.addArea(areaForm, r -> createAddAreaCallback(areaLand, r, callback));
     }
 
-    private void insertCallback(@NotNull LandRow landRow, @NotNull Land parent,
-                                @Nullable Consumer<LandResult> callback) {
-        // TODO create area
-        AreaLandImpl areaLand = new AreaLandImpl(landRow.id(), landRow.name(), parent);
-        // AreaLandImpl land = new AreaLandImpl(uuid, nameLower, parent);
-        // land.addArea(area);
+    private void createAddAreaCallback(@NotNull AreaLand areaLand, @NotNull AreaResult areaResult,
+                                       @Nullable Consumer<LandResult> callback) {
+        if (areaResult.code() != AreaResultCode.SUCCESS) {
+            if (callback != null) {
+                callback.accept(new LandResult(UNKNOWN, null, null));
+            }
+            Log.log().warning(() -> format("This land cannot be create because an error with the area [id=%s, " +
+                    "name=%s]", areaLand.id(), areaLand.getName()));
+            return;
+        }
 
-        // TODO land init
+        idToLandComponent.put(areaLand.id(), areaLand);
+        ((LandImpl) areaLand.getParent()).setChild(areaLand);
+
+        if (callback != null) {
+            callback.accept(new LandResult(SUCCESS, areaLand, areaResult.area()));
+        }
     }
 
     private StorageManager getStorageManager() {

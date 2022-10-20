@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.lands.areas;
+package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.core.lands.AreaLandImpl;
-import app.secuboid.core.lands.WorldLandImpl;
+import app.secuboid.core.lands.areas.AreaImpl;
+import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,17 +30,17 @@ import java.util.Set;
 import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AreasTest {
+class WorldLandTest {
 
     private static final int ID_AREA_1 = 1;
     private static final int ID_AREA_2 = 2;
 
-    private Areas areas;
+    private WorldLand worldLand;
     private AreaLand areaLand;
 
     @BeforeEach
     void beforeEach() {
-        areas = new Areas();
+        worldLand = new WorldLandImpl(1L, "world");
         WorldLand worldLand = new WorldLandImpl(NON_EXISTING_ID, "world001");
         areaLand = new AreaLandImpl(NON_EXISTING_ID, "test001", worldLand);
     }
@@ -48,11 +48,11 @@ class AreasTest {
     @Test
     void when_inside_area_then_get_it() {
         Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
-        areas.add(area);
+        ((WorldLandImpl) worldLand).add(area);
 
         for (int x = 0; x <= 99; x++) {
             for (int z = 0; z <= 99; z++) {
-                Set<Area> targetAreas = areas.get(x, 5, z, true);
+                Set<Area> targetAreas = worldLand.get(x, 5, z);
                 assertTrue(targetAreas.contains(area));
             }
         }
@@ -61,12 +61,12 @@ class AreasTest {
     @Test
     void when_area_removed_then_not_in_any_set() {
         Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
-        areas.add(area);
-        areas.remove(area);
+        ((WorldLandImpl) worldLand).add(area);
+        ((WorldLandImpl) worldLand).remove(area);
 
         for (int x = 0; x <= 99; x++) {
             for (int z = 0; z <= 99; z++) {
-                Set<Area> targetAreas = areas.get(x, 5, z, true);
+                Set<Area> targetAreas = worldLand.get(x, 5, z);
                 assertFalse(targetAreas.contains(area));
             }
         }
@@ -75,22 +75,22 @@ class AreasTest {
     @Test
     void when_outside_area_then_not_get_it() {
         Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
-        areas.add(area);
+        ((WorldLandImpl) worldLand).add(area);
 
-        Set<Area> targetAreas = areas.get(-1, 5, -1, true);
+        Set<Area> targetAreas = worldLand.get(-1, 5, -1);
         assertEquals(0, targetAreas.size());
-        targetAreas = areas.get(100, 5, 99, true);
+        targetAreas = worldLand.get(100, 5, 99);
         assertEquals(0, targetAreas.size());
     }
 
     @Test
     void when_add_two_areas_then_get_both() {
         Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
-        areas.add(area);
+        ((WorldLandImpl) worldLand).add(area);
         Area area2 = new AreaImpl(ID_AREA_2, new CuboidAreaFormImpl(98, 0, 98, 99, 255, 99), areaLand);
-        areas.add(area2);
+        ((WorldLandImpl) worldLand).add(area2);
 
-        Set<Area> targetAreas = areas.get(99, 5, 99, true);
+        Set<Area> targetAreas = worldLand.get(99, 5, 99);
         assertEquals(2, targetAreas.size());
     }
 }

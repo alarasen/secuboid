@@ -23,7 +23,12 @@ import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
+import app.secuboid.api.storage.StorageManager;
+import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.lands.areas.AreaFormImpl;
 import app.secuboid.core.storage.rows.AreaRow;
+import app.secuboid.core.storage.types.AreaType;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,11 +39,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import static app.secuboid.api.lands.areas.AreaResultCode.SUCCESS;
+import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
+
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
     private final WorldLand worldLand;
     private final Land parent;
-    private final Map<Integer, Area> idToArea;
+    private final Map<Long, Area> idToArea;
 
 
     public AreaLandImpl(long id, @NotNull String name, @NotNull Land parent) {
@@ -56,8 +64,47 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
+    public boolean isLocationInside(int x, int z) {
+        for (Area area : idToArea.values()) {
+            if (area.isLocationInside(x, z)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isLocationInside(int x, int y, int z) {
+        for (Area area : idToArea.values()) {
+            if (area.isLocationInside(x, y, z)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isLocationInside(@NotNull Location loc) {
+        if (!getWorldLand().isLocationInside(loc)) {
+            return false;
+        }
+
+        for (Area area : idToArea.values()) {
+            if (area.isLocationInside(loc)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback) {
-        // TODO Auto-generated method stub
+        AreaRow areaRow = new AreaRow(NON_EXISTING_ID, id(), ((AreaFormImpl) areaForm).getAreaType(),
+                areaForm.getX1(), areaForm.getY1(), areaForm.getZ1(), areaForm.getX2(), areaForm.getY2(), areaForm.getZ2());
+        getStorageManager().insert(areaRow, r -> addAreaCallback(r, areaForm, callback));
 
     }
 
@@ -107,7 +154,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public @Nullable Land getParent() {
+    public @NotNull Land getParent() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -124,8 +171,24 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
         return false;
     }
 
-    public void addAreaToLand(@NotNull AreaRow areaRow) {
-        // TODO Add area to this and worldland, no save to db
+    private void addAreaCallback(@NotNull AreaRow areaRow, @NotNull AreaForm areaForm,
+                                 @Nullable Consumer<AreaResult> callback) {
+        Area area = addAreaToLand(areaRow);
 
+        if (callback != null) {
+            callback.accept(new AreaResult(SUCCESS, area));
+        }
+    }
+
+    public @NotNull Area addAreaToLand(@NotNull AreaRow areaRow) {
+        Area area = AreaType.newArea(areaRow, this);
+        idToArea.put(area.id(), area);
+        ((WorldLandImpl) getWorldLand()).add(area);
+
+        return area;
+    }
+
+    private StorageManager getStorageManager() {
+        return SecuboidImpl.instance().getStorageManager();
     }
 }

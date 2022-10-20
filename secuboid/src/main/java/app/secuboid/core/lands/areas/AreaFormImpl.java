@@ -19,6 +19,7 @@ package app.secuboid.core.lands.areas;
 
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.core.messages.Log;
+import app.secuboid.core.storage.types.AreaType;
 import app.secuboid.core.utilities.LocalMath;
 
 import java.util.Objects;
@@ -80,6 +81,8 @@ public abstract class AreaFormImpl implements AreaForm {
         return LocalMath.isInRange(x, getX1(), getX2()) && LocalMath.isInRange(z, getZ1(), getZ2());
     }
 
+    public abstract AreaType getAreaType();
+
     public final void setX1(int x1) {
         if (checkIsResizable()) {
             this.x1 = x1;
@@ -128,10 +131,9 @@ public abstract class AreaFormImpl implements AreaForm {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof AreaFormImpl)) {
+        if (!(o instanceof AreaFormImpl areaFormImpl)) {
             return false;
         }
-        AreaFormImpl areaFormImpl = (AreaFormImpl) o;
         return x1 == areaFormImpl.x1 && y1 == areaFormImpl.y1 && z1 == areaFormImpl.z1 && x2 == areaFormImpl.x2
                 && y2 == areaFormImpl.y2 && z2 == areaFormImpl.z2;
     }

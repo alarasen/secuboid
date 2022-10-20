@@ -17,8 +17,32 @@
  */
 package app.secuboid.api.lands;
 
+import app.secuboid.api.lands.areas.Area;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
+
 /**
  * Represents a land in the entire world.
  */
 public interface WorldLand extends Land {
+
+    /**
+     * Gets the areas from a specific 2D point.
+     *
+     * @param x the x
+     * @param z the z
+     * @return the affected areas
+     */
+    @NotNull Set<Area> get(int x, int z);
+
+    /**
+     * Gets the areas from a specific 3D point.
+     *
+     * @param x the x
+     * @param y the y
+     * @param z the z
+     * @return the affected areas
+     */
+    @NotNull Set<Area> get(int x, int y, int z);
 }
