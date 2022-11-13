@@ -61,7 +61,7 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
 
     @Override
     public @NotNull ParameterValueRow insert(@NotNull Connection conn, @NotNull ParameterValueRow parameterValueRow) throws SQLException {
-        String sql = "INSERT INTO secuboid_land(short_name, value) VALUES(?, ?)";
+        String sql = "INSERT INTO secuboid_parameter_value(short_name, value) VALUES(?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, parameterValueRow.shortName());

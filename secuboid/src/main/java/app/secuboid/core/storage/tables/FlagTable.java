@@ -30,7 +30,7 @@ import app.secuboid.core.storage.rows.FlagRow;
                 + " flag_type VARCHAR(45) NOT NULL,"
                 + " source_parameter_value_id BIGINT NULL,"
                 + " target_parameter_value_id BIGINT NULL,"
-                + " metadata TINYTEXT NULL,"
+                + " metadata VARCHAR(255) NULL,"
                 + " PRIMARY KEY (land_id, flag_type, source_parameter_value_id, target_parameter_value_id),"
                 + " CONSTRAINT fk_flag_land_id FOREIGN KEY (land_id) REFERENCES secuboid_land (id),"
                 + " CONSTRAINT fk_flag_source_parameter_value_id FOREIGN KEY (source_parameter_value_id) REFERENCES secuboid_parameter_value (id),"

@@ -21,6 +21,7 @@ import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LandResult;
+import app.secuboid.api.lands.LandResultCode;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.parameters.values.ParameterValueResult;
 import app.secuboid.api.parameters.values.ParameterValueResultCode;
@@ -59,11 +60,10 @@ public class CommandCreate implements CommandExec {
         SenderSelection selection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
         ActiveSelection activeSelection = selection.getActiveSelection();
 
-        if (!(activeSelection instanceof ActiveSelectionModify)) {
+        if (!(activeSelection instanceof ActiveSelectionModify activeSelectionModify)) {
             // TODO message need active selection modify
             return;
         }
-        ActiveSelectionModify activeSelectionModify = (ActiveSelectionModify) activeSelection;
 
         if (subArgs.length == 0) {
             if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
@@ -113,9 +113,15 @@ public class CommandCreate implements CommandExec {
 
         // TODO get parent
         secuboid.getLands().create(activeSelectionModify.getWorldLand(), landName, parameterValue,
-                activeSelectionModify.getSelectionForm().getAreaForm(), r -> landCreateCallBack(commandSenderInfo, r));
+                activeSelectionModify.getSelectionForm().getAreaForm(), r -> landCreateCallback(commandSenderInfo, r));
     }
 
-    public void landCreateCallBack(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
+    public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
+        if (landResult.code() != LandResultCode.SUCCESS) {
+            // TODO message error
+        }
+
+        // TODO message done
+        commandSenderInfo.getSender().sendMessage("done!");
     }
 }

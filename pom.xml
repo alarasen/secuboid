@@ -13,9 +13,9 @@
         <revision>2.0.0-SNAPSHOT</revision>
 
         <spigot.plugin.api.version>1.19</spigot.plugin.api.version>
-        <spigot.version>1.19.1</spigot.version>
+        <spigot.version>1.19.2</spigot.version>
         <spigot.suffixversion>-R0.1-SNAPSHOT</spigot.suffixversion>
-        <junit-jupiter.version>5.8.2</junit-jupiter.version>
+        <junit-jupiter.version>5.9.1</junit-jupiter.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M7</maven-failsafe-plugin.version>
         <maven-shade-plugin.version>3.3.0</maven-shade-plugin.version>
@@ -117,7 +117,7 @@
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.8.9</version>
+                <version>2.10</version>
             </dependency>
 
             <dependency>
@@ -129,13 +129,13 @@
             <dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
-                <version>2.6.1</version>
+                <version>2.7.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.mariadb.jdbc</groupId>
                 <artifactId>mariadb-java-client</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.9</version>
             </dependency>
 
             <dependency>
@@ -149,7 +149,7 @@
             <dependency>
                 <groupId>com.github.MilkBowl</groupId>
                 <artifactId>VaultAPI</artifactId>
-                <version>1.7</version>
+                <version>1.7.1</version>
             </dependency>
 
             <dependency>
@@ -187,13 +187,13 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>4.2.0</version>
+                <version>4.8.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.awaitility</groupId>
                 <artifactId>awaitility</artifactId>
-                <version>4.1.1</version>
+                <version>4.2.0</version>
             </dependency>
             <!-- Test End -->
 
@@ -221,13 +221,13 @@
             <dependency>
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
-                <version>1.30</version>
+                <version>1.33</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-text</artifactId>
-                <version>1.9</version>
+                <version>1.10.0</version>
             </dependency>
             <!-- Generator End -->
 
