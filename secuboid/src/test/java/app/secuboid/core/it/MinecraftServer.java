@@ -16,22 +16,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.it;
+package app.secuboid.core.it;
 
 import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.SecuboidPluginImpl;
 import app.secuboid.core.messages.Log;
-import app.secuboid.permission.group.SecuboidPermissionGroup;
-import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,28 +51,16 @@ public class MinecraftServer {
     private final List<SecuboidComponent> secuboidComponents;
     private final List<JavaPlugin> plugins;
 
-    public MinecraftServer(File pluginTempDir, List<Class<? extends SecuboidComponent>> secuboidComponentImplClasses) {
+    public MinecraftServer(File pluginTempDir) {
         this.pluginTempDir = pluginTempDir;
         secuboidComponents = new ArrayList<>();
         plugins = new ArrayList<>();
 
-        for (Class<? extends SecuboidComponent> implClass : secuboidComponentImplClasses) {
+        SecuboidPluginImpl secuboidPlugin = mockSecuboidPluginImpl();
+        SecuboidImpl secuboid = new SecuboidImpl(secuboidPlugin);
 
-            if (implClass.isAssignableFrom(SecuboidImpl.class)) {
-                SecuboidPluginImpl secuboidPlugin = mockSecuboidPluginImpl();
-                SecuboidImpl secuboid = new SecuboidImpl(secuboidPlugin);
-
-                secuboidComponents.add(secuboid);
-                plugins.add(secuboidPlugin);
-            } else if (implClass.isAssignableFrom(SecuboidPermissionGroup.class)) {
-                SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin = mockPermissionGroupPlugin();
-                SecuboidPermissionGroup secuboidPermissionGroup = new SecuboidPermissionGroup(
-                        secuboidPermissionGroupPlugin);
-
-                secuboidComponents.add(secuboidPermissionGroup);
-                plugins.add(secuboidPermissionGroupPlugin);
-            }
-        }
+        secuboidComponents.add(secuboid);
+        plugins.add(secuboidPlugin);
     }
 
     public void load() {
@@ -112,15 +96,6 @@ public class MinecraftServer {
         return pluginCommunMock(SecuboidPluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
     }
 
-    private SecuboidPermissionGroupPlugin mockPermissionGroupPlugin() {
-        String pluginName = "SecuboidPermissionGroup";
-        String mainClass = "app.secuboid.permission.group.SecuboidPermissionGroupPlugin";
-        File secuboidPluginYmlFile = new File(
-                "../secuboid-permission-group/src/main/resources-filtered/secuboid-plugin.yml");
-
-        return pluginCommunMock(SecuboidPermissionGroupPlugin.class, pluginName, mainClass, secuboidPluginYmlFile);
-    }
-
     public <P extends JavaPlugin> P pluginCommunMock(Class<P> clazz, String pluginName, String mainClass,
                                                      File secuboidPluginYmlFile) {
         P javaPlugin = mock(clazz);
@@ -154,13 +129,6 @@ public class MinecraftServer {
 
         ServicesManager servicesManager = mock(ServicesManager.class);
         when(server.getServicesManager()).thenReturn(servicesManager);
-
-        // Vault
-        @SuppressWarnings("unchecked")
-        RegisteredServiceProvider<Permission> rsp = mock(RegisteredServiceProvider.class);
-        Permission permission = mock(Permission.class);
-        when(rsp.getProvider()).thenReturn(permission);
-        when(servicesManager.getRegistration(Permission.class)).thenReturn(rsp);
 
         return server;
     }

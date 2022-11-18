@@ -15,17 +15,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.it;
+package app.secuboid.core.it;
 
 import app.secuboid.core.SecuboidImpl;
-import app.secuboid.permission.group.SecuboidPermissionGroup;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -39,8 +37,7 @@ class SecuboidIT {
 
     @BeforeAll
     static void beforeAll() {
-        minecraftServer = new MinecraftServer(pluginTempDir,
-                List.of(SecuboidImpl.class, SecuboidPermissionGroup.class));
+        minecraftServer = new MinecraftServer(pluginTempDir);
         minecraftServer.load();
         secuboidImpl = minecraftServer.getSecuboidComponent(SecuboidImpl.class);
     }
