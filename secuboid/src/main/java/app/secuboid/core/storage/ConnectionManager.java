@@ -42,7 +42,7 @@ public class ConnectionManager {
     private static final String DRIVER_CLASS_NAME_MARIADB = "org.mariadb.jdbc.Driver";
 
     private static final String POOL_NAME_HSQLDB = "Secuboid-HikariPool-HSQL";
-    private static final String POOL_NAME_MARIADB = "Secuboid-HikariPool-ariaDB";
+    private static final String POOL_NAME_MARIADB = "Secuboid-HikariPool-MariaDB";
 
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 

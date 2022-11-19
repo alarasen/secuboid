@@ -88,14 +88,6 @@
             </dependency>
             <!-- Internal End -->
 
-            <!-- Test Internal -->
-            <dependency>
-                <groupId>app.secuboid</groupId>
-                <artifactId>secuboid-it-lib</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <!-- Test Internal End -->
-
             <!-- Spigot API -->
             <dependency>
                 <groupId>org.spigotmc</groupId>

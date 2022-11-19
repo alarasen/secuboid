@@ -19,7 +19,6 @@ package app.secuboid.core.thread;
 
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
-import org.awaitility.Awaitility;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -37,6 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -48,7 +48,7 @@ class QueueThreadTest {
         @Override
         public @NotNull Integer process(@NotNull Duration duration) {
             if (!duration.isZero()) {
-                Awaitility.await().during(duration);
+                await().during(duration);
             }
             return 1;
         }
@@ -56,7 +56,7 @@ class QueueThreadTest {
         @Override
         public @NotNull Set<Integer> processMultiple(@NotNull Duration duration) {
             if (!duration.isZero()) {
-                Awaitility.await().during(duration);
+                await().during(duration);
             }
             return Collections.singleton(2);
         }
@@ -141,7 +141,7 @@ class QueueThreadTest {
         queueThread.start();
         queueThread.addElement(element1, callback);
 
-        Awaitility.await().atMost(Duration.ofSeconds(10)).until(() -> atomicLong.get() == 1);
+        await().atMost(Duration.ofSeconds(10)).until(() -> atomicLong.get() == 1);
         queueThread.stop();
 
         verify(testQueueProcessor, times(1)).process(element1);

@@ -40,6 +40,14 @@ public class MessagePaths {
         return new MessagePath("general.inventory-full", new String[] {}, new Object[] {});
     }
 
+    public static MessagePath generalNeedParameter() {
+        return new MessagePath("general.need-parameter", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath generalError(Object error) {
+        return new MessagePath("general.error", new String[] { "{{error}}" }, new Object[] { error });
+    }
+
     public static MessagePath selectionScoreboardTitleCreate() {
         return new MessagePath("selection.scoreboard.title-create", new String[] {}, new Object[] {});
     }
@@ -78,6 +86,22 @@ public class MessagePaths {
 
     public static MessagePath selectionEmpty() {
         return new MessagePath("selection.empty", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath selectionCreateEnterName() {
+        return new MessagePath("selection.create.enter-name", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath selectionCreateNeedActiveSelection(Object commandSelect) {
+        return new MessagePath("selection.create.need-active-selection", new String[] { "{{command-select}}" }, new Object[] { commandSelect });
+    }
+
+    public static MessagePath selectionCreateNoSpace() {
+        return new MessagePath("selection.create.no-space", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath selectionCreateCreated(Object land) {
+        return new MessagePath("selection.create.created", new String[] { "{{land}}" }, new Object[] { land });
     }
 
     public static MessagePath toolName() {

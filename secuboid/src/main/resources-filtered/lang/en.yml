@@ -3,6 +3,8 @@ general:
   pre-reload: Secuboid is about to be reloaded... Risk of severe lags!
   reload: Secuboid is now reloaded.
   inventory-full: Your inventory is full.
+  need-parameter: You need at least one parameter.
+  error: 'Error: {{error}}'
 selection:
   scoreboard:
     title-create: Creating a new land...
@@ -16,6 +18,11 @@ selection:
     type-when-done: 'Type: "{{command-when-done}}" when done.'
   cancel: The selection is canceled.
   empty: No area or land selected.
+  create:
+    enter-name: 'Enter the land name:'
+    need-active-selection: 'Need active selection, type "{{command-select}}" first.'
+    no-space: "A land name doesn't accept space."
+    created: "Land {{land}} created."
 tool:
   name: Secuboid tool
   lore-1: "Left Click: SELECT or CREATE"

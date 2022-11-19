@@ -23,12 +23,13 @@ import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
-import app.secuboid.core.messages.Message;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import static app.secuboid.core.messages.Message.message;
 
 @CommandRegistered( //
         pluginClass = SecuboidPlugin.class, //
@@ -50,9 +51,9 @@ public class CommandCancel implements CommandExec {
         CommandSender sender = commandSenderInfo.getSender();
 
         if (senderSelection.removeSelection()) {
-            Message.message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCancel());
+            message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCancel());
         } else {
-            Message.message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionEmpty());
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionEmpty());
         }
     }
 }

@@ -22,6 +22,7 @@ import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.LandResultCode;
+import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.parameters.values.ParameterValueResult;
 import app.secuboid.api.parameters.values.ParameterValueResultCode;
@@ -31,23 +32,28 @@ import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.SenderSelection;
 import app.secuboid.core.selection.active.ActiveSelection;
 import app.secuboid.core.selection.active.ActiveSelectionModify;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 import static app.secuboid.api.parameters.values.ParameterValues.NOBODY;
 import static app.secuboid.api.parameters.values.ParameterValues.PLAYER;
+import static app.secuboid.core.messages.Message.message;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "create", //
-        sourceActionFlags = "land-create" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "create",
+        sourceActionFlags = "land-create"
 )
 public class CommandCreate implements CommandExec {
+
+    private static final String COMMAND_SELECT = "/sd select";
 
     Secuboid secuboid;
 
@@ -59,25 +65,27 @@ public class CommandCreate implements CommandExec {
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         SenderSelection selection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
         ActiveSelection activeSelection = selection.getActiveSelection();
+        CommandSender sender = commandSenderInfo.getSender();
 
         if (!(activeSelection instanceof ActiveSelectionModify activeSelectionModify)) {
-            // TODO message need active selection modify
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNeedActiveSelection(COMMAND_SELECT));
             return;
         }
 
         if (subArgs.length == 0) {
             if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
-                // TODO message you need parameter
+                message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
                 return;
             }
 
+            message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCreateEnterName());
             ((SecuboidImpl) secuboid).getChatGetter().put(commandSenderInfo, s -> landNameCallback(commandSenderInfo,
                     activeSelectionModify, s));
             return;
         }
 
         if (subArgs.length > 1) {
-            // TODO message no space in name
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
             return;
         }
 
@@ -87,7 +95,8 @@ public class CommandCreate implements CommandExec {
     private void landNameCallback(@NotNull CommandSenderInfo commandSenderInfo,
                                   @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName) {
         if (landName.contains(" ")) {
-            // TODO message no space in name
+            CommandSender sender = commandSenderInfo.getSender();
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
             return;
         }
 
@@ -106,8 +115,10 @@ public class CommandCreate implements CommandExec {
                                    @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName,
                                    @NotNull ParameterValueResult result) {
         ParameterValue parameterValue = result.parameterValue();
+
         if (result.code() != ParameterValueResultCode.SUCCESS || parameterValue == null) {
-            // TODO message error
+            CommandSender sender = commandSenderInfo.getSender();
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
             return;
         }
 
@@ -117,11 +128,14 @@ public class CommandCreate implements CommandExec {
     }
 
     public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
-        if (landResult.code() != LandResultCode.SUCCESS) {
-            // TODO message error
+        CommandSender sender = commandSenderInfo.getSender();
+
+        if (landResult.code() != LandResultCode.SUCCESS || landResult.areaLand() == null) {
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(landResult.code()));
+            return;
         }
 
-        // TODO message done
-        commandSenderInfo.getSender().sendMessage("done!");
+        message().sendMessage(sender, MessageType.NORMAL,
+                MessagePaths.selectionCreateCreated(landResult.areaLand().getName()));
     }
 }

@@ -56,7 +56,6 @@ public class ParameterValuesImpl implements ParameterValues {
     }
 
     public void init(@NotNull PluginLoader pluginLoader) {
-        // TODO unit test
         if (!nameLowerToType.isEmpty() || !typeToAnnotation.isEmpty()) {
             return;
         }
@@ -72,7 +71,6 @@ public class ParameterValuesImpl implements ParameterValues {
     }
 
     public void load() {
-        // TODO unit test
         typeToValueToParameterValue.clear();
 
         Set<ParameterValueRow> parameterValueRows = getStorageManager().selectAllSync(ParameterValueRow.class);
@@ -212,7 +210,7 @@ public class ParameterValuesImpl implements ParameterValues {
         return null;
     }
 
-    private StorageManager getStorageManager() {
+    StorageManager getStorageManager() {
         return SecuboidImpl.instance().getStorageManager();
     }
 }
