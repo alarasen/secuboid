@@ -95,9 +95,18 @@ public class ParameterValuesImpl implements ParameterValues {
             return;
         }
 
-
         ParameterValue parameterValue = result.parameterValue();
-        ParameterValueRegistered info = parameterValue.type().info();
+        long id = parameterValue.id();
+
+        if (id != NON_EXISTING_ID) {
+            if (callback != null) {
+                callback.accept(result);
+            }
+            return;
+        }
+
+        ParameterValueType type = parameterValue.type();
+        ParameterValueRegistered info = type.info();
         String shortName = info.shortName();
         String valueTrans = parameterValue.getValue();
         ParameterValueRow parameterValueRow = new ParameterValueRow(NON_EXISTING_ID, shortName, valueTrans);
@@ -154,8 +163,8 @@ public class ParameterValuesImpl implements ParameterValues {
 
         ParameterValue parameterValue;
 
-        if (id != NON_EXISTING_ID) {
-            parameterValue = classToValueToParameterValueGet(type, modifiedValue);
+        if (id == NON_EXISTING_ID) {
+            parameterValue = typeToValueToParameterValueGet(type, modifiedValue);
             if (parameterValue != null) {
                 return new ParameterValueResult(SUCCESS, parameterValue);
             }
@@ -200,8 +209,8 @@ public class ParameterValuesImpl implements ParameterValues {
         typeToValueToParameterValue.computeIfAbsent(parameterValue.type(), k -> new HashMap<>()).put(parameterValue.getValue(), parameterValue);
     }
 
-    private @Nullable ParameterValue classToValueToParameterValueGet(ParameterValueType type,
-                                                                     @Nullable String modifiedValue) {
+    private @Nullable ParameterValue typeToValueToParameterValueGet(@NotNull ParameterValueType type,
+                                                                    @Nullable String modifiedValue) {
         Map<String, ParameterValue> valueToParameterValue = typeToValueToParameterValue.get(type);
         if (valueToParameterValue != null) {
             return valueToParameterValue.get(modifiedValue);

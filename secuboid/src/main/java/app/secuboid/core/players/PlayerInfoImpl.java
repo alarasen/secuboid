@@ -17,8 +17,10 @@
  */
 package app.secuboid.core.players;
 
+import app.secuboid.api.events.PlayerLandChangeEvent;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.selection.PlayerSelection;
 import app.secuboid.core.selection.SenderSelection;
@@ -29,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+import static app.secuboid.core.SecuboidImpl.instance;
+
 public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo {
 
     private final Player player;
@@ -38,6 +42,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
 
     private long lastUpdateTimeMillis = 0;
     private Location lastLocation;
+    private Area lastArea;
     private boolean isTpCancel;
 
     private int selectionTop;
@@ -51,6 +56,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         adminMode = false;
         lastUpdateTimeMillis = 0L;
         lastLocation = player.getLocation();
+        lastArea = instance().getLands().getArea(lastLocation);
         isTpCancel = false;
 
     }
@@ -135,16 +141,17 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         return playerSelection;
     }
 
-    public void updatePosInfo(Event event, Location loc) {
+    public void updatePosInfo(Event event, Location toLocation) {
 
         // TODO Permissions and LandEvent
-        // LandPermissionsFlags landPermissionsFlags;
-        // LandPermissionsFlags oldPermissionsFlags;
-        // PlayerLandChangeEvent landEvent;
+        Land currentLand;
+        Land previousLand;
+        PlayerLandChangeEvent playerLandChangeEvent;
 
         // landPermissionsFlags = secuboid.getLands().getPermissionsFlags(loc);
+        lastArea = instance().getLands().getArea(toLocation);
 
-        // if (newPlayer) {
+        //if (event instanceof PlayerSpawnLocationEvent) {
         // entry.setLastLandPermissionsFlags(oldPermissionsFlags =
         // landPermissionsFlags);
         // } else {
@@ -187,7 +194,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         // landNullable.addPlayerInLand(player);
         // }
         // }
-        lastLocation = loc;
+        lastLocation = toLocation;
 
         playerSelection.updateSelectionFromLocation();
     }

@@ -32,5 +32,4 @@ public abstract class AbstractListener implements Listener {
     protected PlayerInfoImpl getPlayerInfoImpl(Player player) {
         return (PlayerInfoImpl) SecuboidImpl.instance().getPlayerInfos().getPlayerInfo(player);
     }
-
 }

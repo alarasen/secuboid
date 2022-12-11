@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import static app.secuboid.core.messages.Message.message;
 import static org.bukkit.event.EventPriority.MONITOR;
@@ -38,16 +39,26 @@ public class PlayerMoveListener extends AbstractListener {
     PlayerMoveListener() {
     }
 
+    public void onPlayerSpawnMonitor(PlayerSpawnLocationEvent event) {
+        Player player = event.getPlayer();
+        PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
+        Location spawnLocation = event.getSpawnLocation();
+
+        playerInfoImpl.updatePosInfo(event, spawnLocation);
+    }
+
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerMoveMonitor(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (player == null) {
+        Location fromLocation = event.getFrom();
+        Location toLocation = event.getTo();
+
+        if (toLocation == null) {
             return;
         }
 
         PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
-        Location loc = player.getLocation();
         long last = playerInfoImpl.getLastUpdateTimeMillis();
         long now = System.currentTimeMillis();
 
@@ -56,23 +67,17 @@ public class PlayerMoveListener extends AbstractListener {
         }
 
         playerInfoImpl.setLastUpdateTimeMillis(now);
-        Location fromLocation = event.getFrom();
-        Location toLocation = event.getTo();
 
         if (fromLocation.getWorld() == toLocation.getWorld() && fromLocation.distance(toLocation) == 0) {
             return;
         }
 
-        playerInfoImpl.updatePosInfo(event, loc);
+        playerInfoImpl.updatePosInfo(event, toLocation);
     }
 
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerTeleportMonitor(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-
-        if (player == null) {
-            return;
-        }
 
         PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
         PlayerSelection playerSelection = playerInfoImpl.getPlayerSelection();
