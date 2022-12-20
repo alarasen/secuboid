@@ -17,7 +17,6 @@
  */
 package app.secuboid.core.players;
 
-import app.secuboid.api.events.PlayerLandChangeEvent;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
@@ -43,8 +42,8 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
 
     private long lastUpdateTimeMillis;
     private Location lastLocation;
-    private Area lastArea;
-    private Land lastLand;
+    private Area area;
+    private Land land;
     private boolean isTpCancel;
 
     PlayerInfoImpl(@NotNull Player player) {
@@ -55,8 +54,8 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         adminMode = false;
         lastUpdateTimeMillis = 0L;
         lastLocation = player.getLocation();
-        lastArea = instance().getLands().getArea(lastLocation);
-        lastLand = instance().getLands().get(lastLocation);
+        area = instance().getLands().getArea(lastLocation);
+        land = instance().getLands().get(lastLocation);
         isTpCancel = false;
     }
 
@@ -105,87 +104,36 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
 
     @Override
     public @Nullable Area getArea() {
-        // TODO Generated
-        return null;
+        return area;
     }
 
     @Override
     public @NotNull Land getLand() {
-        // TODO Generated
-        return null;
+        return land;
     }
 
     @Override
     public @NotNull WorldLand getWorldLand() {
-        // TODO Code
-        return null;
+        return land.getWorldLand();
     }
 
 
     @Override
-    public SenderSelection getSelection() {
+    public @NotNull SenderSelection getSelection() {
         return playerSelection;
     }
 
     @SuppressWarnings("java:S4144")
-    public PlayerSelection getPlayerSelection() {
+    public @NotNull PlayerSelection getPlayerSelection() {
         return playerSelection;
     }
 
-    public void updatePosInfo(Event event, Location toLocation) {
+    public void updatePosInfo(@NotNull Event event, @NotNull Location toLocation) {
 
-        // TODO Permissions and LandEvent
-        Land currentLand;
-        Land previousLand;
-        PlayerLandChangeEvent playerLandChangeEvent;
-
-        // landPermissionsFlags = secuboid.getLands().getPermissionsFlags(loc);
-        lastArea = instance().getLands().getArea(toLocation);
-
-        //if (event instanceof PlayerSpawnLocationEvent) {
-        // entry.setLastLandPermissionsFlags(oldPermissionsFlags =
-        // landPermissionsFlags);
-        // } else {
-        // oldPermissionsFlags = entry.getLastLandPermissionsFlags();
-        // }
-        // if (newPlayer || landPermissionsFlags != oldPermissionsFlags) {
-        // final boolean isTp = eventNullable instanceof PlayerTeleportEvent;
-        // // First parameter : If it is a new player, it is null, if not new
-        // // player, it is "old"
-        // landEvent = new PlayerLandChangeEvent(newPlayer ? null : oldPermissionsFlags,
-        // landPermissionsFlags, player,
-        // entry.getLastLoc(), loc, isTp);
-        // pm.callEvent(landEvent);
-        //
-        // if (landEvent.isCancelled()) {
-        // if (isTp) {
-        // ((PlayerTeleportEvent) eventNullable).setCancelled(true);
-        // return;
-        // }
-        // if (landPermissionsFlags == oldPermissionsFlags) {
-        // player.teleport(player.getWorld().getSpawnLocation());
-        // } else {
-        // final Location retLoc = entry.getLastLoc();
-        // player.teleport(new Location(retLoc.getWorld(), retLoc.getX(),
-        // retLoc.getBlockY(), retLoc.getZ(),
-        // loc.getYaw(), loc.getPitch()));
-        // }
-        // entry.setTpCancel(true);
-        // return;
-        // }
-        // entry.setLastLandPermissionsFlags(landPermissionsFlags);
-        //
-        // // Update player in the lands
-        // final Land oldLandNullable = oldPermissionsFlags.getLandNullable();
-        // if (oldLandNullable != null && oldPermissionsFlags != landPermissionsFlags) {
-        // oldLandNullable.removePlayerInLand(player);
-        // }
-        // final Land landNullable = landPermissionsFlags.getLandNullable();
-        // if (landNullable != null) {
-        // landNullable.addPlayerInLand(player);
-        // }
-        // }
+        // TODO land change Events
         lastLocation = toLocation;
+        area = instance().getLands().getArea(toLocation);
+        land = instance().getLands().get(toLocation);
 
         playerSelection.updateSelectionFromLocation();
     }

@@ -26,7 +26,6 @@ import app.secuboid.api.lands.areas.AreaResultCode;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.messages.Log;
 import app.secuboid.core.storage.rows.AreaRow;
 import app.secuboid.core.storage.rows.LandRow;
 import app.secuboid.core.storage.types.LandType;
@@ -48,6 +47,7 @@ import java.util.stream.Collectors;
 import static app.secuboid.api.lands.LandResultCode.SUCCESS;
 import static app.secuboid.api.lands.LandResultCode.UNKNOWN;
 import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
+import static app.secuboid.core.messages.Log.log;
 import static app.secuboid.core.storage.types.LandType.AREA_LAND;
 import static app.secuboid.core.storage.types.LandType.WORLD_LAND;
 import static java.lang.String.format;
@@ -84,7 +84,7 @@ public class LandsImpl implements Lands {
         LandRow inputLandRow = new LandRow(NON_EXISTING_ID, worldName, WORLD_LAND, null);
         LandRow landRow = getStorageManager().insertSync(inputLandRow);
         if (landRow == null) {
-            Log.log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database",
+            log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database",
                     worldName);
             return;
         }
@@ -230,7 +230,7 @@ public class LandsImpl implements Lands {
 
         if (landRow.type() == AREA_LAND) {
             if (parentId == null) {
-                Log.log().log(SEVERE, "Unable to create the land \"{}\" because it has no parent", landRow.name());
+                log().log(SEVERE, "Unable to create the land \"{}\" because it has no parent", landRow.name());
                 return false;
             }
 
@@ -265,7 +265,7 @@ public class LandsImpl implements Lands {
         if (!(landComponent instanceof AreaLand)) {
             String msg = format("Unable to add area id \"%s\" because the associated land is the wrong type [%s]"
                     , areaRow.id(), landComponent);
-            Log.log().log(SEVERE, msg);
+            log().log(SEVERE, msg);
             return;
         }
         ((AreaLandImpl) landComponent).addAreaToLand(areaRow);
@@ -296,7 +296,7 @@ public class LandsImpl implements Lands {
             if (callback != null) {
                 callback.accept(new LandResult(UNKNOWN, null, null));
             }
-            Log.log().warning(() -> format("This land cannot be create because an error with the area [id=%s, " +
+            log().warning(() -> format("This land cannot be create because an error with the area [id=%s, " +
                     "name=%s]", areaLand.id(), areaLand.getName()));
             return;
         }
@@ -333,7 +333,7 @@ public class LandsImpl implements Lands {
             throw new SecuboidRuntimeException("A location is sent without any world. No world is available");
         }
 
-        Log.log().log(Level.WARNING, "A location is sent without any world. Assuming: {}", world.getName());
+        log().log(Level.WARNING, "A location is sent without any world. Assuming: {}", world.getName());
 
         return world;
     }

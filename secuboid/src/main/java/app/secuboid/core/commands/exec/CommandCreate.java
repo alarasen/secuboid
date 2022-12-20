@@ -114,16 +114,16 @@ public class CommandCreate implements CommandExec {
     private void landOwnerCallback(@NotNull CommandSenderInfo commandSenderInfo,
                                    @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName,
                                    @NotNull ParameterValueResult result) {
-        ParameterValue parameterValue = result.parameterValue();
+        ParameterValue owner = result.parameterValue();
 
-        if (result.code() != ParameterValueResultCode.SUCCESS || parameterValue == null) {
+        if (result.code() != ParameterValueResultCode.SUCCESS || owner == null) {
             CommandSender sender = commandSenderInfo.getSender();
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
             return;
         }
 
         // TODO get parent
-        secuboid.getLands().create(activeSelectionModify.getWorldLand(), landName, parameterValue,
+        secuboid.getLands().create(activeSelectionModify.getWorldLand(), landName, owner,
                 activeSelectionModify.getSelectionForm().getAreaForm(), r -> landCreateCallback(commandSenderInfo, r));
     }
 
@@ -137,5 +137,7 @@ public class CommandCreate implements CommandExec {
 
         message().sendMessage(sender, MessageType.NORMAL,
                 MessagePaths.selectionCreateCreated(landResult.areaLand().getName()));
+        SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
+        senderSelection.removeSelection();
     }
 }
