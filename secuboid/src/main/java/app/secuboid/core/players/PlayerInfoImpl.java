@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -40,15 +41,13 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
 
     private boolean adminMode;
 
-    private long lastUpdateTimeMillis = 0;
+    private long lastUpdateTimeMillis;
     private Location lastLocation;
     private Area lastArea;
+    private Land lastLand;
     private boolean isTpCancel;
 
-    private int selectionTop;
-    private int selectionBottom;
-
-    PlayerInfoImpl(Player player) {
+    PlayerInfoImpl(@NotNull Player player) {
         super(player);
         this.player = player;
 
@@ -57,8 +56,8 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         lastUpdateTimeMillis = 0L;
         lastLocation = player.getLocation();
         lastArea = instance().getLands().getArea(lastLocation);
+        lastLand = instance().getLands().get(lastLocation);
         isTpCancel = false;
-
     }
 
     @Override
@@ -105,17 +104,9 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public int getSelectionTop() {
-        return selectionTop;
-    }
-
-    public void setSelectionTop(int selectionTop) {
-        this.selectionTop = selectionTop;
-    }
-
-    @Override
-    public int getSelectionBottom() {
-        return selectionBottom;
+    public @Nullable Area getArea() {
+        // TODO Generated
+        return null;
     }
 
     @Override

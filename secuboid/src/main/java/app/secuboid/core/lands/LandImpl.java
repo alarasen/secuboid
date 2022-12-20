@@ -40,8 +40,13 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public boolean isDescendants(@NotNull AreaLand areaLand) {
-        // TODO Auto-generated method stub
+    public boolean isDescendantsOf(@NotNull Land land) {
+        for (AreaLand currentLand : land.getChildren()) {
+            if (this.equals(currentLand)) {
+                return true;
+            }
+        }
+
         return false;
     }
 

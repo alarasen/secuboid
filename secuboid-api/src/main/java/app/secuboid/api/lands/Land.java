@@ -64,12 +64,12 @@ public interface Land extends LandComponent {
     boolean isLocationInside(int x, int y, int z);
 
     /**
-     * Checks if is descendants.
+     * Checks if this actual land is descendant of the land.
      *
-     * @param areaLand the area land
+     * @param Land the area land
      * @return true, if is descendants
      */
-    boolean isDescendants(@NotNull AreaLand areaLand);
+    boolean isDescendantsOf(@NotNull Land Land);
 
     /**
      * Gets the child.

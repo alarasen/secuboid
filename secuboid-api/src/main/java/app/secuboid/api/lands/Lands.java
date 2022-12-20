@@ -25,8 +25,6 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -88,20 +86,12 @@ public interface Lands {
     void setParent(@NotNull AreaLand land, @NotNull Land newParent, @Nullable Consumer<LandResult> callback);
 
     /**
-     * Gets the land.
-     *
-     * @param landName the land name
-     * @return the land
-     */
-    AreaLand get(@NotNull String landName);
-
-    /**
-     * Gets the land.
+     * Gets the land component.
      *
      * @param id the id
-     * @return the land
+     * @return the land component
      */
-    AreaLand get(int id);
+    @Nullable LandComponent getLandComponent(long id);
 
     /**
      * Gets the land.
@@ -109,40 +99,25 @@ public interface Lands {
      * @param loc the loc
      * @return the land
      */
-    @Nullable AreaLand get(@NotNull Location loc);
+    @NotNull Land get(@NotNull Location loc);
 
     /**
-     * Gets the lands.
-     *
-     * @return the lands
-     */
-    @NotNull Collection<AreaLand> getLands();
-
-    /**
-     * Gets all lands available from a 2D location.
+     * Gets all area lands available from a 2D location.
      *
      * @param world the world
      * @param x     the x
      * @param z     the z
-     * @return the lands
+     * @return the area lands
      */
-    @NotNull Set<AreaLand> getLands(@NotNull World world, int x, int z);
+    @NotNull Set<AreaLand> getAreaLands(@NotNull World world, int x, int z);
 
     /**
-     * Gets all lands available from a location.
+     * Gets all area lands available from a location.
      *
      * @param loc the location
-     * @return the lands
+     * @return the area lands
      */
-    @NotNull Set<AreaLand> getLands(@NotNull Location loc);
-
-    /**
-     * Gets all lands from an owner.
-     *
-     * @param owner the owner
-     * @return the lands
-     */
-    @NotNull Set<AreaLand> getLands(@NotNull ParameterValue owner);
+    @NotNull Set<AreaLand> getAreaLands(@NotNull Location loc);
 
     /**
      * Gets the areas. This method ignore Y value.
@@ -152,7 +127,7 @@ public interface Lands {
      * @param z     the z
      * @return the areas
      */
-    @NotNull List<Area> getAreas(@NotNull World world, int x, int z);
+    @NotNull Set<Area> getAreas(@NotNull World world, int x, int z);
 
     /**
      * Gets all areas from a location.
@@ -160,13 +135,29 @@ public interface Lands {
      * @param loc the loc
      * @return the areas
      */
-    @NotNull List<Area> getAreas(@NotNull Location loc);
+    @NotNull Set<Area> getAreas(@NotNull Location loc);
 
     /**
      * Gets the active area from the location.
      *
      * @param loc the loc
-     * @return the area
+     * @return the last area or null if the location is outside an area
      */
     @Nullable Area getArea(@NotNull Location loc);
+
+    /**
+     * Gets the world land from the location.
+     *
+     * @param loc the loc
+     * @return the world land
+     */
+    @NotNull WorldLand getWorldLand(@NotNull Location loc);
+
+    /**
+     * Gets the world land from the world.
+     *
+     * @param world the world
+     * @return the world land
+     */
+    @NotNull WorldLand getWorldLand(@NotNull World world);
 }

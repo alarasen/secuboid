@@ -17,6 +17,7 @@
  */
 package app.secuboid.core.lands;
 
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
@@ -30,13 +31,19 @@ import app.secuboid.core.storage.rows.AreaRow;
 import app.secuboid.core.storage.rows.LandRow;
 import app.secuboid.core.storage.types.LandType;
 import app.secuboid.core.utilities.NameUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static app.secuboid.api.lands.LandResultCode.SUCCESS;
 import static app.secuboid.api.lands.LandResultCode.UNKNOWN;
@@ -47,6 +54,8 @@ import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 
 public class LandsImpl implements Lands {
+
+    private static final String DEFAULT_WORLD_NAME = "world";
 
     private final Map<String, WorldLand> worldNameToWorldLand;
     private final Map<Long, LandComponent> idToLandComponent;
@@ -133,63 +142,67 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public AreaLand get(@NotNull String landName) {
-        // TODO Auto-generated method stub
-        return null;
+    public @Nullable LandComponent getLandComponent(long id) {
+        return idToLandComponent.get(id);
     }
 
     @Override
-    public AreaLand get(int id) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Land get(@NotNull Location loc) {
+        Area area = getArea(loc);
+
+        if (area != null) {
+            return area.getLand();
+        }
+
+        return getWorldLand(loc);
     }
 
     @Override
-    public @Nullable AreaLand get(@NotNull Location loc) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Set<AreaLand> getAreaLands(@NotNull World world, int x, int z) {
+        WorldLand worldLand = getWorldLand(world);
+        Set<Area> areas = worldLand.get(x, z);
+
+        return getAreaLandsFromAreas(areas);
     }
 
     @Override
-    public @NotNull Collection<AreaLand> getLands() {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Set<AreaLand> getAreaLands(@NotNull Location loc) {
+        Set<Area> areas = getAreas(loc);
+
+        return getAreaLandsFromAreas(areas);
     }
 
     @Override
-    public @NotNull Set<AreaLand> getLands(@NotNull World world, int x, int z) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Set<Area> getAreas(@NotNull World world, int x, int z) {
+        WorldLand worldLand = getWorldLand(world);
+
+        return worldLand.get(x, z);
     }
 
     @Override
-    public @NotNull Set<AreaLand> getLands(@NotNull Location loc) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Set<Area> getAreas(@NotNull Location loc) {
+        WorldLand worldLand = getWorldLand(loc);
+
+        return worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override
-    public @NotNull Set<AreaLand> getLands(@NotNull ParameterValue owner) {
-        // TODO Auto-generated method stub
-        return null;
+    public @Nullable Area getArea(@NotNull Location loc) {
+        WorldLand worldLand = getWorldLand(loc);
+        Set<Area> areas = worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+
+        // TODO Area priority/child system
+        return areas.stream().findAny().orElse(null);
     }
 
     @Override
-    public @NotNull List<Area> getAreas(@NotNull World world, int x, int z) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull WorldLand getWorldLand(@NotNull Location loc) {
+        return getWorldLand(getWorldFromLocation(loc));
     }
 
     @Override
-    public @NotNull List<Area> getAreas(@NotNull Location loc) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Area getArea(@NotNull Location loc) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull WorldLand getWorldLand(@NotNull World world) {
+        return worldNameToWorldLand.get(world.getName());
     }
 
     private void loadLandComponents() {
@@ -296,7 +309,32 @@ public class LandsImpl implements Lands {
         }
     }
 
-    private StorageManager getStorageManager() {
+    private @NotNull Set<AreaLand> getAreaLandsFromAreas(@NotNull Set<Area> areas) {
+        return areas.stream().map(Area::getLand).collect(Collectors.toSet());
+    }
+
+    private @NotNull StorageManager getStorageManager() {
         return SecuboidImpl.instance().getStorageManager();
+    }
+
+    private @NotNull World getWorldFromLocation(@NotNull Location loc) {
+        World world = loc.getWorld();
+
+        if (world != null)
+            return world;
+
+        world = Bukkit.getWorld(DEFAULT_WORLD_NAME);
+
+        if (world == null) {
+            world = Bukkit.getWorlds().get(0);
+        }
+
+        if (world == null) {
+            throw new SecuboidRuntimeException("A location is sent without any world. No world is available");
+        }
+
+        Log.log().log(Level.WARNING, "A location is sent without any world. Assuming: {}", world.getName());
+
+        return world;
     }
 }

@@ -30,7 +30,7 @@ import java.util.Set;
 import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 import static org.junit.jupiter.api.Assertions.*;
 
-class WorldLandTest {
+class LandTest {
 
     private static final int ID_AREA_1 = 1;
     private static final int ID_AREA_2 = 2;
@@ -92,5 +92,17 @@ class WorldLandTest {
 
         Set<Area> targetAreas = worldLand.get(99, 5, 99);
         assertEquals(2, targetAreas.size());
+    }
+
+    @Test
+    void when_land_is_descendants_then_return_true() {
+        ((LandImpl) worldLand).setChild(areaLand);
+
+        assertTrue(areaLand.isDescendantsOf(worldLand));
+    }
+
+    @Test
+    void when_land_is_not_descendants_then_return_false() {
+        assertFalse(worldLand.isDescendantsOf(areaLand));
     }
 }

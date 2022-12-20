@@ -19,8 +19,10 @@ package app.secuboid.api.players;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.Area;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -51,6 +53,13 @@ public interface PlayerInfo extends CommandSenderInfo {
     void setAdminMode(boolean value);
 
     /**
+     * Gets the Area where the player is.
+     *
+     * @return the last area or null if the player is outside an area
+     */
+    @Nullable Area getArea();
+
+    /**
      * Gets the land where the player is.
      *
      * @return the last land
@@ -63,18 +72,4 @@ public interface PlayerInfo extends CommandSenderInfo {
      * @return the last world land
      */
     @NotNull WorldLand getWorldLand();
-
-    /**
-     * Gets the selection in Y top.
-     *
-     * @return the Y to
-     */
-    int getSelectionTop();
-
-    /**
-     * Gets the selection in Y bottom.
-     *
-     * @return the Y bottom
-     */
-    int getSelectionBottom();
 }
