@@ -29,14 +29,10 @@ import app.secuboid.core.lands.areas.AreaFormImpl;
 import app.secuboid.core.storage.rows.AreaRow;
 import app.secuboid.core.storage.types.AreaType;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static app.secuboid.api.lands.areas.AreaResultCode.SUCCESS;
@@ -104,7 +100,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     public void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback) {
         AreaRow areaRow = new AreaRow(NON_EXISTING_ID, id(), ((AreaFormImpl) areaForm).getAreaType(),
                 areaForm.getX1(), areaForm.getY1(), areaForm.getZ1(), areaForm.getX2(), areaForm.getY2(), areaForm.getZ2());
-        getStorageManager().insert(areaRow, r -> addAreaCallback(r, areaForm, callback));
+        getStorageManager().insert(areaRow, r -> addAreaCallback(r, callback));
 
     }
 
@@ -124,55 +120,31 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public @Nullable Area getArea(int key) {
-        // TODO Auto-generated method stub
-        return null;
+    public @Nullable Area getArea(long id) {
+        return idToArea.get(id);
     }
 
     @Override
-    public @Nullable Integer getAreaKey(@NotNull Area area) {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Set<Long> getAreaIds() {
+        return idToArea.keySet();
     }
 
     @Override
-    public @NotNull Set<Integer> getAreaKeys() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public @NotNull Map<Integer, Area> getIdToArea() {
-        // TODO Auto-generated method stub
-        return null;
+    public @NotNull Map<Long, Area> getIdToArea() {
+        return Collections.unmodifiableMap(idToArea);
     }
 
     @Override
     public @NotNull Collection<Area> getAreas() {
-        // TODO Auto-generated method stub
-        return null;
+        return idToArea.values();
     }
 
     @Override
     public @NotNull Land getParent() {
-        // TODO Auto-generated method stub
-        return null;
+        return parent;
     }
 
-    @Override
-    public boolean isParentOrAncestor(@NotNull Land land) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean isPlayerInLand(@NotNull Player player) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    private void addAreaCallback(@NotNull AreaRow areaRow, @NotNull AreaForm areaForm,
-                                 @Nullable Consumer<AreaResult> callback) {
+    private void addAreaCallback(@NotNull AreaRow areaRow, @Nullable Consumer<AreaResult> callback) {
         Area area = addAreaToLand(areaRow);
 
         if (callback != null) {

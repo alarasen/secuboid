@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import static app.secuboid.core.messages.Log.log;
 import static java.lang.String.format;
 import static java.util.Collections.emptySet;
+import static java.util.logging.Level.SEVERE;
 
 class QueueThreadRun<T, R> extends Thread {
 
@@ -82,7 +83,7 @@ class QueueThreadRun<T, R> extends Thread {
         Consumer<R> callback = element.callback();
 
         if (t == null) {
-            log().log(Level.SEVERE, "An element in thread has a 't' null: {}", element);
+            log().log(SEVERE, "An element in thread has a 't' null: {}", element);
             return null;
         }
 
@@ -91,7 +92,12 @@ class QueueThreadRun<T, R> extends Thread {
         if (callback != null) {
 
             Callable<Void> callableCallback = () -> {
-                callback.accept(r);
+                try {
+                    callback.accept(r);
+                } catch (RuntimeException e) {
+                    log().log(SEVERE, "Exception in main thread callback", e);
+                }
+
                 return null;
             };
 
@@ -106,7 +112,7 @@ class QueueThreadRun<T, R> extends Thread {
         T t = element.t();
 
         if (t == null) {
-            log().log(Level.SEVERE, "An element in thread has a 't' null: {}", element);
+            log().log(SEVERE, "An element in thread has a 't' null: {}", element);
             return emptySet();
         }
 

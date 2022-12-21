@@ -20,7 +20,6 @@ package app.secuboid.api.lands;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,34 +67,26 @@ public interface AreaLand extends Land {
     void replaceArea(int key, @NotNull AreaForm newAreaForm, @Nullable Consumer<AreaResult> callback);
 
     /**
-     * Gets the area.
+     * Gets the area from the id.
      *
-     * @param key the key
+     * @param id the id
      * @return the area
      */
-    @Nullable Area getArea(int key);
+    @Nullable Area getArea(long id);
 
     /**
-     * Gets the area key.
+     * Gets the area ids.
      *
-     * @param area the area
-     * @return the area key or null if the area is not member of this land
+     * @return the area ids
      */
-    @Nullable Integer getAreaKey(@NotNull Area area);
-
-    /**
-     * Gets the area keys.
-     *
-     * @return the area keys
-     */
-    @NotNull Set<Integer> getAreaKeys();
+    @NotNull Set<Long> getAreaIds();
 
     /**
      * Gets the ids and areas map.
      *
      * @return the ids and areas map
      */
-    @NotNull Map<Integer, Area> getIdToArea();
+    @NotNull Map<Long, Area> getIdToArea();
 
     /**
      * Gets the areas.
@@ -110,20 +101,4 @@ public interface AreaLand extends Land {
      * @return the parent or the land is a world
      */
     @NotNull Land getParent();
-
-    /**
-     * Checks if the land is parent, grandparent or ancestor.
-     *
-     * @param land the land
-     * @return true, if is parent or ancestor
-     */
-    boolean isParentOrAncestor(@NotNull Land land);
-
-    /**
-     * Checks if is player in land. No parent verified.
-     *
-     * @param player the player
-     * @return true, if is player in land
-     */
-    boolean isPlayerInLand(@NotNull Player player);
 }
