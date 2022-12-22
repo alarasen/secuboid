@@ -65,7 +65,7 @@ public class CommandCreate implements CommandExec {
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         SenderSelection selection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
         ActiveSelection activeSelection = selection.getActiveSelection();
-        CommandSender sender = commandSenderInfo.getSender();
+        CommandSender sender = commandSenderInfo.sender();
 
         if (!(activeSelection instanceof ActiveSelectionModify activeSelectionModify)) {
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNeedActiveSelection(COMMAND_SELECT));
@@ -95,7 +95,7 @@ public class CommandCreate implements CommandExec {
     private void landNameCallback(@NotNull CommandSenderInfo commandSenderInfo,
                                   @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName) {
         if (landName.contains(" ")) {
-            CommandSender sender = commandSenderInfo.getSender();
+            CommandSender sender = commandSenderInfo.sender();
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
             return;
         }
@@ -117,7 +117,7 @@ public class CommandCreate implements CommandExec {
         ParameterValue owner = result.parameterValue();
 
         if (result.code() != ParameterValueResultCode.SUCCESS || owner == null) {
-            CommandSender sender = commandSenderInfo.getSender();
+            CommandSender sender = commandSenderInfo.sender();
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
             return;
         }
@@ -128,7 +128,7 @@ public class CommandCreate implements CommandExec {
     }
 
     public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
-        CommandSender sender = commandSenderInfo.getSender();
+        CommandSender sender = commandSenderInfo.sender();
 
         if (landResult.code() != LandResultCode.SUCCESS || landResult.areaLand() == null) {
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(landResult.code()));

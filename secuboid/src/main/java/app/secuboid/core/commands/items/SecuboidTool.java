@@ -40,16 +40,16 @@ import static app.secuboid.core.messages.Message.message;
 public class SecuboidTool {
 
     private static final Material SECUBOID_TOOL_MATERIAL = Material.WOODEN_SHOVEL;
-    private static final PersistentDataType<Byte, Byte> SECUBOID_TOOL_PRESISTENT_DATA_TYPE = PersistentDataType.BYTE;
-    private static final String SECUBOID_TOOL_PRESISTENT_DATA_KEY_NAME = "secuboid-tool";
-    private static final byte SECUBOID_TOOL_PRESISTENT_DATA_VALUE = 1;
+    private static final PersistentDataType<Byte, Byte> SECUBOID_TOOL_PERSISTENT_DATA_TYPE = PersistentDataType.BYTE;
+    private static final String SECUBOID_TOOL_PERSISTENT_DATA_KEY_NAME = "secuboid-tool";
+    private static final byte SECUBOID_TOOL_PERSISTENT_DATA_VALUE = 1;
     private static final Enchantment SECUBOID_TOOL_ENCHANTMENT = Enchantment.DURABILITY;
     private static final int SECUBOID_TOOL_ENCHANTMENT_VALUE = 1;
 
     private NamespacedKey toolNamespacedKey;
 
     public void init(@NotNull Plugin plugin) {
-        toolNamespacedKey = new NamespacedKey(plugin, SECUBOID_TOOL_PRESISTENT_DATA_KEY_NAME);
+        toolNamespacedKey = new NamespacedKey(plugin, SECUBOID_TOOL_PERSISTENT_DATA_KEY_NAME);
     }
 
     public void give(@NotNull Player player) {
@@ -84,13 +84,9 @@ public class SecuboidTool {
         }
 
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-        Byte value = persistentDataContainer.get(toolNamespacedKey, SECUBOID_TOOL_PRESISTENT_DATA_TYPE);
+        Byte value = persistentDataContainer.get(toolNamespacedKey, SECUBOID_TOOL_PERSISTENT_DATA_TYPE);
 
-        if (Byte.valueOf(SECUBOID_TOOL_PRESISTENT_DATA_VALUE).equals(value)) {
-            return true;
-        }
-
-        return false;
+        return Byte.valueOf(SECUBOID_TOOL_PERSISTENT_DATA_VALUE).equals(value);
     }
 
     @NotNull
@@ -98,16 +94,17 @@ public class SecuboidTool {
         ItemStack itemStack = new ItemStack(SECUBOID_TOOL_MATERIAL);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
+        assert itemMeta != null : "Item stack for Secuboid tool is null";
         String name = message().get(MessageType.NORMAL, MessagePaths.toolName());
         itemMeta.setDisplayName(name);
         String lore1 = message().get(MessageType.NO_COLOR, MessagePaths.toolLore1());
         String lore2 = message().get(MessageType.NO_COLOR, MessagePaths.toolLore2());
-        List<String> lores = List.of(lore1, lore2);
-        itemMeta.setLore(lores);
+        List<String> loreList = List.of(lore1, lore2);
+        itemMeta.setLore(loreList);
 
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-        persistentDataContainer.set(toolNamespacedKey, SECUBOID_TOOL_PRESISTENT_DATA_TYPE,
-                SECUBOID_TOOL_PRESISTENT_DATA_VALUE);
+        persistentDataContainer.set(toolNamespacedKey, SECUBOID_TOOL_PERSISTENT_DATA_TYPE,
+                SECUBOID_TOOL_PERSISTENT_DATA_VALUE);
 
         itemStack.setItemMeta(itemMeta);
 

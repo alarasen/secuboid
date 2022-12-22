@@ -46,6 +46,24 @@ class LandTest {
     }
 
     @Test
+    void when_get_path_world_then_return_slash_world_name() {
+        assertEquals("/world", worldLand.getPathName());
+    }
+
+    @Test
+    void when_get_path_land_then_return_slash_world_name_slash_land_name() {
+        assertEquals("/world001/test001", areaLand.getPathName());
+    }
+
+    @Test
+    void when_get_path_area_then_return_slash_world_name_slash_land_name_area_id() {
+        Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
+        ((WorldLandImpl) worldLand).add(area);
+
+        assertEquals("/world001/test001:1", area.getPathName());
+    }
+
+    @Test
     void when_inside_area_then_get_it() {
         Area area = new AreaImpl(ID_AREA_1, new CuboidAreaFormImpl(0, 0, 0, 99, 255, 99), areaLand);
         ((WorldLandImpl) worldLand).add(area);

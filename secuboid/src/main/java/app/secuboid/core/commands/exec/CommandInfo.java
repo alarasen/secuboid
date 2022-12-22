@@ -20,13 +20,19 @@ package app.secuboid.core.commands.exec;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.core.messages.MessagePaths;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "info" //
+import static app.secuboid.core.messages.Message.message;
+
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "info"
 )
 public class CommandInfo implements CommandExec {
 
@@ -38,6 +44,15 @@ public class CommandInfo implements CommandExec {
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        // TODO Info
+        CommandSender sender = commandSenderInfo.sender();
+
+        if (subArgs.length == 0) {
+            if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
+                message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
+                return;
+            }
+
+            // TODO Command info
+        }
     }
 }

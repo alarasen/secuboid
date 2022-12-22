@@ -55,6 +55,11 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
+    public @NotNull String getPathName() {
+        return parent.getPathName() + "/" + name;
+    }
+
+    @Override
     public @NotNull WorldLand getWorldLand() {
         return worldLand;
     }

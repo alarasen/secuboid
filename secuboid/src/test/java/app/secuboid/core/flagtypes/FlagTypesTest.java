@@ -35,13 +35,11 @@ class FlagTypesTest {
 
     private static final String FLAG_NAME_TEST = "test-flag";
 
-    private PluginLoader pluginLoader;
-
     private FlagTypes flagTypes;
 
     @BeforeEach
     void beforeEach() {
-        pluginLoader = mock(PluginLoader.class);
+        PluginLoader pluginLoader = mock(PluginLoader.class);
         FlagType flagType = new FlagType(FLAG_NAME_TEST, FLAG_NAME_TEST, true, false, false, false);
         when(pluginLoader.getAnnotatedConstants(FlagRegistered.class, FlagType.class))
                 .thenReturn(Collections.singleton(flagType));

@@ -37,6 +37,11 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
     }
 
     @Override
+    public @NotNull String getPathName() {
+        return "/" + name;
+    }
+
+    @Override
     public @NotNull WorldLand getWorldLand() {
         return this;
     }

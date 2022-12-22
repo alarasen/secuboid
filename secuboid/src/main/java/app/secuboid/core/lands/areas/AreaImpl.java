@@ -46,6 +46,16 @@ public class AreaImpl implements Area {
     }
 
     @Override
+    public @NotNull String getName() {
+        return Long.toString(id);
+    }
+
+    @Override
+    public @NotNull String getPathName() {
+        return land.getPathName() + ":" + id;
+    }
+
+    @Override
     public @NotNull AreaForm getAreaForm() {
         return areaForm;
     }

@@ -25,7 +25,6 @@ import org.bukkit.plugin.SimplePluginManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -35,15 +34,12 @@ import static org.mockito.Mockito.when;
 
 class PluginLoaderTest {
 
-    private SimplePluginManager pluginManager;
-    private Plugin plugin;
-
     private PluginLoader pluginLoader;
 
     @BeforeEach
-    void beforeEach() throws FileNotFoundException {
-        pluginManager = mock(SimplePluginManager.class);
-        plugin = mock(Plugin.class);
+    void beforeEach() {
+        SimplePluginManager pluginManager = mock(SimplePluginManager.class);
+        Plugin plugin = mock(Plugin.class);
         when(pluginManager.getPlugins()).thenReturn(new Plugin[]{plugin});
         ClassLoader classLoader = this.getClass().getClassLoader();
         when(plugin.getResource(PluginLoader.FILENAME_SECUBOID_PLUGIN))

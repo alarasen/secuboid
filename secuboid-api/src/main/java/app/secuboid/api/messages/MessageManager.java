@@ -37,7 +37,7 @@ public interface MessageManager {
      *
      * @return the new instance
      */
-    public static @NotNull MessageManager newMessageManager() {
+    static @NotNull MessageManager newMessageManager() {
         try {
             return (MessageManager) Class
                     .forName("app.secuboid.core.messages.MessageManagerImpl")

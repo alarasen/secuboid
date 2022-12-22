@@ -38,7 +38,6 @@ import static org.mockito.Mockito.*;
 class CommandsTest {
 
     private CommandsImpl commands;
-    private PluginLoader pluginLoader;
     private CommandSender sender;
     private CommandSenderInfo commandSenderInfo;
 
@@ -46,7 +45,7 @@ class CommandsTest {
     void beforeEach() {
         SecuboidPlugin secuboidPlugin = mock(SecuboidPlugin.class);
         Secuboid secuboid = mock(Secuboid.class);
-        pluginLoader = mock(PluginLoader.class);
+        PluginLoader pluginLoader = mock(PluginLoader.class);
 
         CommandRegistered commandRegistered = CommandTest.class.getAnnotation(CommandRegistered.class);
         Map<Class<? extends CommandExec>, CommandRegistered> classToAnnotation = Collections
@@ -89,21 +88,15 @@ class CommandsTest {
 
         @Override
         public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-            CommandSender sender = commandSenderInfo.getSender();
+            CommandSender sender = commandSenderInfo.sender();
             sender.sendMessage("done!");
         }
     }
 
-    private static class CommandSenderInfoTest implements CommandSenderInfo {
-
-        private final CommandSender sender;
-
-        public CommandSenderInfoTest(CommandSender sender) {
-            this.sender = sender;
-        }
+    private record CommandSenderInfoTest(CommandSender sender) implements CommandSenderInfo {
 
         @Override
-        public @NotNull CommandSender getSender() {
+        public @NotNull CommandSender sender() {
             return sender;
         }
 

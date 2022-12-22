@@ -78,23 +78,23 @@ class ReflectionTest {
 
     @Test
     void when_send_class_annotation_then_return_class_to_annotation() {
-        Map<Class<? extends AnnotedClass>, AnnotationTest> classToAnnotation = reflection.getClassToAnnotation(
-                Collections.singleton(AnnotedClass.class), AnnotationTest.class, AnnotedClass.class);
+        Map<Class<? extends AnnotatedClass>, AnnotationTest> classToAnnotation = reflection.getClassToAnnotation(
+                Collections.singleton(AnnotatedClass.class), AnnotationTest.class, AnnotatedClass.class);
 
         assertEquals(1, classToAnnotation.size());
 
-        Map.Entry<Class<? extends AnnotedClass>, AnnotationTest> entry = classToAnnotation.entrySet().iterator().next();
-        assertEquals(AnnotedClass.class, entry.getKey());
+        Map.Entry<Class<? extends AnnotatedClass>, AnnotationTest> entry = classToAnnotation.entrySet().iterator().next();
+        assertEquals(AnnotatedClass.class, entry.getKey());
 
-        AnnotationTest annotationTest = AnnotedClass.class.getAnnotation(AnnotationTest.class);
+        AnnotationTest annotationTest = AnnotatedClass.class.getAnnotation(AnnotationTest.class);
         assertEquals(annotationTest, entry.getValue());
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    private static @interface AnnotationTest {
+    private @interface AnnotationTest {
     }
 
     @AnnotationTest
-    static class AnnotedClass {
+    static class AnnotatedClass {
     }
 }

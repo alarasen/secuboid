@@ -18,6 +18,7 @@
 package app.secuboid.api.lands.areas;
 
 import app.secuboid.api.lands.AreaLand;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.storage.rows.WithId;
 import org.bukkit.Location;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents an area of any type.
  */
-public interface Area extends WithId {
+public interface Area extends WithId, LocationPath {
 
     /**
      * Gets the area form.

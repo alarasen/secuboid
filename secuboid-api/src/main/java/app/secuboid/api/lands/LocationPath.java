@@ -15,35 +15,48 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.players;
 
-import org.bukkit.command.CommandSender;
+package app.secuboid.api.lands;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Contains informations for a command sender.
+ * Represents a location path: /world/land1/land2:areaId
  */
-public interface CommandSenderInfo {
+public interface LocationPath {
 
     /**
-     * Gets the command sender for this player.
-     *
-     * @return the command sender
+     * Used for land separator.
      */
-    @NotNull CommandSender sender();
+    public static final String SEPARATOR_LAND = "/";
 
     /**
-     * Gets the player name.
+     * Used for separator before the area id.
+     */
+    public static final String SEPARATOR_AREA = ":";
+
+    /**
+     * Configuration set prefix.
+     */
+    public static final String PREFIX_CONFIGURATION_SET = "@";
+
+    /**
+     * Gets the name<br>
+     * world: world<br>
+     * land: land<br>
+     * Area: 1<br>
      *
-     * @return the player name
+     * @return the name
      */
     @NotNull String getName();
 
     /**
-     * Is the player admin mode?
+     * Gets the complete path name<br>
+     * /world for a world<br>
+     * /world/land for a land<br>
+     * /world/land:1 for an area<br>
      *
-     * @return true if the player is admin mode
+     * @return the complete path name
      */
-    boolean isAdminMode();
-
+    @NotNull String getPathName();
 }

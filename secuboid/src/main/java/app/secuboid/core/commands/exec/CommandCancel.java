@@ -48,7 +48,7 @@ public class CommandCancel implements CommandExec {
         // TODO cancel command
 
         SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
-        CommandSender sender = commandSenderInfo.getSender();
+        CommandSender sender = commandSenderInfo.sender();
 
         if (senderSelection.removeSelection()) {
             message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCancel());

@@ -87,7 +87,7 @@ public class CommandsImpl implements Commands {
     }
 
     void executeCommandName(CommandSenderInfo commandSenderInfo, String[] args) {
-        CommandSender sender = commandSenderInfo.getSender();
+        CommandSender sender = commandSenderInfo.sender();
 
         if (args == null || args.length == 0) {
             // TODO help with click

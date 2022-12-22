@@ -59,15 +59,18 @@ public class LandsImpl implements Lands {
 
     private final Map<String, WorldLand> worldNameToWorldLand;
     private final Map<Long, LandComponent> idToLandComponent;
+    private final Map<String, Set<LandComponent>> nameToLandComponents;
 
     public LandsImpl() {
         worldNameToWorldLand = new HashMap<>();
         idToLandComponent = new HashMap<>();
+        nameToLandComponents = new HashMap<>();
     }
 
     public void load() {
         worldNameToWorldLand.clear();
         idToLandComponent.clear();
+        nameToLandComponents.clear();
 
         loadLandComponents();
         loadAreas();
@@ -90,7 +93,7 @@ public class LandsImpl implements Lands {
         }
 
         WorldLand worldLand = new WorldLandImpl(landRow.id(), worldName);
-        worldNameToWorldLand.put(worldName, worldLand);
+        putLandComponentToMap(worldLand);
     }
 
     @Override
@@ -242,11 +245,7 @@ public class LandsImpl implements Lands {
         }
 
         LandComponent landComponent = LandType.newLandComponent(landRow, parent);
-        idToLandComponent.put(landComponent.id(), landComponent);
-
-        if (landComponent instanceof WorldLand worldLand) {
-            worldNameToWorldLand.put(worldLand.getName(), worldLand);
-        }
+        putLandComponentToMap(landComponent);
 
         return false;
     }
@@ -301,11 +300,37 @@ public class LandsImpl implements Lands {
             return;
         }
 
-        idToLandComponent.put(areaLand.id(), areaLand);
+        putLandComponentToMap(areaLand);
         ((LandImpl) areaLand.getParent()).setChild(areaLand);
 
         if (callback != null) {
             callback.accept(new LandResult(SUCCESS, areaLand, areaResult.area()));
+        }
+    }
+
+    private void putLandComponentToMap(@NotNull LandComponent landComponent) {
+        String name = landComponent.getName();
+
+        idToLandComponent.put(landComponent.id(), landComponent);
+        nameToLandComponents.computeIfAbsent(name, k -> new HashSet<>()).add(landComponent);
+
+        if (landComponent instanceof WorldLand worldLand) {
+            worldNameToWorldLand.put(name, worldLand);
+        }
+    }
+
+    private void removeLandComponentFromMap(@NotNull LandComponent landComponent) {
+        String name = landComponent.getName();
+
+        idToLandComponent.remove(landComponent.id());
+
+        nameToLandComponents.computeIfPresent(name, (k, v) -> {
+            v.remove(landComponent);
+            return !v.isEmpty() ? v : null;
+        });
+
+        if (landComponent instanceof WorldLand) {
+            worldNameToWorldLand.remove(name);
         }
     }
 
