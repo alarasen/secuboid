@@ -18,6 +18,7 @@
 package app.secuboid.core.messages;
 
 import app.secuboid.api.flagtypes.FlagType;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -62,13 +63,13 @@ public class MessageManagerImpl implements MessageManager {
 
         String lang = config().lang();
 
-        String langFilename = getFilePath(FILENAME_LANG_PREFIX, lang, FILENAME_LANG_SUFFIX);
-        String defaultLangFilename = getFilePath(FILENAME_LANG_PREFIX, LANG_DEFAULT, FILENAME_LANG_SUFFIX);
+        String langFilename = getFilePath(FILENAME_LANG_PREFIX, lang);
+        String defaultLangFilename = getFilePath(FILENAME_LANG_PREFIX, LANG_DEFAULT);
         fileConfiguration = getFileConfiguration(lang, langFilename, defaultLangFilename);
 
-        String langFilenameFlags = getFilePath(FILENAME_LANG_FLAGS_PREFIX, lang, FILENAME_LANG_SUFFIX);
-        String defaultLangFilenameFlags = getFilePath(FILENAME_LANG_FLAGS_PREFIX, LANG_DEFAULT,
-                FILENAME_LANG_SUFFIX);
+        String langFilenameFlags = getFilePath(FILENAME_LANG_FLAGS_PREFIX, lang);
+        String defaultLangFilenameFlags = getFilePath(FILENAME_LANG_FLAGS_PREFIX, LANG_DEFAULT
+        );
         fileConfigurationFlags = getFileConfiguration(lang, langFilenameFlags, defaultLangFilenameFlags);
     }
 
@@ -101,7 +102,7 @@ public class MessageManagerImpl implements MessageManager {
     }
 
     @Override
-    public @Nullable String getFlagDescription(@NotNull FlagType flagType) {
+    public @NotNull String getFlagDescription(@NotNull FlagType flagType) {
         String name = flagType.name();
         String descrition = fileConfigurationFlags.getString(name);
         if (descrition == null) {
@@ -119,12 +120,8 @@ public class MessageManagerImpl implements MessageManager {
         sender.sendMessage(description);
     }
 
-    private String getFilePath(String prefix, String middle, String suffix) {
-        return new StringBuilder() //
-                .append(prefix) //
-                .append(middle) //
-                .append(suffix) //
-                .toString();
+    private String getFilePath(String prefix, String middle) {
+        return prefix + middle + FILENAME_LANG_SUFFIX;
     }
 
     private FileConfiguration getFileConfiguration(String lang, String langFilename, String defaultLangFilename) {
@@ -170,11 +167,7 @@ public class MessageManagerImpl implements MessageManager {
             coloredArgs[i] = colorArg(messageType, color, args[i]);
         }
 
-        return new StringBuilder() //
-                .append(prefix) //
-                .append(color)
-                .append(formatRaw(format, tags, coloredArgs)) //
-                .toString();
+        return prefix + color + formatRaw(format, tags, coloredArgs);
     }
 
     private String formatRaw(String format, String[] tags, String[] args) {
@@ -193,17 +186,19 @@ public class MessageManagerImpl implements MessageManager {
             return Objects.toString(arg);
         }
 
-        if (arg instanceof MessageFormatter formater) {
-            return formater + color;
+        if (arg instanceof MessageFormatter formatter) {
+            return formatter + color;
         }
 
         if (arg instanceof Number number) {
-            return new StringBuilder() //
-                    .append(MessageColor.NUMBER)
-                    .append(number)
-                    .append(color)
-                    .toString()
-                    .replaceAll("([\\.\\,])", color + "$1" + MessageColor.NUMBER);
+            return (MessageColor.NUMBER + number + color)
+                    .replaceAll("([.,])", color + "$1" + MessageColor.NUMBER);
+        }
+
+        if (arg instanceof LocationPath locationPath) {
+            String pathName = locationPath.getPathName();
+            return (MessageColor.NAME + pathName + color)
+                    .replaceAll("([@/:])", color + "$1" + MessageColor.NAME);
         }
 
         return MessageColor.NAME + arg + color;

@@ -18,6 +18,8 @@
 package app.secuboid.core.players;
 
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.Lands;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
@@ -44,6 +46,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     private Location lastLocation;
     private Area area;
     private Land land;
+    private LocationPath locationPath;
     private boolean isTpCancel;
 
     PlayerInfoImpl(@NotNull Player player) {
@@ -113,6 +116,11 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
+    public @NotNull LocationPath getLocationPath() {
+        return locationPath;
+    }
+
+    @Override
     public @NotNull WorldLand getWorldLand() {
         return land.getWorldLand();
     }
@@ -132,8 +140,10 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
 
         // TODO land change Events
         lastLocation = toLocation;
-        area = instance().getLands().getArea(toLocation);
-        land = instance().getLands().get(toLocation);
+        Lands lands = instance().getLands();
+        area = lands.getArea(toLocation);
+        land = lands.get(toLocation);
+        locationPath = lands.getLocationPath(toLocation);
 
         playerSelection.updateSelectionFromLocation();
     }

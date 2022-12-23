@@ -20,9 +20,10 @@ package app.secuboid.core.commands.exec;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.players.ConsoleCommandSenderInfo;
+import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
@@ -46,13 +47,19 @@ public class CommandInfo implements CommandExec {
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
         CommandSender sender = commandSenderInfo.sender();
 
+        LocationPath locationPath;
         if (subArgs.length == 0) {
-            if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
+            if (commandSenderInfo instanceof PlayerInfo playerInfo) {
+                locationPath = playerInfo.getLocationPath();
+            } else {
                 message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
                 return;
             }
-
-            // TODO Command info
+        } else {
+            // TODO with parameter
+            return;
         }
+
+        message().sendMessage(sender, MessageType.NORMAL, MessagePaths.infoLocationPath(locationPath));
     }
 }

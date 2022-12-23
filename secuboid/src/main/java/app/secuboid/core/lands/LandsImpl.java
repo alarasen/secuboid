@@ -36,10 +36,7 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -196,6 +193,11 @@ public class LandsImpl implements Lands {
 
         // TODO Area priority/child system
         return areas.stream().findAny().orElse(null);
+    }
+
+    @Override
+    public @NotNull LocationPath getLocationPath(@NotNull Location loc) {
+        return Optional.ofNullable((LocationPath) getArea(loc)).orElse(get(loc));
     }
 
     @Override

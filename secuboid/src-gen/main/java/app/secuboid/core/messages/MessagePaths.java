@@ -104,6 +104,10 @@ public class MessagePaths {
         return new MessagePath("selection.create.created", new String[] { "{{land}}" }, new Object[] { land });
     }
 
+    public static MessagePath infoLocationPath(Object locationPath) {
+        return new MessagePath("info.location-path", new String[] { "{{location-path}}" }, new Object[] { locationPath });
+    }
+
     public static MessagePath toolName() {
         return new MessagePath("tool.name", new String[] {}, new Object[] {});
     }

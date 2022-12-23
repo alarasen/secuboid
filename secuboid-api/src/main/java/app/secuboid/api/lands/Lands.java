@@ -146,6 +146,14 @@ public interface Lands {
     @Nullable Area getArea(@NotNull Location loc);
 
     /**
+     * Gets the active location path (area or world land) from the location.
+     *
+     * @param loc the loc
+     * @return the last location path (area or world land instance)
+     */
+    @NotNull LocationPath getLocationPath(@NotNull Location loc);
+
+    /**
      * Gets the world land from the location.
      *
      * @param loc the loc

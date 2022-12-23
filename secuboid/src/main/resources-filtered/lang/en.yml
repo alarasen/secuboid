@@ -23,6 +23,8 @@ selection:
     need-active-selection: 'Need active selection, type "{{command-select}}" first.'
     no-space: "A land name doesn't accept space."
     created: "Land {{land}} created."
+info:
+  location-path: '{{location-path}}'
 tool:
   name: Secuboid tool
   lore-1: "Left Click: SELECT or CREATE"

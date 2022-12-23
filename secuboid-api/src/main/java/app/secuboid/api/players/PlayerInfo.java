@@ -18,6 +18,7 @@
 package app.secuboid.api.players;
 
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import org.bukkit.entity.Player;
@@ -65,6 +66,13 @@ public interface PlayerInfo extends CommandSenderInfo {
      * @return the last land
      */
     @NotNull Land getLand();
+
+    /**
+     * Gets the location path (area or world land) where the player is.
+     *
+     * @return the last location path (area or world land)
+     */
+    @NotNull LocationPath getLocationPath();
 
     /**
      * Gets the world land where the player is.

@@ -55,7 +55,7 @@ public interface MessageManager {
      *
      * @param plugin the plugin the load the messages from
      */
-    public void load(@Nullable Plugin plugin);
+    void load(@Nullable Plugin plugin);
 
     /**
      * Gets the message from a yaml path.
@@ -67,7 +67,7 @@ public interface MessageManager {
     @NotNull String get(@NotNull MessageType messageType, @NotNull MessagePath path);
 
     /**
-     * Sends a messsage to this sender.
+     * Sends a message to this sender.
      *
      * @param sender      the command sender (player or console)
      * @param messageType the message type
@@ -89,10 +89,10 @@ public interface MessageManager {
      * @param flagType the flag type
      * @return the flag description
      */
-    @Nullable String getFlagDescription(@NotNull FlagType flagType);
+    @NotNull String getFlagDescription(@NotNull FlagType flagType);
 
     /**
-     * Sends a the flag description to this sender.
+     * Sends the flag description to this sender.
      *
      * @param sender   the command sender (player or console)
      * @param flagType the flag type

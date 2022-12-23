@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MessageTest {
 
     @Test
-    void when_send_two_paramaters_return_it() {
+    void when_send_two_parameters_return_it() {
         MessagePath messagePath = MessagePaths.generalTest("p1", "p2");
         String message = Message.message().get(MessageType.NORMAL, messagePath);
 
@@ -69,7 +69,7 @@ class MessageTest {
     }
 
     @Test
-    void when_get_flag_descrition_return_it() {
+    void when_get_flag_description_return_it() {
         String message = Message.message().getFlagDescription(FlagDeclarations.FLAG_BUILD);
 
         assertEquals("Build and destroy", message);
