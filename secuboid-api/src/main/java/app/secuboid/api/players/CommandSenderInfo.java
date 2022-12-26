@@ -19,6 +19,7 @@ package app.secuboid.api.players;
 
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains informations for a command sender.
@@ -46,4 +47,23 @@ public interface CommandSenderInfo {
      */
     boolean isAdminMode();
 
+    /**
+     * Creates a new chat page for a multiple pages output.
+     *
+     * @param header the header normally from chat messages
+     * @param text   the text
+     */
+    @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text);
+
+    /**
+     * Gets the last chat page for a multiple pages output.
+     *
+     * @return the chat page
+     */
+    @Nullable ChatPage getChatPage();
+
+    /**
+     * Removes the chat page from the memory.
+     */
+    void removeChatPage();
 }

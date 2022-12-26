@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandSelect implements CommandExec {
 
-    Secuboid secuboid;
+    private final Secuboid secuboid;
 
     public CommandSelect(Secuboid secuboid) {
         this.secuboid = secuboid;

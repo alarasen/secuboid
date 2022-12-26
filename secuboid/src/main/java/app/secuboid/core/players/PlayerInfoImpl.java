@@ -54,6 +54,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         this.player = player;
 
         playerSelection = new PlayerSelection(this);
+
         adminMode = false;
         lastUpdateTimeMillis = 0L;
         lastLocation = player.getLocation();

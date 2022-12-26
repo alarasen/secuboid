@@ -15,23 +15,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.SecuboidPlugin;
-import app.secuboid.api.commands.CommandExec;
-import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
-import org.jetbrains.annotations.NotNull;
+package app.secuboid.api.players;
 
-// TODO Add player level from the land
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "here" //
-)
-public class CommandSelectHere implements CommandExec {
+/**
+ * Represents a chat page for a command output.
+ */
+public interface ChatPage {
 
-    @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        // TODO select here
-    }
+    /**
+     * Show a page to the player or the console sender. If the page does not exist, an error message is sent to the
+     * user.
+     *
+     * @param pageNumber the page number to show or an error message
+     * @return true if the page number exists and the message is sent, otherwise false
+     */
+    boolean show(int pageNumber);
+
+    /**
+     * Gets the total number of pages for the last command. this method should be called after a first use of
+     * {@link #show(int)} method, or it will return 0.
+     *
+     * @return the total number of pages
+     */
+    int getTotalPages();
 }

@@ -20,11 +20,14 @@ package app.secuboid.core.commands;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.players.ChatPage;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.core.players.ChatPageImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -108,6 +111,21 @@ class CommandsTest {
         @Override
         public boolean isAdminMode() {
             return false;
+        }
+
+        @Override
+        public @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text) {
+            return new ChatPageImpl(sender, "header", "text");
+        }
+
+        @Override
+        public @Nullable ChatPage getChatPage() {
+            return null;
+        }
+
+        @Override
+        public void removeChatPage() {
+
         }
     }
 }

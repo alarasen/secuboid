@@ -29,6 +29,11 @@ import org.jetbrains.annotations.NotNull;
  * plugin that extends JavaPlugin.
  *
  * <pre>
+ * public MyCommandExec() { // Default constructor
+ * }
+ *
+ * // or
+ *
  * public MyCommandExec(Secuboid secuboid) {
  *     this.secuboid = secuboid;
  * }

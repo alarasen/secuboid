@@ -17,7 +17,6 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.WorldLand;
@@ -37,12 +36,6 @@ import org.jetbrains.annotations.NotNull;
         sourceActionFlags = "land-create" //
 )
 public class CommandSelectCuboid implements CommandExec {
-
-    Secuboid secuboid;
-
-    public CommandSelectCuboid(@NotNull Secuboid secuboid) {
-        this.secuboid = secuboid;
-    }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {

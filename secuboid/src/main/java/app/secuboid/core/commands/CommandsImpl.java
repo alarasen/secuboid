@@ -23,6 +23,7 @@ import app.secuboid.api.commands.Commands;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.commands.exec.CommandPage;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.reflection.PluginLoader;
 import org.bukkit.command.CommandSender;
@@ -109,14 +110,18 @@ public class CommandsImpl implements Commands {
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
 
-    private void executeCommand(CommandContainer commandContainer, CommandSenderInfo commandSenderInfo,
-                                String[] subArgs) {
+    private void executeCommand(@NotNull CommandContainer commandContainer, @NotNull CommandSenderInfo commandSenderInfo,
+                                @NotNull String[] subArgs) {
+        CommandExec commandExec = commandContainer.commandExec();
+
+        if (!(commandExec instanceof CommandPage)) {
+            commandSenderInfo.removeChatPage();
+        }
 
         // TODO check permissions
 
         // TODO subcommands
 
-        CommandExec commandExec = commandContainer.commandExec();
         commandExec.commandExec(commandSenderInfo, subArgs);
     }
 
@@ -164,6 +169,10 @@ public class CommandsImpl implements Commands {
         for (Constructor<?> constructor : constructors) {
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             Secuboid secuboid = getSecuboid();
+
+            if (parameterTypes.length == 0) {
+                return (CommandExec) constructor.newInstance();
+            }
 
             if (parameterTypes.length == 1) {
                 if (parameterTypes[0].isAssignableFrom(Secuboid.class)) {

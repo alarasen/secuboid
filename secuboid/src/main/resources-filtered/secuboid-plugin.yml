@@ -3,6 +3,7 @@ component-classes:
   - app.secuboid.core.commands.exec.CommandCancel
   - app.secuboid.core.commands.exec.CommandCreate
   - app.secuboid.core.commands.exec.CommandInfo
+  - app.secuboid.core.commands.exec.CommandPage
   - app.secuboid.core.commands.exec.CommandReload
   - app.secuboid.core.commands.exec.CommandSelect
   - app.secuboid.core.commands.exec.CommandSelectCuboid

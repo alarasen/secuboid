@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandReload implements CommandExec {
 
-    Secuboid secuboid;
+    private final Secuboid secuboid;
 
     public CommandReload(Secuboid secuboid) {
         this.secuboid = secuboid;

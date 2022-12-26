@@ -55,7 +55,7 @@ public class CommandCreate implements CommandExec {
 
     private static final String COMMAND_SELECT = "/sd select";
 
-    Secuboid secuboid;
+    private final Secuboid secuboid;
 
     public CommandCreate(Secuboid secuboid) {
         this.secuboid = secuboid;

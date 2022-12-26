@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandTool implements CommandExec {
 
-    Secuboid secuboid;
+    private final Secuboid secuboid;
 
     public CommandTool(Secuboid secuboid) {
         this.secuboid = secuboid;

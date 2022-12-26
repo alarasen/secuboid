@@ -15,50 +15,50 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.players;
 
 import app.secuboid.api.players.ChatPage;
-import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
+public class ChatPageImpl implements ChatPage {
+
+    private static final int PAGE_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
+    private static final int PAGE_HEIGHT = ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2;
 
     private final CommandSender sender;
-    private ChatPage chatPage;
+    private final String header;
+    private final String text;
 
-    protected CommandSenderInfoImpl(CommandSender sender) {
+    private int totalPages;
+
+    public ChatPageImpl(@NotNull CommandSender sender, @NotNull String header, @NotNull String text) {
         this.sender = sender;
-        chatPage = null;
+        this.header = header;
+        this.text = text;
+
+        totalPages = 0;
     }
 
     @Override
-    public @NotNull CommandSender sender() {
-        return sender;
+    public boolean show(int pageNumber) {
+        ChatPaginator.ChatPage page = ChatPaginator.paginate(text, pageNumber, PAGE_WIDTH, PAGE_HEIGHT);
+        totalPages = page.getTotalPages();
+
+        if (pageNumber < 1 || pageNumber > totalPages) {
+            return false;
+        }
+
+        sender.sendMessage(page.getLines());
+
+        return true;
     }
 
     @Override
-    public @NotNull String getName() {
-        return sender.getName();
+    public int getTotalPages() {
+        // TODO Implements
+        return 0;
     }
-
-    @Override
-    public @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text) {
-        chatPage = new ChatPageImpl(sender, header, text);
-        return chatPage;
-    }
-
-    @Override
-    public @Nullable ChatPage getChatPage() {
-        return chatPage;
-    }
-
-    @Override
-    public void removeChatPage() {
-        chatPage = null;
-    }
-
-    public abstract SenderSelection getSelection();
 }

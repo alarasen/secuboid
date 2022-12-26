@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 public interface Commands {
 
     /**
-     * Executes the command from it class. The args array should not contains the
+     * Executes the command from it class. The args array should not contain the
      * command call, just the arguments.
      *
      * @param clazz             the command exec class
