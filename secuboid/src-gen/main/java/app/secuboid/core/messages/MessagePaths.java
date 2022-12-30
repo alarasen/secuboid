@@ -60,8 +60,12 @@ public class MessagePaths {
         return new MessagePath("chat-page.footer-right-active", new String[] { "{{page-number}}" }, new Object[] { pageNumber });
     }
 
-    public static MessagePath chatPageNotFound() {
-        return new MessagePath("chat-page.not-found", new String[] {}, new Object[] {});
+    public static MessagePath chatPageNotAvailable() {
+        return new MessagePath("chat-page.not-available", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath chatPageNotFound(Object firstPage, Object lastPage) {
+        return new MessagePath("chat-page.not-found", new String[] { "{{first-page}}", "{{last-page}}" }, new Object[] { firstPage, lastPage });
     }
 
     public static MessagePath selectionScoreboardTitleCreate() {

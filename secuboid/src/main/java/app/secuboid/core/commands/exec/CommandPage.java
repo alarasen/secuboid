@@ -20,9 +20,16 @@ package app.secuboid.core.commands.exec;
 
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.messages.MessageType;
+import app.secuboid.api.players.ChatPage;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.core.messages.MessagePaths;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import static app.secuboid.core.messages.Message.message;
+import static java.lang.Integer.parseInt;
 
 @CommandRegistered(
         pluginClass = SecuboidPlugin.class,
@@ -33,6 +40,28 @@ public class CommandPage implements CommandExec {
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
-        // TODO Shw page
+        CommandSender sender = commandSenderInfo.sender();
+
+        if (subArgs.length == 0) {
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
+            return;
+        }
+
+        ChatPage chatPage = commandSenderInfo.getChatPage();
+        if (chatPage == null) {
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotAvailable());
+            return;
+        }
+
+        int pageNumber;
+        try {
+            pageNumber = parseInt(subArgs[0]);
+        } catch (NumberFormatException e) {
+            int lastPage = chatPage.getTotalPages();
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound(1, lastPage));
+            return;
+        }
+
+        chatPage.show(pageNumber);
     }
 }

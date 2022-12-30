@@ -18,9 +18,11 @@
 
 package app.secuboid.core.players;
 
+import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.ChatPage;
 import app.secuboid.core.messages.MessagePaths;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
@@ -28,13 +30,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntFunction;
 
 import static app.secuboid.core.messages.Message.message;
 
 public class ChatPageImpl implements ChatPage {
 
+    private static final String RUN_COMMAND_PAGE_PREFIX = "/sd page ";
     private static final int PAGE_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
-    private static final int PAGE_HEIGHT = ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2;
+    private static final int PAGE_HEIGHT = ChatPaginator.OPEN_CHAT_PAGE_HEIGHT - 2;
 
     private final CommandSender sender;
     private final String subject;
@@ -56,7 +60,7 @@ public class ChatPageImpl implements ChatPage {
         totalPages = page.getTotalPages();
 
         if (pageNumber < 1 || pageNumber > totalPages) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound());
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound(1, totalPages));
             return;
         }
 
@@ -77,8 +81,7 @@ public class ChatPageImpl implements ChatPage {
         List<TextComponent> textComponents = new ArrayList<>();
 
         if (pageNumber > 1) {
-            TextComponent textComponent = message().getTextComponent(MessageType.CLICKABLE,
-                    MessagePaths.chatPageFooterLeftActive(pageNumber - 1));
+            TextComponent textComponent = addPageTextClickable(MessagePaths::chatPageFooterLeftActive, pageNumber - 1);
             textComponents.add(textComponent);
         }
 
@@ -86,11 +89,21 @@ public class ChatPageImpl implements ChatPage {
             if (!textComponents.isEmpty()) {
                 textComponents.add(new TextComponent(" "));
             }
-            TextComponent textComponent = message().getTextComponent(MessageType.CLICKABLE,
-                    MessagePaths.chatPageFooterRightActive(pageNumber + 1));
+            TextComponent textComponent = addPageTextClickable(MessagePaths::chatPageFooterRightActive, pageNumber + 1);
             textComponents.add(textComponent);
         }
 
         sender.spigot().sendMessage(textComponents.toArray(TextComponent[]::new));
+    }
+
+    private @NotNull TextComponent addPageTextClickable(IntFunction<MessagePath> messagePathFunc,
+                                                        int targetPageNumber) {
+        MessagePath messagePath = messagePathFunc.apply(targetPageNumber);
+        TextComponent textComponent = message().getTextComponent(MessageType.CLICKABLE, messagePath);
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+                RUN_COMMAND_PAGE_PREFIX + targetPageNumber);
+        textComponent.setClickEvent(clickEvent);
+
+        return textComponent;
     }
 }

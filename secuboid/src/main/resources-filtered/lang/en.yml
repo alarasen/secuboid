@@ -9,7 +9,8 @@ chat-page:
   header: "-{{subject}}: Page {{page-number}} of {{total-pages}}-"
   footer-left-active: "[<-page {{page-number}}-]"
   footer-right-active: "[-page {{page-number}}->]"
-  not-found: Page not found.
+  not-available: No page available.
+  not-found: "Page not found. Specify from {{first-page}} to {{last-page}}."
 selection:
   scoreboard:
     title-create: Creating a new land...
