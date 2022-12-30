@@ -45,8 +45,8 @@ public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
     }
 
     @Override
-    public @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text) {
-        chatPage = new ChatPageImpl(sender, header, text);
+    public @NotNull ChatPage newChatPage(@NotNull String subject, @NotNull String text) {
+        chatPage = new ChatPageImpl(sender, subject, text);
         return chatPage;
     }
 

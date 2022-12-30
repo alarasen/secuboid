@@ -50,10 +50,10 @@ public interface CommandSenderInfo {
     /**
      * Creates a new chat page for a multiple pages output.
      *
-     * @param header the header normally from chat messages
-     * @param text   the text
+     * @param subject the subject in the header
+     * @param text    the text
      */
-    @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text);
+    @NotNull ChatPage newChatPage(@NotNull String subject, @NotNull String text);
 
     /**
      * Gets the last chat page for a multiple pages output.

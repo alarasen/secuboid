@@ -20,6 +20,7 @@ package app.secuboid.core.messages;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.*;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -99,6 +100,13 @@ public class MessageManagerImpl implements MessageManager {
     public void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path) {
         String message = get(messageType, path);
         plugin.getServer().broadcastMessage(message);
+    }
+
+    @Override
+    public @NotNull TextComponent getTextComponent(@NotNull MessageType messageType, @NotNull MessagePath path) {
+        String message = get(messageType, path);
+
+        return new TextComponent(message);
     }
 
     @Override

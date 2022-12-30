@@ -5,6 +5,11 @@ general:
   inventory-full: Your inventory is full.
   need-parameter: You need at least one parameter.
   error: 'Error: {{error}}'
+chat-page:
+  header: "-{{subject}}: Page {{page-number}} of {{total-pages}}-"
+  footer-left-active: "[<-page {{page-number}}-]"
+  footer-right-active: "[-page {{page-number}}->]"
+  not-found: Page not found.
 selection:
   scoreboard:
     title-create: Creating a new land...

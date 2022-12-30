@@ -19,6 +19,7 @@ package app.secuboid.api.messages;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.flagtypes.FlagType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +83,15 @@ public interface MessageManager {
      * @param path        the yaml path with arguments
      */
     void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path);
+
+    /**
+     * Gets a text component (Bukkit) from a message path. You can use this when you need a clickable action
+     *
+     * @param messageType the message type
+     * @param path        the yaml path with arguments
+     * @return the text component
+     */
+    @NotNull TextComponent getTextComponent(@NotNull MessageType messageType, @NotNull MessagePath path);
 
     /**
      * Gets the flag description.

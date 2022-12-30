@@ -42,7 +42,12 @@ public enum MessageType {
     /**
      * No color
      */
-    NO_COLOR("", "");
+    NO_COLOR("", ""),
+
+    /**
+     * Clickable
+     */
+    CLICKABLE("", MessageColor.CLICKABLE);
 
     public final @NotNull String prefix;
     public final @NotNull String color;

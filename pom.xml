@@ -94,12 +94,6 @@
                 <artifactId>spigot-api</artifactId>
                 <version>${spigot.version}${spigot.suffixversion}</version>
                 <scope>provided</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>net.md-5</groupId>
-                        <artifactId>bungeecord-chat</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!-- packaged in Secuboid -->

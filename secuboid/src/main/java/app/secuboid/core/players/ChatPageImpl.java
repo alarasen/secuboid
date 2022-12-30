@@ -18,10 +18,18 @@
 
 package app.secuboid.core.players;
 
+import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.ChatPage;
+import app.secuboid.core.messages.MessagePaths;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static app.secuboid.core.messages.Message.message;
 
 public class ChatPageImpl implements ChatPage {
 
@@ -29,36 +37,60 @@ public class ChatPageImpl implements ChatPage {
     private static final int PAGE_HEIGHT = ChatPaginator.CLOSED_CHAT_PAGE_HEIGHT - 2;
 
     private final CommandSender sender;
-    private final String header;
+    private final String subject;
     private final String text;
 
     private int totalPages;
 
-    public ChatPageImpl(@NotNull CommandSender sender, @NotNull String header, @NotNull String text) {
+    public ChatPageImpl(@NotNull CommandSender sender, @NotNull String subject, @NotNull String text) {
         this.sender = sender;
-        this.header = header;
+        this.subject = subject;
         this.text = text;
 
         totalPages = 0;
     }
 
     @Override
-    public boolean show(int pageNumber) {
+    public void show(int pageNumber) {
         ChatPaginator.ChatPage page = ChatPaginator.paginate(text, pageNumber, PAGE_WIDTH, PAGE_HEIGHT);
         totalPages = page.getTotalPages();
 
         if (pageNumber < 1 || pageNumber > totalPages) {
-            return false;
+            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound());
+            return;
         }
 
+        message().sendMessage(sender, MessageType.TITLE, MessagePaths.chatPageHeader(subject, pageNumber, totalPages));
         sender.sendMessage(page.getLines());
 
-        return true;
+        if (totalPages > 1) {
+            showClickableText(sender, pageNumber);
+        }
     }
 
     @Override
     public int getTotalPages() {
-        // TODO Implements
-        return 0;
+        return totalPages;
+    }
+
+    private void showClickableText(CommandSender sender, int pageNumber) {
+        List<TextComponent> textComponents = new ArrayList<>();
+
+        if (pageNumber > 1) {
+            TextComponent textComponent = message().getTextComponent(MessageType.CLICKABLE,
+                    MessagePaths.chatPageFooterLeftActive(pageNumber - 1));
+            textComponents.add(textComponent);
+        }
+
+        if (pageNumber < totalPages) {
+            if (!textComponents.isEmpty()) {
+                textComponents.add(new TextComponent(" "));
+            }
+            TextComponent textComponent = message().getTextComponent(MessageType.CLICKABLE,
+                    MessagePaths.chatPageFooterRightActive(pageNumber + 1));
+            textComponents.add(textComponent);
+        }
+
+        sender.spigot().sendMessage(textComponents.toArray(TextComponent[]::new));
     }
 }

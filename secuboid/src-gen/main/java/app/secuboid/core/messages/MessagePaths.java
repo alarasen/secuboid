@@ -48,6 +48,22 @@ public class MessagePaths {
         return new MessagePath("general.error", new String[] { "{{error}}" }, new Object[] { error });
     }
 
+    public static MessagePath chatPageHeader(Object subject, Object pageNumber, Object totalPages) {
+        return new MessagePath("chat-page.header", new String[] { "{{subject}}", "{{page-number}}", "{{total-pages}}" }, new Object[] { subject, pageNumber, totalPages });
+    }
+
+    public static MessagePath chatPageFooterLeftActive(Object pageNumber) {
+        return new MessagePath("chat-page.footer-left-active", new String[] { "{{page-number}}" }, new Object[] { pageNumber });
+    }
+
+    public static MessagePath chatPageFooterRightActive(Object pageNumber) {
+        return new MessagePath("chat-page.footer-right-active", new String[] { "{{page-number}}" }, new Object[] { pageNumber });
+    }
+
+    public static MessagePath chatPageNotFound() {
+        return new MessagePath("chat-page.not-found", new String[] {}, new Object[] {});
+    }
+
     public static MessagePath selectionScoreboardTitleCreate() {
         return new MessagePath("selection.scoreboard.title-create", new String[] {}, new Object[] {});
     }

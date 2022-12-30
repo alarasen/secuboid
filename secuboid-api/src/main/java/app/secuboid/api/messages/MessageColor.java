@@ -67,6 +67,11 @@ public class MessageColor {
      */
     public static final String FALSE = COLOR_CODE + "4";
 
+    /**
+     * Clickable link
+     */
+    public static final String CLICKABLE = COLOR_CODE + "6" + COLOR_CODE + "n";
+
     private MessageColor() {
     }
 }

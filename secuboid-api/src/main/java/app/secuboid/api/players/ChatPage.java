@@ -28,9 +28,8 @@ public interface ChatPage {
      * user.
      *
      * @param pageNumber the page number to show or an error message
-     * @return true if the page number exists and the message is sent, otherwise false
      */
-    boolean show(int pageNumber);
+    void show(int pageNumber);
 
     /**
      * Gets the total number of pages for the last command. this method should be called after a first use of
