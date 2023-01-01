@@ -24,21 +24,21 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
 import org.jetbrains.annotations.NotNull;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "select", //
-        aliases = "sel" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "select",
+        aliases = "sel"
 )
 public class CommandSelect implements CommandExec {
 
     private final Secuboid secuboid;
 
-    public CommandSelect(Secuboid secuboid) {
+    public CommandSelect(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         secuboid.getCommands().executeCommandClass(CommandSelectCuboid.class, commandSenderInfo, subArgs);
     }
 }

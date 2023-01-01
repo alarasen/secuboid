@@ -37,7 +37,7 @@ import static app.secuboid.core.messages.Message.message;
 public class CommandInfo implements CommandExec {
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         CommandSender sender = commandSenderInfo.sender();
 
         LocationPath locationPath;

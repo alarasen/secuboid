@@ -39,7 +39,7 @@ public class CommandCancel implements CommandExec {
 
     Secuboid secuboid;
 
-    public CommandCancel(Secuboid secuboid) {
+    public CommandCancel(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 

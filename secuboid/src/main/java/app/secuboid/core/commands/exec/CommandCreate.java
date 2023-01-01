@@ -57,7 +57,7 @@ public class CommandCreate implements CommandExec {
 
     private final Secuboid secuboid;
 
-    public CommandCreate(Secuboid secuboid) {
+    public CommandCreate(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 

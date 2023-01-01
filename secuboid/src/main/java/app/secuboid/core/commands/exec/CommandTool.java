@@ -27,21 +27,21 @@ import app.secuboid.core.SecuboidImpl;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "tool", //
-        allowConsole = false //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "tool",
+        allowConsole = false
 )
 public class CommandTool implements CommandExec {
 
     private final Secuboid secuboid;
 
-    public CommandTool(Secuboid secuboid) {
+    public CommandTool(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         Player player = ((PlayerInfo) commandSenderInfo).getPlayer();
         ((SecuboidImpl) secuboid).getSecuboidTool().give(player);
     }

@@ -20,11 +20,15 @@ package app.secuboid.core.commands;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfos;
 import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.Log;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.logging.Level;
 
 public class CommandListener implements CommandExecutor {
 
@@ -33,7 +37,7 @@ public class CommandListener implements CommandExecutor {
     private final CommandsImpl commands;
     private final PlayerInfos playerInfos;
 
-    public CommandListener(CommandsImpl commands, PlayerInfos playerInfos) {
+    public CommandListener(@NotNull CommandsImpl commands, @NotNull PlayerInfos playerInfos) {
         this.commands = commands;
         this.playerInfos = playerInfos;
     }
@@ -41,12 +45,22 @@ public class CommandListener implements CommandExecutor {
     public void init() {
         JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
         PluginCommand pluginCommand = javaPlugin.getCommand(COMMAND_NAME);
+        assert pluginCommand != null;
         pluginCommand.setExecutor(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    @SuppressWarnings("java:S3516")
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
+                             @NotNull String[] args) {
         CommandSenderInfo commandSenderInfo = playerInfos.get(sender);
+
+        if (commandSenderInfo == null) {
+            Log.log().log(Level.WARNING, "The player sent a command and is not available. [sender={}]",
+                    sender.getName());
+            return true;
+        }
+
         commands.executeCommandName(commandSenderInfo, args);
 
         return true;

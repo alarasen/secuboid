@@ -28,22 +28,22 @@ import app.secuboid.core.messages.Message;
 import app.secuboid.core.messages.MessagePaths;
 import org.jetbrains.annotations.NotNull;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "reload", //
-        isAdminModeByPass = false, //
-        permissions = "secuboid.core.reload" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "reload",
+        isAdminModeByPass = false,
+        permissions = "secuboid.core.reload"
 )
 public class CommandReload implements CommandExec {
 
     private final Secuboid secuboid;
 
-    public CommandReload(Secuboid secuboid) {
+    public CommandReload(@NotNull Secuboid secuboid) {
         this.secuboid = secuboid;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalPreReload());
         ((SecuboidImpl) secuboid).reload();
         Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalReload());

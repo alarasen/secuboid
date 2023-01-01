@@ -24,14 +24,14 @@ import app.secuboid.api.reflection.CommandRegistered;
 import org.jetbrains.annotations.NotNull;
 
 // TODO Add player level from the land
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "here" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "select here"
 )
 public class CommandSelectHere implements CommandExec {
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         // TODO select here
     }
 }

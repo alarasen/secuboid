@@ -58,8 +58,10 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         adminMode = false;
         lastUpdateTimeMillis = 0L;
         lastLocation = player.getLocation();
-        area = instance().getLands().getArea(lastLocation);
-        land = instance().getLands().get(lastLocation);
+        Lands lands = instance().getLands();
+        area = lands.getArea(lastLocation);
+        land = lands.get(lastLocation);
+        locationPath = lands.getLocationPath(lastLocation);
         isTpCancel = false;
     }
 

@@ -28,12 +28,12 @@ import app.secuboid.core.players.PlayerInfoImpl;
 import app.secuboid.core.selection.PlayerSelection;
 import org.jetbrains.annotations.NotNull;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "cuboid", //
-        aliases = "cub", //
-        allowConsole = false, //
-        sourceActionFlags = "land-create" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "select cuboid",
+        aliases = "cub",
+        allowConsole = false,
+        sourceActionFlags = "land-create"
 )
 public class CommandSelectCuboid implements CommandExec {
 

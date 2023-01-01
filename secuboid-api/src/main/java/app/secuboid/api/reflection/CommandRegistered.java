@@ -41,8 +41,7 @@ public @interface CommandRegistered {
     @NotNull Class<? extends JavaPlugin> pluginClass();
 
     /**
-     * The command name lowercase. If this command is a child from a parent, type
-     * "parent/this command".
+     * The command name lowercase. If this command is a child from a parent, put parent command, space, this command.
      *
      * @return the name
      */

@@ -41,6 +41,8 @@ import static java.util.logging.Level.SEVERE;
 
 public class CommandsImpl implements Commands {
 
+    private static final int COMMANDS_SEPARATOR = ' ';
+
     private final Map<String, CommandContainer> nameToCommand;
     private final Map<Class<? extends CommandExec>, CommandContainer> classToCommand;
 
@@ -49,7 +51,7 @@ public class CommandsImpl implements Commands {
         classToCommand = new HashMap<>();
     }
 
-    public void init(PluginLoader pluginLoader) {
+    public void init(@NotNull PluginLoader pluginLoader) {
         Map<Class<? extends CommandExec>, CommandRegistered> classToAnnotation = pluginLoader
                 .getClassToAnnotation(CommandRegistered.class, CommandExec.class);
 
@@ -63,7 +65,7 @@ public class CommandsImpl implements Commands {
                 Class<? extends CommandExec> clazz = classToAnnotationEntry.getKey();
                 CommandRegistered commandRegistered = classToAnnotationEntry.getValue();
 
-                long curLevel = commandRegistered.name().chars().filter(c -> c == '/').count();
+                long curLevel = commandRegistered.name().chars().filter(c -> c == COMMANDS_SEPARATOR).count();
                 if (curLevel == commandLevel) {
                     found = true;
                     try {
@@ -81,13 +83,13 @@ public class CommandsImpl implements Commands {
 
     @Override
     public void executeCommandClass(@NotNull Class<? extends CommandExec> clazz, @NotNull CommandSenderInfo commandSenderInfo,
-                                    String[] subArgs) {
+                                    @NotNull String[] subArgs) {
 
         CommandContainer commandContainer = classToCommand.get(clazz);
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
 
-    void executeCommandName(CommandSenderInfo commandSenderInfo, String[] args) {
+    void executeCommandName(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] args) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (args == null || args.length == 0) {
@@ -106,6 +108,7 @@ public class CommandsImpl implements Commands {
             return;
         }
 
+        // TODO Get subcommand
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
@@ -139,11 +142,12 @@ public class CommandsImpl implements Commands {
         // TODO Retreive flags
 
         String commandName = commandRegistered.name();
-        String[] nameSplit = commandName.split("\\/");
+        String[] nameSplit = commandName.split(Character.toString(COMMANDS_SEPARATOR));
+        int nameSplitLengthMinusOne = nameSplit.length - 1;
         Map<String, CommandContainer> curNameToCommand = nameToCommand;
-        int i = 0;
-        while (i < nameSplit.length - 1) {
-            CommandContainer curCommandContainer = curNameToCommand.get(nameSplit[0]);
+
+        for (int i = 0; i < nameSplitLengthMinusOne; i++) {
+            CommandContainer curCommandContainer = curNameToCommand.get(nameSplit[i]);
             if (curCommandContainer == null) {
                 Log.log().log(SEVERE, () -> "There is an error on registered command parent name: " + commandName);
                 return;
@@ -151,7 +155,7 @@ public class CommandsImpl implements Commands {
             curNameToCommand = curCommandContainer.nameToSubCommand();
         }
 
-        String subName = nameSplit[nameSplit.length - 1];
+        String subName = nameSplit[nameSplitLengthMinusOne];
         CommandContainer commandContainer = new CommandContainer(commandExec, commandRegistered, Collections.emptySet(),
                 new HashMap<>());
         classToCommand.put(clazz, commandContainer);

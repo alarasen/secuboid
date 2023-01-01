@@ -29,13 +29,13 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class CommandsTest {
@@ -69,14 +69,22 @@ class CommandsTest {
     void when_call_test_command_name_then_execute_it() {
         commands.executeCommandName(commandSenderInfo, new String[]{"test"});
 
-        verify(sender, times(1)).sendMessage(anyString());
+        verify(sender, times(1)).sendMessage("done!");
+    }
+
+    @Test
+    @Disabled
+    void when_call_test_sub_command_name_then_execute_it() {
+        commands.executeCommandName(commandSenderInfo, new String[]{"test sub"});
+
+        verify(sender, times(1)).sendMessage("done sub!");
     }
 
     @Test
     void when_call_test_command_class_then_execute_it() {
         commands.executeCommandClass(CommandTest.class, commandSenderInfo, new String[]{});
 
-        verify(sender, times(1)).sendMessage(anyString());
+        verify(sender, times(1)).sendMessage("done!");
     }
 
     @CommandRegistered( //
@@ -93,6 +101,23 @@ class CommandsTest {
         public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
             CommandSender sender = commandSenderInfo.sender();
             sender.sendMessage("done!");
+        }
+    }
+
+    @CommandRegistered( //
+            pluginClass = SecuboidPlugin.class, //
+            name = "test sub" //
+    )
+    private static class CommandTestSub implements CommandExec {
+
+        @SuppressWarnings("unused")
+        CommandTestSub(Secuboid secuboid) {
+        }
+
+        @Override
+        public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+            CommandSender sender = commandSenderInfo.sender();
+            sender.sendMessage("done sub!");
         }
     }
 
