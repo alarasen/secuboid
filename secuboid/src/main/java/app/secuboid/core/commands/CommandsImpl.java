@@ -92,15 +92,28 @@ public class CommandsImpl implements Commands {
     void executeCommandName(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] args) {
         CommandSender sender = commandSenderInfo.sender();
 
-        if (args == null || args.length == 0) {
+        if (args.length == 0) {
             // TODO help with click
             sender.sendMessage("todo");
             return;
         }
 
-        String arg = args[0];
-        String argLower = arg.toLowerCase();
-        CommandContainer commandContainer = nameToCommand.get(argLower);
+        Map<String, CommandContainer> curNameToCommand = nameToCommand;
+        int commandPathCounter = 0;
+        CommandContainer commandContainer = null;
+        CommandContainer curCommandContainer;
+        do {
+            String arg = args[commandPathCounter];
+            String argLower = arg.toLowerCase();
+            curCommandContainer = curNameToCommand.get(argLower);
+
+            if (curCommandContainer != null) {
+                commandContainer = curCommandContainer;
+                curNameToCommand = commandContainer.nameToSubCommand();
+            }
+
+            commandPathCounter++;
+        } while (curCommandContainer != null && commandPathCounter < args.length && !curNameToCommand.isEmpty());
 
         if (commandContainer == null) {
             // TODO help with null
@@ -108,8 +121,7 @@ public class CommandsImpl implements Commands {
             return;
         }
 
-        // TODO Get subcommand
-        String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+        String[] subArgs = Arrays.copyOfRange(args, commandPathCounter, args.length);
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
 
@@ -139,7 +151,7 @@ public class CommandsImpl implements Commands {
             return;
         }
 
-        // TODO Retreive flags
+        // TODO Retreve flags
 
         String commandName = commandRegistered.name();
         String[] nameSplit = commandName.split(Character.toString(COMMANDS_SEPARATOR));

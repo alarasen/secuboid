@@ -29,12 +29,11 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -50,9 +49,11 @@ class CommandsTest {
         Secuboid secuboid = mock(Secuboid.class);
         PluginLoader pluginLoader = mock(PluginLoader.class);
 
-        CommandRegistered commandRegistered = CommandTest.class.getAnnotation(CommandRegistered.class);
-        Map<Class<? extends CommandExec>, CommandRegistered> classToAnnotation = Collections
-                .singletonMap(CommandTest.class, commandRegistered);
+        CommandRegistered commandRegisteredTest = CommandTest.class.getAnnotation(CommandRegistered.class);
+        CommandRegistered commandRegisteredTestSub = CommandTestSub.class.getAnnotation(CommandRegistered.class);
+        Map<Class<? extends CommandExec>, CommandRegistered> classToAnnotation =
+                Map.ofEntries(entry(CommandTest.class, commandRegisteredTest), entry(CommandTestSub.class,
+                        commandRegisteredTestSub));
         when(pluginLoader.getClassToAnnotation(CommandRegistered.class, CommandExec.class))
                 .thenReturn(classToAnnotation);
 
@@ -73,9 +74,15 @@ class CommandsTest {
     }
 
     @Test
-    @Disabled
+    void when_call_test_command_with_parameter_then_execute_it() {
+        commands.executeCommandName(commandSenderInfo, new String[]{"test", "parameter"});
+
+        verify(sender, times(1)).sendMessage("done!");
+    }
+
+    @Test
     void when_call_test_sub_command_name_then_execute_it() {
-        commands.executeCommandName(commandSenderInfo, new String[]{"test sub"});
+        commands.executeCommandName(commandSenderInfo, new String[]{"test", "sub"});
 
         verify(sender, times(1)).sendMessage("done sub!");
     }
