@@ -29,10 +29,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 
 public enum AreaType {
-    CUBOID("C", (r, l) -> new AreaImpl(r.id(), new CylinderAreaFormImpl(r.x1(), r.y1(), r.z1(), r.x2(), r.y2(),
+    CUBOID("B", (r, l) -> new AreaImpl(r.id(), new CuboidAreaFormImpl(r.x1(), r.y1(), r.z1(), r.x2(), r.y2(),
             r.z2()), l)),
-    CYLINDER("C", (r, l) -> new AreaImpl(r.id(), new CuboidAreaFormImpl(r.x1(), r.y1(), r.z1(), r.x2(), r.y2(),
+    CYLINDER("C", (r, l) -> new AreaImpl(r.id(), new CylinderAreaFormImpl(r.x1(), r.y1(), r.z1(), r.x2(), r.y2(),
             r.z2()), l));
+
+    public final @NotNull String value;
+    private final @NotNull BiFunction<AreaRow, AreaLand, Area> creator;
+
+    AreaType(@NotNull String value, @NotNull BiFunction<AreaRow, AreaLand, Area> creator) {
+        this.value = value;
+        this.creator = creator;
+    }
 
     public static @NotNull AreaType fromValue(@NotNull String value) {
         for (AreaType areaType : AreaType.values()) {
@@ -46,13 +54,5 @@ public enum AreaType {
 
     public static @NotNull Area newArea(@NotNull AreaRow areaRow, @NotNull AreaLand areaLand) {
         return areaRow.type().creator.apply(areaRow, areaLand);
-    }
-
-    public final @NotNull String value;
-    private final @NotNull BiFunction<AreaRow, AreaLand, Area> creator;
-
-    AreaType(@NotNull String value, @NotNull BiFunction<AreaRow, AreaLand, Area> creator) {
-        this.value = value;
-        this.creator = creator;
     }
 }

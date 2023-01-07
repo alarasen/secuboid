@@ -17,7 +17,10 @@
  */
 package app.secuboid.api;
 
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This abstract class is used only when we need to access Secuboid main class
@@ -25,14 +28,18 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class SecuboidPlugin extends JavaPlugin {
 
-    protected static Secuboid secuboid;
+    private static @Nullable Secuboid secuboid = null;
 
     /**
      * Gets the Secuboid main instance from static way.
      *
      * @return the Secuboid main instance
      */
-    public static Secuboid secuboid() {
+    public static @NotNull Secuboid secuboid() {
+        if (secuboid == null) {
+            throw new SecuboidRuntimeException("Secuboid not yet initialized");
+        }
+
         return secuboid;
     }
 
@@ -41,5 +48,9 @@ public abstract class SecuboidPlugin extends JavaPlugin {
      *
      * @return the Secuboid main instance
      */
-    public abstract Secuboid getSecuboid();
+    public abstract @NotNull Secuboid getSecuboid();
+
+    protected static void setSecuboid(@NotNull Secuboid secuboidInstance) {
+        secuboid = secuboidInstance;
+    }
 }

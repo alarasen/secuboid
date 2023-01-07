@@ -21,13 +21,13 @@ import app.secuboid.api.lands.WorldLand;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelection {
+public abstract class ActiveSelection {
 
-    protected final WorldLand worldLand;
+    protected final @NotNull WorldLand worldLand;
 
-    protected final CommandSender commandSender;
+    protected final @NotNull CommandSender commandSender;
 
-    public ActiveSelection(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender) {
+    protected ActiveSelection(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender) {
         this.worldLand = worldLand;
         this.commandSender = commandSender;
     }
@@ -38,5 +38,17 @@ public class ActiveSelection {
 
     public final @NotNull CommandSender getCommandSender() {
         return commandSender;
+    }
+
+    public void init() {
+        // Override if needed
+    }
+
+    public void playerMoveSelection() {
+        // Override if needed
+    }
+
+    public void removeSelection() {
+        // Override if needed
     }
 }

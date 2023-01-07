@@ -20,6 +20,7 @@ package app.secuboid.core.selection.active;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +29,15 @@ class ChangedBlocks {
 
     private static final int MAX_DISTANCE = 128;
 
-    private final Player player;
-    private final Map<Location, BlockData> locationToBlockData;
+    private final @NotNull Player player;
+    private final @NotNull Map<Location, BlockData> locationToBlockData;
 
-    ChangedBlocks(Player player) {
+    ChangedBlocks(@NotNull Player player) {
         this.player = player;
         locationToBlockData = new HashMap<>();
     }
 
-    void changeBlock(Location location, BlockData blockData) {
+    void changeBlock(@NotNull Location location, @NotNull BlockData blockData) {
         if (!isDistanceMoreThan(player.getLocation(), location, MAX_DISTANCE)) {
             BlockData currentBlockData = location.getBlock().getBlockData();
             locationToBlockData.put(location, currentBlockData);
@@ -51,7 +52,7 @@ class ChangedBlocks {
         locationToBlockData.clear();
     }
 
-    private boolean isDistanceMoreThan(Location loc1, Location loc2, int distance) {
+    private boolean isDistanceMoreThan(@NotNull Location loc1, @NotNull Location loc2, int distance) {
         return Math.abs(loc1.getBlockX() - loc2.getBlockX()) > distance
                 || Math.abs(loc1.getBlockZ() - loc2.getBlockZ()) > distance;
     }

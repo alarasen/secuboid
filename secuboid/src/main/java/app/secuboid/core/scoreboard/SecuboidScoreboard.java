@@ -20,24 +20,35 @@ package app.secuboid.core.scoreboard;
 import app.secuboid.core.SecuboidImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import static app.secuboid.core.messages.Log.log;
+import static java.util.logging.Level.WARNING;
 
 public class SecuboidScoreboard {
 
     private static final String SCOREBOARD_PREFIX = "secuboid-";
-    private static final String CRETERIA = "";
 
-    private final Player player;
-    private final String[] lines;
-    private final Scoreboard scoreboard;
-    private final Objective objective;
+    private final @NotNull Player player;
 
-    public SecuboidScoreboard(Player player, String displayName, String... lines) {
+    private final @NotNull String displayName;
+    private final @NotNull String[] lines;
+    private @Nullable Scoreboard scoreboard;
+    private @Nullable Objective objective;
+
+    public SecuboidScoreboard(@NotNull Player player, @NotNull String displayName, @NotNull String... lines) {
         this.player = player;
+        this.displayName = displayName;
         this.lines = lines;
+        scoreboard = null;
+        objective = null;
+    }
 
+    public void init() {
         ScoreboardManager scoreboardManager = SecuboidImpl.getScoreboardManager();
         scoreboard = scoreboardManager.getNewScoreboard();
-        objective = scoreboard.registerNewObjective(getName(), CRETERIA, displayName, RenderType.INTEGER);
+        objective = scoreboard.registerNewObjective(getName(), Criteria.DUMMY, displayName, RenderType.INTEGER);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         int length = lines.length;
@@ -50,7 +61,12 @@ public class SecuboidScoreboard {
         player.setScoreboard(scoreboard);
     }
 
-    public void changeline(int lineNb, String newLine) {
+    public void changeLine(int lineNb, @NotNull String newLine) {
+        if (scoreboard == null || objective == null) {
+            log().log(WARNING, "No scoreboard to update for the player: {}", player.getName());
+            return;
+        }
+
         scoreboard.resetScores(lines[lineNb]);
         Score score = objective.getScore(newLine);
         score.setScore(lines.length - lineNb);

@@ -19,6 +19,7 @@ package app.secuboid.core.selection;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
@@ -50,21 +51,27 @@ public class PlayerSelection extends SenderSelection {
     }
 
     public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
-        SelectionForm selectionForm = createSelectionForm(areaForm);
+        SelectionForm selectionForm = createSelectionForm(areaForm, true);
         activeSelection = new ActiveSelectionModifyExpand(worldLand, playerInfo, selectionForm);
+        activeSelection.init();
+    }
+
+    public void createActiveSelectionAreaShow(@NotNull Area area) {
+        AreaForm areaForm = area.getAreaForm();
+        SelectionForm selectionForm = createSelectionForm(areaForm, false);
+        activeSelection = new ActiveSelectionAreaShow(player, area, selectionForm);
+        activeSelection.init();
     }
 
     public void updateSelectionFromLocation() {
-        if (activeSelection instanceof ActiveSelectionModify activeSelectionModify) {
-            activeSelectionModify.playerMoveSelection();
+        if (activeSelection != null) {
+            activeSelection.playerMoveSelection();
         }
     }
 
     @Override
     public boolean removeSelection() {
-        if (activeSelection instanceof ActiveSelectionModify activeSelectionModify) {
-            activeSelectionModify.removeSelection();
-        }
+        activeSelection.removeSelection();
 
         return super.removeSelection();
     }
@@ -93,11 +100,11 @@ public class PlayerSelection extends SenderSelection {
         throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
     }
 
-    private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm) {
+    private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm, boolean isResizeable) {
         if (areaForm instanceof CuboidAreaForm cuboidAreaForm) {
-            return new SelectionFormCuboid(cuboidAreaForm, player, null, null);
+            return new SelectionFormCuboid(cuboidAreaForm, player, isResizeable, null, null);
         } else if (areaForm instanceof CylinderAreaForm cylinderAreaForm) {
-            return new SelectionFormCylinder(cylinderAreaForm, player, null, null);
+            return new SelectionFormCylinder(cylinderAreaForm, player, isResizeable, null, null);
         }
 
         throw new SecuboidRuntimeException("Selection form not yet implemented: " + areaForm);

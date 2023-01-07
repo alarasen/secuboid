@@ -18,21 +18,56 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ActiveSelectionAreaShow extends ActiveSelectionArea {
 
-    private final Player player;
+    private final @NotNull Player player;
+    private final @NotNull SelectionForm selectionForm;
 
-    ActiveSelectionAreaShow(@NotNull WorldLand worldLand, @NotNull Player player, @NotNull Area area) {
-        super(worldLand, player, area);
+    private @Nullable SelectionScoreboard selectionScoreboard;
+    private @Nullable Location playerLastLoc;
+
+    public ActiveSelectionAreaShow(@NotNull Player player, @NotNull Area area, @NotNull SelectionForm selectionForm) {
+        super(player, area);
         this.player = player;
+        this.selectionForm = selectionForm;
+        selectionScoreboard = null;
+        playerLastLoc = null;
+    }
+
+    @Override
+    public void init() {
+        playerLastLoc = player.getLocation();
+        selectionForm.refreshVisualSelection();
+        selectionScoreboard = new SelectionScoreboardArea(player, area);
+        selectionScoreboard.init();
     }
 
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public void playerMoveSelection() {
+        Location playerLoc = player.getLocation();
+
+        if (playerLastLoc != null && playerLoc.distanceSquared(playerLastLoc) >= 4D) {
+            playerLastLoc = playerLoc;
+            selectionForm.refreshVisualSelection();
+        }
+    }
+
+    @Override
+    public final void removeSelection() {
+        selectionForm.removeSelection();
+
+        if (selectionScoreboard != null) {
+            selectionScoreboard.hide();
+        }
     }
 }

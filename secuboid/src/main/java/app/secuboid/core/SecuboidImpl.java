@@ -46,6 +46,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -53,44 +54,24 @@ import static app.secuboid.core.config.Config.config;
 
 public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
-    private static SecuboidImpl secuboidImpl;
-    private static SecuboidPlugin secuboidPlugin;
+    private static @NotNull SecuboidImpl secuboidImpl;
+    private static @NotNull SecuboidPlugin secuboidPlugin;
 
-    private final NewInstance newInstance;
-    private final Commands commands;
-    private final CommandListener commandListener;
-    private final ParameterValues parameterValues;
-    private final Lands lands;
-    private final FlagTypes flags;
-    private final PlayerInfosImpl playerInfos;
-    private final SecuboidTool secuboidTool;
-    private final Listeners listeners;
-    private final StorageManager storageManager;
+    private final @NotNull NewInstance newInstance;
+    private final @NotNull Commands commands;
+    private final @NotNull CommandListener commandListener;
+    private final @NotNull ParameterValues parameterValues;
+    private final @NotNull Lands lands;
+    private final @NotNull FlagTypes flags;
+    private final @NotNull PlayerInfosImpl playerInfos;
+    private final @NotNull SecuboidTool secuboidTool;
+    private final @NotNull Listeners listeners;
+    private final @NotNull StorageManager storageManager;
 
-    private final ChatGetter chatGetter;
-
-    public static SecuboidImpl instance() {
-        return secuboidImpl;
-    }
-
-    public static JavaPlugin getJavaPLugin() {
-        return secuboidPlugin;
-    }
-
-    public static PluginManager getPluginManager() {
-        return secuboidPlugin.getServer().getPluginManager();
-    }
-
-    public static ScoreboardManager getScoreboardManager() {
-        return secuboidPlugin.getServer().getScoreboardManager();
-    }
-
-    public static <T extends JavaPlugin> T getPlugin(Class<T> clazz) {
-        return ((SecuboidPluginImpl) secuboidPlugin).getPluginFromClass(clazz);
-    }
+    private final @NotNull ChatGetter chatGetter;
 
     @SuppressWarnings("java:S3010")
-    public SecuboidImpl(SecuboidPluginImpl secuboidPluginImpl) {
+    public SecuboidImpl(@NotNull SecuboidPluginImpl secuboidPluginImpl) {
         newInstance = new NewInstanceImpl();
         secuboidImpl = this;
         secuboidPlugin = secuboidPluginImpl;
@@ -106,6 +87,26 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
         parameterValues = new ParameterValuesImpl();
         lands = new LandsImpl();
+    }
+
+    public static @NotNull SecuboidImpl instance() {
+        return secuboidImpl;
+    }
+
+    public static @NotNull JavaPlugin getJavaPLugin() {
+        return secuboidPlugin;
+    }
+
+    public static @NotNull PluginManager getPluginManager() {
+        return secuboidPlugin.getServer().getPluginManager();
+    }
+
+    public static @Nullable ScoreboardManager getScoreboardManager() {
+        return secuboidPlugin.getServer().getScoreboardManager();
+    }
+
+    public static <T extends JavaPlugin> @Nullable T getPlugin(Class<T> clazz) {
+        return ((SecuboidPluginImpl) secuboidPlugin).getPluginFromClass(clazz);
     }
 
     @Override
@@ -210,11 +211,11 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         return newInstance;
     }
 
-    public SecuboidTool getSecuboidTool() {
+    public @NotNull SecuboidTool getSecuboidTool() {
         return secuboidTool;
     }
 
-    public ChatGetter getChatGetter() {
+    public @NotNull ChatGetter getChatGetter() {
         return chatGetter;
     }
 }

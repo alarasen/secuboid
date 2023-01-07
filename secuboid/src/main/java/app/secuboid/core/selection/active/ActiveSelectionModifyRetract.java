@@ -24,10 +24,11 @@ import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.lands.areas.AreaFormImpl;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ActiveSelectionModifyRetract extends ActiveSelectionModify {
 
-    private Location lastOutSideLoc;
+    private @Nullable Location lastOutSideLoc;
 
     public ActiveSelectionModifyRetract(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);

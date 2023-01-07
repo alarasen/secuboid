@@ -29,8 +29,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SelectionFormCuboid extends SelectionForm {
 
-    public SelectionFormCuboid(@NotNull CuboidAreaForm cuboidAreaForm, @NotNull Player player, @Nullable Land originLand, @Nullable Area originArea) {
-        super(cuboidAreaForm, player, originLand, originArea);
+    public SelectionFormCuboid(@NotNull CuboidAreaForm cuboidAreaForm, @NotNull Player player,
+                               boolean isResizeable, @Nullable Land originLand, @Nullable Area originArea) {
+        super(cuboidAreaForm, player, isResizeable, originLand, originArea);
     }
 
     @Override
@@ -125,13 +126,18 @@ public class SelectionFormCuboid extends SelectionForm {
         }
     }
 
-    private void drawVisualRelative(Location newLoc) {
+    private void drawVisualRelative(@NotNull Location newLoc) {
         // LandPermissionsFlags testCuboidarea =
         // secuboid.getLands().getPermissionsFlags(newLoc);
         // TODO Collision
         // if (parentFlagsDetected == testCuboidarea
         // && (canCreate || secuboid.getPlayerConf().get(player).isAdminMode())) {
-        BlockData blockData = MATERIAL_ACTIVE.createBlockData();
+        BlockData blockData;
+        if (isResizeable) {
+            blockData = MATERIAL_ACTIVE.createBlockData();
+        } else {
+            blockData = MATERIAL_AREA.createBlockData();
+        }
         changedBlocks.changeBlock(newLoc, blockData);
         // } else {
         // changedBlocks.changeBlock(newLoc,

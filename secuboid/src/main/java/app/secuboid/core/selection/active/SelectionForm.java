@@ -31,20 +31,23 @@ public abstract class SelectionForm {
 
     protected static final Material MATERIAL_ACTIVE = Material.SPONGE;
     protected static final Material MATERIAL_COLLISION = Material.REDSTONE_BLOCK;
-    protected static final Material MATERIAL_PASSIVE = Material.IRON_BLOCK;
+    protected static final Material MATERIAL_AREA = Material.IRON_BLOCK;
 
-    protected final AreaForm areaForm;
-    protected final Player player;
-    protected final Land originLand;
-    protected final Area originArea;
-    protected final World world;
+    protected final @NotNull AreaForm areaForm;
+    protected final @NotNull Player player;
+    protected final boolean isResizeable;
+    protected final @Nullable Land originLand;
+    protected final @Nullable Area originArea;
+    protected final @NotNull World world;
 
-    protected ChangedBlocks changedBlocks;
+    protected @NotNull ChangedBlocks changedBlocks;
     protected boolean hasCollision;
 
-    SelectionForm(@NotNull AreaForm areaForm, @NotNull Player player, @Nullable Land originLand, @Nullable Area originArea) {
+    SelectionForm(@NotNull AreaForm areaForm, @NotNull Player player, boolean isResizeable, @Nullable Land originLand,
+                  @Nullable Area originArea) {
         this.areaForm = areaForm;
         this.player = player;
+        this.isResizeable = isResizeable;
         this.originLand = originLand;
         this.originArea = originArea;
         world = player.getWorld();
@@ -59,6 +62,10 @@ public abstract class SelectionForm {
 
     public final @NotNull Player getPlayer() {
         return player;
+    }
+
+    public final boolean isResizeable() {
+        return isResizeable;
     }
 
     public final @Nullable Land getOriginLand() {

@@ -17,72 +17,28 @@
  */
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.api.lands.areas.AreaForm;
-import app.secuboid.api.messages.MessagePath;
-import app.secuboid.api.messages.MessageType;
-import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.SecuboidScoreboard;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+abstract class SelectionScoreboard {
 
-import static app.secuboid.core.messages.Message.message;
+    protected final @NotNull Player player;
+    protected @Nullable SecuboidScoreboard scoreboard;
 
-class SelectionScoreboard {
-
-    private static final String MESSAGE_PATH_MOVE_TYPE_PREFIX = "selection.scoreboard.selection-types.";
-
-    private static final String COMMAND_CREATE = "/sd create";
-
-    private static final Map<Class<? extends ActiveSelectionModify>, String> CLASS_TO_MESSAGE_TAG = Map.of(
-            ActiveSelectionModifyExpand.class, "expand",
-            ActiveSelectionModifyMove.class, "move",
-            ActiveSelectionModifyPassive.class, "passive",
-            ActiveSelectionModifyRetract.class, "retract");
-
-    private final SecuboidScoreboard scoreboard;
-    private final AreaForm areaForm;
-
-    SelectionScoreboard(@NotNull Player player, @NotNull AreaForm areaForm, @NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
-        this.areaForm = areaForm;
-
-        String title = message().get(MessageType.TITLE, MessagePaths.selectionScoreboardTitleCreate());
-        String selectionTypeMsg = getSelectionTypeMsg(activeSelectionModifyClass);
-        String[] lines = new String[5];
-        lines[0] = message().get(MessageType.NORMAL,
-                MessagePaths.selectionScoreboardSelectionType(selectionTypeMsg));
-        lines[1] = message().get(MessageType.NORMAL, areaForm.getMessagePath());
-        long volume = areaForm.getVolume();
-        lines[2] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardVolume(volume));
-        lines[3] = "";
-        lines[4] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardTypeWhenDone(COMMAND_CREATE));
-
-        scoreboard = new SecuboidScoreboard(player, title, lines);
+    SelectionScoreboard(@NotNull Player player) {
+        this.player = player;
+        this.scoreboard = null;
     }
 
-    void update() {
-        long volume = areaForm.getVolume();
-        String line1 = message().get(MessageType.NORMAL, areaForm.getMessagePath());
-        scoreboard.changeline(1, line1);
-        String line2 = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardVolume(volume));
-        scoreboard.changeline(2, line2);
-    }
+    abstract void init();
 
-    void hide() {
-        scoreboard.hide();
-    }
+    abstract void update();
 
-    private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
-        String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
-
-        if (msgTag == null) {
-            throw new SecuboidRuntimeException("Message for this class not implemented: " + activeSelectionModifyClass.getSimpleName());
+    final void hide() {
+        if (scoreboard != null) {
+            scoreboard.hide();
         }
-
-        String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
-        MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});
-        return message().get(MessageType.NO_COLOR, messagePath);
     }
 }

@@ -68,36 +68,44 @@ public class MessagePaths {
         return new MessagePath("chat-page.not-found", new String[] { "{{first-page}}", "{{last-page}}" }, new Object[] { firstPage, lastPage });
     }
 
-    public static MessagePath selectionScoreboardTitleCreate() {
-        return new MessagePath("selection.scoreboard.title-create", new String[] {}, new Object[] {});
+    public static MessagePath selectionScoreboardActiveTitleCreate() {
+        return new MessagePath("selection.scoreboard.active.title-create", new String[] {}, new Object[] {});
     }
 
-    public static MessagePath selectionScoreboardSelectionType(Object selectionType) {
-        return new MessagePath("selection.scoreboard.selection-type", new String[] { "{{selection-type}}" }, new Object[] { selectionType });
+    public static MessagePath selectionScoreboardActiveSelectionType(Object selectionType) {
+        return new MessagePath("selection.scoreboard.active.selection-type", new String[] { "{{selection-type}}" }, new Object[] { selectionType });
     }
 
-    public static MessagePath selectionScoreboardSelectionTypesPassive() {
-        return new MessagePath("selection.scoreboard.selection-types.passive", new String[] {}, new Object[] {});
+    public static MessagePath selectionScoreboardActiveSelectionTypesPassive() {
+        return new MessagePath("selection.scoreboard.active.selection-types.passive", new String[] {}, new Object[] {});
     }
 
-    public static MessagePath selectionScoreboardSelectionTypesExpand() {
-        return new MessagePath("selection.scoreboard.selection-types.expand", new String[] {}, new Object[] {});
+    public static MessagePath selectionScoreboardActiveSelectionTypesExpand() {
+        return new MessagePath("selection.scoreboard.active.selection-types.expand", new String[] {}, new Object[] {});
     }
 
-    public static MessagePath selectionScoreboardSelectionTypesRetract() {
-        return new MessagePath("selection.scoreboard.selection-types.retract", new String[] {}, new Object[] {});
+    public static MessagePath selectionScoreboardActiveSelectionTypesRetract() {
+        return new MessagePath("selection.scoreboard.active.selection-types.retract", new String[] {}, new Object[] {});
     }
 
-    public static MessagePath selectionScoreboardSelectionTypesMove() {
-        return new MessagePath("selection.scoreboard.selection-types.move", new String[] {}, new Object[] {});
+    public static MessagePath selectionScoreboardActiveSelectionTypesMove() {
+        return new MessagePath("selection.scoreboard.active.selection-types.move", new String[] {}, new Object[] {});
     }
 
-    public static MessagePath selectionScoreboardVolume(Object volume) {
-        return new MessagePath("selection.scoreboard.volume", new String[] { "{{volume}}" }, new Object[] { volume });
+    public static MessagePath selectionScoreboardActiveVolume(Object volume) {
+        return new MessagePath("selection.scoreboard.active.volume", new String[] { "{{volume}}" }, new Object[] { volume });
     }
 
-    public static MessagePath selectionScoreboardTypeWhenDone(Object commandWhenDone) {
-        return new MessagePath("selection.scoreboard.type-when-done", new String[] { "{{command-when-done}}" }, new Object[] { commandWhenDone });
+    public static MessagePath selectionScoreboardActiveTypeWhenDone(Object commandWhenDone) {
+        return new MessagePath("selection.scoreboard.active.type-when-done", new String[] { "{{command-when-done}}" }, new Object[] { commandWhenDone });
+    }
+
+    public static MessagePath selectionScoreboardAreaTitle() {
+        return new MessagePath("selection.scoreboard.area.title", new String[] {}, new Object[] {});
+    }
+
+    public static MessagePath selectionScoreboardAreaLocationPath(Object locationPath) {
+        return new MessagePath("selection.scoreboard.area.location-path", new String[] { "{{location-path}}" }, new Object[] { locationPath });
     }
 
     public static MessagePath selectionCancel() {

@@ -20,13 +20,17 @@ package app.secuboid.core;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPluginImpl extends SecuboidPlugin {
+
+    private final @NotNull Secuboid secuboid;
 
     public SecuboidPluginImpl() {
         super();
 
         secuboid = new SecuboidImpl(this);
+        setSecuboid(secuboid);
     }
 
     @Override
@@ -42,7 +46,7 @@ public class SecuboidPluginImpl extends SecuboidPlugin {
     }
 
     @Override
-    public Secuboid getSecuboid() {
+    public @NotNull Secuboid getSecuboid() {
         return secuboid;
     }
 

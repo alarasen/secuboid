@@ -19,19 +19,35 @@
 package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.areas.Area;
-import org.bukkit.command.CommandSender;
+import app.secuboid.api.messages.MessageType;
+import app.secuboid.core.messages.MessagePaths;
+import app.secuboid.core.scoreboard.SecuboidScoreboard;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionArea extends ActiveSelection {
+import static app.secuboid.core.messages.Message.message;
 
-    protected final @NotNull Area area;
+class SelectionScoreboardArea extends SelectionScoreboard {
 
-    public ActiveSelectionArea(@NotNull CommandSender commandSender, @NotNull Area area) {
-        super(area.getLand().getWorldLand(), commandSender);
+    private final @NotNull Area area;
+
+    SelectionScoreboardArea(@NotNull Player player, @NotNull Area area) {
+        super(player);
         this.area = area;
     }
 
-    public @NotNull Area getArea() {
-        return area;
+    @Override
+    void init() {
+        String title = message().get(MessageType.TITLE, MessagePaths.selectionScoreboardAreaTitle());
+        String[] lines = new String[1];
+        lines[0] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardAreaLocationPath(area));
+
+        scoreboard = new SecuboidScoreboard(player, title, lines);
+        scoreboard.init();
+    }
+
+    @Override
+    void update() {
+        // No update, fix selection
     }
 }

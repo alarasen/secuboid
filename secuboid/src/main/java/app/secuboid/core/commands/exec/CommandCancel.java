@@ -17,7 +17,6 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.messages.MessageType;
@@ -31,17 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 import static app.secuboid.core.messages.Message.message;
 
-@CommandRegistered( //
-        pluginClass = SecuboidPlugin.class, //
-        name = "cancel" //
+@CommandRegistered(
+        pluginClass = SecuboidPlugin.class,
+        name = "cancel"
 )
 public class CommandCancel implements CommandExec {
-
-    Secuboid secuboid;
-
-    public CommandCancel(@NotNull Secuboid secuboid) {
-        this.secuboid = secuboid;
-    }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {

@@ -26,8 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SelectionFormCylinder extends SelectionForm {
 
-    public SelectionFormCylinder(@NotNull CylinderAreaForm cylinderAreaForm, @NotNull Player player, @Nullable Land originLand, @Nullable Area originArea) {
-        super(cylinderAreaForm, player, originLand, originArea);
+    public SelectionFormCylinder(@NotNull CylinderAreaForm cylinderAreaForm, @NotNull Player player,
+                                 boolean isResizeable, @Nullable Land originLand, @Nullable Area originArea) {
+        super(cylinderAreaForm, player, isResizeable, originLand, originArea);
     }
 
     @Override

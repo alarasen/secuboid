@@ -13,15 +13,19 @@ chat-page:
   not-found: "Page not found. Specify from {{first-page}} to {{last-page}}."
 selection:
   scoreboard:
-    title-create: Creating a new land...
-    selection-type: "Selection type: {{selection-type}}"
-    selection-types:
-      passive: "-passive-"
-      expand: "<-expand->"
-      retract: "->retract<-"
-      move: "->move->"
-    volume: "Volume: {{volume}} cube(s)"
-    type-when-done: 'Type: "{{command-when-done}}" when done.'
+    active:
+      title-create: Creating a new land...
+      selection-type: "Selection type: {{selection-type}}"
+      selection-types:
+        passive: "-passive-"
+        expand: "<-expand->"
+        retract: "->retract<-"
+        move: "->move->"
+      volume: "Volume: {{volume}} cube(s)"
+      type-when-done: 'Type: "{{command-when-done}}" when done.'
+    area:
+      title: Selecting a land and its area...
+      location-path: '{{location-path}}'
   cancel: The selection is canceled.
   empty: No area or land selected.
   create:
