@@ -32,12 +32,14 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Function;
+
 import static app.secuboid.core.config.Config.config;
 
 public class PlayerSelection extends SenderSelection {
 
-    private final PlayerInfo playerInfo;
-    private final Player player;
+    private final @NotNull PlayerInfo playerInfo;
+    private final @NotNull Player player;
 
     public PlayerSelection(@NotNull PlayerInfo playerInfo) {
         super();
@@ -51,29 +53,18 @@ public class PlayerSelection extends SenderSelection {
     }
 
     public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
-        SelectionForm selectionForm = createSelectionForm(areaForm, true);
-        activeSelection = new ActiveSelectionModifyExpand(worldLand, playerInfo, selectionForm);
-        activeSelection.init();
+        createActiveSelection(areaForm, true, s -> new ActiveSelectionModifyExpand(worldLand, playerInfo, s));
     }
 
     public void createActiveSelectionAreaShow(@NotNull Area area) {
         AreaForm areaForm = area.getAreaForm();
-        SelectionForm selectionForm = createSelectionForm(areaForm, false);
-        activeSelection = new ActiveSelectionAreaShow(player, area, selectionForm);
-        activeSelection.init();
+        createActiveSelection(areaForm, false, s -> new ActiveSelectionAreaShow(player, area, s));
     }
 
     public void updateSelectionFromLocation() {
         if (activeSelection != null) {
             activeSelection.playerMoveSelection();
         }
-    }
-
-    @Override
-    public boolean removeSelection() {
-        activeSelection.removeSelection();
-
-        return super.removeSelection();
     }
 
     private @NotNull AreaForm createAreaForm(@NotNull Class<? extends AreaForm> areaFormClass) {
@@ -98,6 +89,13 @@ public class PlayerSelection extends SenderSelection {
         }
 
         throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
+    }
+
+    private void createActiveSelection(@NotNull AreaForm areaForm, boolean isResizeable,
+                                       Function<SelectionForm, ActiveSelection> selectionFormActiveSelectionFunction) {
+        SelectionForm selectionForm = createSelectionForm(areaForm, isResizeable);
+        activeSelection = selectionFormActiveSelectionFunction.apply(selectionForm);
+        activeSelection.init();
     }
 
     private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm, boolean isResizeable) {

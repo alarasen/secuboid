@@ -20,15 +20,16 @@ package app.secuboid.core.lands.residents;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.lands.residents.Resident;
 import app.secuboid.api.lands.residents.Residents;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ResidentsImpl implements Residents {
 
-    private final LandComponent land;
+    private final @NotNull LandComponent land;
 
-    private final Set<Resident> residents;
+    private final @NotNull Set<Resident> residents;
 
     public ResidentsImpl(LandComponent land) {
         this.land = land;

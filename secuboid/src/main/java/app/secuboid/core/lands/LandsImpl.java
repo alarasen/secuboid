@@ -54,9 +54,9 @@ public class LandsImpl implements Lands {
 
     private static final String DEFAULT_WORLD_NAME = "world";
 
-    private final Map<String, WorldLand> worldNameToWorldLand;
-    private final Map<Long, LandComponent> idToLandComponent;
-    private final Map<String, Set<LandComponent>> nameToLandComponents;
+    private final @NotNull Map<String, WorldLand> worldNameToWorldLand;
+    private final @NotNull Map<Long, LandComponent> idToLandComponent;
+    private final @NotNull Map<String, Set<LandComponent>> nameToLandComponents;
 
     public LandsImpl() {
         worldNameToWorldLand = new HashMap<>();

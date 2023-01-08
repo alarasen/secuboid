@@ -40,9 +40,9 @@ import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
-    private final WorldLand worldLand;
-    private final Land parent;
-    private final Map<Long, Area> idToArea;
+    private final @NotNull WorldLand worldLand;
+    private final @NotNull Land parent;
+    private final @NotNull Map<Long, Area> idToArea;
 
 
     public AreaLandImpl(long id, @NotNull String name, @NotNull Land parent) {
@@ -56,7 +56,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
 
     @Override
     public @NotNull String getPathName() {
-        return parent.getPathName() + "/" + name;
+        return parent.getPathName() + SEPARATOR_LAND + name;
     }
 
     @Override

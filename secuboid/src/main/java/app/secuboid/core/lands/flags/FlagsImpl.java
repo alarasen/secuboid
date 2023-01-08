@@ -19,12 +19,13 @@ package app.secuboid.core.lands.flags;
 
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.lands.flags.Flags;
+import org.jetbrains.annotations.NotNull;
 
 public class FlagsImpl implements Flags {
 
-    private final LandComponent land;
+    private final @NotNull LandComponent land;
 
-    public FlagsImpl(LandComponent land) {
+    public FlagsImpl(@NotNull LandComponent land) {
         this.land = land;
     }
 }

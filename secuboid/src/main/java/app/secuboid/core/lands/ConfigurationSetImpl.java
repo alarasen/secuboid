@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConfigurationSetImpl extends LandComponentImpl implements ConfigurationSet {
 
-    public ConfigurationSetImpl(long id, String name) {
+    public ConfigurationSetImpl(long id, @NotNull String name) {
         super(id, name);
         // TODO Auto-generated constructor stub
     }

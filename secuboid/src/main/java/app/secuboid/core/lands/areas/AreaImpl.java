@@ -29,8 +29,8 @@ import java.util.Objects;
 public class AreaImpl implements Area {
 
     private final long id;
-    private final AreaForm areaForm;
-    private final AreaLand land;
+    private final @NotNull AreaForm areaForm;
+    private final @NotNull AreaLand land;
 
     public AreaImpl(long id, @NotNull AreaForm areaForm, @NotNull AreaLand land) {
         this.id = id;
@@ -52,7 +52,7 @@ public class AreaImpl implements Area {
 
     @Override
     public @NotNull String getPathName() {
-        return land.getPathName() + ":" + id;
+        return land.getPathName() + SEPARATOR_AREA + id;
     }
 
     @Override

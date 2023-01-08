@@ -38,8 +38,6 @@ public class CommandCancel implements CommandExec {
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        // TODO cancel command
-
         SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
         CommandSender sender = commandSenderInfo.sender();
 

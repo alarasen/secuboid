@@ -28,10 +28,10 @@ import java.util.Objects;
 
 public abstract class LandComponentImpl implements LandComponent {
 
-    protected final String name;
+    protected final @NotNull String name;
     private final long id;
-    private final Flags flags;
-    private final Residents residents;
+    private final @NotNull Flags flags;
+    private final @NotNull Residents residents;
 
     protected LandComponentImpl(long id, String name) {
         this.id = id;

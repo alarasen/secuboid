@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SenderSelection {
 
-    protected ActiveSelection activeSelection;
+    protected @Nullable ActiveSelection activeSelection;
 
     public SenderSelection() {
         activeSelection = null;
@@ -38,6 +38,7 @@ public class SenderSelection {
 
     public boolean removeSelection() {
         if (activeSelection != null) {
+            activeSelection.removeSelection();
             activeSelection = null;
             return true;
         }

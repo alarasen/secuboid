@@ -22,6 +22,7 @@ import app.secuboid.api.storage.rows.Row;
 import app.secuboid.api.storage.tables.Table;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.reflection.PluginLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class StorageInit {
 
     private static final int MAX_LOOP_ATTEMPTS = 100;
 
-    private final Map<Class<? extends Row>, Table<Row>> classRowToTable;
+    private final @NotNull Map<Class<? extends Row>, Table<Row>> classRowToTable;
 
     StorageInit() {
         classRowToTable = new HashMap<>();

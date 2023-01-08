@@ -137,6 +137,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
             commandListener.init();
             ((StorageManagerImpl) storageManager).init(pluginLoader);
         } else {
+            ConnectionManager.init(); // Initiated by storage manager on a normal boot
             chatGetter.reset();
         }
         playerInfos.addConsoleCommandSender(secuboidPlugin.getServer().getConsoleSender());

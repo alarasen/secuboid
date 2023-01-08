@@ -28,7 +28,7 @@ import java.util.function.BiConsumer;
 
 public class WorldLandImpl extends LandImpl implements WorldLand {
 
-    private final Map<Long, Set<Area>> regionXZToLandAreas;
+    private final @NotNull Map<Long, Set<Area>> regionXZToLandAreas;
 
     public WorldLandImpl(long id, @NotNull String worldName) {
         super(id, worldName);
@@ -38,7 +38,7 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
 
     @Override
     public @NotNull String getPathName() {
-        return "/" + name;
+        return SEPARATOR_LAND + name;
     }
 
     @Override

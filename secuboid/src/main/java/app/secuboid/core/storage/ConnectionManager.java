@@ -24,6 +24,8 @@ import app.secuboid.core.messages.Log;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,13 +48,13 @@ public class ConnectionManager {
 
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 
-    private static HikariDataSource dataSource;
+    private static @Nullable HikariDataSource dataSource = null;
     private static boolean isLocalHSQL = false;
 
     private ConnectionManager() {
     }
 
-    protected static void init() {
+    public static void init() {
         Config config = config();
         JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
         String dataFolderStr = javaPlugin.getDataFolder().getAbsolutePath();
@@ -85,12 +87,16 @@ public class ConnectionManager {
         dataSource = new HikariDataSource(hikariConfig);
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static @NotNull Connection getConnection() throws SQLException {
+        if (dataSource == null) {
+            throw new SQLException("The Secuboid datasource is closed or net yet available");
+        }
+
         return dataSource.getConnection();
     }
 
     public static void shutdown() {
-        if (!dataSource.isClosed()) {
+        if (dataSource != null && !dataSource.isClosed()) {
             if (isLocalHSQL) {
                 try (Connection conn = getConnection()) {
                     shutdownLocalHSQL(conn);
@@ -99,10 +105,11 @@ public class ConnectionManager {
                 }
             }
             dataSource.close();
+            dataSource = null;
         }
     }
 
-    private static void shutdownLocalHSQL(Connection conn) throws SQLException {
+    private static void shutdownLocalHSQL(@NotNull Connection conn) throws SQLException {
         String sql = "SHUTDOWN";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

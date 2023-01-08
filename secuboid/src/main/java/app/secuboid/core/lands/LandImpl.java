@@ -28,7 +28,7 @@ import java.util.Map;
 
 public abstract class LandImpl extends LandComponentImpl implements Land {
 
-    private final Map<String, AreaLand> nameLowerToChild;
+    private final @NotNull Map<String, AreaLand> nameLowerToChild;
 
     LandImpl(long id, String name) {
         super(id, name);
