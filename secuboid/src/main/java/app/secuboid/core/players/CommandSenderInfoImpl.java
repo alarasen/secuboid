@@ -19,17 +19,17 @@ package app.secuboid.core.players;
 
 import app.secuboid.api.players.ChatPage;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
 
-    private final CommandSender sender;
-    private ChatPage chatPage;
+    private final @NotNull CommandSender sender;
+    private @Nullable ChatPage chatPage;
 
-    protected CommandSenderInfoImpl(CommandSender sender) {
+
+    protected CommandSenderInfoImpl(@NotNull CommandSender sender) {
         this.sender = sender;
         chatPage = null;
     }
@@ -59,6 +59,4 @@ public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
     public void removeChatPage() {
         chatPage = null;
     }
-
-    public abstract SenderSelection getSelection();
 }

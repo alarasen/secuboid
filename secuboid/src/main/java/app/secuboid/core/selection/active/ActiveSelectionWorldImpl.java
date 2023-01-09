@@ -15,30 +15,26 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.players;
 
-import app.secuboid.api.players.ConsoleCommandSenderInfo;
-import app.secuboid.api.selection.SenderSelection;
-import app.secuboid.core.selection.SenderSelectionImpl;
-import org.bukkit.command.ConsoleCommandSender;
+package app.secuboid.core.selection.active;
+
+import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.selection.active.ActiveSelectionWorld;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implements ConsoleCommandSenderInfo {
+public class ActiveSelectionWorldImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionWorld {
 
-    private final @NotNull SenderSelectionImpl selection;
+    protected final @NotNull WorldLand worldLand;
 
-    public ConsoleCommandSenderInfoImpl(ConsoleCommandSender consoleCommandSender) {
-        super(consoleCommandSender);
-        selection = new SenderSelectionImpl(consoleCommandSender);
+    public ActiveSelectionWorldImpl(@NotNull CommandSender commandSender, @NotNull WorldLand worldLand) {
+        super(commandSender, worldLand);
+        this.worldLand = worldLand;
     }
 
     @Override
-    public boolean isAdminMode() {
-        return true;
+    public @NotNull WorldLand getWorldLand() {
+        return worldLand;
     }
 
-    @Override
-    public @NotNull SenderSelection getSelection() {
-        return selection;
-    }
 }

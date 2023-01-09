@@ -40,9 +40,9 @@ public class ChatPageImpl implements ChatPage {
     private static final int PAGE_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
     private static final int PAGE_HEIGHT = ChatPaginator.OPEN_CHAT_PAGE_HEIGHT - 2;
 
-    private final CommandSender sender;
-    private final String subject;
-    private final String text;
+    private final @NotNull CommandSender sender;
+    private final @NotNull String subject;
+    private final @NotNull String text;
 
     private int totalPages;
 

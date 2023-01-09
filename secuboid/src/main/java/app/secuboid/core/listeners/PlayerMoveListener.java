@@ -18,10 +18,10 @@
 package app.secuboid.core.listeners;
 
 import app.secuboid.api.messages.MessageType;
+import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.PlayerInfoImpl;
-import app.secuboid.core.selection.PlayerSelection;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

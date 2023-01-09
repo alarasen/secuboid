@@ -16,22 +16,20 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.selection.active;
+package app.secuboid.api.selection.active;
 
-import app.secuboid.api.lands.areas.Area;
-import org.bukkit.command.CommandSender;
+import app.secuboid.api.lands.LandComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionArea extends ActiveSelection {
+/**
+ * Represents an active selection of a land component.
+ */
+public interface ActiveSelectionLandComponent extends ActiveSelection {
 
-    protected final @NotNull Area area;
-
-    public ActiveSelectionArea(@NotNull CommandSender commandSender, @NotNull Area area) {
-        super(area.getLand().getWorldLand(), commandSender);
-        this.area = area;
-    }
-
-    public @NotNull Area getArea() {
-        return area;
-    }
+    /**
+     * Gets the land component.
+     *
+     * @return the land component
+     */
+    @NotNull LandComponent getLandComponent();
 }

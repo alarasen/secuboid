@@ -33,7 +33,7 @@ public class DbUtils {
         stmt.setTimestamp(parameterIndex, timestamp);
     }
 
-    public static Calendar getCalendar(@NotNull ResultSet rs, @NotNull String columnLabel) throws SQLException {
+    public static @Nullable Calendar getCalendar(@NotNull ResultSet rs, @NotNull String columnLabel) throws SQLException {
         Timestamp timestamp = rs.getTimestamp(columnLabel);
 
         if (timestamp == null) {
@@ -45,7 +45,8 @@ public class DbUtils {
         return calendar;
     }
 
-    public static <U> void setNullable(@NotNull PreparedStatement stmt, int parameterIndex, @Nullable U uNullable, @NotNull SqlBiConsumer<Integer, U> consumer) throws SQLException {
+    public static <U> void setNullable(@NotNull PreparedStatement stmt, int parameterIndex, @Nullable U uNullable,
+                                       @NotNull SqlBiConsumer<Integer, U> consumer) throws SQLException {
         if (uNullable != null) {
             consumer.accept(parameterIndex, uNullable);
         } else {
@@ -53,7 +54,7 @@ public class DbUtils {
         }
     }
 
-    public static <R> R getNullable(ResultSet rs, String columnLabel, SqlFunction<String, R> function) throws SQLException {
+    public static <R> @Nullable R getNullable(ResultSet rs, String columnLabel, SqlFunction<String, R> function) throws SQLException {
         R r = function.apply(columnLabel);
         if (rs.wasNull()) {
             return null;

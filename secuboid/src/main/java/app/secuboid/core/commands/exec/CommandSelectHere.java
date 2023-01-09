@@ -23,8 +23,8 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
-import app.secuboid.core.players.PlayerInfoImpl;
-import app.secuboid.core.selection.PlayerSelection;
+import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.jetbrains.annotations.NotNull;
 
 // TODO Add player level from the land
@@ -47,7 +47,7 @@ public class CommandSelectHere implements CommandExec {
 
         // TODO Select permission
 
-        PlayerSelection playerSelection = ((PlayerInfoImpl) playerInfo).getPlayerSelection();
-        playerSelection.createActiveSelectionAreaShow(area);
+        PlayerSelection playerSelection = playerInfo.getPlayerSelection();
+        ((PlayerSelectionImpl) playerSelection).createActiveSelectionAreaShow(area);
     }
 }

@@ -22,6 +22,8 @@ import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.LandResultCode;
+import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.parameters.values.ParameterValue;
 import app.secuboid.api.parameters.values.ParameterValueResult;
@@ -31,12 +33,13 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.selection.SenderSelection;
+import app.secuboid.api.selection.active.ActiveSelection;
+import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
-import app.secuboid.core.selection.SenderSelection;
-import app.secuboid.core.selection.active.ActiveSelection;
-import app.secuboid.core.selection.active.ActiveSelectionModify;
+import app.secuboid.core.selection.active.ActiveSelectionModifyImpl;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +70,7 @@ public class CommandCreate implements CommandExec {
         ActiveSelection activeSelection = selection.getActiveSelection();
         CommandSender sender = commandSenderInfo.sender();
 
+        // TODD Remove this check and use annotation check
         if (!(activeSelection instanceof ActiveSelectionModify activeSelectionModify)) {
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNeedActiveSelection(COMMAND_SELECT));
             return;
@@ -123,8 +127,9 @@ public class CommandCreate implements CommandExec {
         }
 
         // TODO get parent
-        secuboid.getLands().create(activeSelectionModify.getWorldLand(), landName, owner,
-                activeSelectionModify.getSelectionForm().getAreaForm(), r -> landCreateCallback(commandSenderInfo, r));
+        WorldLand worldLand = activeSelectionModify.getWorldLand();
+        AreaForm areaForm = ((ActiveSelectionModifyImpl) activeSelectionModify).getSelectionForm().getAreaForm();
+        secuboid.getLands().create(worldLand, landName, owner, areaForm, r -> landCreateCallback(commandSenderInfo, r));
     }
 
     public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
@@ -137,7 +142,7 @@ public class CommandCreate implements CommandExec {
 
         message().sendMessage(sender, MessageType.NORMAL,
                 MessagePaths.selectionCreateCreated(landResult.areaLand().getName()));
-        SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
+        SenderSelection senderSelection = commandSenderInfo.getSelection();
         senderSelection.removeSelection();
     }
 }

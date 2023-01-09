@@ -18,10 +18,10 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.messages.MessageType;
+import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.SecuboidScoreboard;
 import org.bukkit.entity.Player;
@@ -87,9 +87,8 @@ class SelectionScoreboardActive extends SelectionScoreboard {
     private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
         String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
 
-        if (msgTag == null) {
-            throw new SecuboidRuntimeException("Message for this class not implemented: " + activeSelectionModifyClass.getSimpleName());
-        }
+        assert msgTag != null :
+                "Message for this class not implemented: " + activeSelectionModifyClass.getSimpleName();
 
         String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
         MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});

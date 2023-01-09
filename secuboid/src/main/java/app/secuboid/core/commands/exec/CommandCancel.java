@@ -22,9 +22,8 @@ import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.messages.MessagePaths;
-import app.secuboid.core.players.CommandSenderInfoImpl;
-import app.secuboid.core.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +37,7 @@ public class CommandCancel implements CommandExec {
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        SenderSelection senderSelection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
+        SenderSelection senderSelection = commandSenderInfo.getSelection();
         CommandSender sender = commandSenderInfo.sender();
 
         if (senderSelection.removeSelection()) {

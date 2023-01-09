@@ -18,19 +18,23 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.players.PlayerInfo;
-import org.bukkit.Location;
+import app.secuboid.api.lands.LandComponent;
+import app.secuboid.api.selection.active.ActiveSelectionLandComponent;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionModifyPassive extends ActiveSelectionModifyImpl {
+public abstract class ActiveSelectionLandComponentImpl extends ActiveSelectionImpl implements ActiveSelectionLandComponent {
 
-    public ActiveSelectionModifyPassive(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
-        super(worldLand, playerInfo, selectionForm);
+    protected final @NotNull LandComponent landComponent;
+
+    protected ActiveSelectionLandComponentImpl(@NotNull CommandSender commandSender,
+                                               @NotNull LandComponent landComponent) {
+        super(commandSender);
+        this.landComponent = landComponent;
     }
 
     @Override
-    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
-        return false;
+    public @NotNull LandComponent getLandComponent() {
+        return landComponent;
     }
 }

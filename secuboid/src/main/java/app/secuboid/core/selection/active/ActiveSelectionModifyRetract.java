@@ -26,7 +26,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ActiveSelectionModifyRetract extends ActiveSelectionModify {
+public class ActiveSelectionModifyRetract extends ActiveSelectionModifyImpl {
 
     private @Nullable Location lastOutSideLoc;
 

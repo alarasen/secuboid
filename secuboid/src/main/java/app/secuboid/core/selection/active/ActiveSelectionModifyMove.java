@@ -25,7 +25,7 @@ import app.secuboid.core.lands.areas.AreaFormImpl;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionModifyMove extends ActiveSelectionModify {
+public class ActiveSelectionModifyMove extends ActiveSelectionModifyImpl {
 
     public ActiveSelectionModifyMove(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);

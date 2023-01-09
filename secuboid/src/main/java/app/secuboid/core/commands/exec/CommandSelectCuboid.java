@@ -24,8 +24,8 @@ import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.reflection.CommandRegistered;
-import app.secuboid.core.players.PlayerInfoImpl;
-import app.secuboid.core.selection.PlayerSelection;
+import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
@@ -41,8 +41,8 @@ public class CommandSelectCuboid implements CommandExec {
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
         WorldLand worldLand = playerInfo.getWorldLand();
-        PlayerSelection playerSelection = ((PlayerInfoImpl) playerInfo).getPlayerSelection();
+        PlayerSelection playerSelection = playerInfo.getPlayerSelection();
 
-        playerSelection.createActiveSelectionModifyExpand(worldLand, CuboidAreaForm.class);
+        ((PlayerSelectionImpl) playerSelection).createActiveSelectionModifyExpand(worldLand, CuboidAreaForm.class);
     }
 }

@@ -88,9 +88,7 @@ public class ConnectionManager {
     }
 
     public static @NotNull Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            throw new SQLException("The Secuboid datasource is closed or net yet available");
-        }
+        assert dataSource != null : "The Secuboid datasource is closed or net yet available";
 
         return dataSource.getConnection();
     }

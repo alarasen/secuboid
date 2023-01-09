@@ -24,6 +24,8 @@ import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
 import app.secuboid.api.players.PlayerInfo;
+import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.api.selection.active.ActiveSelection;
 import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
 import app.secuboid.core.lands.areas.CylinderAreaFormImpl;
 import app.secuboid.core.selection.active.*;
@@ -36,13 +38,13 @@ import java.util.function.Function;
 
 import static app.secuboid.core.config.Config.config;
 
-public class PlayerSelection extends SenderSelection {
+public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSelection {
 
     private final @NotNull PlayerInfo playerInfo;
     private final @NotNull Player player;
 
-    public PlayerSelection(@NotNull PlayerInfo playerInfo) {
-        super();
+    public PlayerSelectionImpl(@NotNull PlayerInfo playerInfo) {
+        super(playerInfo.getPlayer());
         this.playerInfo = playerInfo;
         this.player = playerInfo.getPlayer();
     }
@@ -62,8 +64,8 @@ public class PlayerSelection extends SenderSelection {
     }
 
     public void updateSelectionFromLocation() {
-        if (activeSelection != null) {
-            activeSelection.playerMoveSelection();
+        if (hasSelection()) {
+            ((ActiveSelectionImpl) activeSelection).playerMoveSelection();
         }
     }
 
@@ -95,7 +97,7 @@ public class PlayerSelection extends SenderSelection {
                                        Function<SelectionForm, ActiveSelection> selectionFormActiveSelectionFunction) {
         SelectionForm selectionForm = createSelectionForm(areaForm, isResizeable);
         activeSelection = selectionFormActiveSelectionFunction.apply(selectionForm);
-        activeSelection.init();
+        ((ActiveSelectionImpl) activeSelection).init();
     }
 
     private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm, boolean isResizeable) {

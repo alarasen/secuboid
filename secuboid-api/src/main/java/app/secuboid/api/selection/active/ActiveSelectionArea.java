@@ -16,21 +16,20 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.selection.active;
+package app.secuboid.api.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.players.PlayerInfo;
-import org.bukkit.Location;
+import app.secuboid.api.lands.areas.Area;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveSelectionModifyPassive extends ActiveSelectionModifyImpl {
+/**
+ * Represents an active selection of an area.
+ */
+public interface ActiveSelectionArea extends ActiveSelectionLandComponent {
 
-    public ActiveSelectionModifyPassive(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
-        super(worldLand, playerInfo, selectionForm);
-    }
-
-    @Override
-    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
-        return false;
-    }
+    /**
+     * Gets the selected area.
+     *
+     * @return the area
+     */
+    @NotNull Area getArea();
 }

@@ -15,30 +15,33 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.players;
+package app.secuboid.core.selection.active;
 
-import app.secuboid.api.players.ConsoleCommandSenderInfo;
-import app.secuboid.api.selection.SenderSelection;
-import app.secuboid.core.selection.SenderSelectionImpl;
-import org.bukkit.command.ConsoleCommandSender;
+import app.secuboid.api.selection.active.ActiveSelection;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implements ConsoleCommandSenderInfo {
+public abstract class ActiveSelectionImpl implements ActiveSelection {
 
-    private final @NotNull SenderSelectionImpl selection;
+    protected final @NotNull CommandSender commandSender;
 
-    public ConsoleCommandSenderInfoImpl(ConsoleCommandSender consoleCommandSender) {
-        super(consoleCommandSender);
-        selection = new SenderSelectionImpl(consoleCommandSender);
+    protected ActiveSelectionImpl(@NotNull CommandSender commandSender) {
+        this.commandSender = commandSender;
     }
 
-    @Override
-    public boolean isAdminMode() {
-        return true;
+    public final @NotNull CommandSender getCommandSender() {
+        return commandSender;
     }
 
-    @Override
-    public @NotNull SenderSelection getSelection() {
-        return selection;
+    public void init() {
+        // Override if needed
+    }
+
+    public void playerMoveSelection() {
+        // Override if needed
+    }
+
+    public void removeSelection() {
+        // Override if needed
     }
 }

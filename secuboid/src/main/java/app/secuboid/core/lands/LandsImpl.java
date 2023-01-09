@@ -17,7 +17,6 @@
  */
 package app.secuboid.core.lands;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
@@ -356,9 +355,7 @@ public class LandsImpl implements Lands {
             world = Bukkit.getWorlds().get(0);
         }
 
-        if (world == null) {
-            throw new SecuboidRuntimeException("A location is sent without any world. No world is available");
-        }
+        assert world != null : "A location is sent without any world. No world is available";
 
         log().log(Level.WARNING, "A location is sent without any world. Assuming: {}", world.getName());
 

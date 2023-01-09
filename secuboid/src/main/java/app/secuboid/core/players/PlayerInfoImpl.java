@@ -23,8 +23,9 @@ import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.selection.PlayerSelection;
-import app.secuboid.core.selection.SenderSelection;
+import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.api.selection.SenderSelection;
+import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -37,8 +38,8 @@ import static app.secuboid.core.SecuboidImpl.instance;
 
 public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo {
 
-    private final Player player;
-    private final PlayerSelection playerSelection;
+    private final @NotNull Player player;
+    private final @NotNull PlayerSelection playerSelection;
 
     private boolean adminMode;
 
@@ -52,8 +53,7 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     PlayerInfoImpl(@NotNull Player player) {
         super(player);
         this.player = player;
-
-        playerSelection = new PlayerSelection(this);
+        playerSelection = new PlayerSelectionImpl(this);
 
         adminMode = false;
         lastUpdateTimeMillis = 0L;
@@ -128,13 +128,12 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         return land.getWorldLand();
     }
 
-
     @Override
     public @NotNull SenderSelection getSelection() {
         return playerSelection;
     }
 
-    @SuppressWarnings("java:S4144")
+    @Override
     public @NotNull PlayerSelection getPlayerSelection() {
         return playerSelection;
     }
@@ -148,6 +147,6 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         land = lands.get(toLocation);
         locationPath = lands.getLocationPath(toLocation);
 
-        playerSelection.updateSelectionFromLocation();
+        ((PlayerSelectionImpl) playerSelection).updateSelectionFromLocation();
     }
 }

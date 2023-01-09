@@ -20,23 +20,25 @@ package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.players.PlayerInfo;
+import app.secuboid.api.selection.active.ActiveSelectionModify;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ActiveSelectionModify extends ActiveSelection {
+public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl implements ActiveSelectionModify {
 
+    protected final @NotNull WorldLand worldLand;
     protected final @NotNull PlayerInfo playerInfo;
     protected final @NotNull Player player;
     protected final @NotNull SelectionForm selectionForm;
-
     private @Nullable SelectionScoreboard selectionScoreboard;
     private @Nullable Location playerLastLoc;
 
-    protected ActiveSelectionModify(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo,
-                                    @NotNull SelectionForm selectionForm) {
-        super(worldLand, playerInfo.getPlayer());
+    protected ActiveSelectionModifyImpl(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo,
+                                        @NotNull SelectionForm selectionForm) {
+        super(playerInfo.getPlayer());
+        this.worldLand = worldLand;
         this.playerInfo = playerInfo;
         player = playerInfo.getPlayer();
         this.selectionForm = selectionForm;
@@ -84,6 +86,11 @@ public abstract class ActiveSelectionModify extends ActiveSelection {
         if (selectionScoreboard != null) {
             selectionScoreboard.hide();
         }
+    }
+
+    @Override
+    public @NotNull WorldLand getWorldLand() {
+        return worldLand;
     }
 
     protected abstract boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc);

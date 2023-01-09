@@ -15,40 +15,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.selection.active;
+
+package app.secuboid.api.selection.active;
 
 import app.secuboid.api.lands.WorldLand;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class ActiveSelection {
+/**
+ * Represents an active selection of a world.
+ */
+public interface ActiveSelectionWorld extends ActiveSelectionLandComponent {
 
-    protected final @NotNull WorldLand worldLand;
-
-    protected final @NotNull CommandSender commandSender;
-
-    protected ActiveSelection(@NotNull WorldLand worldLand, @NotNull CommandSender commandSender) {
-        this.worldLand = worldLand;
-        this.commandSender = commandSender;
-    }
-
-    public final @NotNull WorldLand getWorldLand() {
-        return worldLand;
-    }
-
-    public final @NotNull CommandSender getCommandSender() {
-        return commandSender;
-    }
-
-    public void init() {
-        // Override if needed
-    }
-
-    public void playerMoveSelection() {
-        // Override if needed
-    }
-
-    public void removeSelection() {
-        // Override if needed
-    }
+    /**
+     * Gets the world land.
+     *
+     * @return the world land
+     */
+    @NotNull WorldLand getWorldLand();
 }

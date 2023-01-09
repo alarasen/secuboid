@@ -17,6 +17,7 @@
  */
 package app.secuboid.api.players;
 
+import app.secuboid.api.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,4 +67,12 @@ public interface CommandSenderInfo {
      * Removes the chat page from the memory.
      */
     void removeChatPage();
+
+
+    /**
+     * Gets the sender selection.
+     *
+     * @return the sender selection
+     */
+    public @NotNull SenderSelection getSelection();
 }

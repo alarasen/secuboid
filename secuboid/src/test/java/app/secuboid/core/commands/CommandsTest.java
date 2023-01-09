@@ -20,14 +20,11 @@ package app.secuboid.core.commands;
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
-import app.secuboid.api.players.ChatPage;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.reflection.CommandRegistered;
-import app.secuboid.core.players.ChatPageImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +60,8 @@ class CommandsTest {
         commands.init(pluginLoader);
 
         sender = mock(CommandSender.class);
-        commandSenderInfo = new CommandSenderInfoTest(sender);
+        commandSenderInfo = mock(CommandSenderInfo.class);
+        when(commandSenderInfo.sender()).thenReturn(sender);
     }
 
     @Test
@@ -125,39 +123,6 @@ class CommandsTest {
         public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
             CommandSender sender = commandSenderInfo.sender();
             sender.sendMessage("done sub!");
-        }
-    }
-
-    private record CommandSenderInfoTest(CommandSender sender) implements CommandSenderInfo {
-
-        @Override
-        public @NotNull CommandSender sender() {
-            return sender;
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return "sender";
-        }
-
-        @Override
-        public boolean isAdminMode() {
-            return false;
-        }
-
-        @Override
-        public @NotNull ChatPage newChatPage(@NotNull String header, @NotNull String text) {
-            return new ChatPageImpl(sender, "header", "text");
-        }
-
-        @Override
-        public @Nullable ChatPage getChatPage() {
-            return null;
-        }
-
-        @Override
-        public void removeChatPage() {
-
         }
     }
 }

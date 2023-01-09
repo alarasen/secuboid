@@ -21,6 +21,7 @@ import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.selection.PlayerSelection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,4 +81,11 @@ public interface PlayerInfo extends CommandSenderInfo {
      * @return the last world land
      */
     @NotNull WorldLand getWorldLand();
+
+    /**
+     * Gets the player selection.
+     *
+     * @return the player selection
+     */
+    @NotNull PlayerSelection getPlayerSelection();
 }

@@ -17,7 +17,6 @@
  */
 package app.secuboid.api;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,9 +35,7 @@ public abstract class SecuboidPlugin extends JavaPlugin {
      * @return the Secuboid main instance
      */
     public static @NotNull Secuboid secuboid() {
-        if (secuboid == null) {
-            throw new SecuboidRuntimeException("Secuboid not yet initialized");
-        }
+        assert secuboid != null : "Secuboid not yet initialized";
 
         return secuboid;
     }

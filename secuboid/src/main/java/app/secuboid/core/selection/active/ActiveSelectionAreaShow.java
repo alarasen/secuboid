@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ActiveSelectionAreaShow extends ActiveSelectionArea {
+public class ActiveSelectionAreaShow extends ActiveSelectionAreaImpl {
 
     private final @NotNull Player player;
     private final @NotNull SelectionForm selectionForm;

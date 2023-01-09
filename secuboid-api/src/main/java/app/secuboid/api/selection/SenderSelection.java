@@ -15,34 +15,36 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.selection;
 
-import app.secuboid.core.selection.active.ActiveSelection;
-import org.jetbrains.annotations.Nullable;
+package app.secuboid.api.selection;
 
-public class SenderSelection {
+import app.secuboid.api.selection.active.ActiveSelection;
+import org.jetbrains.annotations.NotNull;
 
-    protected @Nullable ActiveSelection activeSelection;
+/**
+ * Represents a sender selection.
+ */
+public interface SenderSelection {
 
-    public SenderSelection() {
-        activeSelection = null;
-    }
+    /**
+     * Gets the active selection. The class {@link app.secuboid.api.selection.active.ActiveSelectionNothing} means no
+     * selection.
+     *
+     * @return the active selection.
+     */
+    @NotNull ActiveSelection getActiveSelection();
 
-    public final @Nullable ActiveSelection getActiveSelection() {
-        return activeSelection;
-    }
+    /**
+     * Checks if a selection is active.
+     *
+     * @return true if a selection is active.
+     */
+    boolean hasSelection();
 
-    public final boolean hasSelection() {
-        return activeSelection != null;
-    }
-
-    public boolean removeSelection() {
-        if (activeSelection != null) {
-            activeSelection.removeSelection();
-            activeSelection = null;
-            return true;
-        }
-
-        return false;
-    }
+    /**
+     * Removes any selection.
+     *
+     * @return true if a selection was active.
+     */
+    boolean removeSelection();
 }
