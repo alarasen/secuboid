@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchPackagePatterns": [
-        "^secuboid-"
+        "^app.secuboid:secuboid-"
       ],
       "enabled": false
     }
