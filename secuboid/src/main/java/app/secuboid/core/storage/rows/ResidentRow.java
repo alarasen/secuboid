@@ -22,7 +22,7 @@ import app.secuboid.api.storage.rows.Row;
 
 public record ResidentRow(
         long landId,
-        long parameterValueId,
+        long recipientId,
         int level
 ) implements Row {
 }

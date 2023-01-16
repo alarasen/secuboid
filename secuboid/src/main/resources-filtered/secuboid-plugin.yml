@@ -13,18 +13,18 @@ component-classes:
   # Flags
   - app.secuboid.core.flags.FlagDeclarations
 
-  # Parameter values
-  - app.secuboid.core.parameters.values.ParameterValueEntityClass
-  - app.secuboid.core.parameters.values.ParameterValueEntityType
-  - app.secuboid.core.parameters.values.ParameterValueEverybody
-  - app.secuboid.core.parameters.values.ParameterValueEverything
-  - app.secuboid.core.parameters.values.ParameterValueNobody
-  - app.secuboid.core.parameters.values.ParameterValuePlayer
-  - app.secuboid.core.parameters.values.ParameterValueResident
+  # Recipients
+  - app.secuboid.core.recipients.RecipientEntityClass
+  - app.secuboid.core.recipients.RecipientEntityType
+  - app.secuboid.core.recipients.RecipientEverybody
+  - app.secuboid.core.recipients.RecipientEverything
+  - app.secuboid.core.recipients.RecipientNobody
+  - app.secuboid.core.recipients.RecipientPlayer
+  - app.secuboid.core.recipients.RecipientResident
 
   # Tables
   - app.secuboid.core.storage.tables.AreaTable
   - app.secuboid.core.storage.tables.FlagTable
   - app.secuboid.core.storage.tables.LandTable
-  - app.secuboid.core.storage.tables.ParameterValueTable
+  - app.secuboid.core.storage.tables.RecipientTable
   - app.secuboid.core.storage.tables.ResidentTable

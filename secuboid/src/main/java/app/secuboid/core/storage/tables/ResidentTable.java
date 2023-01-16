@@ -23,7 +23,7 @@ import app.secuboid.core.storage.rows.ResidentRow;
 
 @TableRegistered(
         row = ResidentRow.class,
-        dependsOn = {LandTable.class, ParameterValueTable.class},
+        dependsOn = {LandTable.class, RecipientTable.class},
         createTable = ""
                 + "CREATE TABLE IF NOT EXISTS secuboid_resident ("
                 + " land_id BIGINT NOT NULL,"

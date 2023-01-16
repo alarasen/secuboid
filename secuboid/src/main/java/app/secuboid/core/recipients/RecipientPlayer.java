@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.parameters.values;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.exceptions.RecipientException;
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueType;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.reflection.RecipientRegistered;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
@@ -32,14 +32,14 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "player", shortName = "p", chatColor = "\u00A76", needsValue = true, priority = 80)
-public record ParameterValuePlayer(@NotNull ParameterValueType type,
-                                   long id,
-                                   @NotNull UUID uuid
-) implements ParameterValue {
+@RecipientRegistered(name = "player", shortName = "p", chatColor = "\u00A76", needsValue = true, priority = 80)
+public record RecipientPlayer(@NotNull RecipientType type,
+                              long id,
+                              @NotNull UUID uuid
+) implements Recipient {
 
     // Needed for load from database
-    public static ParameterValuePlayer newInstance(@NotNull ParameterValueType type, long id, @NotNull String value) throws ParameterValueException {
+    public static RecipientPlayer newInstance(@NotNull RecipientType type, long id, @NotNull String value) throws RecipientException {
         UUID uuid;
 
         try {
@@ -48,10 +48,10 @@ public record ParameterValuePlayer(@NotNull ParameterValueType type,
             String msg = format(
                     "Not a player UUID: Wrong name in the database or Bukkit API is changed? [uuid=%s]",
                     value);
-            throw new ParameterValueException(msg, e);
+            throw new RecipientException(msg, e);
         }
 
-        return new ParameterValuePlayer(type, id, uuid);
+        return new RecipientPlayer(type, id, uuid);
     }
 
     public String getPlayerName() {

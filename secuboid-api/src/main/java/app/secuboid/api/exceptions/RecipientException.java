@@ -15,16 +15,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package app.secuboid.api.exceptions;
 
-package app.secuboid.core.storage.rows;
-
-import app.secuboid.api.storage.rows.RowWithId;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public record ParameterValueRow(
-        long id,
-        @NotNull String shortName,
-        @Nullable String value
-) implements RowWithId {
+/**
+ * When there is a problem with a creation of a recipient.
+ */
+public class RecipientException extends Exception {
+
+    public RecipientException(@NotNull String message) {
+        super(message);
+    }
+
+    public RecipientException(@NotNull String message, @NotNull Throwable cause) {
+        super(message, cause);
+    }
 }

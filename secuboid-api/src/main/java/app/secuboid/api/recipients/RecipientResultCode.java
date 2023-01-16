@@ -15,20 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.exceptions;
 
-import org.jetbrains.annotations.NotNull;
+package app.secuboid.api.recipients;
 
 /**
- * When there is a problem with a creation of a parameter value.
+ * Returned code for a recipient command.
  */
-public class ParameterValueException extends Exception {
+public enum RecipientResultCode {
 
-    public ParameterValueException(@NotNull String message) {
-        super(message);
-    }
+    /**
+     * success
+     */
+    SUCCESS,
 
-    public ParameterValueException(@NotNull String message, @NotNull Throwable cause) {
-        super(message, cause);
-    }
+    /**
+     * player not found
+     */
+    PLAYER_NOT_FOUND,
+
+    /**
+     * Invalid parameter
+     */
+    INVALID_PARAMETER,
+
+    /**
+     * Invalid value
+     */
+    INVALID_VALUE
 }

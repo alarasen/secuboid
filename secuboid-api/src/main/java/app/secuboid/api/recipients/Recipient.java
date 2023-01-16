@@ -15,7 +15,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.parameters.values;
+package app.secuboid.api.recipients;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.storage.rows.WithId;
@@ -24,29 +24,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a parameter value (ex: entity, mob, players, ...) If you
- * implements a new parameter value, you need to add the annotation
- * ParameterValueRegistered and add it to secuboid-plugin.yml. You need also to
+ * Represents a recipient (ex: entity, mob, players, ...) If you
+ * implements a new recipient, you need to add the annotation
+ * RecipientRegistered and add it to secuboid-plugin.yml. You need also to
  * create a static method for a new instance from the database with a throw if something goes
  * wrong:
  *
  * <pre>
- * public static ParameterValueMy newInstance(ParameterValueType type, long id, String value)
- *         throws ParameterValueException {
- *     // return ParameterValueMy(type); // If single instance with no value
- *     return new ParameterValueMy(type, value);
- *     // ParameterValueException will be caught be the requester
+ * public static RecipientMy newInstance(RecipientType type, long id, String value)
+ *         throws RecipientException {
+ *     // return RecipientMy(type); // If single instance with no value
+ *     return new RecipientMy(type, value);
+ *     // RecipientException will be caught be the requester
  * }
  * </pre>
  */
-public interface ParameterValue extends WithId {
+public interface Recipient extends WithId {
 
     /**
-     * Gets the parameter value type.
+     * Gets the recipient type.
      *
-     * @return the parameter value type
+     * @return the recipient type
      */
-    @NotNull ParameterValueType type();
+    @NotNull RecipientType type();
 
     /**
      * Gets the extra value parameter in String format. If there is no extra value

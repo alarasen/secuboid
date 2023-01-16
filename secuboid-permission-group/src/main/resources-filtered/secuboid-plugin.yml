@@ -1,3 +1,3 @@
 component-classes:
-  # Parameter values
-  - app.secuboid.permission.group.parameters.values.ParameterValuePermissionGroup
+  # Recipients
+  - app.secuboid.permission.group.recipients.RecipientPermissionGroup

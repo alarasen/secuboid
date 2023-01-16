@@ -16,15 +16,15 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.parameters.values;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueResult;
-import app.secuboid.api.parameters.values.ParameterValues;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientResult;
+import app.secuboid.api.recipients.Recipients;
+import app.secuboid.api.reflection.RecipientRegistered;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.reflection.PluginLoader;
-import app.secuboid.core.storage.rows.ParameterValueRow;
+import app.secuboid.core.storage.rows.RecipientRow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -36,50 +36,50 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static app.secuboid.api.parameters.values.ParameterValueResultCode.INVALID_PARAMETER;
-import static app.secuboid.api.parameters.values.ParameterValueResultCode.SUCCESS;
-import static app.secuboid.api.parameters.values.ParameterValues.PLAYER;
+import static app.secuboid.api.recipients.RecipientResultCode.INVALID_PARAMETER;
+import static app.secuboid.api.recipients.RecipientResultCode.SUCCESS;
+import static app.secuboid.api.recipients.Recipients.PLAYER;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-class ParameterValuesTest {
+class RecipientsTest {
 
     private final AtomicLong atomicIndexId = new AtomicLong();
 
-    private ParameterValues parameterValues;
+    private Recipients recipients;
 
     @BeforeEach
     void beforeEach() {
-        ParameterValuesImpl parameterValuesImpl = spy(new ParameterValuesImpl());
+        RecipientsImpl recipientsImpl = spy(new RecipientsImpl());
 
         StorageManager storageManager = mock(StorageManager.class);
         doAnswer(this::storageInsertAnswer).when(storageManager).insert(any(), any());
-        doReturn(storageManager).when(parameterValuesImpl).getStorageManager();
+        doReturn(storageManager).when(recipientsImpl).getStorageManager();
 
         PluginLoader pluginLoader = mock(PluginLoader.class);
-        ParameterValueRegistered parameterValueRegistered =
-                ParameterValuePlayer.class.getAnnotation(ParameterValueRegistered.class);
-        when(pluginLoader.getClassToAnnotation(ParameterValueRegistered.class, ParameterValue.class))
-                .thenReturn(Collections.singletonMap(ParameterValuePlayer.class, parameterValueRegistered));
+        RecipientRegistered recipientRegistered =
+                RecipientPlayer.class.getAnnotation(RecipientRegistered.class);
+        when(pluginLoader.getClassToAnnotation(RecipientRegistered.class, Recipient.class))
+                .thenReturn(Collections.singletonMap(RecipientPlayer.class, recipientRegistered));
 
-        parameterValuesImpl.init(pluginLoader);
-        parameterValuesImpl.load();
+        recipientsImpl.init(pluginLoader);
+        recipientsImpl.load();
 
-        parameterValues = parameterValuesImpl;
+        recipients = recipientsImpl;
     }
 
     @Test
     void when_grab_invalid_parameter_send_error_code() {
         String value = UUID.randomUUID().toString();
-        AtomicReference<ParameterValueResult> atomicResult = new AtomicReference<>(null);
-        Consumer<ParameterValueResult> callback = atomicResult::set;
+        AtomicReference<RecipientResult> atomicResult = new AtomicReference<>(null);
+        Consumer<RecipientResult> callback = atomicResult::set;
 
-        parameterValues.grab("INVALID", value, callback);
+        recipients.grab("INVALID", value, callback);
         await().atMost(Duration.ofSeconds(10)).until(() -> atomicResult.get() != null);
 
-        ParameterValueResult result = atomicResult.get();
+        RecipientResult result = atomicResult.get();
 
         assertNotNull(result);
         assertEquals(INVALID_PARAMETER, result.code());
@@ -88,48 +88,48 @@ class ParameterValuesTest {
     @Test
     void when_grab_new_value_add_it() {
         String value = UUID.randomUUID().toString();
-        AtomicReference<ParameterValueResult> atomicResult = new AtomicReference<>(null);
-        Consumer<ParameterValueResult> callback = atomicResult::set;
+        AtomicReference<RecipientResult> atomicResult = new AtomicReference<>(null);
+        Consumer<RecipientResult> callback = atomicResult::set;
 
-        parameterValues.grab(PLAYER, value, callback);
+        recipients.grab(PLAYER, value, callback);
         await().atMost(Duration.ofSeconds(10)).until(() -> atomicResult.get() != null);
 
-        ParameterValueResult result = atomicResult.get();
+        RecipientResult result = atomicResult.get();
 
         assertNotNull(result);
         assertEquals(SUCCESS, result.code());
-        ParameterValue parameterValue = result.parameterValue();
-        assertNotNull(parameterValue);
-        assertEquals(1, parameterValue.id());
+        Recipient recipient = result.recipient();
+        assertNotNull(recipient);
+        assertEquals(1, recipient.id());
     }
 
     @Test
     void when_grab_twice_same_value_add_one_and_get_the_second() {
         String value = UUID.randomUUID().toString();
-        AtomicReference<ParameterValueResult> atomicResult = new AtomicReference<>(null);
-        Consumer<ParameterValueResult> callback = atomicResult::set;
+        AtomicReference<RecipientResult> atomicResult = new AtomicReference<>(null);
+        Consumer<RecipientResult> callback = atomicResult::set;
 
-        parameterValues.grab(PLAYER, value, callback);
+        recipients.grab(PLAYER, value, callback);
         await().atMost(Duration.ofSeconds(10)).until(() -> atomicResult.get() != null);
 
         atomicResult.set(null);
-        parameterValues.grab(PLAYER, value, callback);
+        recipients.grab(PLAYER, value, callback);
         await().atMost(Duration.ofSeconds(10)).until(() -> atomicResult.get() != null);
 
-        ParameterValueResult result = atomicResult.get();
+        RecipientResult result = atomicResult.get();
 
         assertNotNull(result);
         assertEquals(SUCCESS, result.code());
-        ParameterValue parameterValue = result.parameterValue();
-        assertNotNull(parameterValue);
-        assertEquals(1, parameterValue.id());
+        Recipient recipient = result.recipient();
+        assertNotNull(recipient);
+        assertEquals(1, recipient.id());
     }
 
     private Object storageInsertAnswer(InvocationOnMock invocation) {
-        ParameterValueRow previousRow = invocation.getArgument(0);
-        Consumer<ParameterValueRow> callback = invocation.getArgument(1);
+        RecipientRow previousRow = invocation.getArgument(0);
+        Consumer<RecipientRow> callback = invocation.getArgument(1);
 
-        ParameterValueRow row = new ParameterValueRow(atomicIndexId.incrementAndGet(), PLAYER, previousRow.value());
+        RecipientRow row = new RecipientRow(atomicIndexId.incrementAndGet(), PLAYER, previousRow.value());
         callback.accept(row);
 
         return null;

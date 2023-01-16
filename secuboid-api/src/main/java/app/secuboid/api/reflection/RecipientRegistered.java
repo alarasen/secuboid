@@ -28,13 +28,13 @@ import java.lang.annotation.Target;
 import static app.secuboid.api.utilities.CharacterCase.LOWERCASE;
 
 /**
- * The Interface ParameterValueRegistered. Annotation used for custom parameter
+ * The Interface RecipientRegistered. Annotation used for custom parameter
  * values. If you make your own value types, your class should implement
- * ParameterValue.
+ * Recipient.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ParameterValueRegistered {
+public @interface RecipientRegistered {
 
     /**
      * The parameter name (not the value). Ex: player, everybody, etc.

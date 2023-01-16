@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -38,12 +38,6 @@
 
         <!-- packaged in Secuboid -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <scope>compile</scope>
@@ -62,8 +56,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
             <scope>compile</scope>
         </dependency>
         <!-- packaged in Secuboid End -->
@@ -219,10 +213,8 @@
                         <includes>
                             <include>app.secuboid:secuboid-api</include>
                             <include>org.bstats:*</include>
-                            <include>com.google.code.gson:gson</include>
                             <include>org.hsqldb:hsqldb</include>
                             <include>org.mariadb.jdbc:mariadb-java-client</include>
-                            <include>com.zaxxer:HikariCP</include>
                         </includes>
                     </artifactSet>
                     <relocations>
@@ -231,20 +223,12 @@
                             <shadedPattern>app.secuboid.bstats</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.google.gson</pattern>
-                            <shadedPattern>app.secuboid.gson</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>org.hsqldb</pattern>
                             <shadedPattern>app.secuboid.hsqldb</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.mariadb.jdbc</pattern>
                             <shadedPattern>app.secuboid.mariadb.jdbc</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>app.secuboid.hikari</shadedPattern>
                         </relocation>
                     </relocations>
 

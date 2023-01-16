@@ -19,7 +19,7 @@ package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
-import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.recipients.Recipient;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public interface Lands {
      * @param areaForm the area form
      * @param callback the method to call back if success or not
      */
-    void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
+    void create(@NotNull Land parent, @NotNull String landName, @NotNull Recipient owner,
                 @NotNull AreaForm areaForm, @Nullable Consumer<LandResult> callback);
 
     /**

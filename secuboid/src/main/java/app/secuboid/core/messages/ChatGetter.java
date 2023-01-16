@@ -26,6 +26,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
 
+import static app.secuboid.core.messages.Log.log;
+import static java.util.logging.Level.SEVERE;
+
 public class ChatGetter {
 
     private final ConcurrentMap<CommandSenderInfo, Consumer<String>> commandSenderInfoToCallback;
@@ -52,7 +55,11 @@ public class ChatGetter {
 
         if (callback != null) {
             SecuboidImpl.getJavaPLugin().getServer().getScheduler().callSyncMethod(SecuboidImpl.getJavaPLugin(), () -> {
-                callback.accept(message);
+                try {
+                    callback.accept(message);
+                } catch (RuntimeException e) {
+                    log().log(SEVERE, "Exception in chat answer callback", e);
+                }
                 return null;
             });
             return true;

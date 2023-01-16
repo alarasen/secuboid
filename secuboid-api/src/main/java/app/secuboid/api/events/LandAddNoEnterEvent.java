@@ -18,7 +18,7 @@
 package app.secuboid.api.events;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.recipients.Recipient;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,37 +30,37 @@ public class LandAddNoEnterEvent extends LandEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private ParameterValue parameterValue;
+    private Recipient recipient;
 
     /**
      * Instantiates a new player container add no enter events.
      *
-     * @param land           the land
-     * @param parameterValue the parameter value added
+     * @param land      the land
+     * @param recipient the recipient added
      */
-    public LandAddNoEnterEvent(@NotNull Land land, @NotNull ParameterValue parameterValue) {
+    public LandAddNoEnterEvent(@NotNull Land land, @NotNull Recipient recipient) {
         super(land);
-        this.parameterValue = parameterValue;
-    }
-
-    /**
-     * Gets the parameter value added to no enter.
-     *
-     * @return the parameter value
-     */
-    public @NotNull ParameterValue getParameterValue() {
-        return parameterValue;
-    }
-
-    @Override
-    @NotNull
-    public HandlerList getHandlers() {
-        return handlers;
+        this.recipient = recipient;
     }
 
     @SuppressWarnings("java:S4144")
     @NotNull
     public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    /**
+     * Gets the recipient added to no enter.
+     *
+     * @return the recipient
+     */
+    public @NotNull Recipient getRecipient() {
+        return recipient;
+    }
+
+    @Override
+    @NotNull
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.parameters.values;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.exceptions.RecipientException;
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueType;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.reflection.RecipientRegistered;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -29,16 +29,16 @@ import org.jetbrains.annotations.NotNull;
 import static app.secuboid.api.utilities.CharacterCase.UPPERCASE;
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "entity-type", shortName = "et", chatColor = "\u00A75", needsValue = true,
+@RecipientRegistered(name = "entity-type", shortName = "et", chatColor = "\u00A75", needsValue = true,
         characterCase = UPPERCASE, priority = 60)
-public record ParameterValueEntityType(@NotNull ParameterValueType type,
-                                       long id,
-                                       @NotNull EntityType entityType
-) implements ParameterValue {
+public record RecipientEntityType(@NotNull RecipientType type,
+                                  long id,
+                                  @NotNull EntityType entityType
+) implements Recipient {
 
     // Needed for load from database
-    public static ParameterValueEntityType newInstance(@NotNull ParameterValueType type, long id,
-                                                       @NotNull String value) throws ParameterValueException {
+    public static RecipientEntityType newInstance(@NotNull RecipientType type, long id,
+                                                  @NotNull String value) throws RecipientException {
         EntityType entityType;
 
         try {
@@ -48,10 +48,10 @@ public record ParameterValueEntityType(@NotNull ParameterValueType type,
             String msg = format(
                     "Entity type not found: Wrong name in the database or Bukkit API is changed? [entityType=%s]",
                     value);
-            throw new ParameterValueException(msg, e);
+            throw new RecipientException(msg, e);
         }
 
-        return new ParameterValueEntityType(type, id, entityType);
+        return new RecipientEntityType(type, id, entityType);
     }
 
     @Override

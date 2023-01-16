@@ -15,13 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.permission.group.parameters.values;
+package app.secuboid.permission.group.recipients;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.exceptions.RecipientException;
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueType;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.reflection.RecipientRegistered;
 import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,19 +30,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents any players member of the specific Bukkit permission system group.
  */
-@ParameterValueRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", needsValue = true,
+@RecipientRegistered(name = "permission-group", shortName = "pg", chatColor = "\u00A77", needsValue = true,
         priority = 70)
-public record ParameterValuePermissionGroup(
-        @NotNull ParameterValueType type,
+public record RecipientPermissionGroup(
+        @NotNull RecipientType type,
         long id,
         @NotNull String group
-) implements ParameterValue {
+) implements Recipient {
 
     // Needed for load from database
     @SuppressWarnings("java:S1130")
-    public static ParameterValuePermissionGroup newInstance(@NotNull ParameterValueType type, long id,
-                                                            @NotNull String value) throws ParameterValueException {
-        return new ParameterValuePermissionGroup(type, id, value);
+    public static RecipientPermissionGroup newInstance(@NotNull RecipientType type, long id,
+                                                       @NotNull String value) throws RecipientException {
+        return new RecipientPermissionGroup(type, id, value);
     }
 
     @Override

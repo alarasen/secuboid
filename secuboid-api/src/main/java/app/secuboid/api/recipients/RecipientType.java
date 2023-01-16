@@ -15,27 +15,34 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands.flags;
 
-import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.recipients.Recipient;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+package app.secuboid.api.recipients;
+
+import app.secuboid.api.reflection.RecipientRegistered;
+
+import java.util.Objects;
 
 /**
- * Represent a flag with a value.
+ * Represents a recipient type.
  *
- * @param landComponent the affected land
- * @param flagType      the flag type
- * @param source        the recipient source if needed or null
- * @param target        the recipient target if needed or null
- * @param metadata      the metadata if needed or null
+ * @param clazz the class
+ * @param info  the parameter type information
  */
-public record Flag(
-        @NotNull LandComponent landComponent,
-        @NotNull FlagType flagType,
-        @Nullable Recipient source,
-        @Nullable Recipient target,
-        @Nullable String metadata) {
+public record RecipientType(
+        Class<? extends Recipient> clazz,
+        RecipientRegistered info
+) {
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecipientType that = (RecipientType) o;
+        return Objects.equals(clazz, that.clazz);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clazz);
+    }
 }

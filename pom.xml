@@ -98,12 +98,6 @@
 
             <!-- packaged in Secuboid -->
             <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>2.10.1</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.bstats</groupId>
                 <artifactId>bstats-bukkit</artifactId>
                 <version>3.0.0</version>
@@ -122,9 +116,9 @@
             </dependency>
 
             <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>5.0.1</version>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>6.1.6.Final</version>
             </dependency>
             <!-- packaged in Secuboid End -->
 

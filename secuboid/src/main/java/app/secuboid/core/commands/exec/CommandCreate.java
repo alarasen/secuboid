@@ -25,10 +25,10 @@ import app.secuboid.api.lands.LandResultCode;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessageType;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueResult;
-import app.secuboid.api.parameters.values.ParameterValueResultCode;
-import app.secuboid.api.parameters.values.ParameterValues;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientResult;
+import app.secuboid.api.recipients.RecipientResultCode;
+import app.secuboid.api.recipients.Recipients;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
@@ -45,8 +45,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-import static app.secuboid.api.parameters.values.ParameterValues.NOBODY;
-import static app.secuboid.api.parameters.values.ParameterValues.PLAYER;
+import static app.secuboid.api.recipients.Recipients.NOBODY;
+import static app.secuboid.api.recipients.Recipients.PLAYER;
 import static app.secuboid.core.messages.Message.message;
 
 @CommandRegistered(
@@ -104,23 +104,23 @@ public class CommandCreate implements CommandExec {
             return;
         }
 
-        ParameterValues parameterValues = secuboid.getParameterValues();
+        Recipients recipients = secuboid.getRecipients();
         if (!commandSenderInfo.isAdminMode() && commandSenderInfo instanceof PlayerInfo playerInfo) {
             UUID uuid = playerInfo.getUUID();
-            parameterValues.grab(PLAYER, uuid.toString(), r -> landOwnerCallback(commandSenderInfo,
+            recipients.grab(PLAYER, uuid.toString(), r -> landOwnerCallback(commandSenderInfo,
                     activeSelectionModify, landName, r));
         } else {
-            parameterValues.grab(NOBODY, null, r -> landOwnerCallback(commandSenderInfo, activeSelectionModify,
+            recipients.grab(NOBODY, null, r -> landOwnerCallback(commandSenderInfo, activeSelectionModify,
                     landName, r));
         }
     }
 
     private void landOwnerCallback(@NotNull CommandSenderInfo commandSenderInfo,
                                    @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName,
-                                   @NotNull ParameterValueResult result) {
-        ParameterValue owner = result.parameterValue();
+                                   @NotNull RecipientResult result) {
+        Recipient owner = result.recipient();
 
-        if (result.code() != ParameterValueResultCode.SUCCESS || owner == null) {
+        if (result.code() != RecipientResultCode.SUCCESS || owner == null) {
             CommandSender sender = commandSenderInfo.sender();
             message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
             return;

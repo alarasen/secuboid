@@ -19,7 +19,7 @@ package app.secuboid.core.storage.tables;
 
 import app.secuboid.api.reflection.TableRegistered;
 import app.secuboid.api.storage.tables.Table;
-import app.secuboid.core.storage.rows.ParameterValueRow;
+import app.secuboid.core.storage.rows.RecipientRow;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @TableRegistered(
-        row = ParameterValueRow.class,
+        row = RecipientRow.class,
         createTable = ""
                 + "CREATE TABLE IF NOT EXISTS secuboid_parameter_value ("
                 + " id BIGINT NOT NULL AUTO_INCREMENT,"
@@ -37,21 +37,21 @@ import java.util.Set;
                 + " CONSTRAINT parameter_value_short_name_value_unique UNIQUE (short_name, value)"
                 + ")"
 )
-public class ParameterValueTable implements Table<ParameterValueRow> {
+public class RecipientTable implements Table<RecipientRow> {
 
     @Override
-    public @NotNull Set<ParameterValueRow> selectAll(@NotNull Connection conn) throws SQLException {
+    public @NotNull Set<RecipientRow> selectAll(@NotNull Connection conn) throws SQLException {
         String sql = "SELECT id, short_name, value FROM secuboid_parameter_value";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()) {
-                Set<ParameterValueRow> result = new HashSet<>();
+                Set<RecipientRow> result = new HashSet<>();
 
                 while (rs.next()) {
                     long id = rs.getLong("id");
                     String shortName = rs.getString("short_name");
                     String value = rs.getString("value");
-                    result.add(new ParameterValueRow(id, shortName, value));
+                    result.add(new RecipientRow(id, shortName, value));
                 }
 
                 return result;
@@ -60,18 +60,18 @@ public class ParameterValueTable implements Table<ParameterValueRow> {
     }
 
     @Override
-    public @NotNull ParameterValueRow insert(@NotNull Connection conn, @NotNull ParameterValueRow parameterValueRow) throws SQLException {
+    public @NotNull RecipientRow insert(@NotNull Connection conn, @NotNull RecipientRow recipientRow) throws SQLException {
         String sql = "INSERT INTO secuboid_parameter_value(short_name, value) VALUES(?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, parameterValueRow.shortName());
-            stmt.setString(2, parameterValueRow.value());
+            stmt.setString(1, recipientRow.shortName());
+            stmt.setString(2, recipientRow.value());
 
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 rs.next();
-                return new ParameterValueRow(rs.getLong(1), parameterValueRow.shortName(), parameterValueRow.value());
+                return new RecipientRow(rs.getLong(1), recipientRow.shortName(), recipientRow.value());
             }
         }
     }

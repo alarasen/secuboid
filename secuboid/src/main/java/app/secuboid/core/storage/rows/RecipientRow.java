@@ -16,16 +16,15 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.storage.rows;
 
+import app.secuboid.api.storage.rows.RowWithId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Used for callback method when a parameter value is created.
- *
- * @param code           the parameter value result code
- * @param parameterValue the parameter value if success
- */
-public record ParameterValueResult(@NotNull ParameterValueResultCode code, @Nullable ParameterValue parameterValue) {
+public record RecipientRow(
+        long id,
+        @NotNull String shortName,
+        @Nullable String value
+) implements RowWithId {
 }

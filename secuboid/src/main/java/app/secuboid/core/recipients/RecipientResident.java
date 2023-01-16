@@ -15,37 +15,37 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.parameters.values;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.exceptions.RecipientException;
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueType;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.reflection.RecipientRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", needsValue = true, priority = 60)
-public record ParameterValueResident(@NotNull ParameterValueType type,
-                                     long id,
-                                     int level
-) implements ParameterValue {
+@RecipientRegistered(name = "resident", shortName = "res", chatColor = "\u00A7A", needsValue = true, priority = 60)
+public record RecipientResident(@NotNull RecipientType type,
+                                long id,
+                                int level
+) implements Recipient {
 
     // Needed for load from database
-    public static ParameterValueResident newInstance(@NotNull ParameterValueType type, long id,
-                                                     @NotNull String value) throws ParameterValueException {
+    public static RecipientResident newInstance(@NotNull RecipientType type, long id,
+                                                @NotNull String value) throws RecipientException {
         int level;
 
         try {
             level = Integer.parseInt(value);
         } catch (NumberFormatException e) {
             String msg = format("Non parsable level number for a resident [level=%s]", value);
-            throw new ParameterValueException(msg, e);
+            throw new RecipientException(msg, e);
         }
 
-        return new ParameterValueResident(type, id, level);
+        return new RecipientResident(type, id, level);
     }
 
     @Override

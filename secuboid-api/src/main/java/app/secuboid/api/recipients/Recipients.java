@@ -16,7 +16,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.parameters.values;
+package app.secuboid.api.recipients;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +24,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
- * Access to parameter values.
+ * Access to recipients.
  */
-public interface ParameterValues {
+public interface Recipients {
 
     public static final String ENTITY_TYPE = "et";
     public static final String ENTITY_CLASS = "ec";
@@ -37,11 +37,11 @@ public interface ParameterValues {
     public static final String EVERYBODY = "everybody";
 
     /**
-     * Grabs a parameter value.
+     * Grabs a recipient.
      *
      * @param name     the name or short name
-     * @param value    the value or null if the parameter value doesn't accept values
+     * @param value    the value or null if the recipient doesn't accept values
      * @param callback the returned answer in callback
      */
-    void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<ParameterValueResult> callback);
+    void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<RecipientResult> callback);
 }

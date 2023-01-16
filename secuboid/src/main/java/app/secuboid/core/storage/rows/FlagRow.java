@@ -25,8 +25,8 @@ import org.jetbrains.annotations.Nullable;
 public record FlagRow(
         long landId,
         @NotNull String flagType,
-        @Nullable Long sourceParameterValueId,
-        @Nullable Long targetParameterValueId,
+        @Nullable Long sourceRecipientId,
+        @Nullable Long targetRecipientId,
         @Nullable String metadata
 ) implements Row {
 }

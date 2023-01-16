@@ -22,7 +22,7 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
 import app.secuboid.api.lands.areas.AreaResultCode;
-import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.recipients.Recipient;
 import app.secuboid.api.storage.StorageManager;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.storage.rows.AreaRow;
@@ -93,7 +93,7 @@ public class LandsImpl implements Lands {
     }
 
     @Override
-    public void create(@NotNull Land parent, @NotNull String landName, @NotNull ParameterValue owner,
+    public void create(@NotNull Land parent, @NotNull String landName, @NotNull Recipient owner,
                        @NotNull AreaForm areaForm, @Nullable Consumer<LandResult> callback) {
         String nameLower = landName.toLowerCase();
 
@@ -210,7 +210,8 @@ public class LandsImpl implements Lands {
     }
 
     private void loadLandComponents() {
-        Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
+        // TODO Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
+        Set<LandRow> landRows = Collections.emptySet();
 
         while (!landRows.isEmpty()) {
             Set<LandRow> nextLandRows = new HashSet<>();
@@ -252,7 +253,8 @@ public class LandsImpl implements Lands {
     }
 
     private void loadAreas() {
-        Set<AreaRow> areaRows = getStorageManager().selectAllSync(AreaRow.class);
+        // TODO Set<AreaRow> areaRows = getStorageManager().selectAllSync(AreaRow.class);
+        Set<AreaRow> areaRows = Collections.emptySet();
 
         for (AreaRow areaRow : areaRows) {
             loadArea(areaRow);
@@ -340,7 +342,8 @@ public class LandsImpl implements Lands {
     }
 
     private @NotNull StorageManager getStorageManager() {
-        return SecuboidImpl.instance().getStorageManager();
+        // TODO return SecuboidImpl.instance().getStorageManager();
+        return null;
     }
 
     private @NotNull World getWorldFromLocation(@NotNull Location loc) {

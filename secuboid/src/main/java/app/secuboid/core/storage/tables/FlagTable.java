@@ -23,7 +23,7 @@ import app.secuboid.core.storage.rows.FlagRow;
 
 @TableRegistered(
         row = FlagRow.class,
-        dependsOn = {LandTable.class, ParameterValueTable.class},
+        dependsOn = {LandTable.class, RecipientTable.class},
         createTable = ""
                 + "CREATE TABLE IF NOT EXISTS secuboid_flag ("
                 + " land_id BIGINT NOT NULL,"

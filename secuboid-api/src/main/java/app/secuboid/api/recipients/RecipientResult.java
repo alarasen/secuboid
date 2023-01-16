@@ -15,27 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands.flags;
 
-import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.recipients.Recipient;
+package app.secuboid.api.recipients;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represent a flag with a value.
+ * Used for callback method when a recipient is created.
  *
- * @param landComponent the affected land
- * @param flagType      the flag type
- * @param source        the recipient source if needed or null
- * @param target        the recipient target if needed or null
- * @param metadata      the metadata if needed or null
+ * @param code      the recipient result code
+ * @param recipient the recipient if success
  */
-public record Flag(
-        @NotNull LandComponent landComponent,
-        @NotNull FlagType flagType,
-        @Nullable Recipient source,
-        @Nullable Recipient target,
-        @Nullable String metadata) {
+public record RecipientResult(@NotNull RecipientResultCode code, @Nullable Recipient recipient) {
 }

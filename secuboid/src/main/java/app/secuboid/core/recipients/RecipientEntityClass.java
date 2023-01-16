@@ -15,31 +15,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.parameters.values;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.exceptions.ParameterValueException;
+import app.secuboid.api.exceptions.RecipientException;
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
-import app.secuboid.api.parameters.values.ParameterValueType;
-import app.secuboid.api.reflection.ParameterValueRegistered;
+import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.reflection.RecipientRegistered;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import static app.secuboid.api.utilities.CharacterCase.CASE_SENSITIVE;
 import static java.lang.String.format;
 
-@ParameterValueRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", needsValue = true,
+@RecipientRegistered(name = "entity-class", shortName = "ec", chatColor = "\u00A75", needsValue = true,
         characterCase = CASE_SENSITIVE, priority = 40)
-public record ParameterValueEntityClass(@NotNull ParameterValueType type,
-                                        long id,
-                                        @NotNull Class<? extends Entity> entityClass
-) implements ParameterValue {
+public record RecipientEntityClass(@NotNull RecipientType type,
+                                   long id,
+                                   @NotNull Class<? extends Entity> entityClass
+) implements Recipient {
 
     private static final String ENTITY_PREFIX = "org.bukkit.entity.";
 
     // Needed for load from database
-    public static ParameterValueEntityClass newInstance(@NotNull ParameterValueType type, long id,
-                                                        @NotNull String value) throws ParameterValueException {
+    public static RecipientEntityClass newInstance(@NotNull RecipientType type, long id,
+                                                   @NotNull String value) throws RecipientException {
         String entityClassStr;
         if (value.contains(".")) {
             entityClassStr = value;
@@ -55,7 +55,7 @@ public record ParameterValueEntityClass(@NotNull ParameterValueType type,
             String msg = format(
                     "Entity class not found: Wrong name in the database or Bukkit API is changed? [entityClass=%s]",
                     value);
-            throw new ParameterValueException(msg, e);
+            throw new RecipientException(msg, e);
         }
 
         Class<? extends Entity> entityClass;
@@ -66,10 +66,10 @@ public record ParameterValueEntityClass(@NotNull ParameterValueType type,
             String msg = format(
                     "Not an entity class: Wrong name in the database or Bukkit API is changed? [entityClass=%s]",
                     value);
-            throw new ParameterValueException(msg, e);
+            throw new RecipientException(msg, e);
         }
 
-        return new ParameterValueEntityClass(type, id, entityClass);
+        return new RecipientEntityClass(type, id, entityClass);
     }
 
     @Override

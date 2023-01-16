@@ -24,9 +24,8 @@ import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.Commands;
 import app.secuboid.api.flagtypes.FlagTypes;
 import app.secuboid.api.lands.Lands;
-import app.secuboid.api.parameters.values.ParameterValues;
 import app.secuboid.api.players.PlayerInfos;
-import app.secuboid.api.storage.StorageManager;
+import app.secuboid.api.recipients.Recipients;
 import app.secuboid.core.commands.CommandListener;
 import app.secuboid.core.commands.CommandsImpl;
 import app.secuboid.core.commands.items.SecuboidTool;
@@ -36,11 +35,13 @@ import app.secuboid.core.listeners.Listeners;
 import app.secuboid.core.messages.ChatGetter;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.messages.Message;
-import app.secuboid.core.parameters.values.ParameterValuesImpl;
+import app.secuboid.core.persistence.Persistence;
+import app.secuboid.core.persistence.PersistenceThread;
 import app.secuboid.core.players.PlayerInfosImpl;
+import app.secuboid.core.recipients.RecipientsImpl;
 import app.secuboid.core.reflection.PluginLoader;
 import app.secuboid.core.storage.ConnectionManager;
-import app.secuboid.core.storage.StorageManagerImpl;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -54,21 +55,25 @@ import static app.secuboid.core.config.Config.config;
 
 public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
-    private static @NotNull SecuboidImpl secuboidImpl;
-    private static @NotNull SecuboidPlugin secuboidPlugin;
+    private static final String MSG_NOT_INITIALIZED = "Secuboid not yet initialized";
+
+    private static @Nullable SecuboidImpl secuboidImpl;
+    private static @Nullable SecuboidPlugin secuboidPlugin;
 
     private final @NotNull NewInstance newInstance;
     private final @NotNull Commands commands;
     private final @NotNull CommandListener commandListener;
-    private final @NotNull ParameterValues parameterValues;
+    private final @NotNull Recipients recipients;
     private final @NotNull Lands lands;
     private final @NotNull FlagTypes flags;
     private final @NotNull PlayerInfosImpl playerInfos;
     private final @NotNull SecuboidTool secuboidTool;
     private final @NotNull Listeners listeners;
-    private final @NotNull StorageManager storageManager;
+    private final @NotNull Persistence persistence;
 
     private final @NotNull ChatGetter chatGetter;
+
+    private @Nullable PersistenceThread persistenceThread;
 
     @SuppressWarnings("java:S3010")
     public SecuboidImpl(@NotNull SecuboidPluginImpl secuboidPluginImpl) {
@@ -82,69 +87,78 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         secuboidTool = new SecuboidTool();
         listeners = new Listeners();
         commandListener = new CommandListener((CommandsImpl) commands, playerInfos);
-        storageManager = new StorageManagerImpl(secuboidPlugin);
+        persistence = new Persistence();
+
         chatGetter = new ChatGetter();
 
-        parameterValues = new ParameterValuesImpl();
+        recipients = new RecipientsImpl();
         lands = new LandsImpl();
+
+        persistenceThread = null;
     }
 
     public static @NotNull SecuboidImpl instance() {
+        assert secuboidImpl != null : MSG_NOT_INITIALIZED;
         return secuboidImpl;
     }
 
     public static @NotNull JavaPlugin getJavaPLugin() {
+        assert secuboidPlugin != null : MSG_NOT_INITIALIZED;
         return secuboidPlugin;
     }
 
     public static @NotNull PluginManager getPluginManager() {
-        return secuboidPlugin.getServer().getPluginManager();
+        return getJavaPLugin().getServer().getPluginManager();
     }
 
     public static @Nullable ScoreboardManager getScoreboardManager() {
+        assert secuboidPlugin != null : MSG_NOT_INITIALIZED;
         return secuboidPlugin.getServer().getScoreboardManager();
     }
 
     public static <T extends JavaPlugin> @Nullable T getPlugin(Class<T> clazz) {
-        return ((SecuboidPluginImpl) secuboidPlugin).getPluginFromClass(clazz);
+        return ((SecuboidPluginImpl) getJavaPLugin()).getPluginFromClass(clazz);
     }
 
     @Override
     public void load(boolean isServerBoot) {
+        JavaPlugin javaPlugin = getJavaPLugin();
+        Server server = javaPlugin.getServer();
 
         if (isServerBoot) {
 
             // Set logger first
-            Log.setLog(secuboidPlugin.getLogger());
-            secuboidPlugin.saveDefaultConfig();
+            Log.setLog(javaPlugin.getLogger());
+            javaPlugin.saveDefaultConfig();
         } else {
-            secuboidPlugin.reloadConfig();
+            javaPlugin.reloadConfig();
         }
-        config().load(secuboidPlugin.getConfig());
+        config().load(javaPlugin.getConfig());
 
         if (isServerBoot) {
 
             // Everything here is what will not change after a configuration or persistence
             // change
-            Message.message().load(secuboidPlugin);
-            secuboidTool.init(secuboidPlugin);
+            Message.message().load(javaPlugin);
+            secuboidTool.init(javaPlugin);
             PluginLoader pluginLoader = new PluginLoader();
-            PluginManager pluginManager = secuboidPlugin.getServer().getPluginManager();
+            PluginManager pluginManager = server.getPluginManager();
             pluginLoader.init(pluginManager);
             ((FlagTypesImpl) flags).init(pluginLoader);
             ((CommandsImpl) commands).init(pluginLoader);
-            ((ParameterValuesImpl) parameterValues).init(pluginLoader);
+            ((RecipientsImpl) recipients).init(pluginLoader);
             commandListener.init();
-            ((StorageManagerImpl) storageManager).init(pluginLoader);
         } else {
             ConnectionManager.init(); // Initiated by storage manager on a normal boot
             chatGetter.reset();
         }
-        playerInfos.addConsoleCommandSender(secuboidPlugin.getServer().getConsoleSender());
+        playerInfos.addConsoleCommandSender(server.getConsoleSender());
 
         // Load
-        ((StorageManagerImpl) storageManager).start();
-        ((ParameterValuesImpl) parameterValues).load();
+        persistenceThread = new PersistenceThread(server.getScheduler(), persistence);
+        persistenceThread.init();
+
+        ((RecipientsImpl) recipients).load();
         ((LandsImpl) lands).load();
 
         if (isServerBoot) {
@@ -153,7 +167,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
         // Reload players, not only on "sd reload" because there is also the bukkit
         // "reload" command.
-        for (Player player : secuboidPlugin.getServer().getOnlinePlayers()) {
+        for (Player player : javaPlugin.getServer().getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
             String playerName = player.getName();
 
@@ -167,8 +181,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         // TODO refactor
 
         // Only when Secuboid is completely unloaded
-        ((StorageManagerImpl) storageManager).stop();
-        ConnectionManager.shutdown();
+        getPersistenceThread().shutdown();
     }
 
     @Override
@@ -193,8 +206,8 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     }
 
     @Override
-    public @NotNull ParameterValues getParameterValues() {
-        return parameterValues;
+    public @NotNull Recipients getRecipients() {
+        return recipients;
     }
 
     @Override
@@ -203,13 +216,13 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     }
 
     @Override
-    public @NotNull StorageManager getStorageManager() {
-        return storageManager;
-    }
-
-    @Override
     public @NotNull NewInstance getNewInstance() {
         return newInstance;
+    }
+
+    public @NotNull PersistenceThread getPersistenceThread() {
+        assert persistenceThread != null : MSG_NOT_INITIALIZED;
+        return persistenceThread;
     }
 
     public @NotNull SecuboidTool getSecuboidTool() {

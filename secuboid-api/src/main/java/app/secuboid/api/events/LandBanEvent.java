@@ -18,7 +18,7 @@
 package app.secuboid.api.events;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.recipients.Recipient;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,38 +29,38 @@ public class LandBanEvent extends LandEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final ParameterValue parameterValue;
+    private final Recipient recipient;
 
     /**
      * Instantiates a new land ban events.
      *
-     * @param land           the land
-     * @param parameterValue parameterValue
+     * @param land      the land
+     * @param recipient recipient
      */
-    public LandBanEvent(@NotNull Land land, @NotNull ParameterValue parameterValue) {
+    public LandBanEvent(@NotNull Land land, @NotNull Recipient recipient) {
         super(land);
-        this.parameterValue = parameterValue;
-    }
-
-    /**
-     * Gets the parameter value.
-     *
-     * @return the parameter value
-     */
-    @NotNull
-    public ParameterValue getParameterValue() {
-        return parameterValue;
-    }
-
-    @Override
-    @NotNull
-    public HandlerList getHandlers() {
-        return handlers;
+        this.recipient = recipient;
     }
 
     @SuppressWarnings("java:S4144")
     @NotNull
     public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    /**
+     * Gets the recipient.
+     *
+     * @return the recipient
+     */
+    @NotNull
+    public Recipient getRecipient() {
+        return recipient;
+    }
+
+    @Override
+    @NotNull
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -24,7 +24,6 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
 import app.secuboid.api.storage.StorageManager;
-import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.lands.areas.AreaFormImpl;
 import app.secuboid.core.storage.rows.AreaRow;
 import app.secuboid.core.storage.types.AreaType;
@@ -166,6 +165,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     private StorageManager getStorageManager() {
-        return SecuboidImpl.instance().getStorageManager();
+        // TODO return SecuboidImpl.instance().getStorageManager();
+        return null;
     }
 }

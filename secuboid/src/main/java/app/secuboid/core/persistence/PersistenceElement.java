@@ -16,30 +16,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.persistence;
 
-/**
- * Returned code for a parameter value command.
- */
-public enum ParameterValueResultCode {
+import org.hibernate.Session;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-    /**
-     * success
-     */
-    SUCCESS,
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-    /**
-     * player not found
-     */
-    PLAYER_NOT_FOUND,
-
-    /**
-     * Invalid parameter
-     */
-    INVALID_PARAMETER,
-
-    /**
-     * Invalid value
-     */
-    INVALID_VALUE
+record PersistenceElement<R>(
+        @NotNull Function<Session, R> sessionFunction,
+        @Nullable Consumer<R> callback,
+        boolean isSync
+) {
 }

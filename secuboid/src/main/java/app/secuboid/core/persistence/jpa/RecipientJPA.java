@@ -16,33 +16,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.parameters.values;
+package app.secuboid.core.persistence.jpa;
 
-import app.secuboid.api.reflection.ParameterValueRegistered;
-
-import java.util.Objects;
-
-/**
- * Represents a parameter value type.
- *
- * @param clazz the class
- * @param info  the parameter type information
- */
-public record ParameterValueType(
-        Class<? extends ParameterValue> clazz,
-        ParameterValueRegistered info
-) {
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ParameterValueType that = (ParameterValueType) o;
-        return Objects.equals(clazz, that.clazz);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(clazz);
-    }
+public class RecipientJPA {
 }

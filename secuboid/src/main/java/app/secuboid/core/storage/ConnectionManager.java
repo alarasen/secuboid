@@ -17,22 +17,13 @@
  */
 package app.secuboid.core.storage;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.config.Config;
-import app.secuboid.core.messages.Log;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import static app.secuboid.core.config.Config.config;
-import static java.util.logging.Level.SEVERE;
 
 public class ConnectionManager {
 
@@ -48,63 +39,19 @@ public class ConnectionManager {
 
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 
-    private static @Nullable HikariDataSource dataSource = null;
+    private static @Nullable DataSource dataSource = null;
     private static boolean isLocalHSQL = false;
 
     private ConnectionManager() {
     }
 
     public static void init() {
-        Config config = config();
-        JavaPlugin javaPlugin = SecuboidImpl.getJavaPLugin();
-        String dataFolderStr = javaPlugin.getDataFolder().getAbsolutePath();
-        String url = config.databaseUrl().replace(TAG_PLUGIN_PATH, dataFolderStr);
-        String user = config.databaseUser();
-        String password = config.databasePassword();
-        HikariConfig hikariConfig = new HikariConfig();
-
-        if (url.contains(DRIVER_HSQLDB)) {
-            if (url.startsWith("jdbc:hsqldb:file:")) {
-                isLocalHSQL = true;
-            }
-
-            hikariConfig.setPoolName(POOL_NAME_HSQLDB);
-            hikariConfig.setDriverClassName(DRIVER_CLASS_NAME_HSQLDB);
-            hikariConfig.addDataSourceProperty("sql.syntax_mys", true);
-
-        } else if (url.contains(DRIVER_MARIADB)) {
-            hikariConfig.setPoolName(POOL_NAME_MARIADB);
-            hikariConfig.setDriverClassName(DRIVER_CLASS_NAME_MARIADB);
-            hikariConfig.setAutoCommit(true);
-        } else {
-            isLocalHSQL = false;
-            throw new SecuboidRuntimeException("Database driver \"mariadb\" (also for MySQL support) and \"hsqldb\" are the only supported");
-        }
-
-        hikariConfig.setJdbcUrl(url);
-        hikariConfig.setUsername(user);
-        hikariConfig.setPassword(password);
-        dataSource = new HikariDataSource(hikariConfig);
     }
 
     public static @NotNull Connection getConnection() throws SQLException {
         assert dataSource != null : "The Secuboid datasource is closed or net yet available";
 
         return dataSource.getConnection();
-    }
-
-    public static void shutdown() {
-        if (dataSource != null && !dataSource.isClosed()) {
-            if (isLocalHSQL) {
-                try (Connection conn = getConnection()) {
-                    shutdownLocalHSQL(conn);
-                } catch (SQLException e) {
-                    Log.log().log(SEVERE, "Unable to shutdown the local database", e);
-                }
-            }
-            dataSource.close();
-            dataSource = null;
-        }
     }
 
     private static void shutdownLocalHSQL(@NotNull Connection conn) throws SQLException {

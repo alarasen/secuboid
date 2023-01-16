@@ -18,18 +18,18 @@
 package app.secuboid.api.lands.residents;
 
 import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.parameters.values.ParameterValue;
+import app.secuboid.api.recipients.Recipient;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a resident.
  *
- * @param landComponent  the land component
- * @param parameterValue the parameter value
- * @param level          the level
+ * @param landComponent the land component
+ * @param recipient     the recipient
+ * @param level         the level
  */
 public record Resident(
         @NotNull LandComponent landComponent,
-        @NotNull ParameterValue parameterValue,
+        @NotNull Recipient recipient,
         int level) {
 }
