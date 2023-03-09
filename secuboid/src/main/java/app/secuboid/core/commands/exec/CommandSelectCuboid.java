@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,18 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "select cuboid",
         aliases = "cub",
         allowConsole = false,
@@ -37,12 +36,19 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandSelectCuboid implements CommandExec {
 
+    private final @NotNull ScoreboardService scoreboardService;
+
+    public CommandSelectCuboid(@NotNull ScoreboardService scoreboardService) {
+        this.scoreboardService = scoreboardService;
+    }
+
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
         WorldLand worldLand = playerInfo.getWorldLand();
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();
 
-        ((PlayerSelectionImpl) playerSelection).createActiveSelectionModifyExpand(worldLand, CuboidAreaForm.class);
+        ((PlayerSelectionImpl) playerSelection).createActiveSelectionModifyExpand(scoreboardService, worldLand,
+                CuboidAreaForm.class);
     }
 }

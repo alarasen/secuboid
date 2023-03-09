@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,32 +17,29 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.api.reflection.CommandRegistered;
-import app.secuboid.core.SecuboidImpl;
+import app.secuboid.api.registration.CommandRegistered;
+import app.secuboid.core.items.SecuboidToolService;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "tool",
         allowConsole = false
 )
 public class CommandTool implements CommandExec {
 
-    private final @NotNull Secuboid secuboid;
+    private final @NotNull SecuboidToolService secuboidToolService;
 
-    public CommandTool(@NotNull Secuboid secuboid) {
-        this.secuboid = secuboid;
+    public CommandTool(@NotNull SecuboidToolService secuboidToolService) {
+        this.secuboidToolService = secuboidToolService;
     }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         Player player = ((PlayerInfo) commandSenderInfo).getPlayer();
-        ((SecuboidImpl) secuboid).getSecuboidTool().give(player);
+        secuboidToolService.give(player);
     }
 }

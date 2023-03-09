@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,18 +18,18 @@
 
 package app.secuboid.api.recipients;
 
-import app.secuboid.api.reflection.RecipientRegistered;
+import app.secuboid.api.registration.RecipientRegistered;
 
 import java.util.Objects;
 
 /**
- * Represents a recipient type.
+ * Represents a recipientExec type.
  *
- * @param clazz the class
- * @param info  the parameter type information
+ * @param recipientExec the recipient exec
+ * @param info          the parameter type information
  */
 public record RecipientType(
-        Class<? extends Recipient> clazz,
+        RecipientExec recipientExec,
         RecipientRegistered info
 ) {
 
@@ -38,11 +38,11 @@ public record RecipientType(
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipientType that = (RecipientType) o;
-        return Objects.equals(clazz, that.clazz);
+        return Objects.equals(recipientExec, that.recipientExec);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clazz);
+        return Objects.hash(recipientExec);
     }
 }

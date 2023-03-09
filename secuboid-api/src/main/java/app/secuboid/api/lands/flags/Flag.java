@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ package app.secuboid.api.lands.flags;
 
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientExec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,14 +28,14 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param landComponent the affected land
  * @param flagType      the flag type
- * @param source        the recipient source if needed or null
- * @param target        the recipient target if needed or null
+ * @param source        the recipientExec source if needed or null
+ * @param target        the recipientExec target if needed or null
  * @param metadata      the metadata if needed or null
  */
 public record Flag(
         @NotNull LandComponent landComponent,
         @NotNull FlagType flagType,
-        @Nullable Recipient source,
-        @Nullable Recipient target,
+        @Nullable RecipientExec source,
+        @Nullable RecipientExec target,
         @Nullable String metadata) {
 }

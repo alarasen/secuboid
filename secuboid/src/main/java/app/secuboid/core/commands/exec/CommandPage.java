@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,38 +18,38 @@
 
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
-import app.secuboid.api.players.ChatPage;
+import app.secuboid.api.players.ChatPageService;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import static app.secuboid.core.messages.Message.message;
 import static java.lang.Integer.parseInt;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "page",
         aliases = "p"
 )
 public class CommandPage implements CommandExec {
+
+    private final @NotNull ChatPageService chatPageService;
+    private final @NotNull MessageManagerService messageManagerService;
+
+    public CommandPage(@NotNull ChatPageService chatPageService, @NotNull MessageManagerService messageManagerService) {
+        this.chatPageService = chatPageService;
+        this.messageManagerService = messageManagerService;
+    }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (subArgs.length == 0) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
-            return;
-        }
-
-        ChatPage chatPage = commandSenderInfo.getChatPage();
-        if (chatPage == null) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotAvailable());
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
             return;
         }
 
@@ -57,11 +57,11 @@ public class CommandPage implements CommandExec {
         try {
             pageNumber = parseInt(subArgs[0]);
         } catch (NumberFormatException e) {
-            int lastPage = chatPage.getTotalPages();
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound(1, lastPage));
+            int lastPage = chatPageService.getTotalPages(commandSenderInfo);
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound(1, lastPage));
             return;
         }
 
-        chatPage.show(pageNumber);
+        chatPageService.show(commandSenderInfo, pageNumber);
     }
 }

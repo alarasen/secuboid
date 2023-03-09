@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,219 +17,243 @@
  */
 package app.secuboid.core;
 
-import app.secuboid.api.NewInstance;
 import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.SecuboidPlugin;
-import app.secuboid.api.commands.Commands;
-import app.secuboid.api.flagtypes.FlagTypes;
-import app.secuboid.api.lands.Lands;
-import app.secuboid.api.players.PlayerInfos;
-import app.secuboid.api.recipients.Recipients;
-import app.secuboid.core.commands.CommandListener;
-import app.secuboid.core.commands.CommandsImpl;
-import app.secuboid.core.commands.items.SecuboidTool;
-import app.secuboid.core.flagtypes.FlagTypesImpl;
-import app.secuboid.core.lands.LandsImpl;
-import app.secuboid.core.listeners.Listeners;
-import app.secuboid.core.messages.ChatGetter;
+import app.secuboid.api.commands.CommandService;
+import app.secuboid.api.flagtypes.FlagTypeService;
+import app.secuboid.api.lands.LandService;
+import app.secuboid.api.messages.MessageManagerService;
+import app.secuboid.api.messages.MessageService;
+import app.secuboid.api.players.ChatPageService;
+import app.secuboid.api.players.PlayerInfoService;
+import app.secuboid.api.recipients.RecipientService;
+import app.secuboid.api.registration.RegistrationService;
+import app.secuboid.api.services.ServiceService;
+import app.secuboid.core.commands.CommandListenerService;
+import app.secuboid.core.commands.CommandServiceImpl;
+import app.secuboid.core.commands.exec.*;
+import app.secuboid.core.flags.FlagDeclarations;
+import app.secuboid.core.flagtypes.FlagTypeServiceImpl;
+import app.secuboid.core.items.SecuboidToolService;
+import app.secuboid.core.lands.LandServiceImpl;
+import app.secuboid.core.listeners.*;
+import app.secuboid.core.messages.ChatGetterService;
 import app.secuboid.core.messages.Log;
-import app.secuboid.core.messages.Message;
-import app.secuboid.core.persistence.Persistence;
-import app.secuboid.core.persistence.PersistenceThread;
-import app.secuboid.core.players.PlayerInfosImpl;
-import app.secuboid.core.recipients.RecipientsImpl;
-import app.secuboid.core.reflection.PluginLoader;
-import app.secuboid.core.storage.ConnectionManager;
+import app.secuboid.core.messages.MessageServiceImpl;
+import app.secuboid.core.persistence.PersistenceService;
+import app.secuboid.core.persistence.PersistenceSessionService;
+import app.secuboid.core.players.ChatPageServiceImpl;
+import app.secuboid.core.players.PlayerInfoServiceImpl;
+import app.secuboid.core.recipients.RecipientServiceImpl;
+import app.secuboid.core.registration.RegistrationServiceImpl;
+import app.secuboid.core.scoreboard.ScoreboardService;
+import app.secuboid.core.services.ServiceServiceImpl;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 import static app.secuboid.core.config.Config.config;
 
-public class SecuboidImpl implements Secuboid, SecuboidComponent {
+public class SecuboidImpl implements Secuboid {
 
-    private static final String MSG_NOT_INITIALIZED = "Secuboid not yet initialized";
+    private final @NotNull SecuboidPlugin secuboidPlugin;
 
-    private static @Nullable SecuboidImpl secuboidImpl;
-    private static @Nullable SecuboidPlugin secuboidPlugin;
+    // Bukkit instances in alphabetical order
+    private final @NotNull PluginManager pluginManager;
 
-    private final @NotNull NewInstance newInstance;
-    private final @NotNull Commands commands;
-    private final @NotNull CommandListener commandListener;
-    private final @NotNull Recipients recipients;
-    private final @NotNull Lands lands;
-    private final @NotNull FlagTypes flags;
-    private final @NotNull PlayerInfosImpl playerInfos;
-    private final @NotNull SecuboidTool secuboidTool;
-    private final @NotNull Listeners listeners;
-    private final @NotNull Persistence persistence;
+    // Secuboid instances in alphabetical order
+    private final @NotNull ChatGetterService chatGetterService;
+    private final @NotNull ChatPageService chatPageService;
+    private final @NotNull CommandService commandService;
+    private final @NotNull CommandListenerService commandListenerService;
+    private final @NotNull FlagTypeService flagTypeService;
+    private final @NotNull LandService landService;
+    private final @NotNull MessageManagerService messageManagerService;
+    private final @NotNull MessageService messageService;
+    private final @NotNull PersistenceSessionService persistenceSessionService;
+    private final @NotNull PersistenceService persistenceService;
+    private final @NotNull PlayerInfoService playerInfoService;
+    private final @NotNull RecipientService recipientService;
+    private final @NotNull RegistrationService registrationService;
+    private final @NotNull ScoreboardService scoreboardService;
+    private final @NotNull SecuboidToolService secuboidToolService;
+    private final @NotNull ServiceService serviceService;
 
-    private final @NotNull ChatGetter chatGetter;
+    public SecuboidImpl(@NotNull SecuboidPlugin secuboidPlugin) {
+        this.secuboidPlugin = secuboidPlugin;
 
-    private @Nullable PersistenceThread persistenceThread;
+        // Bukkit/Spigot instances
+        Server server = secuboidPlugin.getServer();
+        pluginManager = server.getPluginManager();
+        BukkitScheduler scheduler = server.getScheduler();
+        ScoreboardManager scoreboardManager = server.getScoreboardManager();
 
-    @SuppressWarnings("java:S3010")
-    public SecuboidImpl(@NotNull SecuboidPluginImpl secuboidPluginImpl) {
-        newInstance = new NewInstanceImpl();
-        secuboidImpl = this;
-        secuboidPlugin = secuboidPluginImpl;
+        // Secuboid instances
+        // phase 1 in alphabetical order
+        chatGetterService = new ChatGetterService(secuboidPlugin, scheduler);
+        landService = new LandServiceImpl(server);
+        messageService = new MessageServiceImpl();
+        persistenceSessionService = new PersistenceSessionService(secuboidPlugin);
+        registrationService = new RegistrationServiceImpl();
 
-        flags = new FlagTypesImpl();
-        playerInfos = new PlayerInfosImpl();
-        commands = new CommandsImpl();
-        secuboidTool = new SecuboidTool();
-        listeners = new Listeners();
-        commandListener = new CommandListener((CommandsImpl) commands, playerInfos);
-        persistence = new Persistence();
+        // phase 2 in alphabetical order
+        flagTypeService = new FlagTypeServiceImpl(registrationService);
+        messageManagerService = messageService.grab(secuboidPlugin);
+        persistenceService = new PersistenceService(secuboidPlugin, scheduler, persistenceSessionService);
+        playerInfoService = new PlayerInfoServiceImpl(server, landService);
+        recipientService = new RecipientServiceImpl(registrationService);
+        serviceService = new ServiceServiceImpl(registrationService);
 
-        chatGetter = new ChatGetter();
+        // phase 3 in alphabetical order
+        chatPageService = new ChatPageServiceImpl(messageManagerService);
+        scoreboardService = new ScoreboardService(scoreboardManager, messageManagerService);
+        secuboidToolService = new SecuboidToolService(secuboidPlugin, messageManagerService);
 
-        recipients = new RecipientsImpl();
-        lands = new LandsImpl();
+        // phase 4 in alphabetical order
+        commandService = new CommandServiceImpl(chatPageService, registrationService);
 
-        persistenceThread = null;
+        // phase 5 in alphabetical order
+        commandListenerService = new CommandListenerService(secuboidPlugin, commandService, playerInfoService);
     }
 
-    public static @NotNull SecuboidImpl instance() {
-        assert secuboidImpl != null : MSG_NOT_INITIALIZED;
-        return secuboidImpl;
+    public void onLoad() {
+        Log.setLog(secuboidPlugin.getLogger());
+        registerServices();
+        registerCommands();
+        registerFlagTypes();
+        registerRecipients();
     }
 
-    public static @NotNull JavaPlugin getJavaPLugin() {
-        assert secuboidPlugin != null : MSG_NOT_INITIALIZED;
-        return secuboidPlugin;
-    }
-
-    public static @NotNull PluginManager getPluginManager() {
-        return getJavaPLugin().getServer().getPluginManager();
-    }
-
-    public static @Nullable ScoreboardManager getScoreboardManager() {
-        assert secuboidPlugin != null : MSG_NOT_INITIALIZED;
-        return secuboidPlugin.getServer().getScoreboardManager();
-    }
-
-    public static <T extends JavaPlugin> @Nullable T getPlugin(Class<T> clazz) {
-        return ((SecuboidPluginImpl) getJavaPLugin()).getPluginFromClass(clazz);
-    }
-
-    @Override
-    public void load(boolean isServerBoot) {
-        JavaPlugin javaPlugin = getJavaPLugin();
-        Server server = javaPlugin.getServer();
-
+    public void onEnable(boolean isServerBoot) {
         if (isServerBoot) {
-
-            // Set logger first
-            Log.setLog(javaPlugin.getLogger());
-            javaPlugin.saveDefaultConfig();
+            secuboidPlugin.saveDefaultConfig();
         } else {
-            javaPlugin.reloadConfig();
+            secuboidPlugin.reloadConfig();
         }
-        config().load(javaPlugin.getConfig());
+        config().load(secuboidPlugin.getConfig());
+
+        serviceService.onEnable(secuboidPlugin);
 
         if (isServerBoot) {
-
-            // Everything here is what will not change after a configuration or persistence
-            // change
-            Message.message().load(javaPlugin);
-            secuboidTool.init(javaPlugin);
-            PluginLoader pluginLoader = new PluginLoader();
-            PluginManager pluginManager = server.getPluginManager();
-            pluginLoader.init(pluginManager);
-            ((FlagTypesImpl) flags).init(pluginLoader);
-            ((CommandsImpl) commands).init(pluginLoader);
-            ((RecipientsImpl) recipients).init(pluginLoader);
-            commandListener.init();
-        } else {
-            ConnectionManager.init(); // Initiated by storage manager on a normal boot
-            chatGetter.reset();
-        }
-        playerInfos.addConsoleCommandSender(server.getConsoleSender());
-
-        // Load
-        persistenceThread = new PersistenceThread(server.getScheduler(), persistence);
-        persistenceThread.init();
-
-        ((RecipientsImpl) recipients).load();
-        ((LandsImpl) lands).load();
-
-        if (isServerBoot) {
-            listeners.register();
-        }
-
-        // Reload players, not only on "sd reload" because there is also the bukkit
-        // "reload" command.
-        for (Player player : javaPlugin.getServer().getOnlinePlayers()) {
-            UUID playerUUID = player.getUniqueId();
-            String playerName = player.getName();
-
-            // Reload players
+            registerListeners();
         }
     }
 
-    @Override
-    public void unload() {
-        playerInfos.removeAll();
-        // TODO refactor
-
-        // Only when Secuboid is completely unloaded
-        getPersistenceThread().shutdown();
+    public void onDisable() {
+        serviceService.onEnable(secuboidPlugin);
     }
 
-    @Override
     public void reload() {
-        unload();
-        load(false);
+        ((ServiceServiceImpl) serviceService).onDisableReload();
+        ((ServiceServiceImpl) serviceService).onEnableReload();
+    }
+
+    // Override getters in alphabetical order
+
+    @Override
+    public @NotNull CommandService getCommandService() {
+        return commandService;
     }
 
     @Override
-    public @NotNull PlayerInfos getPlayerInfos() {
-        return playerInfos;
+    public @NotNull FlagTypeService getFlagTypeService() {
+        return flagTypeService;
     }
 
     @Override
-    public @NotNull Commands getCommands() {
-        return commands;
+    public @NotNull LandService getLandService() {
+        return landService;
     }
 
     @Override
-    public @NotNull FlagTypes getFlagTypes() {
-        return flags;
+    public @NotNull MessageService getMessageService() {
+        return messageService;
     }
 
     @Override
-    public @NotNull Recipients getRecipients() {
-        return recipients;
+    public @NotNull PlayerInfoService getPlayerInfoService() {
+        return playerInfoService;
     }
 
     @Override
-    public @NotNull Lands getLands() {
-        return lands;
+    public @NotNull RecipientService getRecipientService() {
+        return recipientService;
     }
 
     @Override
-    public @NotNull NewInstance getNewInstance() {
-        return newInstance;
+    public @NotNull RegistrationService getRegistrationService() {
+        return registrationService;
     }
 
-    public @NotNull PersistenceThread getPersistenceThread() {
-        assert persistenceThread != null : MSG_NOT_INITIALIZED;
-        return persistenceThread;
+    @Override
+    public @NotNull ServiceService getServiceManager() {
+        return serviceService;
     }
 
-    public @NotNull SecuboidTool getSecuboidTool() {
-        return secuboidTool;
+    private void registerServices() {
+
+        // Register services
+        // phase 1 in alphabetical order
+        registrationService.registerService(secuboidPlugin, registrationService);
+        registrationService.registerService(secuboidPlugin, serviceService);
+
+        // phase 2 in alphabetical order
+        registrationService.registerService(secuboidPlugin, chatGetterService);
+        registrationService.registerService(secuboidPlugin, commandListenerService);
+        registrationService.registerService(secuboidPlugin, commandService);
+        registrationService.registerService(secuboidPlugin, flagTypeService);
+        registrationService.registerService(secuboidPlugin, messageManagerService);
+        registrationService.registerService(secuboidPlugin, messageService);
+        registrationService.registerService(secuboidPlugin, persistenceSessionService);
+        registrationService.registerService(secuboidPlugin, recipientService);
+        registrationService.registerService(secuboidPlugin, secuboidToolService);
+
+        // Phase 3 in alphabetical order
+        registrationService.registerService(secuboidPlugin, persistenceService);
+        registrationService.registerService(secuboidPlugin, scoreboardService);
+
+        // Phase 4 in alphabetical order
+        registrationService.registerService(secuboidPlugin, landService);
+
+        //Phase 5 in alphabetical order
+        registrationService.registerService(secuboidPlugin, playerInfoService);
+
+        //Phase 6 in alphabetical order
+        registrationService.registerService(secuboidPlugin, chatPageService);
+
     }
 
-    public @NotNull ChatGetter getChatGetter() {
-        return chatGetter;
+    private void registerCommands() {
+
+        // Register commands in alphabetical order
+        registrationService.registerCommand(new CommandCancel(messageManagerService));
+        registrationService.registerCommand(new CommandCreate(chatGetterService, landService, messageManagerService,
+                recipientService));
+        registrationService.registerCommand(new CommandInfo(messageManagerService));
+        registrationService.registerCommand(new CommandPage(chatPageService, messageManagerService));
+        registrationService.registerCommand(new CommandReload(this, messageManagerService));
+        registrationService.registerCommand(new CommandSelect(commandService));
+        registrationService.registerCommand(new CommandSelectCuboid(scoreboardService));
+        registrationService.registerCommand(new CommandSelectHere(scoreboardService));
+        registrationService.registerCommand(new CommandTool(secuboidToolService));
+    }
+
+    private void registerRecipients() {
+        // TODO
+    }
+
+    private void registerFlagTypes() {
+        registrationService.registerFlagType(FlagDeclarations.class);
+    }
+
+    private void registerListeners() {
+        pluginManager.registerEvents(new AsyncPlayerChatListener(chatGetterService, playerInfoService), secuboidPlugin);
+        pluginManager.registerEvents(new PlayerConnectionListener(chatGetterService, playerInfoService), secuboidPlugin);
+        pluginManager.registerEvents(new PlayerMoveListener(chatGetterService, messageManagerService,
+                playerInfoService), secuboidPlugin);
+        pluginManager.registerEvents(new SecuboidToolListener(playerInfoService, secuboidToolService), secuboidPlugin);
+        pluginManager.registerEvents(new WorldListener(landService), secuboidPlugin);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -27,7 +27,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionModifyExpand extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
+    public ActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo,
+                                       @NotNull SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 

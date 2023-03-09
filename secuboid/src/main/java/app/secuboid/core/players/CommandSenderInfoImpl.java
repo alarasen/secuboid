@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,21 +17,17 @@
  */
 package app.secuboid.core.players;
 
-import app.secuboid.api.players.ChatPage;
 import app.secuboid.api.players.CommandSenderInfo;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
 
     private final @NotNull CommandSender sender;
-    private @Nullable ChatPage chatPage;
 
 
     protected CommandSenderInfoImpl(@NotNull CommandSender sender) {
         this.sender = sender;
-        chatPage = null;
     }
 
     @Override
@@ -42,21 +38,5 @@ public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
     @Override
     public @NotNull String getName() {
         return sender.getName();
-    }
-
-    @Override
-    public @NotNull ChatPage newChatPage(@NotNull String subject, @NotNull String text) {
-        chatPage = new ChatPageImpl(sender, subject, text);
-        return chatPage;
-    }
-
-    @Override
-    public @Nullable ChatPage getChatPage() {
-        return chatPage;
-    }
-
-    @Override
-    public void removeChatPage() {
-        chatPage = null;
     }
 }

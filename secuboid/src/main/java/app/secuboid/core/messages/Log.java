@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,9 @@
  */
 package app.secuboid.core.messages;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.logging.Logger;
 
 public class Log {
@@ -24,16 +27,16 @@ public class Log {
     private static final String LOGGER_PROPERTY_NAME = "java.util.logging.SimpleFormatter.format";
     private static final String LOGGER_PROPERTY_VALUE = "[%1$tF %1$tT] [%4$-7s] %5$s %n";
 
-    private static Logger logger = null;
+    private static @Nullable Logger logger = null;
 
     private Log() {
     }
 
-    public static void setLog(Logger logger) {
+    public static void setLog(@Nullable Logger logger) {
         Log.logger = logger;
     }
 
-    public static Logger log() {
+    public static @NotNull Logger log() {
         if (logger == null) {
             System.setProperty(LOGGER_PROPERTY_NAME, LOGGER_PROPERTY_VALUE);
             logger = Logger.getGlobal();

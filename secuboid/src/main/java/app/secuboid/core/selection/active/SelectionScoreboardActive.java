@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,14 +23,13 @@ import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.messages.MessagePaths;
-import app.secuboid.core.scoreboard.SecuboidScoreboard;
+import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 import static app.secuboid.core.messages.Log.log;
-import static app.secuboid.core.messages.Message.message;
 import static java.util.logging.Level.WARNING;
 
 class SelectionScoreboardActive extends SelectionScoreboard {
@@ -46,28 +45,28 @@ class SelectionScoreboardActive extends SelectionScoreboard {
     private final @NotNull AreaForm areaForm;
     private final @NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass;
 
-    SelectionScoreboardActive(@NotNull Player player, @NotNull AreaForm areaForm, @NotNull Class<?
+    SelectionScoreboardActive(@NotNull ScoreboardService scoreboardService, @NotNull Player player,
+                              @NotNull AreaForm areaForm, @NotNull Class<?
             extends ActiveSelectionModify> activeSelectionModifyClass) {
-        super(player);
+        super(scoreboardService, player);
         this.areaForm = areaForm;
         this.activeSelectionModifyClass = activeSelectionModifyClass;
     }
 
     @Override
     void init() {
-        String title = message().get(MessageType.TITLE, MessagePaths.selectionScoreboardActiveTitleCreate());
+        String title = scoreboardService.getMessage(MessageType.TITLE, MessagePaths.selectionScoreboardActiveTitleCreate());
         String selectionTypeMsg = getSelectionTypeMsg(activeSelectionModifyClass);
         String[] lines = new String[5];
-        lines[0] = message().get(MessageType.NORMAL,
+        lines[0] = scoreboardService.getMessage(MessageType.NORMAL,
                 MessagePaths.selectionScoreboardActiveSelectionType(selectionTypeMsg));
-        lines[1] = message().get(MessageType.NORMAL, areaForm.getMessagePath());
+        lines[1] = scoreboardService.getMessage(MessageType.NORMAL, areaForm.getMessagePath());
         long volume = areaForm.getVolume();
-        lines[2] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
+        lines[2] = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
         lines[3] = "";
-        lines[4] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveTypeWhenDone(COMMAND_CREATE));
+        lines[4] = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveTypeWhenDone(COMMAND_CREATE));
 
-        scoreboard = new SecuboidScoreboard(player, title, lines);
-        scoreboard.init();
+        scoreboard = scoreboardService.create(player, title, lines);
     }
 
     @Override
@@ -78,10 +77,10 @@ class SelectionScoreboardActive extends SelectionScoreboard {
         }
 
         long volume = areaForm.getVolume();
-        String line1 = message().get(MessageType.NORMAL, areaForm.getMessagePath());
-        scoreboard.changeLine(1, line1);
-        String line2 = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
-        scoreboard.changeLine(2, line2);
+        String line1 = scoreboardService.getMessage(MessageType.NORMAL, areaForm.getMessagePath());
+        scoreboardService.changeLine(scoreboard, 1, line1);
+        String line2 = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
+        scoreboardService.changeLine(scoreboard, 2, line2);
     }
 
     private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
@@ -92,6 +91,6 @@ class SelectionScoreboardActive extends SelectionScoreboard {
 
         String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
         MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});
-        return message().get(MessageType.NO_COLOR, messagePath);
+        return scoreboardService.getMessage(MessageType.NO_COLOR, messagePath);
     }
 }

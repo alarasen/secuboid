@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,43 +18,12 @@
 package app.secuboid.api.commands;
 
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * If you create a command for Secuboid, you should implement this interface and
- * add CommandRegistered annotation. Don't forget to add your class in
- * secuboid-plugin.yml. You have a choice of three constructors: Secuboid,
- * YourPlugin, Secuboid and YourPlugin. YourPlugin is the class of your own
- * plugin that extends JavaPlugin.
- *
- * <pre>
- * public MyCommandExec() { // Default constructor
- * }
- *
- * // or
- *
- * public MyCommandExec(Secuboid secuboid) {
- *     this.secuboid = secuboid;
- * }
- *
- * // or
- *
- * public MyCommandExec(MyPlugin myPlugin) {
- *     this.myPlugin = myPlugin;
- * }
- *
- * // or
- *
- * public MyCommandExec(Secuboid secuboid, MyPlugin myPlugin) {
- *     this.secuboid = secuboid;
- *     this.myPlugin = myPlugin;
- * }
- * </pre>
- * <p>
- * Any other constructors will be ignored.
- *
- * @see CommandRegistered
+ * If you create a command for Secuboid, you should implement this interface and add CommandRegistered annotation.
+ * Don't forget to add your class in
+ * {@link app.secuboid.api.registration.RegistrationService#registerCommand(CommandExec)}.
  */
 public interface CommandExec {
 

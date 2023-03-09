@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,126 +18,102 @@
 
 package app.secuboid.core.it;
 
-import app.secuboid.api.SecuboidComponent;
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.SecuboidPluginImpl;
-import app.secuboid.core.messages.Log;
-import org.bukkit.Server;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class MinecraftServer {
 
-    private static final String PLUGIN_VERSION = "IT_VERSION";
-
-    private final File pluginTempDir;
-
-    private final List<SecuboidComponent> secuboidComponents;
-    private final List<JavaPlugin> plugins;
-
-    public MinecraftServer(File pluginTempDir) {
-        this.pluginTempDir = pluginTempDir;
-        secuboidComponents = new ArrayList<>();
-        plugins = new ArrayList<>();
-
-        SecuboidPluginImpl secuboidPlugin = mockSecuboidPluginImpl();
-        SecuboidImpl secuboid = new SecuboidImpl(secuboidPlugin);
-
-        secuboidComponents.add(secuboid);
-        plugins.add(secuboidPlugin);
-    }
-
-    public void load() {
-        for (SecuboidComponent secuboidComponent : secuboidComponents) {
-            secuboidComponent.load(true);
-        }
-    }
-
-    public void unload() {
-        List<SecuboidComponent> secuboidComponentsCopy = secuboidComponents.subList(0, secuboidComponents.size());
-        Collections.reverse(secuboidComponentsCopy);
-        for (SecuboidComponent secuboidComponent : secuboidComponentsCopy) {
-            secuboidComponent.unload();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public <C> C getSecuboidComponent(Class<C> secuboidComponentImplClasses) {
-        for (SecuboidComponent secuboidComponent : secuboidComponents) {
-            if (secuboidComponentImplClasses.isAssignableFrom(secuboidComponent.getClass())) {
-                return (C) secuboidComponent;
-            }
-        }
-
-        throw new SecuboidRuntimeException("Invalid class");
-    }
-
-    private SecuboidPluginImpl mockSecuboidPluginImpl() {
-        String pluginName = "Secuboid";
-        String mainClass = "app.secuboid.core.SecuboidPluginImpl";
-        File secuboidPluginYmlFile = new File("../secuboid/src/main/resources-filtered/secuboid-plugin.yml");
-
-        return pluginCommunMock(SecuboidPluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
-    }
-
-    public <P extends JavaPlugin> P pluginCommunMock(Class<P> clazz, String pluginName, String mainClass,
-                                                     File secuboidPluginYmlFile) {
-        P javaPlugin = mock(clazz);
-
-        when(javaPlugin.getLogger()).thenReturn(Log.log());
-        when(javaPlugin.getConfig()).thenReturn(new YamlConfiguration());
-        when(javaPlugin.getDescription()).thenReturn(new PluginDescriptionFile(pluginName, PLUGIN_VERSION, mainClass));
-        when(javaPlugin.getDataFolder()).thenReturn(new File(pluginTempDir, pluginName));
-        when(javaPlugin.getName()).thenReturn(pluginName);
-
-        Server server = mockServer();
-        when(javaPlugin.getServer()).thenReturn(server);
-
-        try {
-            when(javaPlugin.getResource("secuboid-plugin.yml")).thenReturn(new FileInputStream(secuboidPluginYmlFile));
-        } catch (FileNotFoundException e) {
-            throw new SecuboidRuntimeException("Unable to read the file: " + secuboidPluginYmlFile, e);
-        }
-
-        PluginCommand pluginCommand = mock(PluginCommand.class);
-        when(javaPlugin.getCommand(anyString())).thenReturn(pluginCommand);
-
-        return javaPlugin;
-    }
-
-    private Server mockServer() {
-        Server server = mock(Server.class);
-        PluginManager pluginManager = mockPluginManager();
-
-        when(server.getPluginManager()).thenReturn(pluginManager);
-
-        ServicesManager servicesManager = mock(ServicesManager.class);
-        when(server.getServicesManager()).thenReturn(servicesManager);
-
-        return server;
-    }
-
-    private PluginManager mockPluginManager() {
-        PluginManager pluginManager = mock(PluginManager.class);
-
-        when(pluginManager.getPlugins()).thenAnswer(a -> plugins.toArray(new JavaPlugin[0]));
-
-        return pluginManager;
-    }
+//    private static final String PLUGIN_VERSION = "IT_VERSION";
+//
+//    private final File pluginTempDir;
+//
+//    private final List<SecuboidComponent> secuboidComponents;
+//    private final List<JavaPlugin> plugins;
+//
+//    public MinecraftServer(File pluginTempDir) {
+//        this.pluginTempDir = pluginTempDir;
+//        secuboidComponents = new ArrayList<>();
+//        plugins = new ArrayList<>();
+//
+//        SecuboidPluginImpl secuboidPlugin = mockSecuboidPluginImpl();
+//        SecuboidImpl secuboid = new SecuboidImpl(secuboidPlugin);
+//
+//        secuboidComponents.add(secuboid);
+//        plugins.add(secuboidPlugin);
+//    }
+//
+//    public void load() {
+//        for (SecuboidComponent secuboidComponent : secuboidComponents) {
+//            secuboidComponent.load(true);
+//        }
+//    }
+//
+//    public void unload() {
+//        List<SecuboidComponent> secuboidComponentsCopy = secuboidComponents.subList(0, secuboidComponents.size());
+//        Collections.reverse(secuboidComponentsCopy);
+//        for (SecuboidComponent secuboidComponent : secuboidComponentsCopy) {
+//            secuboidComponent.unload();
+//        }
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    public <C> C getSecuboidComponent(Class<C> secuboidComponentImplClasses) {
+//        for (SecuboidComponent secuboidComponent : secuboidComponents) {
+//            if (secuboidComponentImplClasses.isAssignableFrom(secuboidComponent.getClass())) {
+//                return (C) secuboidComponent;
+//            }
+//        }
+//
+//        throw new SecuboidRuntimeException("Invalid class");
+//    }
+//
+//    private SecuboidPluginImpl mockSecuboidPluginImpl() {
+//        String pluginName = "Secuboid";
+//        String mainClass = "app.secuboid.core.SecuboidPluginImpl";
+//        File secuboidPluginYmlFile = new File("../secuboid/src/main/resources-filtered/secuboid-plugin.yml");
+//
+//        return pluginCommonMock(SecuboidPluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
+//    }
+//
+//    public <P extends JavaPlugin> P pluginCommonMock(Class<P> clazz, String pluginName, String mainClass,
+//                                                     File secuboidPluginYmlFile) {
+//        P javaPlugin = mock(clazz);
+//
+//        when(javaPlugin.getLogger()).thenReturn(Log.log());
+//        when(javaPlugin.getConfig()).thenReturn(new YamlConfiguration());
+//        when(javaPlugin.getDescription()).thenReturn(new PluginDescriptionFile(pluginName, PLUGIN_VERSION, mainClass));
+//        when(javaPlugin.getDataFolder()).thenReturn(new File(pluginTempDir, pluginName));
+//        when(javaPlugin.getName()).thenReturn(pluginName);
+//
+//        Server server = mockServer();
+//        when(javaPlugin.getServer()).thenReturn(server);
+//
+//        try {
+//            when(javaPlugin.getResource("secuboid-plugin.yml")).thenReturn(new FileInputStream(secuboidPluginYmlFile));
+//        } catch (FileNotFoundException e) {
+//            throw new SecuboidRuntimeException("Unable to read the file: " + secuboidPluginYmlFile, e);
+//        }
+//
+//        PluginCommand pluginCommand = mock(PluginCommand.class);
+//        when(javaPlugin.getCommand(anyString())).thenReturn(pluginCommand);
+//
+//        return javaPlugin;
+//    }
+//
+//    private Server mockServer() {
+//        Server server = mock(Server.class);
+//        PluginManager pluginManager = mockPluginManager();
+//
+//        when(server.getPluginManager()).thenReturn(pluginManager);
+//
+//        ServicesManager servicesManager = mock(ServicesManager.class);
+//        when(server.getServicesManager()).thenReturn(servicesManager);
+//
+//        return server;
+//    }
+//
+//    private PluginManager mockPluginManager() {
+//        PluginManager pluginManager = mock(PluginManager.class);
+//
+//        when(pluginManager.getPlugins()).thenAnswer(a -> plugins.toArray(new JavaPlugin[0]));
+//
+//        return pluginManager;
+//    }
 }

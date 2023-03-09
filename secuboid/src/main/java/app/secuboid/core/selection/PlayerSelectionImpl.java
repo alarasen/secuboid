@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@ import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.api.selection.active.ActiveSelection;
 import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
 import app.secuboid.core.lands.areas.CylinderAreaFormImpl;
+import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,18 +50,22 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         this.player = playerInfo.getPlayer();
     }
 
-    public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull Class<? extends AreaForm> areaFormClass) {
+    public void createActiveSelectionModifyExpand(@NotNull ScoreboardService scoreboardService,
+                                                  @NotNull WorldLand worldLand,
+                                                  @NotNull Class<? extends AreaForm> areaFormClass) {
         AreaForm areaForm = createAreaForm(areaFormClass);
-        createActiveSelectionModifyExpand(worldLand, areaForm);
+        createActiveSelectionModifyExpand(scoreboardService, worldLand, areaForm);
     }
 
-    public void createActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
-        createActiveSelection(areaForm, true, s -> new ActiveSelectionModifyExpand(worldLand, playerInfo, s));
+    public void createActiveSelectionModifyExpand(@NotNull ScoreboardService scoreboardService,
+                                                  @NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
+        createActiveSelection(scoreboardService, areaForm, true, s -> new ActiveSelectionModifyExpand(worldLand,
+                playerInfo, s));
     }
 
-    public void createActiveSelectionAreaShow(@NotNull Area area) {
+    public void createActiveSelectionAreaShow(@NotNull ScoreboardService scoreboardService, @NotNull Area area) {
         AreaForm areaForm = area.getAreaForm();
-        createActiveSelection(areaForm, false, s -> new ActiveSelectionAreaShow(player, area, s));
+        createActiveSelection(scoreboardService, areaForm, false, s -> new ActiveSelectionAreaShow(player, area, s));
     }
 
     public void updateSelectionFromLocation() {
@@ -93,11 +98,12 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
     }
 
-    private void createActiveSelection(@NotNull AreaForm areaForm, boolean isResizeable,
+    private void createActiveSelection(@NotNull ScoreboardService scoreboardService, @NotNull AreaForm areaForm,
+                                       boolean isResizeable,
                                        Function<SelectionForm, ActiveSelection> selectionFormActiveSelectionFunction) {
         SelectionForm selectionForm = createSelectionForm(areaForm, isResizeable);
         activeSelection = selectionFormActiveSelectionFunction.apply(selectionForm);
-        ((ActiveSelectionImpl) activeSelection).init();
+        ((ActiveSelectionImpl) activeSelection).init(scoreboardService);
     }
 
     private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm, boolean isResizeable) {

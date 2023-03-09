@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -20,19 +20,18 @@ package app.secuboid.api.flagtypes;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a flag type. Hidden "true" is only for a flag
- * that contains sensitive or ununderstandable informations for a player.
+ * Represents a flag type. Hidden "true" is only for a flag that contains sensitive or not understandable information
+ * for a player.
  *
- * @param name         the name of the flag lowercase with "-" if more than one
- *                     word
+ * @param name         the name of the flag lowercase with "-" if more than one word
  * @param description  the flag description
  * @param needSource   is this flag need a source parameter (ex: the player who
- *                     take the action, the explosed creeper)?
+ *                     take the action, the exploded creeper)?
  * @param needTarget   is this flag need a target parameter (ex: to mob targeted
  *                     with an arrow)?
  * @param needMetadata is this flag need extra data?
  * @param isHidden     hidden "true" is only for a flag that contains sensitive
- *                     or ununderstandable informations for a player
+ *                     or not understandable information for a player
  **/
 public record FlagType(
         @NotNull String name,
@@ -40,5 +39,6 @@ public record FlagType(
         boolean needSource,
         boolean needTarget,
         boolean needMetadata,
-        boolean isHidden) {
+        boolean isHidden
+) {
 }

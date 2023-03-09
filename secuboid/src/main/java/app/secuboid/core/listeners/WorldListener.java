@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,15 +18,23 @@
 
 package app.secuboid.core.listeners;
 
-import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.lands.LandsImpl;
+import app.secuboid.api.lands.LandService;
+import app.secuboid.core.lands.LandServiceImpl;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.event.EventPriority.MONITOR;
 
-public class WorldListener extends AbstractListener {
+public class WorldListener implements Listener {
+
+    private final @NotNull LandService landService;
+
+    public WorldListener(@NotNull LandService landService) {
+        this.landService = landService;
+    }
 
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onWorldLoadMonitor(WorldLoadEvent event) {
@@ -34,6 +42,6 @@ public class WorldListener extends AbstractListener {
 
         // This is synced because the Minecraft world load is not async (with lags) and we cannot take the risk to have
         // world damages (ex: fire, explosion or player destroy)
-        ((LandsImpl) SecuboidImpl.instance().getLands()).loadWorldSync(world);
+        ((LandServiceImpl) landService).loadWorldSync(world);
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,38 +19,35 @@ package app.secuboid.core;
 
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPluginImpl extends SecuboidPlugin {
 
-    private final @NotNull Secuboid secuboid;
+    private final @NotNull SecuboidImpl secuboidImpl;
 
     public SecuboidPluginImpl() {
-        super();
+        secuboidImpl = new SecuboidImpl(this);
+    }
 
-        secuboid = new SecuboidImpl(this);
-        setSecuboid(secuboid);
+    @Override
+    public void onLoad() {
+        secuboidImpl.onLoad();
     }
 
     @Override
     public void onEnable() {
-        ((SecuboidImpl) secuboid).load(true);
+        secuboidImpl.onEnable(true);
         // TODO refactor
         // new SecuboidMetrics(this).start();
     }
 
     @Override
     public void onDisable() {
-        ((SecuboidImpl) secuboid).unload();
+        secuboidImpl.onDisable();
     }
 
     @Override
     public @NotNull Secuboid getSecuboid() {
-        return secuboid;
-    }
-
-    public <T extends JavaPlugin> T getPluginFromClass(Class<T> clazz) {
-        return JavaPlugin.getPlugin(clazz);
+        return secuboidImpl;
     }
 }
