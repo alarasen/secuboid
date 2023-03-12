@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
 package app.secuboid.core.players;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.lands.Lands;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
@@ -28,13 +27,10 @@ import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-
-import static app.secuboid.core.SecuboidImpl.instance;
 
 public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo {
 
@@ -44,25 +40,35 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     private boolean adminMode;
 
     private long lastUpdateTimeMillis;
-    private Location lastLocation;
-    private Area area;
-    private Land land;
-    private LocationPath locationPath;
+    private @NotNull Location lastLocation;
+    private @Nullable Area area;
+    private @NotNull Land land;
+    private @NotNull LocationPath locationPath;
     private boolean isTpCancel;
 
-    PlayerInfoImpl(@NotNull Player player) {
+    PlayerInfoImpl(@NotNull Player player, @NotNull Location lastLocation, @Nullable Area area, @NotNull Land land,
+                   @NotNull LocationPath locationPath) {
         super(player);
         this.player = player;
         playerSelection = new PlayerSelectionImpl(this);
 
         adminMode = false;
         lastUpdateTimeMillis = 0L;
-        lastLocation = player.getLocation();
-        Lands lands = instance().getLands();
-        area = lands.getArea(lastLocation);
-        land = lands.get(lastLocation);
-        locationPath = lands.getLocationPath(lastLocation);
+        this.lastLocation = lastLocation;
+        this.area = area;
+        this.land = land;
+        this.locationPath = locationPath;
         isTpCancel = false;
+    }
+
+    public void updatePlayerPosition(@NotNull Location lastLocation, @Nullable Area area, @NotNull Land land,
+                                     @NotNull LocationPath locationPath) {
+        this.lastLocation = lastLocation;
+        this.area = area;
+        this.land = land;
+        this.locationPath = locationPath;
+
+        ((PlayerSelectionImpl) playerSelection).updateSelectionFromLocation();
     }
 
     @Override
@@ -136,17 +142,5 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     @Override
     public @NotNull PlayerSelection getPlayerSelection() {
         return playerSelection;
-    }
-
-    public void updatePosInfo(@NotNull Event event, @NotNull Location toLocation) {
-
-        // TODO land change Events
-        lastLocation = toLocation;
-        Lands lands = instance().getLands();
-        area = lands.getArea(toLocation);
-        land = lands.get(toLocation);
-        locationPath = lands.getLocationPath(toLocation);
-
-        ((PlayerSelectionImpl) playerSelection).updateSelectionFromLocation();
     }
 }

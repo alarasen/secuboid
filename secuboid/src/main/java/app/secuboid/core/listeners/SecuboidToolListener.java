@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,14 @@
  */
 package app.secuboid.core.listeners;
 
+import app.secuboid.api.players.PlayerInfo;
+import app.secuboid.api.players.PlayerInfoService;
 import app.secuboid.api.selection.PlayerSelection;
-import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.commands.items.SecuboidTool;
-import app.secuboid.core.players.PlayerInfoImpl;
+import app.secuboid.core.items.SecuboidToolService;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -36,9 +37,14 @@ import static org.bukkit.event.EventPriority.NORMAL;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
 import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
-public class SecuboidToolListener extends AbstractListener {
+public class SecuboidToolListener implements Listener {
 
-    SecuboidToolListener() {
+    private final @NotNull PlayerInfoService playerInfoService;
+    private final @NotNull SecuboidToolService secuboidToolService;
+
+    public SecuboidToolListener(@NotNull PlayerInfoService playerInfoService, @NotNull SecuboidToolService secuboidToolService) {
+        this.playerInfoService = playerInfoService;
+        this.secuboidToolService = secuboidToolService;
     }
 
     @EventHandler(priority = NORMAL)
@@ -52,14 +58,15 @@ public class SecuboidToolListener extends AbstractListener {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
-        PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
-        PlayerSelection playerSelection = playerInfoImpl.getPlayerSelection();
+        PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
+        assert playerInfo != null;
+        PlayerSelection playerSelection = playerInfo.getPlayerSelection();
         Action action = event.getAction();
 
         if (action == LEFT_CLICK_BLOCK) {
-            leftClick(playerInfoImpl, playerSelection);
+            leftClick(playerInfo, playerSelection);
         } else if (action == RIGHT_CLICK_BLOCK) {
-            rightClick(playerInfoImpl, playerSelection);
+            rightClick(playerInfo, playerSelection);
         }
     }
 
@@ -80,21 +87,16 @@ public class SecuboidToolListener extends AbstractListener {
     }
 
     private boolean isSecuboidTool(@Nullable ItemStack itemStack) {
-        return getSecuboidTool().isSecuboidTool(itemStack);
+        return secuboidToolService.isSecuboidTool(itemStack);
     }
 
-    private void leftClick(@NotNull PlayerInfoImpl playerInfoImpl, @NotNull PlayerSelection playerSelection) {
+    private void leftClick(@NotNull PlayerInfo playerInfo, @NotNull PlayerSelection playerSelection) {
         if (!playerSelection.hasSelection()) {
             // todo select here
         }
     }
 
-    private void rightClick(@NotNull PlayerInfoImpl playerInfoImpl, @NotNull PlayerSelection playerSelection) {
+    private void rightClick(@NotNull PlayerInfo playerInfo, @NotNull PlayerSelection playerSelection) {
 
-    }
-
-    @NotNull
-    private SecuboidTool getSecuboidTool() {
-        return SecuboidImpl.instance().getSecuboidTool();
     }
 }

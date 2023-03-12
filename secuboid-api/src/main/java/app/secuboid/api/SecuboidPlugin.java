@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,26 +19,11 @@ package app.secuboid.api;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * This abstract class is used only when we need to access Secuboid main class
- * from java plugin.
+ * This class is only the secuboid plugin instance and is used to call the secuboid main instance.
  */
 public abstract class SecuboidPlugin extends JavaPlugin {
-
-    private static @Nullable Secuboid secuboid = null;
-
-    /**
-     * Gets the Secuboid main instance from static way.
-     *
-     * @return the Secuboid main instance
-     */
-    public static @NotNull Secuboid secuboid() {
-        assert secuboid != null : "Secuboid not yet initialized";
-
-        return secuboid;
-    }
 
     /**
      * Gets the Secuboid main instance.
@@ -46,8 +31,4 @@ public abstract class SecuboidPlugin extends JavaPlugin {
      * @return the Secuboid main instance
      */
     public abstract @NotNull Secuboid getSecuboid();
-
-    protected static void setSecuboid(@NotNull Secuboid secuboidInstance) {
-        secuboid = secuboidInstance;
-    }
 }

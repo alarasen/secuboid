@@ -132,10 +132,8 @@ public class FlagsGenerator extends CommonGenerator {
     }
 
     private void generateFlag(BufferedWriter bwJavaTarget, FlagRecord flagRecord) throws IOException {
-        bwJavaTarget.append("    @FlagRegistered");
-        bwJavaTarget.newLine();
-
         String nameUpper = toConstant("FLAG_" + flagRecord.name());
+
         bwJavaTarget //
                 .append("    public static final FlagType ") //
                 .append(nameUpper) //

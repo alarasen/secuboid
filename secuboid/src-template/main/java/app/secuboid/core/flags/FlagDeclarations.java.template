@@ -18,7 +18,6 @@
 package app.secuboid.core.flags;
 
 import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.reflection.FlagRegistered;
 
 public class FlagDeclarations {
 

@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,28 +17,26 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.commands.CommandService;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "select",
         aliases = "sel"
 )
 public class CommandSelect implements CommandExec {
 
-    private final @NotNull Secuboid secuboid;
+    private final @NotNull CommandService commandService;
 
-    public CommandSelect(@NotNull Secuboid secuboid) {
-        this.secuboid = secuboid;
+    public CommandSelect(@NotNull CommandService commandService) {
+        this.commandService = commandService;
     }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
-        secuboid.getCommands().executeCommandClass(CommandSelectCuboid.class, commandSenderInfo, subArgs);
+        commandService.executeCommandClass(CommandSelectCuboid.class, commandSenderInfo, subArgs);
     }
 }

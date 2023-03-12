@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,18 +18,18 @@
 package app.secuboid.api.lands.residents;
 
 import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientExec;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a resident.
  *
  * @param landComponent the land component
- * @param recipient     the recipient
+ * @param recipientExec the recipientExec
  * @param level         the level
  */
 public record Resident(
         @NotNull LandComponent landComponent,
-        @NotNull Recipient recipient,
+        @NotNull RecipientExec recipientExec,
         int level) {
 }

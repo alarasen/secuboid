@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ package app.secuboid.api.exceptions;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * When there is a problem with a creation of a recipient.
+ * When there is a problem with a creation of a recipientExec.
  */
 public class RecipientException extends Exception {
 

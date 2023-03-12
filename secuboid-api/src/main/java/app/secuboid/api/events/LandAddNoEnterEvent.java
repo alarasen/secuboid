@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 package app.secuboid.api.events;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientExec;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,17 +30,17 @@ public class LandAddNoEnterEvent extends LandEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private Recipient recipient;
+    private RecipientExec recipientExec;
 
     /**
      * Instantiates a new player container add no enter events.
      *
-     * @param land      the land
-     * @param recipient the recipient added
+     * @param land          the land
+     * @param recipientExec the recipientExec added
      */
-    public LandAddNoEnterEvent(@NotNull Land land, @NotNull Recipient recipient) {
+    public LandAddNoEnterEvent(@NotNull Land land, @NotNull RecipientExec recipientExec) {
         super(land);
-        this.recipient = recipient;
+        this.recipientExec = recipientExec;
     }
 
     @SuppressWarnings("java:S4144")
@@ -50,12 +50,12 @@ public class LandAddNoEnterEvent extends LandEvent {
     }
 
     /**
-     * Gets the recipient added to no enter.
+     * Gets the recipientExec added to no enter.
      *
-     * @return the recipient
+     * @return the recipientExec
      */
-    public @NotNull Recipient getRecipient() {
-        return recipient;
+    public @NotNull RecipientExec getRecipient() {
+        return recipientExec;
     }
 
     @Override

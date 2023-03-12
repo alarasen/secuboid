@@ -1,3 +1,0 @@
-component-classes:
-  # Recipients
-  - app.secuboid.permission.group.recipients.RecipientPermissionGroup

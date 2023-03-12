@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -23,19 +23,12 @@ import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
-import app.secuboid.api.storage.StorageManager;
-import app.secuboid.core.lands.areas.AreaFormImpl;
-import app.secuboid.core.storage.rows.AreaRow;
-import app.secuboid.core.storage.types.AreaType;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
-
-import static app.secuboid.api.lands.areas.AreaResultCode.SUCCESS;
-import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
 
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
@@ -102,9 +95,11 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
 
     @Override
     public void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback) {
-        AreaRow areaRow = new AreaRow(NON_EXISTING_ID, id(), ((AreaFormImpl) areaForm).getAreaType(),
-                areaForm.getX1(), areaForm.getY1(), areaForm.getZ1(), areaForm.getX2(), areaForm.getY2(), areaForm.getZ2());
-        getStorageManager().insert(areaRow, r -> addAreaCallback(r, callback));
+        // TODO add area
+        //AreaRow areaRow = new AreaRow(NON_EXISTING_ID, id(), ((AreaFormImpl) areaForm).getAreaType(),
+        //        areaForm.getX1(), areaForm.getY1(), areaForm.getZ1(), areaForm.getX2(), areaForm.getY2(),
+        //        areaForm.getZ2());
+        //getStorageManager().insert(areaRow, r -> addAreaCallback(r, callback));
 
     }
 
@@ -148,24 +143,19 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
         return parent;
     }
 
-    private void addAreaCallback(@NotNull AreaRow areaRow, @Nullable Consumer<AreaResult> callback) {
-        Area area = addAreaToLand(areaRow);
+//    private void addAreaCallback(@NotNull AreaRow areaRow, @Nullable Consumer<AreaResult> callback) {
+//        Area area = addAreaToLand(areaRow);
+//
+//        if (callback != null) {
+//            callback.accept(new AreaResult(SUCCESS, area));
+//        }
+//    }
 
-        if (callback != null) {
-            callback.accept(new AreaResult(SUCCESS, area));
-        }
-    }
-
-    public @NotNull Area addAreaToLand(@NotNull AreaRow areaRow) {
-        Area area = AreaType.newArea(areaRow, this);
-        idToArea.put(area.id(), area);
-        ((WorldLandImpl) getWorldLand()).add(area);
-
-        return area;
-    }
-
-    private StorageManager getStorageManager() {
-        // TODO return SecuboidImpl.instance().getStorageManager();
-        return null;
-    }
+//    public @NotNull Area addAreaToLand(@NotNull AreaRow areaRow) {
+//        Area area = AreaType.newArea(areaRow, this);
+//        idToArea.put(area.id(), area);
+//        ((WorldLandImpl) getWorldLand()).add(area);
+//
+//        return area;
+//    }
 }

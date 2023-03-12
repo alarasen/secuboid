@@ -1,0 +1,41 @@
+/*
+ *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Copyright (C) 2014 Tabinol
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package app.secuboid.core.messages;
+
+import app.secuboid.api.messages.MessageManagerService;
+import app.secuboid.api.messages.MessageService;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MessageServiceImpl implements MessageService {
+
+    private final @NotNull Map<Plugin, MessageManagerService> pluginToMessageManager;
+
+    public MessageServiceImpl() {
+        pluginToMessageManager = new HashMap<>();
+    }
+
+    @Override
+    public @NotNull MessageManagerService grab(@NotNull Plugin plugin) {
+        return pluginToMessageManager.computeIfAbsent(plugin, MessageManagerServiceImpl::new);
+    }
+}

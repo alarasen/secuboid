@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,23 +17,26 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import static app.secuboid.core.messages.Message.message;
-
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "cancel"
 )
 public class CommandCancel implements CommandExec {
+
+    private final @NotNull MessageManagerService messageManagerService;
+
+    public CommandCancel(@NotNull MessageManagerService messageManagerService) {
+        this.messageManagerService = messageManagerService;
+    }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
@@ -41,9 +44,9 @@ public class CommandCancel implements CommandExec {
         CommandSender sender = commandSenderInfo.sender();
 
         if (senderSelection.removeSelection()) {
-            message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCancel());
+            messageManagerService.sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCancel());
         } else {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionEmpty());
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.selectionEmpty());
         }
     }
 }

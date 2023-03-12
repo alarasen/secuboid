@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@ package app.secuboid.api.players;
 import app.secuboid.api.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains informations for a command sender.
@@ -47,27 +46,6 @@ public interface CommandSenderInfo {
      * @return true if the player is admin mode
      */
     boolean isAdminMode();
-
-    /**
-     * Creates a new chat page for a multiple pages output.
-     *
-     * @param subject the subject in the header
-     * @param text    the text
-     */
-    @NotNull ChatPage newChatPage(@NotNull String subject, @NotNull String text);
-
-    /**
-     * Gets the last chat page for a multiple pages output.
-     *
-     * @return the chat page
-     */
-    @Nullable ChatPage getChatPage();
-
-    /**
-     * Removes the chat page from the memory.
-     */
-    void removeChatPage();
-
 
     /**
      * Gets the sender selection.

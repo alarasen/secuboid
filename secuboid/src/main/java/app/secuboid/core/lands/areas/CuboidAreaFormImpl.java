@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,9 @@ package app.secuboid.core.lands.areas;
 import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
-import app.secuboid.core.storage.types.AreaType;
 import app.secuboid.core.utilities.LocalMath;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-
-import static app.secuboid.core.storage.types.AreaType.CUBOID;
 
 public class CuboidAreaFormImpl extends AreaFormImpl implements CuboidAreaForm {
 
@@ -77,10 +74,5 @@ public class CuboidAreaFormImpl extends AreaFormImpl implements CuboidAreaForm {
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    @Override
-    public AreaType getAreaType() {
-        return CUBOID;
     }
 }

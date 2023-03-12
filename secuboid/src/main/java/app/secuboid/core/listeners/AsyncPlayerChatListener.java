@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,24 +19,34 @@
 package app.secuboid.core.listeners;
 
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.SecuboidImpl;
+import app.secuboid.api.players.PlayerInfoService;
+import app.secuboid.core.messages.ChatGetterService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.event.EventPriority.LOWEST;
 
-public class AsyncPlayerChatListener extends AbstractListener {
+public class AsyncPlayerChatListener implements Listener {
+
+    private final @NotNull ChatGetterService chatGetterService;
+    private final @NotNull PlayerInfoService playerInfoService;
+
+    public AsyncPlayerChatListener(@NotNull ChatGetterService chatGetterService, @NotNull PlayerInfoService playerInfoService) {
+        this.chatGetterService = chatGetterService;
+        this.playerInfoService = playerInfoService;
+    }
 
     @EventHandler(priority = LOWEST, ignoreCancelled = true)
     public void onAsyncPlayerChatLowest(AsyncPlayerChatEvent event) {
-        SecuboidImpl secuboidImpl = SecuboidImpl.instance();
         Player player = event.getPlayer();
-        PlayerInfo playerInfo = getPlayerInfoImpl(player);
+        PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
 
         if (playerInfo != null) {
             String message = event.getMessage();
-            if (secuboidImpl.getChatGetter().checkAnswerAndCallBackIfNeeded(playerInfo, message)) {
+            if (chatGetterService.checkAnswerAndCallBackIfNeeded(playerInfo, message)) {
                 event.setCancelled(true);
             }
         }

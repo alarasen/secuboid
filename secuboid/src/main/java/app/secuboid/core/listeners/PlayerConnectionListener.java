@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,30 +18,40 @@
 package app.secuboid.core.listeners;
 
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.SecuboidImpl;
+import app.secuboid.api.players.PlayerInfoService;
+import app.secuboid.core.messages.ChatGetterService;
+import app.secuboid.core.players.PlayerInfoServiceImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.event.EventPriority.MONITOR;
 
-public class PlayerConnectionListener extends AbstractListener {
+public class PlayerConnectionListener implements Listener {
 
-    PlayerConnectionListener() {
+    private final @NotNull ChatGetterService chatGetterService;
+    private final @NotNull PlayerInfoService playerInfoService;
+
+    public PlayerConnectionListener(@NotNull ChatGetterService chatGetterService, @NotNull PlayerInfoService playerInfoService) {
+        this.chatGetterService = chatGetterService;
+        this.playerInfoService = playerInfoService;
     }
 
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerJoinMonitor(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        getPlayerInfosImpl().addPlayer(player);
+        ((PlayerInfoServiceImpl) playerInfoService).addPlayer(player);
     }
 
     @EventHandler(priority = MONITOR)
     public void onPlayerQuitMonitor(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        PlayerInfo playerInfo = getPlayerInfosImpl().getPlayerInfo(player);
-        SecuboidImpl.instance().getChatGetter().remove(playerInfo);
-        getPlayerInfosImpl().removePlayer(player);
+        PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
+        assert playerInfo != null;
+        chatGetterService.remove(playerInfo);
+        ((PlayerInfoServiceImpl) playerInfoService).removePlayer(player);
     }
 }

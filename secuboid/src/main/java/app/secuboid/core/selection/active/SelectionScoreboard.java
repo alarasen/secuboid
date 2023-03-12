@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
  */
 package app.secuboid.core.selection.active;
 
+import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.scoreboard.SecuboidScoreboard;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -24,10 +25,12 @@ import org.jetbrains.annotations.Nullable;
 
 abstract class SelectionScoreboard {
 
+    protected final @NotNull ScoreboardService scoreboardService;
     protected final @NotNull Player player;
     protected @Nullable SecuboidScoreboard scoreboard;
 
-    SelectionScoreboard(@NotNull Player player) {
+    SelectionScoreboard(@NotNull ScoreboardService scoreboardService, @NotNull Player player) {
+        this.scoreboardService = scoreboardService;
         this.player = player;
         this.scoreboard = null;
     }
@@ -38,7 +41,7 @@ abstract class SelectionScoreboard {
 
     final void hide() {
         if (scoreboard != null) {
-            scoreboard.hide();
+            scoreboardService.hide(scoreboard);
         }
     }
 }

@@ -18,16 +18,13 @@
 package app.secuboid.core.flags;
 
 import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.reflection.FlagRegistered;
 
 public class FlagDeclarations {
 
     private FlagDeclarations() {
     }
 
-    @FlagRegistered
     public static final FlagType FLAG_BUILD = new FlagType("build", "Build and destroy", true, false, false, false);
 
-    @FlagRegistered
     public static final FlagType FLAG_LAND_CREATE = new FlagType("land-create", "Create a land", true, false, false, false);
 }

@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,30 +17,16 @@
  */
 package app.secuboid.api.thread;
 
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;
 
-import static app.secuboid.api.SecuboidPlugin.secuboid;
-
 /**
  * This is a class to create a waiting queue thread.
  */
 public interface QueueThread<T, R> {
-
-    /**
-     * Instantiates a new Secuboid queue thread.
-     *
-     * @param plugin         the actual plugin
-     * @param threadName     the name of the thread
-     * @param queueProcessor the queue processor
-     */
-    public static <T, R> @NotNull QueueThread<T, R> newQueueThread(@NotNull Plugin plugin, @NotNull String threadName, @NotNull QueueProcessor<T, R> queueProcessor) {
-        return secuboid().getNewInstance().newQueueThread(plugin, threadName, queueProcessor);
-    }
 
     /**
      * Starts the thread.

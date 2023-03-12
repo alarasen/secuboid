@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@ package app.secuboid.core.commands;
 
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
