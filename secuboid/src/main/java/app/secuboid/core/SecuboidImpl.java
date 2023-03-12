@@ -18,6 +18,7 @@
 package app.secuboid.core;
 
 import app.secuboid.api.Secuboid;
+import app.secuboid.api.SecuboidComponent;
 import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandService;
 import app.secuboid.api.flagtypes.FlagTypeService;
@@ -56,7 +57,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static app.secuboid.core.config.Config.config;
 
-public class SecuboidImpl implements Secuboid {
+public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     private final @NotNull SecuboidPlugin secuboidPlugin;
 
@@ -118,6 +119,7 @@ public class SecuboidImpl implements Secuboid {
         commandListenerService = new CommandListenerService(secuboidPlugin, commandService, playerInfoService);
     }
 
+    @Override
     public void onLoad() {
         Log.setLog(secuboidPlugin.getLogger());
         registerServices();
@@ -126,6 +128,7 @@ public class SecuboidImpl implements Secuboid {
         registerRecipients();
     }
 
+    @Override
     public void onEnable(boolean isServerBoot) {
         if (isServerBoot) {
             secuboidPlugin.saveDefaultConfig();
@@ -141,10 +144,12 @@ public class SecuboidImpl implements Secuboid {
         }
     }
 
+    @Override
     public void onDisable() {
         serviceService.onEnable(secuboidPlugin);
     }
 
+    @Override
     public void reload() {
         ((ServiceServiceImpl) serviceService).onDisableReload();
         ((ServiceServiceImpl) serviceService).onEnableReload();

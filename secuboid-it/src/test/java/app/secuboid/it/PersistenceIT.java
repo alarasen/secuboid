@@ -16,7 +16,7 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.it;
+package app.secuboid.it;
 
 public class PersistenceIT {
 

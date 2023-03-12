@@ -25,24 +25,23 @@
         <artifactId>secuboid-parent</artifactId>
         <version>${revision}</version>
     </parent>
-    <artifactId>secuboid-permission-group</artifactId>
-    <name>SecuboidPermissionGroup</name>
-    <description>Adds Bukkit permission group system to the land parameters</description>
+    <artifactId>secuboid-it</artifactId>
+    <name>SecuboidIT</name>
+    <description>Integration tests for Secuboid</description>
 
     <dependencies>
-
-        <!-- IDE -->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <!-- IDE End -->
 
         <!-- Internal -->
         <dependency>
             <groupId>app.secuboid</groupId>
-            <artifactId>secuboid-api</artifactId>
+            <artifactId>secuboid</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>app.secuboid</groupId>
+            <artifactId>secuboid-permission-group</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- Internal End -->
 
@@ -50,17 +49,9 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
         <!-- Spigot API End-->
-
-        <!-- Minecraft plugins -->
-        <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Minecraft plugins End -->
 
         <!-- Test -->
         <dependency>
@@ -80,25 +71,26 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- Test End -->
 
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources-filtered/</directory>
-            </resource>
-        </resources>
-
         <plugins>
+
             <!-- Needed for junit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
+
         </plugins>
     </build>
 </project>

@@ -1,5 +1,5 @@
 /*
- Secuboid: LandService and Protection plugin for Minecraft server
+ Secuboid: Lands and Protection plugin for Minecraft server
  Copyright (C) 2014 Tabinol
 
  This program is free software: you can redistribute it and/or modify
@@ -21,9 +21,10 @@ import app.secuboid.api.flagtypes.FlagType;
 
 public class FlagDeclarations {
 
-    public static final FlagType FLAG_BUILD = new FlagType("build", "Build and destroy", true, false, false, false);
-    public static final FlagType FLAG_LAND_CREATE = new FlagType("land-create", "Create a land", true, false, false, false);
-
     private FlagDeclarations() {
     }
+
+    public static final FlagType FLAG_BUILD = new FlagType("build", "Build and destroy", true, false, false, false);
+
+    public static final FlagType FLAG_LAND_CREATE = new FlagType("land-create", "Create a land", true, false, false, false);
 }

@@ -27,7 +27,7 @@ public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implemen
 
     private final @NotNull SenderSelectionImpl selection;
 
-    public ConsoleCommandSenderInfoImpl(ConsoleCommandSender consoleCommandSender) {
+    public ConsoleCommandSenderInfoImpl(@NotNull ConsoleCommandSender consoleCommandSender) {
         super(consoleCommandSender);
         selection = new SenderSelectionImpl(consoleCommandSender);
     }

@@ -18,27 +18,31 @@
 
 package app.secuboid.permission.group;
 
-import net.milkbowl.vault.permission.Permission;
+import app.secuboid.permission.group.recipients.SecuboidPermissionGroup;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPermissionGroupPlugin extends JavaPlugin {
 
-    private Permission permission;
-
-    private PermissionGroupService permissionGroupService;
+    private final @NotNull SecuboidPermissionGroup secuboidPermissionGroup;
 
     @SuppressWarnings("java:S3010")
     public SecuboidPermissionGroupPlugin() {
-        permissionGroupService = new PermissionGroupService(this);
-        permission = permissionGroupService.getPermission();
+        secuboidPermissionGroup = new SecuboidPermissionGroup(this);
     }
 
-    public Permission getPermission() {
-        return permission;
+    @Override
+    public void onLoad() {
+        secuboidPermissionGroup.onLoad();
     }
 
     @Override
     public void onEnable() {
-        //permissionGroupService.load(true);
+        secuboidPermissionGroup.onEnable(true);
+    }
+
+    @Override
+    public void onDisable() {
+        secuboidPermissionGroup.onDisable();
     }
 }

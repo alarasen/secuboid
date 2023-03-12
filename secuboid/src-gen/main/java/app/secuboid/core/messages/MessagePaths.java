@@ -1,5 +1,5 @@
 /*
- Secuboid: LandService and Protection plugin for Minecraft server
+ Secuboid: Lands and Protection plugin for Minecraft server
  Copyright (C) 2014 Tabinol
 
  This program is free software: you can redistribute it and/or modify

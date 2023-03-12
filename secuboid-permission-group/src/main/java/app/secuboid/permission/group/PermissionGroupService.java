@@ -20,15 +20,17 @@ package app.secuboid.permission.group;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.services.Service;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.plugin.ServicesManager;
+import org.jetbrains.annotations.NotNull;
 
 public class PermissionGroupService implements Service {
 
-    private final SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin;
+    private final @NotNull ServicesManager servicesManager;
 
     private final Permission permission = null;
 
-    public PermissionGroupService(SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin) {
-        this.secuboidPermissionGroupPlugin = secuboidPermissionGroupPlugin;
+    public PermissionGroupService(ServicesManager servicesManager) {
+        this.servicesManager = servicesManager;
     }
 
     @Override
@@ -39,8 +41,7 @@ public class PermissionGroupService implements Service {
     }
 
     private boolean setupPermissions() {
-        return secuboidPermissionGroupPlugin.getServer().getServicesManager()
-                .getRegistration(Permission.class) != null;
+        return servicesManager.getRegistration(Permission.class) != null;
     }
 
     public Permission getPermission() {
