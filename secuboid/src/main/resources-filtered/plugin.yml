@@ -2,7 +2,7 @@
 name: Secuboid
 main: app.secuboid.core.SecuboidPluginImpl
 version: ${project.version}
-description: "Lands and grief protection plugin"
+description: "LandService and grief protection plugin"
 authors: [ Tabinol, Kaz00, Ouaou ]
 api-version: ${spigot.plugin.api.version}
 commands:

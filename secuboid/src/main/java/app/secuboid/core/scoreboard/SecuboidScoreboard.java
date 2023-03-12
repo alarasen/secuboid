@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,70 +17,43 @@
  */
 package app.secuboid.core.scoreboard;
 
-import app.secuboid.core.SecuboidImpl;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import static app.secuboid.core.messages.Log.log;
-import static java.util.logging.Level.WARNING;
+import java.util.Arrays;
+import java.util.Objects;
 
-public class SecuboidScoreboard {
+public record SecuboidScoreboard(
+        @NotNull Player player,
+        @NotNull Scoreboard scoreboard,
+        @NotNull Objective objective,
+        @NotNull String[] lines
+) {
 
-    private static final String SCOREBOARD_PREFIX = "secuboid-";
-
-    private final @NotNull Player player;
-
-    private final @NotNull String displayName;
-    private final @NotNull String[] lines;
-    private @Nullable Scoreboard scoreboard;
-    private @Nullable Objective objective;
-
-    public SecuboidScoreboard(@NotNull Player player, @NotNull String displayName, @NotNull String... lines) {
-        this.player = player;
-        this.displayName = displayName;
-        this.lines = lines;
-        scoreboard = null;
-        objective = null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SecuboidScoreboard that = (SecuboidScoreboard) o;
+        return player.equals(that.player) && scoreboard.equals(that.scoreboard) && objective.equals(that.objective) && Arrays.equals(lines, that.lines);
     }
 
-    public void init() {
-        ScoreboardManager scoreboardManager = SecuboidImpl.getScoreboardManager();
-        scoreboard = scoreboardManager.getNewScoreboard();
-        objective = scoreboard.registerNewObjective(getName(), Criteria.DUMMY, displayName, RenderType.INTEGER);
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-        int length = lines.length;
-
-        for (int i = 0; i < length; i++) {
-            Score score = objective.getScore(lines[i]);
-            score.setScore(length - i);
-        }
-
-        player.setScoreboard(scoreboard);
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(player, scoreboard, objective);
+        result = 31 * result + Arrays.hashCode(lines);
+        return result;
     }
 
-    public void changeLine(int lineNb, @NotNull String newLine) {
-        if (scoreboard == null || objective == null) {
-            log().log(WARNING, "No scoreboard to update for the player: {}", player.getName());
-            return;
-        }
-
-        scoreboard.resetScores(lines[lineNb]);
-        Score score = objective.getScore(newLine);
-        score.setScore(lines.length - lineNb);
-        lines[lineNb] = newLine;
-    }
-
-    public void hide() {
-        if (player.isOnline()) {
-            ScoreboardManager scoreboardManager = SecuboidImpl.getScoreboardManager();
-            player.setScoreboard(scoreboardManager.getMainScoreboard());
-        }
-    }
-
-    private String getName() {
-        return SCOREBOARD_PREFIX + player.getName();
+    @Override
+    public String toString() {
+        return "SecuboidScoreboard{" +
+                "player=" + player +
+                ", scoreboard=" + scoreboard +
+                ", objective=" + objective +
+                ", lines=" + Arrays.toString(lines) +
+                '}';
     }
 }

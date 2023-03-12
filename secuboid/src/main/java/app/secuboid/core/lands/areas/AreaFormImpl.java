@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@ package app.secuboid.core.lands.areas;
 
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.core.messages.Log;
-import app.secuboid.core.storage.types.AreaType;
 import app.secuboid.core.utilities.LocalMath;
 
 import java.util.Objects;
@@ -51,42 +50,15 @@ public abstract class AreaFormImpl implements AreaForm {
         return x1;
     }
 
-    @Override
-    public final int getY1() {
-        return y1;
-    }
-
-    @Override
-    public final int getZ1() {
-        return z1;
-    }
-
-    @Override
-    public final int getX2() {
-        return x2;
-    }
-
-    @Override
-    public final int getY2() {
-        return y2;
-    }
-
-    @Override
-    public final int getZ2() {
-        return z2;
-    }
-
-    @Override
-    public final boolean isLocationInsideSquare(int x, int z) {
-        return LocalMath.isInRange(x, getX1(), getX2()) && LocalMath.isInRange(z, getZ1(), getZ2());
-    }
-
-    public abstract AreaType getAreaType();
-
     public final void setX1(int x1) {
         if (checkIsResizable()) {
             this.x1 = x1;
         }
+    }
+
+    @Override
+    public final int getY1() {
+        return y1;
     }
 
     public final void setY1(int y1) {
@@ -95,10 +67,20 @@ public abstract class AreaFormImpl implements AreaForm {
         }
     }
 
+    @Override
+    public final int getZ1() {
+        return z1;
+    }
+
     public final void setZ1(int z1) {
         if (checkIsResizable()) {
             this.z1 = z1;
         }
+    }
+
+    @Override
+    public final int getX2() {
+        return x2;
     }
 
     public final void setX2(int x2) {
@@ -107,16 +89,31 @@ public abstract class AreaFormImpl implements AreaForm {
         }
     }
 
+    @Override
+    public final int getY2() {
+        return y2;
+    }
+
     public final void setY2(int y2) {
         if (checkIsResizable()) {
             this.y2 = y2;
         }
     }
 
+    @Override
+    public final int getZ2() {
+        return z2;
+    }
+
     public final void setZ2(int z2) {
         if (checkIsResizable()) {
             this.z2 = z2;
         }
+    }
+
+    @Override
+    public final boolean isLocationInsideSquare(int x, int z) {
+        return LocalMath.isInRange(x, getX1(), getX2()) && LocalMath.isInRange(z, getZ1(), getZ2());
     }
 
     private boolean checkIsResizable() {

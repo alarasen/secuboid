@@ -1,0 +1,111 @@
+/*
+ *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Copyright (C) 2014 Tabinol
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package app.secuboid.core.players;
+
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.LandService;
+import app.secuboid.api.lands.LocationPath;
+import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.players.CommandSenderInfo;
+import app.secuboid.api.players.ConsoleCommandSenderInfo;
+import app.secuboid.api.players.PlayerInfo;
+import app.secuboid.api.players.PlayerInfoService;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PlayerInfoServiceImpl implements PlayerInfoService {
+
+    private final @NotNull Server server;
+    private final @NotNull LandService landService;
+
+    private final @NotNull Map<CommandSender, CommandSenderInfo> senderToInfo;
+
+    public PlayerInfoServiceImpl(@NotNull Server server, @NotNull LandService landService) {
+        this.server = server;
+        this.landService = landService;
+
+        senderToInfo = new HashMap<>();
+    }
+
+    public void addPlayer(Player player) {
+        Location lastLocation = player.getLocation();
+        Area area = landService.getArea(lastLocation);
+        Land land = landService.get(lastLocation);
+        LocationPath locationPath = landService.getLocationPath(lastLocation);
+        PlayerInfo playerInfo = new PlayerInfoImpl(player, lastLocation, area, land, locationPath);
+        senderToInfo.put(player, playerInfo);
+    }
+
+    public void removePlayer(Player player) {
+        PlayerInfo playerInfo = (PlayerInfo) senderToInfo.get(player);
+
+        // First, remove AutoCancelSelect
+        // TODO reactivate
+        // ((PlayerInfoImpl) playerInfo).setAutoCancelSelect(false);
+
+        senderToInfo.remove(player);
+    }
+
+    public void updatePlayerPosition(@NotNull PlayerInfo playerInfo, @NotNull Location toLocation) {
+
+        // TODO land change Events
+        Area area = landService.getArea(toLocation);
+        Land land = landService.get(toLocation);
+        LocationPath locationPath = landService.getLocationPath(toLocation);
+        ((PlayerInfoImpl) playerInfo).updatePlayerPosition(toLocation, area, land, locationPath);
+    }
+
+    @Override
+    public void onEnable(boolean isServerBoot) {
+        if (isServerBoot) {
+            ConsoleCommandSender consoleCommandSender = server.getConsoleSender();
+            ConsoleCommandSenderInfo consoleCommandSenderInfo = new ConsoleCommandSenderInfoImpl(consoleCommandSender);
+            senderToInfo.put(consoleCommandSender, consoleCommandSenderInfo);
+        }
+
+        server.getOnlinePlayers().forEach(this::addPlayer);
+    }
+
+    @Override
+    public void onDisable(boolean isServerShutdown) {
+        server.getOnlinePlayers().forEach(this::removePlayer);
+    }
+
+    @Override
+    public CommandSenderInfo get(CommandSender sender) {
+        return senderToInfo.get(sender);
+    }
+
+    @Override
+    public PlayerInfo getPlayerInfo(Player player) {
+        return (PlayerInfo) senderToInfo.get(player);
+    }
+
+    @Override
+    public @NotNull Collection<CommandSenderInfo> getAll() {
+        return senderToInfo.values();
+    }
+}

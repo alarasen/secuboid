@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -21,29 +21,26 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.core.messages.MessagePaths;
-import app.secuboid.core.scoreboard.SecuboidScoreboard;
+import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import static app.secuboid.core.messages.Message.message;
 
 class SelectionScoreboardArea extends SelectionScoreboard {
 
     private final @NotNull Area area;
 
-    SelectionScoreboardArea(@NotNull Player player, @NotNull Area area) {
-        super(player);
+    SelectionScoreboardArea(@NotNull ScoreboardService scoreboardService, @NotNull Player player, @NotNull Area area) {
+        super(scoreboardService, player);
         this.area = area;
     }
 
     @Override
     void init() {
-        String title = message().get(MessageType.TITLE, MessagePaths.selectionScoreboardAreaTitle());
+        String title = scoreboardService.getMessage(MessageType.TITLE, MessagePaths.selectionScoreboardAreaTitle());
         String[] lines = new String[1];
-        lines[0] = message().get(MessageType.NORMAL, MessagePaths.selectionScoreboardAreaLocationPath(area));
+        lines[0] = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardAreaLocationPath(area));
 
-        scoreboard = new SecuboidScoreboard(player, title, lines);
-        scoreboard.init();
+        scoreboard = scoreboardService.create(player, title, lines);
     }
 
     @Override

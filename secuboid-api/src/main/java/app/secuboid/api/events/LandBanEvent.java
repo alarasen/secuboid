@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 package app.secuboid.api.events;
 
 import app.secuboid.api.lands.Land;
-import app.secuboid.api.recipients.Recipient;
+import app.secuboid.api.recipients.RecipientExec;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,17 +29,17 @@ public class LandBanEvent extends LandEvent {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private final Recipient recipient;
+    private final RecipientExec recipientExec;
 
     /**
      * Instantiates a new land ban events.
      *
-     * @param land      the land
-     * @param recipient recipient
+     * @param land          the land
+     * @param recipientExec recipientExec
      */
-    public LandBanEvent(@NotNull Land land, @NotNull Recipient recipient) {
+    public LandBanEvent(@NotNull Land land, @NotNull RecipientExec recipientExec) {
         super(land);
-        this.recipient = recipient;
+        this.recipientExec = recipientExec;
     }
 
     @SuppressWarnings("java:S4144")
@@ -49,13 +49,13 @@ public class LandBanEvent extends LandEvent {
     }
 
     /**
-     * Gets the recipient.
+     * Gets the recipientExec.
      *
-     * @return the recipient
+     * @return the recipientExec
      */
     @NotNull
-    public Recipient getRecipient() {
-        return recipient;
+    public RecipientExec getRecipient() {
+        return recipientExec;
     }
 
     @Override

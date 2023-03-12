@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,24 +17,27 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LocationPath;
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import static app.secuboid.core.messages.Message.message;
-
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "info"
 )
 public class CommandInfo implements CommandExec {
+
+    private final @NotNull MessageManagerService messageManagerService;
+
+    public CommandInfo(@NotNull MessageManagerService messageManagerService) {
+        this.messageManagerService = messageManagerService;
+    }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
@@ -45,7 +48,7 @@ public class CommandInfo implements CommandExec {
             if (commandSenderInfo instanceof PlayerInfo playerInfo) {
                 locationPath = playerInfo.getLocationPath();
             } else {
-                message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
+                messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
                 return;
             }
         } else {
@@ -53,6 +56,6 @@ public class CommandInfo implements CommandExec {
             return;
         }
 
-        message().sendMessage(sender, MessageType.NORMAL, MessagePaths.infoLocationPath(locationPath));
+        messageManagerService.sendMessage(sender, MessageType.NORMAL, MessagePaths.infoLocationPath(locationPath));
     }
 }

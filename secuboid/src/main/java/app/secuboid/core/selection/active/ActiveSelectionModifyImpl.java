@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.selection.active.ActiveSelectionModify;
+import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +49,11 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
     }
 
     @Override
-    public void init() {
+    public void init(@NotNull ScoreboardService scoreboardService) {
         playerLastLoc = player.getLocation();
         selectionForm.refreshVisualSelection();
-        selectionScoreboard = new SelectionScoreboardActive(player, selectionForm.areaForm, this.getClass());
+        selectionScoreboard = new SelectionScoreboardActive(scoreboardService, player, selectionForm.areaForm,
+                this.getClass());
         selectionScoreboard.init();
     }
 

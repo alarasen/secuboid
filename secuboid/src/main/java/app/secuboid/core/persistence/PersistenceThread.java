@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 package app.secuboid.core.persistence;
 
-import app.secuboid.core.SecuboidImpl;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.hibernate.Session;
 import org.jetbrains.annotations.NotNull;
@@ -36,50 +36,45 @@ import static java.util.logging.Level.SEVERE;
 
 public class PersistenceThread extends Thread {
 
-    private static final String THREAD_NAME = "Secuboid Persistence";
+    private static final String THREAD_NAME = "Secuboid PersistenceSessionService";
 
+    private final @NotNull JavaPlugin javaPlugin;
     private final @NotNull BukkitScheduler scheduler;
-    private final @NotNull Persistence persistence;
+    private final @NotNull PersistenceSessionService persistenceSessionService;
     private final @NotNull BlockingQueue<PersistenceElement<?>> queue;
-
     private final @NotNull BlockingQueue<Object> threadSyncQueue;
 
-    // TODO unit tests
 
-    public PersistenceThread(@NotNull BukkitScheduler scheduler, @NotNull Persistence persistence) {
+    PersistenceThread(@NotNull JavaPlugin javaPlugin, @NotNull BukkitScheduler scheduler,
+                      @NotNull PersistenceSessionService persistenceSessionService) {
+        this.javaPlugin = javaPlugin;
         this.scheduler = scheduler;
-        this.persistence = persistence;
+        this.persistenceSessionService = persistenceSessionService;
+
         queue = new LinkedBlockingQueue<>();
         threadSyncQueue = new LinkedBlockingQueue<>(1);
+
         setName(THREAD_NAME);
     }
 
-    public void init() {
-        persistence.init();
-        start();
-    }
-
-    public void shutdown() {
+    void shutdown() {
         interrupt();
         try {
             join();
         } catch (InterruptedException e) {
-            log().severe("Unwanted interruption on persistence shutdown. Possible data loss!");
+            log().severe("Unwanted interruption on persistenceSessionService shutdown. Possible data loss!");
             Thread.currentThread().interrupt();
         }
-        persistence.shutdown();
     }
 
-    public <R> void exec(@NotNull Function<Session, R> sessionFunction, @Nullable Consumer<R> callback) {
-        PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, callback, false);
-        offer(element);
+    <R> void offer(@NotNull PersistenceElement<R> element) {
+        if (!queue.offer(element)) {
+            log().severe("The persistenceSessionService queue is full. Possible data loss!");
+        }
     }
 
     @SuppressWarnings("unchecked")
-    public <R> @Nullable R execSync(@NotNull Function<Session, R> sessionFunction) {
-        PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, null, true);
-        offer(element);
-
+    <R> @Nullable R take() {
         Object result;
         try {
             result = threadSyncQueue.take();
@@ -109,7 +104,7 @@ public class PersistenceThread extends Thread {
             }
         }
 
-        log().info("Flushing the persistence queue...");
+        log().info("Flushing the persistenceSessionService queue...");
         List<PersistenceElement<?>> elements = new ArrayList<>();
         queue.drainTo(elements);
 
@@ -117,14 +112,14 @@ public class PersistenceThread extends Thread {
             process(element);
         }
 
-        log().info("Flushing the persistence queue done!");
+        log().info("Flushing the persistenceSessionService queue done!");
     }
 
     private <R> void process(@NotNull PersistenceElement<R> element) {
         Function<Session, R> sessionFunction = element.sessionFunction();
 
         R result;
-        try (Session session = persistence.getSession()) {
+        try (Session session = persistenceSessionService.getSession()) {
             result = sessionFunction.apply(session);
         }
 
@@ -134,18 +129,12 @@ public class PersistenceThread extends Thread {
         }
 
         if (element.isSync() && !threadSyncQueue.offer(result)) {
-            log().severe(() -> "Unable to send the persistence result: " + result);
-        }
-    }
-
-    private <R> void offer(@NotNull PersistenceElement<R> element) {
-        if (!queue.offer(element)) {
-            log().severe("The persistence queue is full. Possible data loss!");
+            log().severe(() -> "Unable to send the persistenceSessionService result: " + result);
         }
     }
 
     private <R> void callMainThread(@NotNull Consumer<R> callback, R result) {
-        scheduler.callSyncMethod(SecuboidImpl.getJavaPLugin(), () -> {
+        scheduler.callSyncMethod(javaPlugin, () -> {
             try {
                 callback.accept(result);
             } catch (RuntimeException e) {

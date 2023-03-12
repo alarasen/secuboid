@@ -15,28 +15,42 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.api;
 
 /**
- * Only for secuboid component plugin (SecuboidPlugin, SecuboidEconomyPlugin, ...)
+ * Only for secuboid component plugin (Secuboid, SecuboidPermissionGroup, ...). Implement this interface is not
+ * enough. You need also the call those methods from the plugin class.
  */
 public interface SecuboidComponent {
 
     /**
-     * Loads the plugin. An unload must be done before if the server is already
-     * running.
+     * When the plugin is loaded.
+     */
+    default void onLoad() {
+        // Override if needed
+    }
+
+    /**
+     * When the plugin is enabled.
      *
-     * @param isServerBoot Is it from server start?
+     * @param isServerBoot is the server is booting (true) or reload plugin (false)
      */
-    void load(boolean isServerBoot);
+    default void onEnable(boolean isServerBoot) {
+        // Override if needed
+    }
 
     /**
-     * Unloads the plugin.
+     * When the plugin is disabled
      */
-    void unload();
+    default void onDisable() {
+        // Override if needed
+    }
 
     /**
-     * Reload the configuration.
+     * On Secuboid reload
      */
-    void reload();
+    default void reload() {
+        // Override if needed
+    }
 }

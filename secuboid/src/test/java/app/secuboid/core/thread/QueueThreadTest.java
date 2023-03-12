@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -42,25 +42,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class QueueThreadTest {
-
-    private static class TestQueueProcessor implements QueueProcessor<Duration, Integer> {
-
-        @Override
-        public @NotNull Integer process(@NotNull Duration duration) {
-            if (!duration.isZero()) {
-                await().during(duration);
-            }
-            return 1;
-        }
-
-        @Override
-        public @NotNull Set<Integer> processMultiple(@NotNull Duration duration) {
-            if (!duration.isZero()) {
-                await().during(duration);
-            }
-            return Collections.singleton(2);
-        }
-    }
 
     private TestQueueProcessor testQueueProcessor;
     private QueueThread<Duration, Integer> queueThread;
@@ -174,5 +155,24 @@ class QueueThreadTest {
         queueThread.stop();
 
         assertEquals(1, result);
+    }
+
+    private static class TestQueueProcessor implements QueueProcessor<Duration, Integer> {
+
+        @Override
+        public @NotNull Integer process(@NotNull Duration duration) {
+            if (!duration.isZero()) {
+                await().during(duration);
+            }
+            return 1;
+        }
+
+        @Override
+        public @NotNull Set<Integer> processMultiple(@NotNull Duration duration) {
+            if (!duration.isZero()) {
+                await().during(duration);
+            }
+            return Collections.singleton(2);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -22,10 +22,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Used for callback method when a recipient is created.
+ * Used for callback method when a recipientExec is created.
  *
- * @param code      the recipient result code
- * @param recipient the recipient if success
+ * @param code          the recipientExec result code
+ * @param recipientExec the recipientExec if success
  */
-public record RecipientResult(@NotNull RecipientResultCode code, @Nullable Recipient recipient) {
+public record RecipientResult(@NotNull RecipientResultCode code, @Nullable RecipientExec recipientExec) {
 }

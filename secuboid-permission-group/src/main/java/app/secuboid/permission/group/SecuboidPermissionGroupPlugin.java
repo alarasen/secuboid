@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,27 +18,31 @@
 
 package app.secuboid.permission.group;
 
-import net.milkbowl.vault.permission.Permission;
+import app.secuboid.permission.group.recipients.SecuboidPermissionGroup;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPermissionGroupPlugin extends JavaPlugin {
 
-    private static Permission permission;
-
-    private SecuboidPermissionGroup secuboidPermissionGroup;
+    private final @NotNull SecuboidPermissionGroup secuboidPermissionGroup;
 
     @SuppressWarnings("java:S3010")
     public SecuboidPermissionGroupPlugin() {
         secuboidPermissionGroup = new SecuboidPermissionGroup(this);
-        permission = secuboidPermissionGroup.getPermission();
+    }
+
+    @Override
+    public void onLoad() {
+        secuboidPermissionGroup.onLoad();
     }
 
     @Override
     public void onEnable() {
-        secuboidPermissionGroup.load(true);
+        secuboidPermissionGroup.onEnable(true);
     }
 
-    public static Permission getPermission() {
-        return permission;
+    @Override
+    public void onDisable() {
+        secuboidPermissionGroup.onDisable();
     }
 }

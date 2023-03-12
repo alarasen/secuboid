@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,18 +18,16 @@
 package app.secuboid.core.commands.exec;
 
 import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
-import app.secuboid.core.messages.Message;
 import app.secuboid.core.messages.MessagePaths;
 import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "reload",
         isAdminModeByPass = false,
         permissions = "secuboid.core.reload"
@@ -37,15 +35,17 @@ import org.jetbrains.annotations.NotNull;
 public class CommandReload implements CommandExec {
 
     private final @NotNull Secuboid secuboid;
+    private final @NotNull MessageManagerService messageManagerService;
 
-    public CommandReload(@NotNull Secuboid secuboid) {
+    public CommandReload(@NotNull Secuboid secuboid, @NotNull MessageManagerService messageManagerService) {
         this.secuboid = secuboid;
+        this.messageManagerService = messageManagerService;
     }
 
     @Override
     public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
-        Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalPreReload());
+        messageManagerService.broadcastMessage(MessageType.NORMAL, MessagePaths.generalPreReload());
         ((SecuboidImpl) secuboid).reload();
-        Message.message().broadcastMessage(MessageType.NORMAL, MessagePaths.generalReload());
+        messageManagerService.broadcastMessage(MessageType.NORMAL, MessagePaths.generalReload());
     }
 }

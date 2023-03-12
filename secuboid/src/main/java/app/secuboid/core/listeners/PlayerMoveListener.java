@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,34 +17,49 @@
  */
 package app.secuboid.core.listeners;
 
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
+import app.secuboid.api.players.PlayerInfo;
+import app.secuboid.api.players.PlayerInfoService;
 import app.secuboid.api.selection.PlayerSelection;
-import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.ChatGetterService;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.PlayerInfoImpl;
+import app.secuboid.core.players.PlayerInfoServiceImpl;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
-import static app.secuboid.core.messages.Message.message;
 import static org.bukkit.event.EventPriority.MONITOR;
 
-public class PlayerMoveListener extends AbstractListener {
+public class PlayerMoveListener implements Listener {
 
     private static final int MOVE_TIME_LAPS_TICKS = 500;
+    private final @NotNull ChatGetterService chatGetterService;
+    private final @NotNull MessageManagerService messageManagerService;
+    private final @NotNull PlayerInfoService playerInfoService;
 
-    PlayerMoveListener() {
+    public PlayerMoveListener(@NotNull ChatGetterService chatGetterService,
+                              @NotNull MessageManagerService messageManagerService,
+                              @NotNull PlayerInfoService playerInfoService) {
+        this.chatGetterService = chatGetterService;
+        this.messageManagerService = messageManagerService;
+        this.playerInfoService = playerInfoService;
     }
 
+    // TODO Why removed????
     public void onPlayerSpawnMonitor(PlayerSpawnLocationEvent event) {
         Player player = event.getPlayer();
-        PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
+        PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
+        assert playerInfo != null;
         Location spawnLocation = event.getSpawnLocation();
 
-        playerInfoImpl.updatePosInfo(event, spawnLocation);
+        ((PlayerInfoServiceImpl) playerInfoService).updatePlayerPosition(playerInfo, spawnLocation);
     }
 
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
@@ -58,7 +73,8 @@ public class PlayerMoveListener extends AbstractListener {
             return;
         }
 
-        PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
+        PlayerInfoImpl playerInfoImpl = (PlayerInfoImpl) playerInfoService.getPlayerInfo(player);
+        assert playerInfoImpl != null;
         long last = playerInfoImpl.getLastUpdateTimeMillis();
         long now = System.currentTimeMillis();
 
@@ -72,17 +88,18 @@ public class PlayerMoveListener extends AbstractListener {
             return;
         }
 
-        playerInfoImpl.updatePosInfo(event, toLocation);
+        ((PlayerInfoServiceImpl) playerInfoService).updatePlayerPosition(playerInfoImpl, toLocation);
     }
 
     @EventHandler(priority = MONITOR, ignoreCancelled = true)
     public void onPlayerTeleportMonitor(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
-        PlayerInfoImpl playerInfoImpl = getPlayerInfoImpl(player);
-        PlayerSelection playerSelection = playerInfoImpl.getPlayerSelection();
+        PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
+        assert playerInfo != null;
+        PlayerSelection playerSelection = playerInfo.getPlayerSelection();
         playerSelection.removeSelection();
-        SecuboidImpl.instance().getChatGetter().remove(playerInfoImpl);
-        message().sendMessage(player, MessageType.NORMAL, MessagePaths.selectionCancel());
+        chatGetterService.remove(playerInfo);
+        messageManagerService.sendMessage(player, MessageType.NORMAL, MessagePaths.selectionCancel());
     }
 }

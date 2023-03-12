@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,26 +17,26 @@
  */
 package app.secuboid.core.commands.exec;
 
-import app.secuboid.api.Secuboid;
-import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.LandResultCode;
+import app.secuboid.api.lands.LandService;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
-import app.secuboid.api.recipients.Recipient;
-import app.secuboid.api.recipients.RecipientResult;
-import app.secuboid.api.recipients.RecipientResultCode;
-import app.secuboid.api.recipients.Recipients;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.api.reflection.CommandRegistered;
+import app.secuboid.api.recipients.RecipientExec;
+import app.secuboid.api.recipients.RecipientResult;
+import app.secuboid.api.recipients.RecipientResultCode;
+import app.secuboid.api.recipients.RecipientService;
+import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.api.selection.active.ActiveSelection;
 import app.secuboid.api.selection.active.ActiveSelectionModify;
-import app.secuboid.core.SecuboidImpl;
+import app.secuboid.core.messages.ChatGetterService;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.active.ActiveSelectionModifyImpl;
@@ -45,12 +45,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-import static app.secuboid.api.recipients.Recipients.NOBODY;
-import static app.secuboid.api.recipients.Recipients.PLAYER;
-import static app.secuboid.core.messages.Message.message;
+import static app.secuboid.api.recipients.RecipientService.NOBODY;
+import static app.secuboid.api.recipients.RecipientService.PLAYER;
 
 @CommandRegistered(
-        pluginClass = SecuboidPlugin.class,
         name = "create",
         sourceActionFlags = "land-create"
 )
@@ -58,10 +56,18 @@ public class CommandCreate implements CommandExec {
 
     private static final String COMMAND_SELECT = "/sd select";
 
-    private final @NotNull Secuboid secuboid;
+    private final @NotNull ChatGetterService chatGetterService;
+    private final @NotNull LandService landService;
+    private final @NotNull MessageManagerService messageManagerService;
+    private final @NotNull RecipientService recipientService;
 
-    public CommandCreate(@NotNull Secuboid secuboid) {
-        this.secuboid = secuboid;
+    public CommandCreate(@NotNull ChatGetterService chatGetterService, @NotNull LandService landService,
+                         @NotNull MessageManagerService messageManagerService,
+                         @NotNull RecipientService recipientService) {
+        this.chatGetterService = chatGetterService;
+        this.landService = landService;
+        this.messageManagerService = messageManagerService;
+        this.recipientService = recipientService;
     }
 
     @Override
@@ -72,24 +78,24 @@ public class CommandCreate implements CommandExec {
 
         // TODD Remove this check and use annotation check
         if (!(activeSelection instanceof ActiveSelectionModify activeSelectionModify)) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNeedActiveSelection(COMMAND_SELECT));
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNeedActiveSelection(COMMAND_SELECT));
             return;
         }
 
         if (subArgs.length == 0) {
             if (commandSenderInfo instanceof ConsoleCommandSenderInfo) {
-                message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
+                messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalNeedParameter());
                 return;
             }
 
-            message().sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCreateEnterName());
-            ((SecuboidImpl) secuboid).getChatGetter().put(commandSenderInfo, s -> landNameCallback(commandSenderInfo,
-                    activeSelectionModify, s));
+            messageManagerService.sendMessage(sender, MessageType.NORMAL, MessagePaths.selectionCreateEnterName());
+            chatGetterService.put(commandSenderInfo, s -> landNameCallback(commandSenderInfo, activeSelectionModify,
+                    s));
             return;
         }
 
         if (subArgs.length > 1) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
             return;
         }
 
@@ -100,17 +106,16 @@ public class CommandCreate implements CommandExec {
                                   @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName) {
         if (landName.contains(" ")) {
             CommandSender sender = commandSenderInfo.sender();
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
             return;
         }
 
-        Recipients recipients = secuboid.getRecipients();
         if (!commandSenderInfo.isAdminMode() && commandSenderInfo instanceof PlayerInfo playerInfo) {
             UUID uuid = playerInfo.getUUID();
-            recipients.grab(PLAYER, uuid.toString(), r -> landOwnerCallback(commandSenderInfo,
+            recipientService.grab(PLAYER, uuid.toString(), r -> landOwnerCallback(commandSenderInfo,
                     activeSelectionModify, landName, r));
         } else {
-            recipients.grab(NOBODY, null, r -> landOwnerCallback(commandSenderInfo, activeSelectionModify,
+            recipientService.grab(NOBODY, null, r -> landOwnerCallback(commandSenderInfo, activeSelectionModify,
                     landName, r));
         }
     }
@@ -118,29 +123,29 @@ public class CommandCreate implements CommandExec {
     private void landOwnerCallback(@NotNull CommandSenderInfo commandSenderInfo,
                                    @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName,
                                    @NotNull RecipientResult result) {
-        Recipient owner = result.recipient();
+        RecipientExec owner = result.recipientExec();
 
         if (result.code() != RecipientResultCode.SUCCESS || owner == null) {
             CommandSender sender = commandSenderInfo.sender();
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
             return;
         }
 
         // TODO get parent
         WorldLand worldLand = activeSelectionModify.getWorldLand();
         AreaForm areaForm = ((ActiveSelectionModifyImpl) activeSelectionModify).getSelectionForm().getAreaForm();
-        secuboid.getLands().create(worldLand, landName, owner, areaForm, r -> landCreateCallback(commandSenderInfo, r));
+        landService.create(worldLand, landName, owner, areaForm, r -> landCreateCallback(commandSenderInfo, r));
     }
 
     public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (landResult.code() != LandResultCode.SUCCESS || landResult.areaLand() == null) {
-            message().sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(landResult.code()));
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(landResult.code()));
             return;
         }
 
-        message().sendMessage(sender, MessageType.NORMAL,
+        messageManagerService.sendMessage(sender, MessageType.NORMAL,
                 MessagePaths.selectionCreateCreated(landResult.areaLand().getName()));
         SenderSelection senderSelection = commandSenderInfo.getSelection();
         senderSelection.removeSelection();

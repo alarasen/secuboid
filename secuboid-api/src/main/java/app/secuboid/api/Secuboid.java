@@ -1,5 +1,5 @@
 /*
- *  Secuboid: Lands and Protection plugin for Minecraft server
+ *  Secuboid: LandService and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,14 @@
  */
 package app.secuboid.api;
 
-import app.secuboid.api.commands.Commands;
-import app.secuboid.api.flagtypes.FlagTypes;
-import app.secuboid.api.lands.Lands;
-import app.secuboid.api.players.PlayerInfos;
-import app.secuboid.api.recipients.Recipients;
+import app.secuboid.api.commands.CommandService;
+import app.secuboid.api.flagtypes.FlagTypeService;
+import app.secuboid.api.lands.LandService;
+import app.secuboid.api.messages.MessageService;
+import app.secuboid.api.players.PlayerInfoService;
+import app.secuboid.api.recipients.RecipientService;
+import app.secuboid.api.registration.RegistrationService;
+import app.secuboid.api.services.ServiceService;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,44 +33,58 @@ import org.jetbrains.annotations.NotNull;
 public interface Secuboid {
 
     /**
-     * Gets online player information.
+     * Gets the command service.
      *
-     * @return the player information
+     * @return the command service
      */
-    @NotNull PlayerInfos getPlayerInfos();
+    @NotNull CommandService getCommandService();
 
     /**
-     * Gets the commands class instance.
+     * Gets the flag types service.
      *
-     * @return the commands class instance
+     * @return the flag types service
      */
-    @NotNull Commands getCommands();
+    @NotNull FlagTypeService getFlagTypeService();
 
     /**
-     * Gets the flag definitions instance.
+     * Gets the message service.
      *
-     * @return the flags instance
+     * @return the message service
      */
-    @NotNull FlagTypes getFlagTypes();
+    @NotNull MessageService getMessageService();
 
     /**
-     * Gets the recipients instance.
+     * Gets land  service.
      *
-     * @return the recipients instance
+     * @return the lands service
      */
-    @NotNull Recipients getRecipients();
+    @NotNull LandService getLandService();
 
     /**
-     * Gets lands.
+     * Gets online player information service.
      *
-     * @return the lands
+     * @return the player information service
      */
-    @NotNull Lands getLands();
+    @NotNull PlayerInfoService getPlayerInfoService();
 
     /**
-     * For internal use only.
+     * Gets the recipients service.
      *
-     * @return the new instance
+     * @return the recipients service
      */
-    @NotNull NewInstance getNewInstance();
+    @NotNull RecipientService getRecipientService();
+
+    /**
+     * Gets the registration service.
+     *
+     * @return the registration service
+     */
+    @NotNull RegistrationService getRegistrationService();
+
+    /**
+     * Gets the service manager.
+     *
+     * @return the service manager
+     */
+    @NotNull ServiceService getServiceManager();
 }
