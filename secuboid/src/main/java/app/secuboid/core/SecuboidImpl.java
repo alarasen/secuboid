@@ -146,7 +146,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     @Override
     public void onDisable() {
-        serviceService.onEnable(secuboidPlugin);
+        serviceService.onDisable(secuboidPlugin);
     }
 
     @Override
@@ -205,27 +205,31 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         registrationService.registerService(secuboidPlugin, serviceService);
 
         // phase 2 in alphabetical order
+        registrationService.registerService(secuboidPlugin, persistenceSessionService);
+
+        // phase 3 in alphabetical order
+        registrationService.registerService(secuboidPlugin, persistenceService);
+
+        // phase 4 in alphabetical order
         registrationService.registerService(secuboidPlugin, chatGetterService);
         registrationService.registerService(secuboidPlugin, commandListenerService);
         registrationService.registerService(secuboidPlugin, commandService);
         registrationService.registerService(secuboidPlugin, flagTypeService);
         registrationService.registerService(secuboidPlugin, messageManagerService);
         registrationService.registerService(secuboidPlugin, messageService);
-        registrationService.registerService(secuboidPlugin, persistenceSessionService);
         registrationService.registerService(secuboidPlugin, recipientService);
         registrationService.registerService(secuboidPlugin, secuboidToolService);
 
-        // Phase 3 in alphabetical order
-        registrationService.registerService(secuboidPlugin, persistenceService);
+        // Phase 5 in alphabetical order
         registrationService.registerService(secuboidPlugin, scoreboardService);
 
-        // Phase 4 in alphabetical order
+        // Phase 6 in alphabetical order
         registrationService.registerService(secuboidPlugin, landService);
 
-        //Phase 5 in alphabetical order
+        // Phase 7 in alphabetical order
         registrationService.registerService(secuboidPlugin, playerInfoService);
 
-        //Phase 6 in alphabetical order
+        // Phase 8 in alphabetical order
         registrationService.registerService(secuboidPlugin, chatPageService);
 
     }

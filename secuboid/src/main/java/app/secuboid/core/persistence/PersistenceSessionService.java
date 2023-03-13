@@ -21,6 +21,7 @@ package app.secuboid.core.persistence;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.services.Service;
 import app.secuboid.core.config.Config;
+import app.secuboid.core.persistence.jpa.RecipientJPA;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -53,7 +54,8 @@ public class PersistenceSessionService implements Service {
         isLocalHSQL = false;
     }
 
-    void init() {
+    @Override
+    public void onEnable(boolean isServerBoot) {
         Config config = config();
         String dataFolderStr = javaPlugin.getDataFolder().getAbsolutePath();
         String url = config.databaseUrl().replace(TAG_PLUGIN_PATH, dataFolderStr);
@@ -88,16 +90,13 @@ public class PersistenceSessionService implements Service {
 
         Configuration configuration = new Configuration();
         configuration.addProperties(properties);
+        configuration.addAnnotatedClass(RecipientJPA.class);
 
         sessionFactory = configuration.buildSessionFactory();
     }
 
-    @NotNull Session getSession() {
-        assert sessionFactory != null : "The Secuboid datasource is closed or net yet available";
-        return sessionFactory.openSession();
-    }
-
-    void shutdown() {
+    @Override
+    public void onDisable(boolean isServerShutdown) {
         if (sessionFactory != null && !sessionFactory.isClosed()) {
             if (isLocalHSQL) {
                 try (Session session = getSession()) {
@@ -107,6 +106,12 @@ public class PersistenceSessionService implements Service {
             sessionFactory.close();
             sessionFactory = null;
         }
+    }
+
+    @NotNull
+    public Session getSession() {
+        assert sessionFactory != null : "The Secuboid datasource is closed or net yet available";
+        return sessionFactory.openSession();
     }
 
     private void shutdownLocalHSQL(@NotNull Session session) {

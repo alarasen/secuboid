@@ -18,27 +18,89 @@
 
 package app.secuboid.core.persistence.jpa;
 
-import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+import java.util.Objects;
 import java.util.UUID;
 
-@Entity(name = "RecipientExec")
-@Table(name = "secuboid_recipient", uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value", "uuid"}))
+@Entity // (name = "RecipientExec")
+@Table(name = "secuboid_recipient") //, uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value",
+//"uuid"}))
+
 public class RecipientJPA {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
     @Column(name = "short_name", nullable = false, length = 10)
-    private @NotNull String shortName;
+    private String shortName;
 
     @Column(name = "value")
-    private @Nullable String value;
-
+    private String value;
     @Column(name = "uuid")
-    private @Nullable UUID uuid;
+    private UUID uuid;
+
+    public long getId() {
+        return id;
+    }
+
+    public RecipientJPA setId(long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public RecipientJPA setShortName(String shortName) {
+        this.shortName = shortName;
+        return this;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public RecipientJPA setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public RecipientJPA setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecipientJPA that = (RecipientJPA) o;
+        return id == that.id && Objects.equals(shortName, that.shortName) && Objects.equals(value, that.value) && Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, shortName, value, uuid);
+    }
+
+    @Override
+    public String toString() {
+        return "RecipientJPA{" +
+                "id=" + id +
+                ", shortName='" + shortName + '\'' +
+                ", value='" + value + '\'' +
+                ", uuid=" + uuid +
+                '}';
+    }
 }
