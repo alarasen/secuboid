@@ -90,6 +90,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         pluginManager = server.getPluginManager();
         BukkitScheduler scheduler = server.getScheduler();
         ScoreboardManager scoreboardManager = server.getScoreboardManager();
+        assert scoreboardManager != null : "The scoreboard manager should not be null if the first world is loaded";
 
         // Secuboid instances
         // phase 1 in alphabetical order

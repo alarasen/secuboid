@@ -31,7 +31,7 @@
         <revision>2.0.0-SNAPSHOT</revision>
 
         <spigot.plugin.api.version>1.19</spigot.plugin.api.version>
-        <spigot.version>1.19.3</spigot.version>
+        <spigot.version>1.19.4</spigot.version>
         <spigot.suffixversion>-R0.1-SNAPSHOT</spigot.suffixversion>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>

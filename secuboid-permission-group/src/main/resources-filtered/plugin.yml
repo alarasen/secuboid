@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/bukkit-plugin.json
-name: PermissionGroupService
+name: SecuboidPermissionGroup
 main: app.secuboid.permission.group.SecuboidPermissionGroupPlugin
 version: ${project.version}
 description: "Adds Bukkit permission group system to the land parameters"
