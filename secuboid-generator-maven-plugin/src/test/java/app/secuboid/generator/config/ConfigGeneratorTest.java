@@ -17,91 +17,75 @@
  */
 package app.secuboid.generator.config;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 import app.secuboid.generator.common.BufferedWriterArray;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class ConfigGeneratorTest {
 
-        private static final String YAML_STR = ""
-                        + "integer-config: 123\n"
-                        + "double-config: 2.3\n"
-                        + "boolean-config: true\n"
-                        + "string-config: bonjour \"tous\"\n"
-                        + "string-list: [\"un\", \"deux\", \"trois\"]\n"
-                        + "main:\n"
-                        + "  sub: yes\n";
+    private static final String YAML_STR = """
+            integer-config: 123
+            double-config: 2.3
+            boolean-config: true
+            string-config: bonjour "tous"
+            string-list: ["un", "deux", "trois"]
+            main:
+              sub: yes
+            """;
 
-        private static final String JAVA_TEMPLATE_STR = ""
-                        + "package package.name;\n"
-                        + "\n"
-                        + "public class Config {\n"
-                        + "\n"
-                        + "{{generatedVars}}\n"
-                        + "\n"
-                        + "{{generatedGetters}}\n"
-                        + "\n"
-                        + "    public run() {\n"
-                        + "{{generatedLoads}}\n"
-                        + "    }\n"
-                        + "}\n";
+    private static final String JAVA_TEMPLATE_STR = """
+            package package.name;
 
-        private final ConfigGenerator configGenerator = new ConfigGenerator(null, null, null, null);
+            public class Config {
 
-        @Test
-        void when_generate_code_then_return_target_with_all_types() throws MojoExecutionException, IOException {
-                StringWriter swJavaTarget = new StringWriter();
-                StringWriter[] swJavaTargets = new StringWriter[] { swJavaTarget };
+            {{generatedVars}}
 
-                try (
-                        InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes()); //
-                        //
-                        StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR); //
-                        BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate); //
-                        //
-                        BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets); //
-                ) {
-                        configGenerator.generate(isSource, brJavaTemplate, bufferedWriterArray);
+                public run() {
+            {{generatedLoads}}
                 }
+            }
+            """;
 
-                String output = swJavaTarget.toString();
+    private final ConfigGenerator configGenerator = ConfigGenerator.builder().build();
 
-                assertTrue(output.contains("private int integerConfig;"));
-                assertTrue(output.contains("private double doubleConfig;"));
-                assertTrue(output.contains("private boolean booleanConfig;"));
-                assertTrue(output.contains("private String stringConfig;"));
-                assertTrue(output.contains("private List<String> stringList;"));
+    @Test
+    void when_generate_code_then_return_target_with_all_types() throws MojoExecutionException, IOException {
+        StringWriter swJavaTarget = new StringWriter();
+        StringWriter[] swJavaTargets = new StringWriter[]{swJavaTarget};
 
-                assertTrue(output.contains("public int integerConfig() {"));
-                assertTrue(output.contains("return integerConfig;"));
-                assertTrue(output.contains("public double doubleConfig() {"));
-                assertTrue(output.contains("return doubleConfig;"));
-                assertTrue(output.contains("public boolean booleanConfig() {"));
-                assertTrue(output.contains("return booleanConfig;"));
-                assertTrue(output.contains("public String stringConfig() {"));
-                assertTrue(output.contains("return stringConfig;"));
-                assertTrue(output.contains("public List<String> stringList() {"));
-                assertTrue(output.contains("return stringList;"));
+        try (
+                InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes());
 
-                assertTrue(output.contains("doubleConfig = fileConfiguration.getDouble(\"double-config\");"));
-                assertTrue(output.contains("fileConfiguration.addDefault(\"boolean-config\", true);"));
-                assertTrue(output.contains("booleanConfig = fileConfiguration.getBoolean(\"boolean-config\");"));
-                assertTrue(output.contains(
-                                "fileConfiguration.addDefault(\"string-config\", \"bonjour \\\"tous\\\"\");"));
-                assertTrue(output.contains("stringConfig = fileConfiguration.getString(\"string-config\");"));
-                assertTrue(output.contains(
-                                "fileConfiguration.addDefault(\"string-list\", Arrays.asList(\"un\", \"deux\", \"trois\"));"));
-                assertTrue(output.contains("stringList = fileConfiguration.getStringList(\"string-list\");"));
-                assertTrue(output.contains("fileConfiguration.addDefault(\"main.sub\", true);"));
-                assertTrue(output.contains("mainSub = fileConfiguration.getBoolean(\"main.sub\");"));
+                StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR);
+                BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate);
+
+                BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets)
+        ) {
+            configGenerator.generate(isSource, brJavaTemplate, bufferedWriterArray);
         }
+
+        String output = swJavaTarget.toString();
+
+        assertTrue(output.contains("private int integerConfig;"));
+        assertTrue(output.contains("private double doubleConfig;"));
+        assertTrue(output.contains("private boolean booleanConfig;"));
+        assertTrue(output.contains("private String stringConfig;"));
+        assertTrue(output.contains("private List<String> stringList;"));
+
+        assertTrue(output.contains("doubleConfig = fileConfiguration.getDouble(\"double-config\");"));
+        assertTrue(output.contains("fileConfiguration.addDefault(\"boolean-config\", true);"));
+        assertTrue(output.contains("booleanConfig = fileConfiguration.getBoolean(\"boolean-config\");"));
+        assertTrue(output.contains(
+                "fileConfiguration.addDefault(\"string-config\", \"bonjour \\\"tous\\\"\");"));
+        assertTrue(output.contains("stringConfig = fileConfiguration.getString(\"string-config\");"));
+        assertTrue(output.contains(
+                "fileConfiguration.addDefault(\"string-list\", Arrays.asList(\"un\", \"deux\", \"trois\"));"));
+        assertTrue(output.contains("stringList = fileConfiguration.getStringList(\"string-list\");"));
+        assertTrue(output.contains("fileConfiguration.addDefault(\"main.sub\", true);"));
+        assertTrue(output.contains("mainSub = fileConfiguration.getBoolean(\"main.sub\");"));
+    }
 }

@@ -59,7 +59,7 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     @Override
     public void onEnable(boolean isServerBoot) {
 
-        String lang = config().lang();
+        String lang = config().getLang();
 
         String langFilename = getFilePath(FILENAME_LANG_PREFIX, lang);
         String defaultLangFilename = getFilePath(FILENAME_LANG_PREFIX, LANG_DEFAULT);

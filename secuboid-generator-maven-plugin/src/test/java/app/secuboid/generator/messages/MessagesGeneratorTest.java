@@ -17,73 +17,70 @@
  */
 package app.secuboid.generator.messages;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 import app.secuboid.generator.common.BufferedWriterArray;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class MessagesGeneratorTest {
 
-        private static final String YAML_STR = ""
-                        + "simple: blah\n"
-                        + "double-var: blah\n"
-                        + "main:\n"
-                        + "  sub1: blah {{tag-1}} blah {{tag-2}} blah\n"
-                        + "  sub2: blah\n"
-                        + "one:\n"
-                        + "  two:\n"
-                        + "    three: blah\n";
+    private static final String YAML_STR = """
+            simple: blah
+            double-var: blah
+            main:
+              sub1: blah {{tag-1}} blah {{tag-2}} blah
+              sub2: blah
+            one:
+              two:
+                three: blah
+            """;
 
-        private static final String JAVA_TEMPLATE_STR = ""
-                        + "package package.name;\n"
-                        + "\n"
-                        + "public class MessagePaths {\n"
-                        + "\n"
-                        + "{{generatedConsts}}\n"
-                        + "}\n";
+    private static final String JAVA_TEMPLATE_STR = """
+            package package.name;
 
-        private final MessagesGenerator messagesGenerator = new MessagesGenerator(null, null, null, null);
+            public class MessagePaths {
 
-        @Test
-        void when_generate_code_then_return_constants() throws MojoExecutionException, IOException {
-                StringWriter swJavaTarget = new StringWriter();
-                StringWriter[] swJavaTargets = new StringWriter[] { swJavaTarget };
+            {{generatedConsts}}
+            }
+            """;
 
-                try (
-                        InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes()); //
-                        //
-                        StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR); //
-                        BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate); //
-                        //
-                        BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets); //
-                ) {
-                        messagesGenerator.generate(isSource, brJavaTemplate, bufferedWriterArray);
-                }
+    private final MessagesGenerator messagesGenerator = MessagesGenerator.builder().build();
 
-                String output = swJavaTarget.toString();
+    @Test
+    void when_generate_code_then_return_constants() throws MojoExecutionException, IOException {
+        StringWriter swJavaTarget = new StringWriter();
+        StringWriter[] swJavaTargets = new StringWriter[]{swJavaTarget};
 
-                assertTrue(output.contains("public static MessagePath simple() {"));
-                assertTrue(output
-                                .contains("    return new MessagePath(\"simple\", new String[] {}, new Object[] {});"));
-                assertTrue(output.contains("public static MessagePath doubleVar() {"));
-                assertTrue(output.contains(
-                                "    return new MessagePath(\"double-var\", new String[] {}, new Object[] {});"));
-                assertTrue(output.contains("public static MessagePath mainSub1(Object tag1, Object tag2) {"));
-                assertTrue(output.contains(
-                                "    return new MessagePath(\"main.sub1\", new String[] { \"{{tag-1}}\", \"{{tag-2}}\" }, new Object[] { tag1, tag2 });"));
-                assertTrue(output.contains("public static MessagePath mainSub2() {"));
-                assertTrue(output.contains(
-                                "    return new MessagePath(\"main.sub2\", new String[] {}, new Object[] {});"));
-                assertTrue(output.contains("public static MessagePath oneTwoThree() {"));
-                assertTrue(output.contains(
-                                "    return new MessagePath(\"one.two.three\", new String[] {}, new Object[] {});"));
+        try (
+                InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes());
+
+                StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR);
+                BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate);
+
+                BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets)
+        ) {
+            messagesGenerator.generate(isSource, brJavaTemplate, bufferedWriterArray);
         }
+
+        String output = swJavaTarget.toString();
+
+        assertTrue(output.contains("public static MessagePath simple() {"));
+        assertTrue(output
+                .contains("    return new MessagePath(\"simple\", new String[] {}, new Object[] {});"));
+        assertTrue(output.contains("public static MessagePath doubleVar() {"));
+        assertTrue(output.contains(
+                "    return new MessagePath(\"double-var\", new String[] {}, new Object[] {});"));
+        assertTrue(output.contains("public static MessagePath mainSub1(Object tag1, Object tag2) {"));
+        assertTrue(output.contains(
+                "    return new MessagePath(\"main.sub1\", new String[] { \"{{tag-1}}\", \"{{tag-2}}\" }, new Object[] { tag1, tag2 });"));
+        assertTrue(output.contains("public static MessagePath mainSub2() {"));
+        assertTrue(output.contains(
+                "    return new MessagePath(\"main.sub2\", new String[] {}, new Object[] {});"));
+        assertTrue(output.contains("public static MessagePath oneTwoThree() {"));
+        assertTrue(output.contains(
+                "    return new MessagePath(\"one.two.three\", new String[] {}, new Object[] {});"));
+    }
 }

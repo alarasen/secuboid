@@ -17,9 +17,11 @@
  */
 package app.secuboid.core.config;
 
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+@Getter
 public class Config {
 
     private static final Config INSTANCE = new Config();
@@ -35,8 +37,6 @@ public class Config {
     public static Config config() {
         return INSTANCE;
     }
-
-    {{generatedGetters}}
 
     public void load(FileConfiguration fileConfiguration) {
         {{generatedLoads}}

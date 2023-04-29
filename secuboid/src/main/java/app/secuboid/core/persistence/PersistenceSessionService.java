@@ -21,7 +21,10 @@ package app.secuboid.core.persistence;
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.services.Service;
 import app.secuboid.core.config.Config;
+import app.secuboid.core.persistence.jpa.AreaJPA;
+import app.secuboid.core.persistence.jpa.LandJPA;
 import app.secuboid.core.persistence.jpa.RecipientJPA;
+import app.secuboid.core.persistence.jpa.ResidentJPA;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -58,9 +61,9 @@ public class PersistenceSessionService implements Service {
     public void onEnable(boolean isServerBoot) {
         Config config = config();
         String dataFolderStr = javaPlugin.getDataFolder().getAbsolutePath();
-        String url = config.databaseUrl().replace(TAG_PLUGIN_PATH, dataFolderStr);
-        String user = config.databaseUser();
-        String password = config.databasePassword();
+        String url = config.getDatabaseUrl().replace(TAG_PLUGIN_PATH, dataFolderStr);
+        String user = config.getDatabaseUser();
+        String password = config.getDatabasePassword();
 
         Properties properties = new Properties();
 
@@ -90,7 +93,10 @@ public class PersistenceSessionService implements Service {
 
         Configuration configuration = new Configuration();
         configuration.addProperties(properties);
+        configuration.addAnnotatedClass(AreaJPA.class);
+        configuration.addAnnotatedClass(LandJPA.class);
         configuration.addAnnotatedClass(RecipientJPA.class);
+        configuration.addAnnotatedClass(ResidentJPA.class);
 
         sessionFactory = configuration.buildSessionFactory();
     }

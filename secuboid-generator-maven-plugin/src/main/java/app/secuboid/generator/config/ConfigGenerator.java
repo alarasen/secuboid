@@ -17,6 +17,13 @@
  */
 package app.secuboid.generator.config;
 
+import app.secuboid.generator.common.BufferedWriterArray;
+import app.secuboid.generator.common.CommonGenerator;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,30 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import app.secuboid.generator.common.BufferedWriterArray;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.sonatype.plexus.build.incremental.BuildContext;
-import org.yaml.snakeyaml.Yaml;
-
-import app.secuboid.generator.common.CommonGenerator;
-
+@Getter
+@SuperBuilder
 public class ConfigGenerator extends CommonGenerator {
 
     private static final String TAG_GENERATED_VARS = "{{generatedVars}}";
-    private static final String TAG_GENERATED_GETTERS = "{{generatedGetters}}";
     private static final String TAG_GENERATED_LOADS = "{{generatedLoads}}";
 
-    private final List<ConfigRecord> configRecords;
-
-    public ConfigGenerator(BuildContext buildContext, String source, String javaTemplate, String javaTarget) {
-        super(buildContext, source, javaTemplate, new String[] { javaTarget });
-
-        configRecords = new ArrayList<>();
-    }
+    private final List<ConfigRecord> configRecords = new ArrayList<>();
 
     @Override
     protected void generate(InputStream isSource, BufferedReader brJavaTemplate,
-            BufferedWriterArray bufferedWriterArray) throws MojoExecutionException, IOException {
+                            BufferedWriterArray bufferedWriterArray) throws MojoExecutionException, IOException {
         BufferedWriter bwJavaTarget = bufferedWriterArray.getBwTargets()[0];
         Yaml yaml = new Yaml();
         Map<String, Object> node = yaml.load(isSource);
@@ -58,8 +53,6 @@ public class ConfigGenerator extends CommonGenerator {
         while ((line = brJavaTemplate.readLine()) != null) {
             if (line.contains(TAG_GENERATED_VARS)) {
                 generateVars(bwJavaTarget);
-            } else if (line.contains(TAG_GENERATED_GETTERS)) {
-                generateGetters(bwJavaTarget);
             } else if (line.contains(TAG_GENERATED_LOADS)) {
                 generateLoads(bwJavaTarget);
             } else {
@@ -83,7 +76,7 @@ public class ConfigGenerator extends CommonGenerator {
         String path = pathParent + key;
 
         if (value instanceof Map) {
-            loopRecord(path + YAML_KEY_DELEMITER, (Map<String, Object>) value);
+            loopRecord(path + YAML_KEY_DELIMITER, (Map<String, Object>) value);
             return;
         }
 
@@ -153,35 +146,6 @@ public class ConfigGenerator extends CommonGenerator {
                     .append(';');
 
             bwJavaTarget.newLine();
-        }
-    }
-
-    private void generateGetters(BufferedWriter bwJavaTarget) throws IOException {
-        boolean isFirst = true;
-        for (ConfigRecord configRecord : configRecords) {
-            if (!isFirst) {
-                bwJavaTarget.newLine();
-            }
-
-            bwJavaTarget //
-                    .append("    public ") //
-                    .append(configRecord.javaType()) //
-                    .append(' ')
-                    .append(configRecord.varName()) //
-                    .append("() {");
-
-            bwJavaTarget.newLine();
-
-            bwJavaTarget //
-                    .append("        return ") //
-                    .append(configRecord.varName()) //
-                    .append(';');
-
-            bwJavaTarget.newLine();
-            bwJavaTarget.append("    }");
-            bwJavaTarget.newLine();
-
-            isFirst = false;
         }
     }
 

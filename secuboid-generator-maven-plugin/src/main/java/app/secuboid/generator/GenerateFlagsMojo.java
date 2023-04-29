@@ -50,6 +50,6 @@ public class GenerateFlagsMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Generate: " + flagsJavaTarget);
-        new FlagsGenerator(buildContext, flagsSource, flagsJavaTemplate, flagsJavaTarget, languageToTarget).run();
+        FlagsGenerator.newFlagsGenerator(buildContext, flagsSource, flagsJavaTemplate, flagsJavaTarget, languageToTarget).run();
     }
 }

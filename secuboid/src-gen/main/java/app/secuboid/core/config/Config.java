@@ -17,9 +17,11 @@
  */
 package app.secuboid.core.config;
 
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+@Getter
 public class Config {
 
     private static final Config INSTANCE = new Config();
@@ -38,26 +40,6 @@ public class Config {
 
     public static Config config() {
         return INSTANCE;
-    }
-
-    public String lang() {
-        return lang;
-    }
-
-    public String databaseUrl() {
-        return databaseUrl;
-    }
-
-    public String databaseUser() {
-        return databaseUser;
-    }
-
-    public String databasePassword() {
-        return databasePassword;
-    }
-
-    public int selectionDefaultStartDiameter() {
-        return selectionDefaultStartDiameter;
     }
 
     public void load(FileConfiguration fileConfiguration) {

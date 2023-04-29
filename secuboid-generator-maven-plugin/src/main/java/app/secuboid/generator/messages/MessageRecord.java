@@ -19,10 +19,10 @@ package app.secuboid.generator.messages;
 
 import java.util.List;
 
-record MessageRecord( //
-                String methodName, //
-                List<String> parameters,
-                String path, //
-                List<String> tags //
+record MessageRecord(
+        String methodName,
+        List<String> parameters,
+        String path,
+        List<String> tags
 ) {
 }

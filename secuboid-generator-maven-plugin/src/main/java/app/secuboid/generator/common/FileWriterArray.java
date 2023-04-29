@@ -33,6 +33,7 @@ public class FileWriterArray implements Closeable {
         fileTargets = new File[targets.length];
 
         for (int i = 0; i < targets.length; i++) {
+            //noinspection resource
             fwTargets[i] = new FileWriter(targets[i]);
             fileTargets[i] = new File(targets[i]);
         }

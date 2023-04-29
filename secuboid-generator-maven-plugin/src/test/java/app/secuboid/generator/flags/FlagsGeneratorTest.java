@@ -30,39 +30,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FlagsGeneratorTest {
 
-    private static final String YAML_STR = ""
-            + "action-test:\n"
-            + "  type: action\n"
-            + "  need-source: false\n"
-            + "  description:\n"
-            + "    en: Action test\n"
-            + "    fr: Action test\n"
-            + "source-action-test:\n"
-            + "  type: source-action\n"
-            + "  description:\n"
-            + "    en: Source action test\n"
-            + "    fr: Source action test\n"
-            + "source-action-target-test:\n"
-            + "  type: source-action-target\n"
-            + "  need-target: true\n"
-            + "  description:\n"
-            + "    en: Source action target test\n"
-            + "    fr: Source action target test\n"
-            + "metadata-test:\n"
-            + "  type: metadata\n"
-            + "  hidden: true\n"
-            + "  need-metadata: true\n"
-            + "  value-class: String.class\n"
-            + "  from-string: v -> v\n"
-            + "  description:\n"
-            + "    en: Metadata test\n"
-            + "    fr: Metadata test\n";
+    private static final String YAML_STR = """
+            action-test:
+              type: action
+              need-source: false
+              description:
+                en: Action test
+                fr: Action test
+            source-action-test:
+              type: source-action
+              description:
+                en: Source action test
+                fr: Source action test
+            source-action-target-test:
+              type: source-action-target
+              need-target: true
+              description:
+                en: Source action target test
+                fr: Source action target test
+            metadata-test:
+              type: metadata
+              hidden: true
+              need-metadata: true
+              value-class: String.class
+              from-string: v -> v
+              description:
+                en: Metadata test
+                fr: Metadata test
+            """;
 
     private static final String JAVA_TEMPLATE_STR = "{{generatedFlags}}";
 
     private final Map<String, String> languageToTarget = singletonMap("en", null);
 
-    private final FlagsGenerator flagsGenerator = new FlagsGenerator(null, null, null, null, languageToTarget);
+    private final FlagsGenerator flagsGenerator = FlagsGenerator.newFlagsGenerator(null, null, null, null, languageToTarget);
 
     @Test
     void when_generate_code_then_return_target_with_all_types() throws MojoExecutionException, IOException {
@@ -71,12 +72,12 @@ class FlagsGeneratorTest {
         StringWriter[] swJavaTargets = new StringWriter[]{swJavaTarget, swLangTarget};
 
         try (
-                InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes()); //
-                //
-                StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR); //
+                InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes());
+
+                StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR);
                 BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate); //
-                //
-                BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets); //
+
+                BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets)
         ) {
             flagsGenerator.generate(isSource, brJavaTemplate, bufferedWriterArray);
         }

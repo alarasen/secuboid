@@ -17,6 +17,8 @@
  */
 package app.secuboid.generator.common;
 
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.text.CaseUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -28,21 +30,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
+@SuperBuilder
 public abstract class CommonGenerator {
 
-    public static final char YAML_KEY_DELEMITER = '.';
+    public static final char YAML_KEY_DELIMITER = '.';
 
-    private BuildContext buildContext;
+    private final BuildContext buildContext;
     private final String source;
     private final String template;
     private final String[] targets;
-
-    protected CommonGenerator(BuildContext buildContext, String source, String template, String[] targets) {
-        this.buildContext = buildContext;
-        this.source = source;
-        this.template = template;
-        this.targets = targets;
-    }
 
     public void run() throws MojoExecutionException {
         File fileSource = new File(source);
@@ -105,7 +102,7 @@ public abstract class CommonGenerator {
     }
 
     protected String toCamelCase(String valueStr) {
-        return CaseUtils.toCamelCase(valueStr.replace('-', YAML_KEY_DELEMITER), false, YAML_KEY_DELEMITER);
+        return CaseUtils.toCamelCase(valueStr.replace('-', YAML_KEY_DELIMITER), false, YAML_KEY_DELIMITER);
     }
 
     protected String spaceIfNotEmpty(List<?> list) {

@@ -75,7 +75,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
     }
 
     private @NotNull AreaForm createAreaForm(@NotNull Class<? extends AreaForm> areaFormClass) {
-        int selectionDefaultStartDiameter = config().selectionDefaultStartDiameter();
+        int selectionDefaultStartDiameter = config().getSelectionDefaultStartDiameter();
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
         int playerZ = loc.getBlockZ();

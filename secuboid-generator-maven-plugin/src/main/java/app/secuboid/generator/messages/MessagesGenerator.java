@@ -19,8 +19,9 @@ package app.secuboid.generator.messages;
 
 import app.secuboid.generator.common.BufferedWriterArray;
 import app.secuboid.generator.common.CommonGenerator;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.sonatype.plexus.build.incremental.BuildContext;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
@@ -31,18 +32,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
+@SuperBuilder
 public class MessagesGenerator extends CommonGenerator {
 
     private static final char YAML_KEY_DELEMITER = '.';
     private static final String TAG_GENERATED_CONSTS = "{{generatedConsts}}";
 
-    private final List<MessageRecord> messageRecords;
-
-    public MessagesGenerator(BuildContext buildContext, String source, String javaTemplate, String javaTarget) {
-        super(buildContext, source, javaTemplate, new String[]{javaTarget});
-
-        messageRecords = new ArrayList<>();
-    }
+    private final List<MessageRecord> messageRecords = new ArrayList<>();
 
     @Override
     protected void generate(InputStream isSource, BufferedReader brJavaTemplate,

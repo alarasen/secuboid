@@ -17,11 +17,11 @@
  */
 package app.secuboid.generator.config;
 
-record ConfigRecord( //
-        String javaType, //
-        String varName, //
-        String getFunction, //
-        String path, //
-        String defaultValue //
+record ConfigRecord(
+        String javaType,
+        String varName,
+        String getFunction,
+        String path,
+        String defaultValue
 ) {
 }

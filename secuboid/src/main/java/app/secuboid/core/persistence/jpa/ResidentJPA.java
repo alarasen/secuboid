@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -24,31 +24,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "secuboid_recipient", uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value", "uuid"}))
-public class RecipientJPA {
+@Table(name = "secuboid_resident")
+public class ResidentJPA {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "land_id", nullable = false)
+    private LandJPA landJPA;
 
-    @Column(name = "short_name", nullable = false, length = 10)
-    private String shortName;
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_id", nullable = false)
+    private RecipientJPA recipientJPA;
 
-    @Column(name = "value")
-    private String value;
-
-    @Column(name = "uuid")
-    private UUID uuid;
-
-    @OneToMany(mappedBy = "recipientJPA", cascade = CascadeType.ALL)
-    private Set<ResidentJPA> residentJPASet;
+    @Id
+    @Column(name = "level", nullable = false)
+    private int level;
 }

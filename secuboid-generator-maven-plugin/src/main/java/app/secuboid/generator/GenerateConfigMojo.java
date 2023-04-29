@@ -45,6 +45,12 @@ public class GenerateConfigMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Generate: " + configJavaTarget);
-        new ConfigGenerator(buildContext, configSource, configJavaTemplate, configJavaTarget).run();
+        ConfigGenerator.builder()
+                .buildContext(buildContext)
+                .source(configSource)
+                .template(configJavaTemplate)
+                .targets(new String[]{configJavaTarget})
+                .build()
+                .run();
     }
 }

@@ -58,10 +58,11 @@ class PersistenceIT {
     @Test
     void when_start_database_then_database_reachable() {
         var session = persistenceSessionService.getSession();
-        RecipientJPA recipientJPA = new RecipientJPA()
-                .setShortName("TST")
-                .setValue("TEST")
-                .setUuid(null);
+        RecipientJPA recipientJPA = RecipientJPA.builder()
+                .shortName("TST")
+                .value("TEST")
+                .uuid(null)
+                .build();
 
         var transaction = session.beginTransaction();
         session.persist(recipientJPA);
@@ -76,10 +77,11 @@ class PersistenceIT {
     @Test
     void when_connection_restart_then_data_persist() {
         var session = persistenceSessionService.getSession();
-        RecipientJPA recipientJPA = new RecipientJPA()
-                .setShortName("TST")
-                .setValue("TEST")
-                .setUuid(null);
+        RecipientJPA recipientJPA = RecipientJPA.builder()
+                .shortName("TST")
+                .value("TEST")
+                .uuid(null)
+                .build();
 
         var transaction = session.beginTransaction();
         session.persist(recipientJPA);

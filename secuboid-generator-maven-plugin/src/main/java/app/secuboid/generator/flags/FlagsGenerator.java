@@ -19,6 +19,8 @@ package app.secuboid.generator.flags;
 
 import app.secuboid.generator.common.BufferedWriterArray;
 import app.secuboid.generator.common.CommonGenerator;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.yaml.snakeyaml.Yaml;
@@ -33,25 +35,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+@Getter
+@SuperBuilder()
 public class FlagsGenerator extends CommonGenerator {
 
     private static final String TAG_GENERATED_FLAGS = "{{generatedFlags}}";
 
     // This static variable is a hack to be able to use it before the super()
     // constructor
-    private static List<String> languages;
+    private final List<String> languages;
 
-    private final List<FlagRecord> flagRecords;
+    private final List<FlagRecord> flagRecords = new ArrayList<>();
 
-    public FlagsGenerator(BuildContext buildContext, String source, String javaTemplate, String target,
-                          Map<String, String> languageToTarget) {
-        super(buildContext, source, javaTemplate, createTargetArray(target, languageToTarget));
 
-        flagRecords = new ArrayList<>();
-    }
-
-    private static String[] createTargetArray(String target, Map<String, String> languageToTarget) {
-        languages = new ArrayList<>();
+    public static FlagsGenerator newFlagsGenerator(BuildContext buildContext, String source, String javaTemplate,
+                                                   String target, Map<String, String> languageToTarget) {
+        List<String> languages = new ArrayList<>();
         List<String> targetList = new ArrayList<>();
         targetList.add(target);
 
@@ -60,7 +59,15 @@ public class FlagsGenerator extends CommonGenerator {
             targetList.add(v);
         });
 
-        return targetList.toArray(new String[0]);
+        String[] targets = targetList.toArray(new String[0]);
+
+        return FlagsGenerator.builder()
+                .buildContext(buildContext)
+                .source(source)
+                .template(javaTemplate)
+                .targets(targets)
+                .languages(languages)
+                .build();
     }
 
     @Override

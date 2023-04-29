@@ -45,6 +45,12 @@ public class GenerateMessagesMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Generate: " + messagesJavaTarget);
-        new MessagesGenerator(buildContext, messagesSource, messagesJavaTemplate, messagesJavaTarget).run();
+        MessagesGenerator.builder()
+                .buildContext(buildContext)
+                .source(messagesSource)
+                .template(messagesJavaTemplate)
+                .targets(new String[]{messagesJavaTarget})
+                .build()
+                .run();
     }
 }

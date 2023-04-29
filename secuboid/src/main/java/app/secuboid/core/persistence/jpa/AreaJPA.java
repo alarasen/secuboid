@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -24,31 +24,41 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "secuboid_recipient", uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value", "uuid"}))
-public class RecipientJPA {
+@Table(name = "secuboid_area")
+public class AreaJPA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "short_name", nullable = false, length = 10)
-    private String shortName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "land_id", nullable = false)
+    private LandJPA landJPA;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "type", nullable = false, length = 1)
+    private String type;
 
-    @Column(name = "uuid")
-    private UUID uuid;
+    @Column(name = "x1", nullable = false)
+    private int x1;
 
-    @OneToMany(mappedBy = "recipientJPA", cascade = CascadeType.ALL)
-    private Set<ResidentJPA> residentJPASet;
+    @Column(name = "y1", nullable = false)
+    private int y1;
+
+    @Column(name = "z1", nullable = false)
+    private int z1;
+
+    @Column(name = "x2", nullable = false)
+    private int x2;
+
+    @Column(name = "y2", nullable = false)
+    private int y2;
+
+    @Column(name = "z2", nullable = false)
+    private int z2;
 }
