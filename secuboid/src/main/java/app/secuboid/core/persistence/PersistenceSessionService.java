@@ -42,6 +42,7 @@ public class PersistenceSessionService implements Service {
     public static final String DRIVER_HSQLDB = "jdbc:hsqldb";
     public static final String DRIVER_MARIADB = "jdbc:mariadb";
 
+    public static final String CONNECTION_PROVIDER_CLASS = "org.hibernate.hikaricp.internal.HikariCPConnectionProvider";
     public static final String HBM2DDL_AUTO_VALUE = "update";
 
 
@@ -88,6 +89,7 @@ public class PersistenceSessionService implements Service {
         properties.setProperty("hibernate.connection.url", url);
         properties.setProperty("hibernate.connection.username", user);
         properties.setProperty("hibernate.connection.password", password);
+        properties.setProperty("hibernate.connection.provider_class", CONNECTION_PROVIDER_CLASS);
         properties.setProperty("hibernate.hbm2ddl.auto", HBM2DDL_AUTO_VALUE);
 
 

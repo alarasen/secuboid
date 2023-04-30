@@ -95,6 +95,8 @@ class PersistenceIT {
         RecipientJPA recipientInserted = session.get(RecipientJPA.class, 1);
         session.close();
 
-        assertEquals(recipientJPA, recipientInserted);
+        assertEquals(recipientJPA.getId(), recipientInserted.getId());
+        assertEquals(recipientJPA.getShortName(), recipientInserted.getShortName());
+        assertEquals(recipientJPA.getValue(), recipientInserted.getValue());
     }
 }
