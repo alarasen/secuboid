@@ -20,7 +20,6 @@ package app.secuboid.generator.flags;
 import app.secuboid.generator.common.BufferedWriterArray;
 import app.secuboid.generator.common.CommonGenerator;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.sonatype.plexus.build.incremental.BuildContext;
 import org.yaml.snakeyaml.Yaml;
@@ -36,17 +35,18 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 @Getter
-@SuperBuilder()
 public class FlagsGenerator extends CommonGenerator {
 
     private static final String TAG_GENERATED_FLAGS = "{{generatedFlags}}";
 
-    // This static variable is a hack to be able to use it before the super()
-    // constructor
     private final List<String> languages;
 
     private final List<FlagRecord> flagRecords = new ArrayList<>();
 
+    private FlagsGenerator(BuildContext buildContext, String source, String template, String[] targets, List<String> languages) {
+        super(buildContext, source, template, targets);
+        this.languages = languages;
+    }
 
     public static FlagsGenerator newFlagsGenerator(BuildContext buildContext, String source, String javaTemplate,
                                                    String target, Map<String, String> languageToTarget) {
@@ -61,13 +61,7 @@ public class FlagsGenerator extends CommonGenerator {
 
         String[] targets = targetList.toArray(new String[0]);
 
-        return FlagsGenerator.builder()
-                .buildContext(buildContext)
-                .source(source)
-                .template(javaTemplate)
-                .targets(targets)
-                .languages(languages)
-                .build();
+        return new FlagsGenerator(buildContext, source, javaTemplate, targets, languages);
     }
 
     @Override

@@ -17,8 +17,8 @@
  */
 package app.secuboid.generator.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import org.apache.commons.text.CaseUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.sonatype.plexus.build.incremental.BuildContext;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-@SuperBuilder
+@AllArgsConstructor
 public abstract class CommonGenerator {
 
     public static final char YAML_KEY_DELIMITER = '.';

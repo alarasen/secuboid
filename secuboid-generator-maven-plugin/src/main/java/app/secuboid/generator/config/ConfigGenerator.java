@@ -20,8 +20,8 @@ package app.secuboid.generator.config;
 import app.secuboid.generator.common.BufferedWriterArray;
 import app.secuboid.generator.common.CommonGenerator;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.sonatype.plexus.build.incremental.BuildContext;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
@@ -33,13 +33,16 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@SuperBuilder
 public class ConfigGenerator extends CommonGenerator {
 
     private static final String TAG_GENERATED_VARS = "{{generatedVars}}";
     private static final String TAG_GENERATED_LOADS = "{{generatedLoads}}";
 
     private final List<ConfigRecord> configRecords = new ArrayList<>();
+
+    public ConfigGenerator(BuildContext buildContext, String source, String template, String target) {
+        super(buildContext, source, template, new String[]{target});
+    }
 
     @Override
     protected void generate(InputStream isSource, BufferedReader brJavaTemplate,

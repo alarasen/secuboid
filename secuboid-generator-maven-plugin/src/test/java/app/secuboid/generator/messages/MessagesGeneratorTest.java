@@ -47,7 +47,7 @@ class MessagesGeneratorTest {
             }
             """;
 
-    private final MessagesGenerator messagesGenerator = MessagesGenerator.builder().build();
+    private final MessagesGenerator messagesGenerator = new MessagesGenerator(null, null, null, null);
 
     @Test
     void when_generate_code_then_return_constants() throws MojoExecutionException, IOException {

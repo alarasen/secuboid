@@ -50,7 +50,7 @@ class ConfigGeneratorTest {
             }
             """;
 
-    private final ConfigGenerator configGenerator = ConfigGenerator.builder().build();
+    private final ConfigGenerator configGenerator = new ConfigGenerator(null, null, null, null);
 
     @Test
     void when_generate_code_then_return_target_with_all_types() throws MojoExecutionException, IOException {
