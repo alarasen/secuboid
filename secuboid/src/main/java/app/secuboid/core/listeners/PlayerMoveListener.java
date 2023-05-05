@@ -32,7 +32,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.jetbrains.annotations.NotNull;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import static org.bukkit.event.EventPriority.MONITOR;
@@ -40,13 +39,13 @@ import static org.bukkit.event.EventPriority.MONITOR;
 public class PlayerMoveListener implements Listener {
 
     private static final int MOVE_TIME_LAPS_TICKS = 500;
-    private final @NotNull ChatGetterService chatGetterService;
-    private final @NotNull MessageManagerService messageManagerService;
-    private final @NotNull PlayerInfoService playerInfoService;
+    private final ChatGetterService chatGetterService;
+    private final MessageManagerService messageManagerService;
+    private final PlayerInfoService playerInfoService;
 
-    public PlayerMoveListener(@NotNull ChatGetterService chatGetterService,
-                              @NotNull MessageManagerService messageManagerService,
-                              @NotNull PlayerInfoService playerInfoService) {
+    public PlayerMoveListener(ChatGetterService chatGetterService,
+                              MessageManagerService messageManagerService,
+                              PlayerInfoService playerInfoService) {
         this.chatGetterService = chatGetterService;
         this.messageManagerService = messageManagerService;
         this.playerInfoService = playerInfoService;
@@ -56,7 +55,6 @@ public class PlayerMoveListener implements Listener {
     public void onPlayerSpawnMonitor(PlayerSpawnLocationEvent event) {
         Player player = event.getPlayer();
         PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
-        assert playerInfo != null;
         Location spawnLocation = event.getSpawnLocation();
 
         ((PlayerInfoServiceImpl) playerInfoService).updatePlayerPosition(playerInfo, spawnLocation);
@@ -74,7 +72,6 @@ public class PlayerMoveListener implements Listener {
         }
 
         PlayerInfoImpl playerInfoImpl = (PlayerInfoImpl) playerInfoService.getPlayerInfo(player);
-        assert playerInfoImpl != null;
         long last = playerInfoImpl.getLastUpdateTimeMillis();
         long now = System.currentTimeMillis();
 
@@ -96,7 +93,6 @@ public class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
 
         PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
-        assert playerInfo != null;
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();
         playerSelection.removeSelection();
         chatGetterService.remove(playerInfo);

@@ -24,8 +24,6 @@ import app.secuboid.api.lands.areas.AreaForm;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class SelectionForm {
 
@@ -33,18 +31,18 @@ public abstract class SelectionForm {
     protected static final Material MATERIAL_COLLISION = Material.REDSTONE_BLOCK;
     protected static final Material MATERIAL_AREA = Material.IRON_BLOCK;
 
-    protected final @NotNull AreaForm areaForm;
-    protected final @NotNull Player player;
+    protected final AreaForm areaForm;
+    protected final Player player;
     protected final boolean isResizeable;
-    protected final @Nullable Land originLand;
-    protected final @Nullable Area originArea;
-    protected final @NotNull World world;
+    protected final Land originLand;
+    protected final Area originArea;
+    protected final World world;
 
-    protected @NotNull ChangedBlocks changedBlocks;
+    protected ChangedBlocks changedBlocks;
     protected boolean hasCollision;
 
-    SelectionForm(@NotNull AreaForm areaForm, @NotNull Player player, boolean isResizeable, @Nullable Land originLand,
-                  @Nullable Area originArea) {
+    SelectionForm(AreaForm areaForm, Player player, boolean isResizeable, Land originLand,
+                  Area originArea) {
         this.areaForm = areaForm;
         this.player = player;
         this.isResizeable = isResizeable;
@@ -56,11 +54,11 @@ public abstract class SelectionForm {
         hasCollision = false;
     }
 
-    public final @NotNull AreaForm getAreaForm() {
+    public final AreaForm getAreaForm() {
         return areaForm;
     }
 
-    public final @NotNull Player getPlayer() {
+    public final Player getPlayer() {
         return player;
     }
 
@@ -68,11 +66,11 @@ public abstract class SelectionForm {
         return isResizeable;
     }
 
-    public final @Nullable Land getOriginLand() {
+    public final Land getOriginLand() {
         return originLand;
     }
 
-    public final @Nullable Area getOriginArea() {
+    public final Area getOriginArea() {
         return originArea;
     }
 

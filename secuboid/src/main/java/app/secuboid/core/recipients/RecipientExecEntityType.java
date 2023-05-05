@@ -22,7 +22,6 @@ import app.secuboid.api.lands.flags.Flag;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.registration.RecipientRegistered;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 
 import static app.secuboid.api.utilities.CharacterCase.UPPERCASE;
 
@@ -31,13 +30,13 @@ import static app.secuboid.api.utilities.CharacterCase.UPPERCASE;
 public class RecipientExecEntityType implements RecipientExec {
 
     @Override
-    public boolean hasAccess(@NotNull Flag flag, @NotNull Entity entity) {
+    public boolean hasAccess(Flag flag, Entity entity) {
         // TODO Implement
         return true;
     }
 
     @Override
-    public boolean hasAccess(@NotNull Flag flag, @NotNull Entity entity, @NotNull Land originLand) {
+    public boolean hasAccess(Flag flag, Entity entity, Land originLand) {
         return hasAccess(flag, entity);
     }
 }

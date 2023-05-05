@@ -23,20 +23,19 @@ import app.secuboid.api.selection.active.ActiveSelectionNothing;
 import app.secuboid.core.selection.active.ActiveSelectionImpl;
 import app.secuboid.core.selection.active.ActiveSelectionNothingImpl;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class SenderSelectionImpl implements SenderSelection {
 
-    protected final @NotNull CommandSender commandSender;
-    protected @NotNull ActiveSelection activeSelection;
+    protected final CommandSender commandSender;
+    protected ActiveSelection activeSelection;
 
-    public SenderSelectionImpl(@NotNull CommandSender commandSender) {
+    public SenderSelectionImpl(CommandSender commandSender) {
         this.commandSender = commandSender;
         activeSelection = new ActiveSelectionNothingImpl(commandSender);
     }
 
     @Override
-    public final @NotNull ActiveSelection getActiveSelection() {
+    public final ActiveSelection getActiveSelection() {
         return activeSelection;
     }
 

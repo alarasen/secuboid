@@ -22,17 +22,16 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class AreaImpl implements Area {
 
     private final long id;
-    private final @NotNull AreaForm areaForm;
-    private final @NotNull AreaLand land;
+    private final AreaForm areaForm;
+    private final AreaLand land;
 
-    public AreaImpl(long id, @NotNull AreaForm areaForm, @NotNull AreaLand land) {
+    public AreaImpl(long id, AreaForm areaForm, AreaLand land) {
         this.id = id;
         this.areaForm = areaForm;
         this.land = land;
@@ -46,22 +45,22 @@ public class AreaImpl implements Area {
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return Long.toString(id);
     }
 
     @Override
-    public @NotNull String getPathName() {
+    public String getPathName() {
         return land.getPathName() + SEPARATOR_AREA + id;
     }
 
     @Override
-    public @NotNull AreaForm getAreaForm() {
+    public AreaForm getAreaForm() {
         return areaForm;
     }
 
     @Override
-    public @NotNull AreaLand getLand() {
+    public AreaLand getLand() {
         return land;
     }
 
@@ -103,7 +102,7 @@ public class AreaImpl implements Area {
         return areaForm.isLocationInside(x, y, z);
     }
 
-    public boolean isLocationInside(@NotNull Location loc) {
+    public boolean isLocationInside(Location loc) {
         return areaForm.isLocationInside(loc);
     }
 
@@ -112,7 +111,7 @@ public class AreaImpl implements Area {
         return areaForm.isLocationInsideSquare(x, z);
     }
 
-    public @NotNull MessagePath getMessagePath() {
+    public MessagePath getMessagePath() {
         return areaForm.getMessagePath();
     }
 

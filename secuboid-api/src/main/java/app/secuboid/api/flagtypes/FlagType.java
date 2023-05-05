@@ -17,8 +17,6 @@
  */
 package app.secuboid.api.flagtypes;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Represents a flag type. Hidden "true" is only for a flag that contains sensitive or not understandable information
  * for a player.
@@ -34,8 +32,8 @@ import org.jetbrains.annotations.NotNull;
  *                     or not understandable information for a player
  **/
 public record FlagType(
-        @NotNull String name,
-        @NotNull String description,
+        String name,
+        String description,
         boolean needSource,
         boolean needTarget,
         boolean needMetadata,

@@ -25,7 +25,6 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.SecuboidImpl;
 import app.secuboid.core.messages.MessagePaths;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "reload",
@@ -34,16 +33,16 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandReload implements CommandExec {
 
-    private final @NotNull Secuboid secuboid;
-    private final @NotNull MessageManagerService messageManagerService;
+    private final Secuboid secuboid;
+    private final MessageManagerService messageManagerService;
 
-    public CommandReload(@NotNull Secuboid secuboid, @NotNull MessageManagerService messageManagerService) {
+    public CommandReload(Secuboid secuboid, MessageManagerService messageManagerService) {
         this.secuboid = secuboid;
         this.messageManagerService = messageManagerService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         messageManagerService.broadcastMessage(MessageType.NORMAL, MessagePaths.generalPreReload());
         ((SecuboidImpl) secuboid).reload();
         messageManagerService.broadcastMessage(MessageType.NORMAL, MessagePaths.generalReload());

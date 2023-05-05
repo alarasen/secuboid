@@ -17,8 +17,6 @@
  */
 package app.secuboid.api.messages;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -31,9 +29,9 @@ import java.util.Objects;
  * @param args         the arguments to put in place of tags
  */
 public record MessagePath(
-        @NotNull String yamlPath,
-        @NotNull String[] replacedTags,
-        @NotNull Object[] args) {
+        String yamlPath,
+        String[] replacedTags,
+        Object[] args) {
 
     @Override
     public boolean equals(Object o) {

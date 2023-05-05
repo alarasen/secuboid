@@ -19,13 +19,58 @@ package app.secuboid.api.events;
 
 import app.secuboid.api.lands.Land;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * When a land is modified. When there is a change in a land.
  */
 public class LandModifyEvent extends LandEvent {
+
+    private static final HandlerList handlers = new HandlerList();
+    private final LandModifyReason landModifyReason;
+    private final Object newObject;
+
+    /**
+     * Instantiates a new land modify events.
+     *
+     * @param land             the land
+     * @param landModifyReason the land modify reason
+     * @param newObject        the new object
+     */
+    public LandModifyEvent(Land land, LandModifyReason landModifyReason, Object newObject) {
+        super(land);
+        this.newObject = newObject;
+        this.landModifyReason = landModifyReason;
+    }
+
+    @SuppressWarnings("java:S4144")
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    /**
+     * Gets the land modify reason.
+     *
+     * @return the land modify reason
+     */
+    public LandModifyReason getLandModifyReason() {
+        return landModifyReason;
+    }
+
+    /**
+     * Gets the new object. This object can be an Area, a playerContainer (for
+     * RESIDENT or owner change), a flag, a permission, a String for a name change.
+     *
+     * @return the new object
+     */
+
+    public Object getNewObject() {
+        return newObject;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
     /**
      * The land modify reason.
@@ -76,56 +121,5 @@ public class LandModifyEvent extends LandEvent {
          * The land rename.
          */
         RENAME
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-
-    private final LandModifyReason landModifyReason;
-    private final Object newObject;
-
-    /**
-     * Instantiates a new land modify events.
-     *
-     * @param land             the land
-     * @param landModifyReason the land modify reason
-     * @param newObject        the new object
-     */
-    public LandModifyEvent(@NotNull Land land, @NotNull LandModifyReason landModifyReason, @Nullable Object newObject) {
-        super(land);
-        this.newObject = newObject;
-        this.landModifyReason = landModifyReason;
-    }
-
-    /**
-     * Gets the land modify reason.
-     *
-     * @return the land modify reason
-     */
-    @NotNull
-    public LandModifyReason getLandModifyReason() {
-        return landModifyReason;
-    }
-
-    /**
-     * Gets the new object. This object can be an Area, a playerContainer (for
-     * RESIDENT or owner change), a flag, a permission, a String for a name change.
-     *
-     * @return the new object
-     */
-    @Nullable
-    public Object getNewObject() {
-        return newObject;
-    }
-
-    @Override
-    @NotNull
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @SuppressWarnings("java:S4144")
-    @NotNull
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }

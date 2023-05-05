@@ -25,7 +25,6 @@ import app.secuboid.api.players.PlayerInfoService;
 import app.secuboid.api.recipients.RecipientService;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.api.services.ServiceService;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Secuboid main api interface.
@@ -37,54 +36,54 @@ public interface Secuboid {
      *
      * @return the command service
      */
-    @NotNull CommandService getCommandService();
+    CommandService getCommandService();
 
     /**
      * Gets the flag types service.
      *
      * @return the flag types service
      */
-    @NotNull FlagTypeService getFlagTypeService();
+    FlagTypeService getFlagTypeService();
 
     /**
      * Gets the message service.
      *
      * @return the message service
      */
-    @NotNull MessageService getMessageService();
+    MessageService getMessageService();
 
     /**
      * Gets land  service.
      *
      * @return the lands service
      */
-    @NotNull LandService getLandService();
+    LandService getLandService();
 
     /**
      * Gets online player information service.
      *
      * @return the player information service
      */
-    @NotNull PlayerInfoService getPlayerInfoService();
+    PlayerInfoService getPlayerInfoService();
 
     /**
      * Gets the recipients service.
      *
      * @return the recipients service
      */
-    @NotNull RecipientService getRecipientService();
+    RecipientService getRecipientService();
 
     /**
      * Gets the registration service.
      *
      * @return the registration service
      */
-    @NotNull RegistrationService getRegistrationService();
+    RegistrationService getRegistrationService();
 
     /**
      * Gets the service manager.
      *
      * @return the service manager
      */
-    @NotNull ServiceService getServiceManager();
+    ServiceService getServiceManager();
 }

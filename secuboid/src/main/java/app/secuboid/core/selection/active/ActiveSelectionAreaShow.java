@@ -22,18 +22,16 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ActiveSelectionAreaShow extends ActiveSelectionAreaImpl {
 
-    private final @NotNull Player player;
-    private final @NotNull SelectionForm selectionForm;
+    private final Player player;
+    private final SelectionForm selectionForm;
 
-    private @Nullable SelectionScoreboard selectionScoreboard;
-    private @Nullable Location playerLastLoc;
+    private SelectionScoreboard selectionScoreboard;
+    private Location playerLastLoc;
 
-    public ActiveSelectionAreaShow(@NotNull Player player, @NotNull Area area, @NotNull SelectionForm selectionForm) {
+    public ActiveSelectionAreaShow(Player player, Area area, SelectionForm selectionForm) {
         super(player, area);
         this.player = player;
         this.selectionForm = selectionForm;
@@ -42,14 +40,14 @@ public class ActiveSelectionAreaShow extends ActiveSelectionAreaImpl {
     }
 
     @Override
-    public void init(@NotNull ScoreboardService scoreboardService) {
+    public void init(ScoreboardService scoreboardService) {
         playerLastLoc = player.getLocation();
         selectionForm.refreshVisualSelection();
         selectionScoreboard = new SelectionScoreboardArea(scoreboardService, player, area);
         selectionScoreboard.init();
     }
 
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

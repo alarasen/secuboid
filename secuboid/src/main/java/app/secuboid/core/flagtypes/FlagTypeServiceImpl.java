@@ -21,8 +21,6 @@ import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.flagtypes.FlagTypeService;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.core.registration.RegistrationServiceImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,11 +28,11 @@ import java.util.Set;
 
 public class FlagTypeServiceImpl implements FlagTypeService {
 
-    private final @NotNull RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
-    private final @NotNull Map<String, FlagType> nameToFlagType;
+    private final Map<String, FlagType> nameToFlagType;
 
-    public FlagTypeServiceImpl(@NotNull RegistrationService registrationService) {
+    public FlagTypeServiceImpl(RegistrationService registrationService) {
         this.registrationService = registrationService;
 
         nameToFlagType = new HashMap<>();
@@ -49,12 +47,12 @@ public class FlagTypeServiceImpl implements FlagTypeService {
     }
 
     @Override
-    public @Nullable FlagType getFlagType(String flagName) {
+    public FlagType getFlagType(String flagName) {
         return nameToFlagType.get(flagName);
     }
 
     @Override
-    public @NotNull Set<String> getFlagTypeNames() {
+    public Set<String> getFlagTypeNames() {
         return nameToFlagType.keySet();
     }
 }

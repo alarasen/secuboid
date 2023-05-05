@@ -18,8 +18,6 @@
 package app.secuboid.api.storage;
 
 import app.secuboid.api.storage.rows.Row;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.Set;
@@ -31,21 +29,13 @@ import java.util.function.Consumer;
 public interface StorageManager {
 
     /**
-     * Bi function for SQL.
-     */
-    @FunctionalInterface
-    public interface BiFunctionSQL<T, U, R> {
-        @NotNull R apply(@NotNull T t, @NotNull U u) throws SQLException;
-    }
-
-    /**
      * Get (select) multiple values sync.
      *
      * @param classRow the row class
      * @param <R>      a row
      * @return the result set
      */
-    <R extends Row> @NotNull Set<R> selectAllSync(@NotNull Class<R> classRow);
+    <R extends Row> Set<R> selectAllSync(Class<R> classRow);
 
     /**
      * Insert to the database sync.
@@ -53,7 +43,7 @@ public interface StorageManager {
      * @param row the row
      * @param <R> a row
      */
-    <R extends Row> @Nullable R insertSync(@NotNull R row);
+    <R extends Row> R insertSync(R row);
 
     /**
      * Insert to the database.
@@ -62,7 +52,7 @@ public interface StorageManager {
      * @param callback the callback or null
      * @param <R>      a row
      */
-    <R extends Row> void insert(@NotNull R row, @Nullable Consumer<R> callback);
+    <R extends Row> void insert(R row, Consumer<R> callback);
 
     /**
      * Update to the database.
@@ -71,7 +61,7 @@ public interface StorageManager {
      * @param callback the callback or null
      * @param <R>      a row
      */
-    <R extends Row> void update(@NotNull R row, @Nullable Consumer<R> callback);
+    <R extends Row> void update(R row, Consumer<R> callback);
 
     /**
      * Delete from the database.
@@ -80,5 +70,13 @@ public interface StorageManager {
      * @param callback the callback or null
      * @param <R>      a row
      */
-    <R extends Row> void delete(@NotNull R row, @Nullable Consumer<R> callback);
+    <R extends Row> void delete(R row, Consumer<R> callback);
+
+    /**
+     * Bi function for SQL.
+     */
+    @FunctionalInterface
+    public interface BiFunctionSQL<T, U, R> {
+        R apply(T t, U u) throws SQLException;
+    }
 }

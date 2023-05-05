@@ -20,11 +20,10 @@ package app.secuboid.core.selection.active;
 
 import app.secuboid.api.selection.active.ActiveSelectionNothing;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionNothingImpl extends ActiveSelectionImpl implements ActiveSelectionNothing {
 
-    public ActiveSelectionNothingImpl(@NotNull CommandSender commandSender) {
+    public ActiveSelectionNothingImpl(CommandSender commandSender) {
         super(commandSender);
     }
 }

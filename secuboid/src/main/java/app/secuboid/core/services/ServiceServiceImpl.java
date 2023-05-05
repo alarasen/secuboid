@@ -23,7 +23,6 @@ import app.secuboid.api.services.Service;
 import app.secuboid.api.services.ServiceService;
 import app.secuboid.core.registration.RegistrationServiceImpl;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +34,9 @@ import static java.util.Collections.reverse;
 
 public class ServiceServiceImpl implements ServiceService {
 
-    private final @NotNull RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
-    public ServiceServiceImpl(@NotNull RegistrationService registrationService) {
+    public ServiceServiceImpl(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
 
@@ -58,21 +57,21 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public void onLoad(@NotNull Plugin plugin) {
+    public void onLoad(Plugin plugin) {
         Map<Plugin, List<Service>> pluginToServices = ((RegistrationServiceImpl) registrationService).getPluginToServices();
         List<Service> services = pluginToServices.get(plugin);
         executeMethods(services, Service::onLoad);
     }
 
     @Override
-    public void onEnable(@NotNull Plugin plugin) {
+    public void onEnable(Plugin plugin) {
         Map<Plugin, List<Service>> pluginToServices = ((RegistrationServiceImpl) registrationService).getPluginToServices();
         List<Service> services = pluginToServices.get(plugin);
         executeMethods(services, s -> s.onEnable(true));
     }
 
     @Override
-    public void onDisable(@NotNull Plugin plugin) {
+    public void onDisable(Plugin plugin) {
         Map<Plugin, List<Service>> pluginToServices = ((RegistrationServiceImpl) registrationService).getPluginToServices();
         List<Service> services = pluginToServices.get(plugin);
         List<Service> servicesReverse = new ArrayList<>(services);
@@ -80,7 +79,7 @@ public class ServiceServiceImpl implements ServiceService {
         executeMethods(servicesReverse, s -> s.onDisable(false));
     }
 
-    private void executeMethods(@NotNull List<Service> services, @NotNull Consumer<Service> consumer) {
+    private void executeMethods(List<Service> services, Consumer<Service> consumer) {
         services.forEach(consumer);
     }
 }

@@ -24,15 +24,14 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
-import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.event.EventPriority.MONITOR;
 
 public class WorldListener implements Listener {
 
-    private final @NotNull LandService landService;
+    private final LandService landService;
 
-    public WorldListener(@NotNull LandService landService) {
+    public WorldListener(LandService landService) {
         this.landService = landService;
     }
 

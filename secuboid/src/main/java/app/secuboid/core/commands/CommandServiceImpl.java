@@ -27,7 +27,6 @@ import app.secuboid.core.commands.exec.CommandPage;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.registration.RegistrationServiceImpl;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,14 +41,14 @@ public class CommandServiceImpl implements CommandService {
 
     private static final int COMMANDS_SEPARATOR = ' ';
 
-    private final @NotNull ChatPageService chatPageService;
-    private final @NotNull RegistrationService registrationService;
+    private final ChatPageService chatPageService;
+    private final RegistrationService registrationService;
 
-    private final @NotNull Map<String, CommandContainer> nameToCommandContainer;
-    private final @NotNull Map<Class<? extends CommandExec>, CommandContainer> classToCommandContainer;
+    private final Map<String, CommandContainer> nameToCommandContainer;
+    private final Map<Class<? extends CommandExec>, CommandContainer> classToCommandContainer;
 
-    public CommandServiceImpl(@NotNull ChatPageService chatPageService,
-                              @NotNull RegistrationService registrationService) {
+    public CommandServiceImpl(ChatPageService chatPageService,
+                              RegistrationService registrationService) {
         this.chatPageService = chatPageService;
         this.registrationService = registrationService;
 
@@ -84,14 +83,14 @@ public class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public void executeCommandClass(@NotNull Class<? extends CommandExec> clazz,
-                                    @NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void executeCommandClass(Class<? extends CommandExec> clazz,
+                                    CommandSenderInfo commandSenderInfo, String[] subArgs) {
 
         CommandContainer commandContainer = classToCommandContainer.get(clazz);
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
 
-    void executeCommandName(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] args) {
+    void executeCommandName(CommandSenderInfo commandSenderInfo, String[] args) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (args.length == 0) {
@@ -127,8 +126,8 @@ public class CommandServiceImpl implements CommandService {
         executeCommand(commandContainer, commandSenderInfo, subArgs);
     }
 
-    private void executeCommand(@NotNull CommandContainer commandContainer,
-                                @NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    private void executeCommand(CommandContainer commandContainer,
+                                CommandSenderInfo commandSenderInfo, String[] subArgs) {
         CommandExec commandExec = commandContainer.commandExec();
 
         if (!(commandExec instanceof CommandPage)) {
@@ -142,7 +141,7 @@ public class CommandServiceImpl implements CommandService {
         commandExec.commandExec(commandSenderInfo, subArgs);
     }
 
-    private void registerCommand(@NotNull CommandExec commandExec, @NotNull CommandRegistered commandRegistered) {
+    private void registerCommand(CommandExec commandExec, CommandRegistered commandRegistered) {
         // TODO Retreve flags
 
         String commandName = commandRegistered.name();

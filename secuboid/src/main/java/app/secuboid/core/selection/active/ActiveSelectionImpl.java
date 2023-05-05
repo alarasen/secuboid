@@ -20,21 +20,20 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.selection.active.ActiveSelection;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class ActiveSelectionImpl implements ActiveSelection {
 
-    protected final @NotNull CommandSender commandSender;
+    protected final CommandSender commandSender;
 
-    protected ActiveSelectionImpl(@NotNull CommandSender commandSender) {
+    protected ActiveSelectionImpl(CommandSender commandSender) {
         this.commandSender = commandSender;
     }
 
-    public final @NotNull CommandSender getCommandSender() {
+    public final CommandSender getCommandSender() {
         return commandSender;
     }
 
-    public void init(@NotNull ScoreboardService scoreboardService) {
+    public void init(ScoreboardService scoreboardService) {
         // Override if needed
     }
 

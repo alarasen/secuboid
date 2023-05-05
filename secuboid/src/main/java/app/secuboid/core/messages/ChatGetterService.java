@@ -22,7 +22,6 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.services.Service;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -33,11 +32,11 @@ import static java.util.logging.Level.SEVERE;
 
 public class ChatGetterService implements Service {
 
-    private final @NotNull JavaPlugin javaPlugin;
-    private final @NotNull BukkitScheduler scheduler;
-    private final @NotNull ConcurrentMap<CommandSenderInfo, Consumer<String>> commandSenderInfoToCallback;
+    private final JavaPlugin javaPlugin;
+    private final BukkitScheduler scheduler;
+    private final ConcurrentMap<CommandSenderInfo, Consumer<String>> commandSenderInfoToCallback;
 
-    public ChatGetterService(@NotNull JavaPlugin javaPlugin, @NotNull BukkitScheduler scheduler) {
+    public ChatGetterService(JavaPlugin javaPlugin, BukkitScheduler scheduler) {
         this.javaPlugin = javaPlugin;
         this.scheduler = scheduler;
         commandSenderInfoToCallback = new ConcurrentHashMap<>();
@@ -50,16 +49,16 @@ public class ChatGetterService implements Service {
         }
     }
 
-    public void remove(@NotNull CommandSenderInfo commandSenderInfo) {
+    public void remove(CommandSenderInfo commandSenderInfo) {
         commandSenderInfoToCallback.remove(commandSenderInfo);
     }
 
 
-    public void put(@NotNull CommandSenderInfo commandSenderInfo, @NotNull Consumer<String> callback) {
+    public void put(CommandSenderInfo commandSenderInfo, Consumer<String> callback) {
         this.commandSenderInfoToCallback.put(commandSenderInfo, callback);
     }
 
-    public boolean checkAnswerAndCallBackIfNeeded(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String message) {
+    public boolean checkAnswerAndCallBackIfNeeded(CommandSenderInfo commandSenderInfo, String message) {
         Consumer<String> callback = this.commandSenderInfoToCallback.remove(commandSenderInfo);
 
         if (callback != null) {

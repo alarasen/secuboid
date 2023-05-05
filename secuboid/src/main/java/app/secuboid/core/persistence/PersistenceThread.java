@@ -21,8 +21,6 @@ package app.secuboid.core.persistence;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.hibernate.Session;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +36,15 @@ public class PersistenceThread extends Thread {
 
     private static final String THREAD_NAME = "Secuboid PersistenceSessionService";
 
-    private final @NotNull JavaPlugin javaPlugin;
-    private final @NotNull BukkitScheduler scheduler;
-    private final @NotNull PersistenceSessionService persistenceSessionService;
-    private final @NotNull BlockingQueue<PersistenceElement<?>> queue;
-    private final @NotNull BlockingQueue<Object> threadSyncQueue;
+    private final JavaPlugin javaPlugin;
+    private final BukkitScheduler scheduler;
+    private final PersistenceSessionService persistenceSessionService;
+    private final BlockingQueue<PersistenceElement<?>> queue;
+    private final BlockingQueue<Object> threadSyncQueue;
 
 
-    PersistenceThread(@NotNull JavaPlugin javaPlugin, @NotNull BukkitScheduler scheduler,
-                      @NotNull PersistenceSessionService persistenceSessionService) {
+    PersistenceThread(JavaPlugin javaPlugin, BukkitScheduler scheduler,
+                      PersistenceSessionService persistenceSessionService) {
         this.javaPlugin = javaPlugin;
         this.scheduler = scheduler;
         this.persistenceSessionService = persistenceSessionService;
@@ -67,14 +65,14 @@ public class PersistenceThread extends Thread {
         }
     }
 
-    <R> void offer(@NotNull PersistenceElement<R> element) {
+    <R> void offer(PersistenceElement<R> element) {
         if (!queue.offer(element)) {
             log().severe("The persistenceSessionService queue is full. Possible data loss!");
         }
     }
 
     @SuppressWarnings("unchecked")
-    <R> @Nullable R take() {
+    <R> R take() {
         Object result;
         try {
             result = threadSyncQueue.take();
@@ -115,7 +113,7 @@ public class PersistenceThread extends Thread {
         log().info("Flushing the persistenceSessionService queue done!");
     }
 
-    private <R> void process(@NotNull PersistenceElement<R> element) {
+    private <R> void process(PersistenceElement<R> element) {
         Function<Session, R> sessionFunction = element.sessionFunction();
 
         R result;
@@ -133,7 +131,7 @@ public class PersistenceThread extends Thread {
         }
     }
 
-    private <R> void callMainThread(@NotNull Consumer<R> callback, R result) {
+    private <R> void callMainThread(Consumer<R> callback, R result) {
         scheduler.callSyncMethod(javaPlugin, () -> {
             try {
                 callback.accept(result);

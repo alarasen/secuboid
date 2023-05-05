@@ -18,8 +18,6 @@
 package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.areas.Area;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Used for callback method when a land is created or modified. The land will be
@@ -29,5 +27,5 @@ import org.jetbrains.annotations.Nullable;
  * @param areaLand the land if success
  * @param area     the area created if success
  */
-public record LandResult(@NotNull LandResultCode code, @Nullable AreaLand areaLand, @Nullable Area area) {
+public record LandResult(LandResultCode code, AreaLand areaLand, Area area) {
 }

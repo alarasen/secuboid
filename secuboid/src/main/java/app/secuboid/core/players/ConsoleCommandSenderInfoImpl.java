@@ -21,13 +21,12 @@ import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.selection.SenderSelectionImpl;
 import org.bukkit.command.ConsoleCommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implements ConsoleCommandSenderInfo {
 
-    private final @NotNull SenderSelectionImpl selection;
+    private final SenderSelectionImpl selection;
 
-    public ConsoleCommandSenderInfoImpl(@NotNull ConsoleCommandSender consoleCommandSender) {
+    public ConsoleCommandSenderInfoImpl(ConsoleCommandSender consoleCommandSender) {
         super(consoleCommandSender);
         selection = new SenderSelectionImpl(consoleCommandSender);
     }
@@ -38,7 +37,7 @@ public class ConsoleCommandSenderInfoImpl extends CommandSenderInfoImpl implemen
     }
 
     @Override
-    public @NotNull SenderSelection getSelection() {
+    public SenderSelection getSelection() {
         return selection;
     }
 }

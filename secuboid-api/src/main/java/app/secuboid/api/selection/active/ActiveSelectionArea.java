@@ -19,7 +19,6 @@
 package app.secuboid.api.selection.active;
 
 import app.secuboid.api.lands.areas.Area;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an active selection of an area.
@@ -31,5 +30,5 @@ public interface ActiveSelectionArea extends ActiveSelectionLandComponent {
      *
      * @return the area
      */
-    @NotNull Area getArea();
+    Area getArea();
 }

@@ -23,7 +23,6 @@ import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.items.SecuboidToolService;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "tool",
@@ -31,14 +30,14 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandTool implements CommandExec {
 
-    private final @NotNull SecuboidToolService secuboidToolService;
+    private final SecuboidToolService secuboidToolService;
 
-    public CommandTool(@NotNull SecuboidToolService secuboidToolService) {
+    public CommandTool(SecuboidToolService secuboidToolService) {
         this.secuboidToolService = secuboidToolService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         Player player = ((PlayerInfo) commandSenderInfo).getPlayer();
         secuboidToolService.give(player);
     }

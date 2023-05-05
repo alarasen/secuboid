@@ -19,7 +19,6 @@
 package app.secuboid.api.selection.active;
 
 import app.secuboid.api.lands.WorldLand;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an active selection of an area creation or modify.
@@ -31,5 +30,5 @@ public interface ActiveSelectionModify extends ActiveSelection {
      *
      * @return the world land
      */
-    @NotNull WorldLand getWorldLand();
+    WorldLand getWorldLand();
 }

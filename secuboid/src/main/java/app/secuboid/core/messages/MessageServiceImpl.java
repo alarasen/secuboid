@@ -21,21 +21,20 @@ package app.secuboid.core.messages;
 import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageService;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MessageServiceImpl implements MessageService {
 
-    private final @NotNull Map<Plugin, MessageManagerService> pluginToMessageManager;
+    private final Map<Plugin, MessageManagerService> pluginToMessageManager;
 
     public MessageServiceImpl() {
         pluginToMessageManager = new HashMap<>();
     }
 
     @Override
-    public @NotNull MessageManagerService grab(@NotNull Plugin plugin) {
+    public MessageManagerService grab(Plugin plugin) {
         return pluginToMessageManager.computeIfAbsent(plugin, MessageManagerServiceImpl::new);
     }
 }

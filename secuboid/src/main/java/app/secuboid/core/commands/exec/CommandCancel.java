@@ -25,21 +25,20 @@ import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "cancel"
 )
 public class CommandCancel implements CommandExec {
 
-    private final @NotNull MessageManagerService messageManagerService;
+    private final MessageManagerService messageManagerService;
 
-    public CommandCancel(@NotNull MessageManagerService messageManagerService) {
+    public CommandCancel(MessageManagerService messageManagerService) {
         this.messageManagerService = messageManagerService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         SenderSelection senderSelection = commandSenderInfo.getSelection();
         CommandSender sender = commandSenderInfo.sender();
 

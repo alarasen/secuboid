@@ -17,18 +17,16 @@
  */
 package app.secuboid.api.exceptions;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * When there is a problem with a creation of a recipientExec.
  */
 public class RecipientException extends Exception {
 
-    public RecipientException(@NotNull String message) {
+    public RecipientException(String message) {
         super(message);
     }
 
-    public RecipientException(@NotNull String message, @NotNull Throwable cause) {
+    public RecipientException(String message, Throwable cause) {
         super(message, cause);
     }
 }

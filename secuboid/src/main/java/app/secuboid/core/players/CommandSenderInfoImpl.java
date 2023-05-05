@@ -19,24 +19,23 @@ package app.secuboid.core.players;
 
 import app.secuboid.api.players.CommandSenderInfo;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class CommandSenderInfoImpl implements CommandSenderInfo {
 
-    private final @NotNull CommandSender sender;
+    private final CommandSender sender;
 
 
-    protected CommandSenderInfoImpl(@NotNull CommandSender sender) {
+    protected CommandSenderInfoImpl(CommandSender sender) {
         this.sender = sender;
     }
 
     @Override
-    public @NotNull CommandSender sender() {
+    public CommandSender sender() {
         return sender;
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return sender.getName();
     }
 }

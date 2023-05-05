@@ -18,14 +18,11 @@
 
 package app.secuboid.api.recipients;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Used for callback method when a recipientExec is created.
  *
  * @param code          the recipientExec result code
  * @param recipientExec the recipientExec if success
  */
-public record RecipientResult(@NotNull RecipientResultCode code, @Nullable RecipientExec recipientExec) {
+public record RecipientResult(RecipientResultCode code, RecipientExec recipientExec) {
 }

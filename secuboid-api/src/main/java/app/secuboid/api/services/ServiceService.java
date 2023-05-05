@@ -19,7 +19,6 @@
 package app.secuboid.api.services;
 
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Use those methods to load, enable and disable your services on normal Bukkit start, shutdown and reload (not
@@ -32,19 +31,19 @@ public interface ServiceService extends Service {
      *
      * @param plugin the Bukkit plugin
      */
-    void onLoad(@NotNull Plugin plugin);
+    void onLoad(Plugin plugin);
 
     /**
      * Enable the services. Every service are enabled in registration order.
      *
      * @param plugin the Bukkit plugin
      */
-    void onEnable(@NotNull Plugin plugin);
+    void onEnable(Plugin plugin);
 
     /**
      * Disable the services. Every service are disabled in REVERSE registration order.
      *
      * @param plugin the Bukkit plugin
      */
-    void onDisable(@NotNull Plugin plugin);
+    void onDisable(Plugin plugin);
 }

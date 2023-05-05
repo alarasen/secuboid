@@ -21,8 +21,6 @@ package app.secuboid.core.thread;
 import app.secuboid.api.thread.QueueProcessor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -41,8 +39,8 @@ class QueueThreadRun<T, R> extends Thread {
     private final QueueProcessor<T, R> queueProcessor;
     private final BlockingQueue<QueueThreadElement<T, R>> taskQueue;
 
-    QueueThreadRun(@NotNull Plugin plugin, @NotNull QueueProcessor<T, R> queueProcessor,
-                   @NotNull BlockingQueue<QueueThreadElement<T, R>> taskQueue) {
+    QueueThreadRun(Plugin plugin, QueueProcessor<T, R> queueProcessor,
+                   BlockingQueue<QueueThreadElement<T, R>> taskQueue) {
         this.plugin = plugin;
         this.queueProcessor = queueProcessor;
         this.taskQueue = taskQueue;
@@ -78,7 +76,7 @@ class QueueThreadRun<T, R> extends Thread {
         }
     }
 
-    private @Nullable R processElement(@NotNull QueueThreadElement<T, R> element) {
+    private R processElement(QueueThreadElement<T, R> element) {
         T t = element.t();
         Consumer<R> callback = element.callback();
 
@@ -108,7 +106,7 @@ class QueueThreadRun<T, R> extends Thread {
         return r;
     }
 
-    private @NotNull Set<R> processElements(@NotNull QueueThreadElement<T, R> element) {
+    private Set<R> processElements(QueueThreadElement<T, R> element) {
         T t = element.t();
 
         if (t == null) {

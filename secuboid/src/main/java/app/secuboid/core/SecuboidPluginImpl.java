@@ -19,11 +19,10 @@ package app.secuboid.core;
 
 import app.secuboid.api.Secuboid;
 import app.secuboid.api.SecuboidPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPluginImpl extends SecuboidPlugin {
 
-    private final @NotNull SecuboidImpl secuboidImpl;
+    private final SecuboidImpl secuboidImpl;
 
     public SecuboidPluginImpl() {
         secuboidImpl = new SecuboidImpl(this);
@@ -47,7 +46,7 @@ public class SecuboidPluginImpl extends SecuboidPlugin {
     }
 
     @Override
-    public @NotNull Secuboid getSecuboid() {
+    public Secuboid getSecuboid() {
         return secuboidImpl;
     }
 }

@@ -18,8 +18,6 @@
 package app.secuboid.api.thread;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -34,7 +32,8 @@ public interface QueueProcessor<T, R> {
      * @param t the t
      * @return the value for the return (or callback)
      */
-    @Nullable R process(@NotNull T t);
+
+    R process(T t);
 
     /**
      * Process (set) and what it should execute inside the loop.
@@ -42,7 +41,7 @@ public interface QueueProcessor<T, R> {
      * @param t the t
      * @return the value for the return (or callback)
      */
-    default @NotNull Set<R> processMultiple(@NotNull T t) {
+    default Set<R> processMultiple(T t) {
         throw new SecuboidRuntimeException("processMultiple Not implemented!");
     }
 }

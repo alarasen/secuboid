@@ -24,13 +24,11 @@ import app.secuboid.core.utilities.PlayerUtil;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SelectionFormCuboid extends SelectionForm {
 
-    public SelectionFormCuboid(@NotNull CuboidAreaForm cuboidAreaForm, @NotNull Player player,
-                               boolean isResizeable, @Nullable Land originLand, @Nullable Area originArea) {
+    public SelectionFormCuboid(CuboidAreaForm cuboidAreaForm, Player player,
+                               boolean isResizeable, Land originLand, Area originArea) {
         super(cuboidAreaForm, player, isResizeable, originLand, originArea);
     }
 
@@ -126,7 +124,7 @@ public class SelectionFormCuboid extends SelectionForm {
         }
     }
 
-    private void drawVisualRelative(@NotNull Location newLoc) {
+    private void drawVisualRelative(Location newLoc) {
         // LandPermissionsFlags testCuboidarea =
         // secuboid.getLands().getPermissionsFlags(newLoc);
         // TODO Collision

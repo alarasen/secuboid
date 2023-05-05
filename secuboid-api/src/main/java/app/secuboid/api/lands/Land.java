@@ -18,8 +18,6 @@
 package app.secuboid.api.lands;
 
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -33,7 +31,7 @@ public interface Land extends LandComponent {
      *
      * @return the world land
      */
-    @NotNull WorldLand getWorldLand();
+    WorldLand getWorldLand();
 
     /**
      * Check if the location is inside the land. This method does not check for Y
@@ -51,7 +49,7 @@ public interface Land extends LandComponent {
      * @param loc the location
      * @return true if inside the land
      */
-    boolean isLocationInside(@NotNull Location loc);
+    boolean isLocationInside(Location loc);
 
     /**
      * Check if the location is inside the land.
@@ -69,7 +67,7 @@ public interface Land extends LandComponent {
      * @param Land the area land
      * @return true, if is descendants
      */
-    boolean isDescendantsOf(@NotNull Land Land);
+    boolean isDescendantsOf(Land Land);
 
     /**
      * Gets the child.
@@ -77,12 +75,12 @@ public interface Land extends LandComponent {
      * @param name the land name
      * @return the child
      */
-    @Nullable AreaLand getChild(@NotNull String name);
+    AreaLand getChild(String name);
 
     /**
      * Gets the children.
      *
      * @return the children
      */
-    @NotNull Collection<AreaLand> getChildren();
+    Collection<AreaLand> getChildren();
 }

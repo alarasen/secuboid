@@ -20,15 +20,14 @@ package app.secuboid.core.commands;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.registration.CommandRegistered;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;
 
 record CommandContainer(
-        @NotNull CommandExec commandExec,
-        @NotNull CommandRegistered commandRegistered,
-        @NotNull Set<FlagType> FlagTypes,
-        @NotNull Map<String, CommandContainer> nameToSubCommand
+        CommandExec commandExec,
+        CommandRegistered commandRegistered,
+        Set<FlagType> FlagTypes,
+        Map<String, CommandContainer> nameToSubCommand
 ) {
 }

@@ -21,20 +21,19 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.selection.active.ActiveSelectionLandComponent;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class ActiveSelectionLandComponentImpl extends ActiveSelectionImpl implements ActiveSelectionLandComponent {
 
-    protected final @NotNull LandComponent landComponent;
+    protected final LandComponent landComponent;
 
-    protected ActiveSelectionLandComponentImpl(@NotNull CommandSender commandSender,
-                                               @NotNull LandComponent landComponent) {
+    protected ActiveSelectionLandComponentImpl(CommandSender commandSender,
+                                               LandComponent landComponent) {
         super(commandSender);
         this.landComponent = landComponent;
     }
 
     @Override
-    public @NotNull LandComponent getLandComponent() {
+    public LandComponent getLandComponent() {
         return landComponent;
     }
 }

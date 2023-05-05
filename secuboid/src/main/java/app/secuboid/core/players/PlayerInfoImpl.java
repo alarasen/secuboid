@@ -27,27 +27,25 @@ import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.selection.PlayerSelectionImpl;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo {
 
-    private final @NotNull Player player;
-    private final @NotNull PlayerSelection playerSelection;
+    private final Player player;
+    private final PlayerSelection playerSelection;
 
     private boolean adminMode;
 
     private long lastUpdateTimeMillis;
-    private @NotNull Location lastLocation;
-    private @Nullable Area area;
-    private @NotNull Land land;
-    private @NotNull LocationPath locationPath;
+    private Location lastLocation;
+    private Area area;
+    private Land land;
+    private LocationPath locationPath;
     private boolean isTpCancel;
 
-    PlayerInfoImpl(@NotNull Player player, @NotNull Location lastLocation, @Nullable Area area, @NotNull Land land,
-                   @NotNull LocationPath locationPath) {
+    PlayerInfoImpl(Player player, Location lastLocation, Area area, Land land,
+                   LocationPath locationPath) {
         super(player);
         this.player = player;
         playerSelection = new PlayerSelectionImpl(this);
@@ -61,8 +59,8 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         isTpCancel = false;
     }
 
-    public void updatePlayerPosition(@NotNull Location lastLocation, @Nullable Area area, @NotNull Land land,
-                                     @NotNull LocationPath locationPath) {
+    public void updatePlayerPosition(Location lastLocation, Area area, Land land,
+                                     LocationPath locationPath) {
         this.lastLocation = lastLocation;
         this.area = area;
         this.land = land;
@@ -72,12 +70,12 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     @Override
-    public @NotNull UUID getUUID() {
+    public UUID getUUID() {
         return player.getUniqueId();
     }
 
@@ -115,32 +113,32 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public @Nullable Area getArea() {
+    public Area getArea() {
         return area;
     }
 
     @Override
-    public @NotNull Land getLand() {
+    public Land getLand() {
         return land;
     }
 
     @Override
-    public @NotNull LocationPath getLocationPath() {
+    public LocationPath getLocationPath() {
         return locationPath;
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand() {
+    public WorldLand getWorldLand() {
         return land.getWorldLand();
     }
 
     @Override
-    public @NotNull SenderSelection getSelection() {
+    public SenderSelection getSelection() {
         return playerSelection;
     }
 
     @Override
-    public @NotNull PlayerSelection getPlayerSelection() {
+    public PlayerSelection getPlayerSelection() {
         return playerSelection;
     }
 }

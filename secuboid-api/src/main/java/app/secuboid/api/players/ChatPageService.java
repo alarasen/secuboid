@@ -19,7 +19,6 @@
 package app.secuboid.api.players;
 
 import app.secuboid.api.services.Service;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Chat page service for a command output.
@@ -33,7 +32,7 @@ public interface ChatPageService extends Service {
      * @param subject           the subject
      * @param text              the text
      */
-    void show(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String subject, @NotNull String text);
+    void show(CommandSenderInfo commandSenderInfo, String subject, String text);
 
     /**
      * Shows a page to the player or the console sender. If the page does not exist, an error message is sent to the
@@ -42,7 +41,7 @@ public interface ChatPageService extends Service {
      * @param commandSenderInfo the command sender info
      * @param pageNumber        the page number to show or an error message
      */
-    void show(@NotNull CommandSenderInfo commandSenderInfo, int pageNumber);
+    void show(CommandSenderInfo commandSenderInfo, int pageNumber);
 
     /**
      * Gets the total number of pages for the last command or 0 if there is no page stored.
@@ -50,12 +49,12 @@ public interface ChatPageService extends Service {
      * @param commandSenderInfo the command sender info
      * @return the total number of pages or 0 if no page is stored
      */
-    int getTotalPages(@NotNull CommandSenderInfo commandSenderInfo);
+    int getTotalPages(CommandSenderInfo commandSenderInfo);
 
     /**
      * Removes any page for this command sender.
      *
      * @param commandSenderInfo the command sender info
      */
-    void remove(@NotNull CommandSenderInfo commandSenderInfo);
+    void remove(CommandSenderInfo commandSenderInfo);
 }

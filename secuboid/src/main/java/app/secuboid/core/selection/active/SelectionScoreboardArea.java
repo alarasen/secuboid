@@ -23,13 +23,12 @@ import app.secuboid.api.messages.MessageType;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 class SelectionScoreboardArea extends SelectionScoreboard {
 
-    private final @NotNull Area area;
+    private final Area area;
 
-    SelectionScoreboardArea(@NotNull ScoreboardService scoreboardService, @NotNull Player player, @NotNull Area area) {
+    SelectionScoreboardArea(ScoreboardService scoreboardService, Player player, Area area) {
         super(scoreboardService, player);
         this.area = area;
     }

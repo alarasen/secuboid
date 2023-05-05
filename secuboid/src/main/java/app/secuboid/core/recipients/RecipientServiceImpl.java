@@ -26,8 +26,6 @@ import app.secuboid.api.recipients.RecipientType;
 import app.secuboid.api.registration.RecipientRegistered;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.core.registration.RegistrationServiceImpl;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,12 +41,12 @@ public class RecipientServiceImpl implements RecipientService {
 
     private final RegistrationService registrationService;
 
-    private final @NotNull Map<String, RecipientType> nameLowerToType;
+    private final Map<String, RecipientType> nameLowerToType;
 
-    private final @NotNull Map<RecipientType, RecipientRegistered> typeToAnnotation;
-    private final @NotNull Map<RecipientType, Map<String, RecipientExec>> typeToValueToRecipient;
+    private final Map<RecipientType, RecipientRegistered> typeToAnnotation;
+    private final Map<RecipientType, Map<String, RecipientExec>> typeToValueToRecipient;
 
-    public RecipientServiceImpl(@NotNull RegistrationService registrationService) {
+    public RecipientServiceImpl(RegistrationService registrationService) {
         this.registrationService = registrationService;
 
         nameLowerToType = new HashMap<>();
@@ -65,7 +63,7 @@ public class RecipientServiceImpl implements RecipientService {
         loadRecipients();
     }
 
-    public void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<RecipientResult> callback) {
+    public void grab(String name, String value, Consumer<RecipientResult> callback) {
         String nameLower = name.toLowerCase();
 
         // Pre-validation
@@ -125,7 +123,7 @@ public class RecipientServiceImpl implements RecipientService {
 //        }
     }
 
-//    private void insertCallback(@NotNull RecipientRow recipientRow, @Nullable Consumer<RecipientResult> callback) {
+//    private void insertCallback(RecipientRow recipientRow, Consumer<RecipientResult> callback) {
 //        RecipientResult result = grabInstanceWithResult(recipientRow.id(),
 //                recipientRow.shortName(), recipientRow.value());
 //
@@ -134,7 +132,7 @@ public class RecipientServiceImpl implements RecipientService {
 //        }
 //    }
 //
-//    private void loadRecipientRow(@NotNull RecipientRow recipientRow) {
+//    private void loadRecipientRow(RecipientRow recipientRow) {
 //        RecipientResult result = grabInstanceWithResult(recipientRow.id(),
 //                recipientRow.shortName(), recipientRow.value());
 //        RecipientResultCode code = result.code();
@@ -146,8 +144,8 @@ public class RecipientServiceImpl implements RecipientService {
 //        }
 //    }
 
-    private @NotNull RecipientResult grabInstanceWithResult(long id, @NotNull String nameLower,
-                                                            @Nullable String value) {
+    private RecipientResult grabInstanceWithResult(long id, String nameLower,
+                                                   String value) {
         RecipientType type = nameLowerToType.get(nameLower);
 
         if (type == null) {
@@ -195,8 +193,8 @@ public class RecipientServiceImpl implements RecipientService {
     }
 
     @SuppressWarnings("java:S2139")
-    private @NotNull RecipientExec createInstance(RecipientType type, long id,
-                                                  @Nullable String value) throws RecipientException {
+    private RecipientExec createInstance(RecipientType type, long id,
+                                         String value) throws RecipientException {
 //        Class<? extends RecipientExec> clazz = type.clazz();
 //        try {
 //            Method newInstance = clazz.getMethod("newInstance", RecipientType.class, long.class, String.class);
@@ -219,13 +217,13 @@ public class RecipientServiceImpl implements RecipientService {
         return null;
     }
 
-    private void typeToValueToRecipientAdd(@NotNull RecipientExec recipientExec) {
+    private void typeToValueToRecipientAdd(RecipientExec recipientExec) {
         //typeToValueToRecipient.computeIfAbsent(recipientExec.type(), k -> new HashMap<>()).put(recipientExec
         // .getValue(), recipientExec);
     }
 
-    private @Nullable RecipientExec typeToValueToRecipientGet(@NotNull RecipientType type,
-                                                              @Nullable String modifiedValue) {
+    private RecipientExec typeToValueToRecipientGet(RecipientType type,
+                                                    String modifiedValue) {
         Map<String, RecipientExec> valueToRecipient = typeToValueToRecipient.get(type);
         if (valueToRecipient != null) {
             return valueToRecipient.get(modifiedValue);

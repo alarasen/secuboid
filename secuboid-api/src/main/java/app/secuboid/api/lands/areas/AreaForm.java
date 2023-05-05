@@ -17,10 +17,8 @@
  */
 package app.secuboid.api.lands.areas;
 
-import org.bukkit.Location;
-
 import app.secuboid.api.messages.MessagePath;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.Location;
 
 /**
  * Represents an area form.
@@ -90,5 +88,5 @@ public interface AreaForm {
     /**
      * @see Area#getMessagePath()
      */
-    @NotNull MessagePath getMessagePath();
+    MessagePath getMessagePath();
 }

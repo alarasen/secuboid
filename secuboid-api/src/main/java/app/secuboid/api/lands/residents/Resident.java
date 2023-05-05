@@ -19,7 +19,6 @@ package app.secuboid.api.lands.residents;
 
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.recipients.RecipientExec;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a resident.
@@ -29,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * @param level         the level
  */
 public record Resident(
-        @NotNull LandComponent landComponent,
-        @NotNull RecipientExec recipientExec,
+        LandComponent landComponent,
+        RecipientExec recipientExec,
         int level) {
 }

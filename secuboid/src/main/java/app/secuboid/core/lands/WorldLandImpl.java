@@ -21,28 +21,27 @@ import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 
 public class WorldLandImpl extends LandImpl implements WorldLand {
 
-    private final @NotNull Map<Long, Set<Area>> regionXZToLandAreas;
+    private final Map<Long, Set<Area>> regionXZToLandAreas;
 
-    public WorldLandImpl(long id, @NotNull String worldName) {
+    public WorldLandImpl(long id, String worldName) {
         super(id, worldName);
 
         regionXZToLandAreas = new HashMap<>();
     }
 
     @Override
-    public @NotNull String getPathName() {
+    public String getPathName() {
         return SEPARATOR_LAND + name;
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand() {
+    public WorldLand getWorldLand() {
         return this;
     }
 
@@ -57,7 +56,7 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
     }
 
     @Override
-    public boolean isLocationInside(@NotNull Location loc) {
+    public boolean isLocationInside(Location loc) {
         World locWorld = loc.getWorld();
 
         if (locWorld != null) {
@@ -68,12 +67,12 @@ public class WorldLandImpl extends LandImpl implements WorldLand {
     }
 
     @Override
-    public @NotNull Set<Area> get(int x, int z) {
+    public Set<Area> get(int x, int z) {
         return get(x, 0, z, false);
     }
 
     @Override
-    public @NotNull Set<Area> get(int x, int y, int z) {
+    public Set<Area> get(int x, int y, int z) {
         return get(x, y, z, true);
     }
 

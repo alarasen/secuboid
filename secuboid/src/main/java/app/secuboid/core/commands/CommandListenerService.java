@@ -27,7 +27,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
@@ -35,12 +34,12 @@ public class CommandListenerService implements CommandExecutor, Service {
 
     private static final String COMMAND_NAME = "secuboid";
 
-    private final @NotNull JavaPlugin javaPlugin;
-    private final @NotNull CommandService commandService;
-    private final @NotNull PlayerInfoService playerInfoService;
+    private final JavaPlugin javaPlugin;
+    private final CommandService commandService;
+    private final PlayerInfoService playerInfoService;
 
-    public CommandListenerService(@NotNull JavaPlugin javaPlugin, @NotNull CommandService commandService,
-                                  @NotNull PlayerInfoService playerInfoService) {
+    public CommandListenerService(JavaPlugin javaPlugin, CommandService commandService,
+                                  PlayerInfoService playerInfoService) {
         this.javaPlugin = javaPlugin;
         this.commandService = commandService;
         this.playerInfoService = playerInfoService;
@@ -53,14 +52,12 @@ public class CommandListenerService implements CommandExecutor, Service {
         }
 
         PluginCommand pluginCommand = javaPlugin.getCommand(COMMAND_NAME);
-        assert pluginCommand != null;
         pluginCommand.setExecutor(this);
     }
 
     @Override
     @SuppressWarnings("java:S3516")
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
-                             @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         CommandSenderInfo commandSenderInfo = playerInfoService.get(sender);
 
         if (commandSenderInfo == null) {

@@ -20,7 +20,6 @@ package app.secuboid.api.events;
 import app.secuboid.api.lands.Land;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This events is called when a land is deleted.
@@ -36,8 +35,13 @@ public class LandDeleteEvent extends LandEvent implements Cancellable {
      *
      * @param deletedLand the deleted land
      */
-    public LandDeleteEvent(@NotNull Land deletedLand) {
+    public LandDeleteEvent(Land deletedLand) {
         super(deletedLand);
+    }
+
+    @SuppressWarnings("java:S4144")
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     @Override
@@ -51,14 +55,7 @@ public class LandDeleteEvent extends LandEvent implements Cancellable {
     }
 
     @Override
-    @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @SuppressWarnings("java:S4144")
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

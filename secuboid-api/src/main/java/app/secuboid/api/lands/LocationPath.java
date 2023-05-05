@@ -18,8 +18,6 @@
 
 package app.secuboid.api.lands;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Represents a location path: /world/land1/land2:areaId
  */
@@ -48,7 +46,7 @@ public interface LocationPath {
      *
      * @return the name
      */
-    @NotNull String getName();
+    String getName();
 
     /**
      * Gets the complete path name<br>
@@ -58,5 +56,5 @@ public interface LocationPath {
      *
      * @return the complete path name
      */
-    @NotNull String getPathName();
+    String getPathName();
 }

@@ -20,7 +20,6 @@ package app.secuboid.api.messages;
 
 import app.secuboid.api.services.Service;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the Secuboid plugin and extensions message service.
@@ -34,5 +33,5 @@ public interface MessageService extends Service {
      * @param plugin the Secuboid plugin
      * @return the message manager
      */
-    @NotNull MessageManagerService grab(@NotNull Plugin plugin);
+    MessageManagerService grab(Plugin plugin);
 }

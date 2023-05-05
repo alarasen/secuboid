@@ -21,19 +21,18 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.selection.active.ActiveSelectionArea;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionAreaImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionArea {
 
-    protected final @NotNull Area area;
+    protected final Area area;
 
-    public ActiveSelectionAreaImpl(@NotNull CommandSender commandSender, @NotNull Area area) {
+    public ActiveSelectionAreaImpl(CommandSender commandSender, Area area) {
         super(commandSender, area.getLand());
         this.area = area;
     }
 
     @Override
-    public @NotNull Area getArea() {
+    public Area getArea() {
         return area;
     }
 }

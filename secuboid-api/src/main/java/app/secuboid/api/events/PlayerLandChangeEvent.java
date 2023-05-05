@@ -22,8 +22,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * This events is called every time a player moves from a land to an other, or
@@ -50,7 +48,7 @@ public class PlayerLandChangeEvent extends LandEvent implements Cancellable {
      * @param toLoc    the to location
      * @param isTp     the is a player teleport
      */
-    public PlayerLandChangeEvent(@Nullable Land lastLand, @NotNull Land land, @NotNull Player player, @Nullable Location fromLoc, @NotNull Location toLoc,
+    public PlayerLandChangeEvent(Land lastLand, Land land, Player player, Location fromLoc, Location toLoc,
                                  boolean isTp) {
         super(land);
         this.lastLand = lastLand;
@@ -60,12 +58,16 @@ public class PlayerLandChangeEvent extends LandEvent implements Cancellable {
         this.isTp = isTp;
     }
 
+    @SuppressWarnings("java:S4144")
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * Gets the player.
      *
      * @return the player
      */
-    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -74,28 +76,23 @@ public class PlayerLandChangeEvent extends LandEvent implements Cancellable {
      * Gets the last land or null if it is a new player.
      *
      * @return the last land or null
-     */
-    @Nullable
-    public Land getLastLand() {
-        return lastLand;
-    }
-
-    /**
+     * <p>
+     * public Land getLastLand() {
+     * return lastLand;
+     * }
+     * <p>
+     * /**
      * Gets the from location.
-     *
      * @return the from location
-     */
-    @Nullable
-    public Location getFromLoc() {
-        return fromLoc;
-    }
-
-    /**
+     * <p>
+     * public Location getFromLoc() {
+     * return fromLoc;
+     * }
+     * <p>
+     * /**
      * Gets the to location.
-     *
      * @return the to location
      */
-    @NotNull
     public Location getToLoc() {
         return toLoc;
     }
@@ -120,13 +117,7 @@ public class PlayerLandChangeEvent extends LandEvent implements Cancellable {
     }
 
     @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @SuppressWarnings("java:S4144")
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -25,7 +25,6 @@ import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -42,11 +41,11 @@ class SelectionScoreboardActive extends SelectionScoreboard {
             ActiveSelectionModifyPassive.class, "passive",
             ActiveSelectionModifyRetract.class, "retract");
 
-    private final @NotNull AreaForm areaForm;
-    private final @NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass;
+    private final AreaForm areaForm;
+    private final Class<? extends ActiveSelectionModify> activeSelectionModifyClass;
 
-    SelectionScoreboardActive(@NotNull ScoreboardService scoreboardService, @NotNull Player player,
-                              @NotNull AreaForm areaForm, @NotNull Class<?
+    SelectionScoreboardActive(ScoreboardService scoreboardService, Player player,
+                              AreaForm areaForm, Class<?
             extends ActiveSelectionModify> activeSelectionModifyClass) {
         super(scoreboardService, player);
         this.areaForm = areaForm;
@@ -83,11 +82,8 @@ class SelectionScoreboardActive extends SelectionScoreboard {
         scoreboardService.changeLine(scoreboard, 2, line2);
     }
 
-    private @NotNull String getSelectionTypeMsg(@NotNull Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
+    private String getSelectionTypeMsg(Class<? extends ActiveSelectionModify> activeSelectionModifyClass) {
         String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
-
-        assert msgTag != null :
-                "Message for this class not implemented: " + activeSelectionModifyClass.getSimpleName();
 
         String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
         MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});

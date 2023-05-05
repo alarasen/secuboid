@@ -20,7 +20,6 @@ package app.secuboid.api.recipients;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.flags.Flag;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a recipientExec (ex: entity, mob, players, ...) If you implements a new recipientExec, you need to add the
@@ -37,7 +36,7 @@ public interface RecipientExec {
      * @param entity the entity
      * @return true if the entity has access
      */
-    boolean hasAccess(@NotNull Flag flag, @NotNull Entity entity);
+    boolean hasAccess(Flag flag, Entity entity);
 
     /**
      * Return if the player has access from a land.
@@ -47,5 +46,5 @@ public interface RecipientExec {
      * @param originLand the land where we are looking from
      * @return true if the entity has access
      */
-    boolean hasAccess(@NotNull Flag flag, @NotNull Entity entity, @NotNull Land originLand);
+    boolean hasAccess(Flag flag, Entity entity, Land originLand);
 }

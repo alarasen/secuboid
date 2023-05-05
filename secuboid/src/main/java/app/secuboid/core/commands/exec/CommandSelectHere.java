@@ -25,7 +25,6 @@ import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.PlayerSelectionImpl;
-import org.jetbrains.annotations.NotNull;
 
 // TODO Add player level from the land
 @CommandRegistered(
@@ -33,14 +32,14 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandSelectHere implements CommandExec {
 
-    private final @NotNull ScoreboardService scoreboardService;
+    private final ScoreboardService scoreboardService;
 
-    public CommandSelectHere(@NotNull ScoreboardService scoreboardService) {
+    public CommandSelectHere(ScoreboardService scoreboardService) {
         this.scoreboardService = scoreboardService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         // TODO select here
         PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
         Area area = playerInfo.getArea();

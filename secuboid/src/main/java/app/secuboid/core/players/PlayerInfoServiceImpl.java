@@ -30,7 +30,6 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,12 +37,12 @@ import java.util.Map;
 
 public class PlayerInfoServiceImpl implements PlayerInfoService {
 
-    private final @NotNull Server server;
-    private final @NotNull LandService landService;
+    private final Server server;
+    private final LandService landService;
 
-    private final @NotNull Map<CommandSender, CommandSenderInfo> senderToInfo;
+    private final Map<CommandSender, CommandSenderInfo> senderToInfo;
 
-    public PlayerInfoServiceImpl(@NotNull Server server, @NotNull LandService landService) {
+    public PlayerInfoServiceImpl(Server server, LandService landService) {
         this.server = server;
         this.landService = landService;
 
@@ -69,7 +68,7 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
         senderToInfo.remove(player);
     }
 
-    public void updatePlayerPosition(@NotNull PlayerInfo playerInfo, @NotNull Location toLocation) {
+    public void updatePlayerPosition(PlayerInfo playerInfo, Location toLocation) {
 
         // TODO land change Events
         Area area = landService.getArea(toLocation);
@@ -105,7 +104,7 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
     }
 
     @Override
-    public @NotNull Collection<CommandSenderInfo> getAll() {
+    public Collection<CommandSenderInfo> getAll() {
         return senderToInfo.values();
     }
 }

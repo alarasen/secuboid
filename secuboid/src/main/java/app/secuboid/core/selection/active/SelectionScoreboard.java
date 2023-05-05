@@ -20,16 +20,14 @@ package app.secuboid.core.selection.active;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.scoreboard.SecuboidScoreboard;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 abstract class SelectionScoreboard {
 
-    protected final @NotNull ScoreboardService scoreboardService;
-    protected final @NotNull Player player;
-    protected @Nullable SecuboidScoreboard scoreboard;
+    protected final ScoreboardService scoreboardService;
+    protected final Player player;
+    protected SecuboidScoreboard scoreboard;
 
-    SelectionScoreboard(@NotNull ScoreboardService scoreboardService, @NotNull Player player) {
+    SelectionScoreboard(ScoreboardService scoreboardService, Player player) {
         this.scoreboardService = scoreboardService;
         this.player = player;
         this.scoreboard = null;

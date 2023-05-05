@@ -21,13 +21,11 @@ import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.CylinderAreaForm;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class SelectionFormCylinder extends SelectionForm {
 
-    public SelectionFormCylinder(@NotNull CylinderAreaForm cylinderAreaForm, @NotNull Player player,
-                                 boolean isResizeable, @Nullable Land originLand, @Nullable Area originArea) {
+    public SelectionFormCylinder(CylinderAreaForm cylinderAreaForm, Player player,
+                                 boolean isResizeable, Land originLand, Area originArea) {
         super(cylinderAreaForm, player, isResizeable, originLand, originArea);
     }
 

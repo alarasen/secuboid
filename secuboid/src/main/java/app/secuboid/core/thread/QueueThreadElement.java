@@ -18,13 +18,12 @@
 
 package app.secuboid.core.thread;
 
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;
 
-record QueueThreadElement<T, R>(@Nullable T t,
-                                @Nullable BlockingQueue<Object> resultQueue,
-                                @Nullable Consumer<R> callback,
+record QueueThreadElement<T, R>(T t,
+                                BlockingQueue<Object> resultQueue,
+                                Consumer<R> callback,
                                 boolean isSet) {
 }

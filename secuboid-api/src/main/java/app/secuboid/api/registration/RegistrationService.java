@@ -23,7 +23,6 @@ import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.services.Service;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * All service, command, flag and recipient executors must be registered here.
@@ -36,7 +35,7 @@ public interface RegistrationService extends Service {
      * @param plugin  the source plugin
      * @param service the service
      */
-    void registerService(@NotNull Plugin plugin, @NotNull Service service);
+    void registerService(Plugin plugin, Service service);
 
     /**
      * Register a command with {@link app.secuboid.api.commands.CommandExec}. The class must be annotated with
@@ -44,7 +43,7 @@ public interface RegistrationService extends Service {
      *
      * @param commandExec the command execution
      */
-    void registerCommand(@NotNull CommandExec commandExec);
+    void registerCommand(CommandExec commandExec);
 
     /**
      * Register all flag types from a class with {@link app.secuboid.api.flagtypes.FlagType}. It takes automatically
@@ -52,14 +51,14 @@ public interface RegistrationService extends Service {
      *
      * @param clazz the class
      */
-    void registerFlagType(@NotNull Class<?> clazz);
+    void registerFlagType(Class<?> clazz);
 
     /**
      * Register a flag type instance with {@link app.secuboid.api.flagtypes.FlagType}.
      *
      * @param flagType the flag type
      */
-    void registerFlagType(@NotNull FlagType flagType);
+    void registerFlagType(FlagType flagType);
 
     /**
      * Register a recipient type instance with {@link app.secuboid.api.recipients.RecipientExec}. The class must be
@@ -67,5 +66,5 @@ public interface RegistrationService extends Service {
      *
      * @param recipientExec the recipient execution
      */
-    void registerRecipient(@NotNull RecipientExec recipientExec);
+    void registerRecipient(RecipientExec recipientExec);
 }

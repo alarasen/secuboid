@@ -22,7 +22,6 @@ import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.storage.rows.WithId;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an area of any type.
@@ -34,14 +33,14 @@ public interface Area extends WithId, LocationPath {
      *
      * @return the area form
      */
-    @NotNull AreaForm getAreaForm();
+    AreaForm getAreaForm();
 
     /**
      * Gets the land.
      *
      * @return the land
      */
-    @NotNull AreaLand getLand();
+    AreaLand getLand();
 
     /**
      * Gets the x1.
@@ -124,7 +123,7 @@ public interface Area extends WithId, LocationPath {
      * @param loc the location
      * @return if true or false
      */
-    boolean isLocationInside(@NotNull Location loc);
+    boolean isLocationInside(Location loc);
 
     /**
      * Gets if the location is in the square limit of the land. This method ignore
@@ -142,5 +141,5 @@ public interface Area extends WithId, LocationPath {
      *
      * @return the message path
      */
-    @NotNull MessagePath getMessagePath();
+    MessagePath getMessagePath();
 }

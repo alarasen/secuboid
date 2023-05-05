@@ -20,8 +20,6 @@ package app.secuboid.api.lands.flags;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.lands.LandComponent;
 import app.secuboid.api.recipients.RecipientExec;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represent a flag with a value.
@@ -33,9 +31,9 @@ import org.jetbrains.annotations.Nullable;
  * @param metadata      the metadata if needed or null
  */
 public record Flag(
-        @NotNull LandComponent landComponent,
-        @NotNull FlagType flagType,
-        @Nullable RecipientExec source,
-        @Nullable RecipientExec target,
-        @Nullable String metadata) {
+        LandComponent landComponent,
+        FlagType flagType,
+        RecipientExec source,
+        RecipientExec target,
+        String metadata) {
 }

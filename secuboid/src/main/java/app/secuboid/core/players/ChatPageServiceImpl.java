@@ -28,7 +28,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.IntFunction;
@@ -39,18 +38,18 @@ public class ChatPageServiceImpl implements ChatPageService {
     private static final int PAGE_WIDTH = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
     private static final int PAGE_HEIGHT = ChatPaginator.OPEN_CHAT_PAGE_HEIGHT - 2;
 
-    private final @NotNull MessageManagerService messageManagerService;
+    private final MessageManagerService messageManagerService;
 
-    private final @NotNull Map<CommandSenderInfo, ChatPage> commandSenderInfoToChatPage;
+    private final Map<CommandSenderInfo, ChatPage> commandSenderInfoToChatPage;
 
-    public ChatPageServiceImpl(@NotNull MessageManagerService messageManagerService) {
+    public ChatPageServiceImpl(MessageManagerService messageManagerService) {
         this.messageManagerService = messageManagerService;
 
         commandSenderInfoToChatPage = new HashMap<>();
     }
 
     @Override
-    public void show(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String subject, @NotNull String text) {
+    public void show(CommandSenderInfo commandSenderInfo, String subject, String text) {
         ChatPaginator.ChatPage page = ChatPaginator.paginate(text, 1, PAGE_WIDTH, PAGE_HEIGHT);
         int totalPages = page.getTotalPages();
         ChatPage chatPage = new ChatPage(subject, text, totalPages);
@@ -59,7 +58,7 @@ public class ChatPageServiceImpl implements ChatPageService {
     }
 
     @Override
-    public void show(@NotNull CommandSenderInfo commandSenderInfo, int pageNumber) {
+    public void show(CommandSenderInfo commandSenderInfo, int pageNumber) {
         CommandSender sender = commandSenderInfo.sender();
         ChatPage chatPage = commandSenderInfoToChatPage.get(commandSenderInfo);
 
@@ -73,16 +72,16 @@ public class ChatPageServiceImpl implements ChatPageService {
     }
 
     @Override
-    public int getTotalPages(@NotNull CommandSenderInfo commandSenderInfo) {
+    public int getTotalPages(CommandSenderInfo commandSenderInfo) {
         return Optional.ofNullable(commandSenderInfoToChatPage.get(commandSenderInfo)).map(ChatPage::totalPages).orElse(0);
     }
 
     @Override
-    public void remove(@NotNull CommandSenderInfo commandSenderInfo) {
+    public void remove(CommandSenderInfo commandSenderInfo) {
         commandSenderInfoToChatPage.remove(commandSenderInfo);
     }
 
-    private void show(@NotNull CommandSender sender, @NotNull ChatPage chatPage, @NotNull ChatPaginator.ChatPage page
+    private void show(CommandSender sender, ChatPage chatPage, ChatPaginator.ChatPage page
             , int pageNumber) {
         int totalPages = chatPage.totalPages();
 
@@ -120,8 +119,8 @@ public class ChatPageServiceImpl implements ChatPageService {
         sender.spigot().sendMessage(textComponents.toArray(TextComponent[]::new));
     }
 
-    private @NotNull TextComponent addPageTextClickable(IntFunction<MessagePath> messagePathFunc,
-                                                        int targetPageNumber) {
+    private TextComponent addPageTextClickable(IntFunction<MessagePath> messagePathFunc,
+                                               int targetPageNumber) {
         MessagePath messagePath = messagePathFunc.apply(targetPageNumber);
         TextComponent textComponent = messageManagerService.getTextComponent(MessageType.CLICKABLE, messagePath);
         ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND,

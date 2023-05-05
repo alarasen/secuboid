@@ -19,8 +19,6 @@
 package app.secuboid.api.recipients;
 
 import app.secuboid.api.services.Service;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -44,5 +42,5 @@ public interface RecipientService extends Service {
      * @param value    the value or null if the recipientExec doesn't accept values
      * @param callback the returned answer in callback
      */
-    void grab(@NotNull String name, @Nullable String value, @Nullable Consumer<RecipientResult> callback);
+    void grab(String name, String value, Consumer<RecipientResult> callback);
 }

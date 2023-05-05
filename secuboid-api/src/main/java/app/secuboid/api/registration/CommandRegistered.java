@@ -17,8 +17,6 @@
  */
 package app.secuboid.api.registration;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,14 +35,14 @@ public @interface CommandRegistered {
      *
      * @return the name
      */
-    @NotNull String name();
+    String name();
 
     /**
      * Aliases if the command can be called with a short alias. Lowercase.
      *
      * @return the aliases
      */
-    @NotNull String[] aliases() default {};
+    String[] aliases() default {};
 
     /**
      * Allowing from console? Default true. Must be false only when the command
@@ -68,7 +66,7 @@ public @interface CommandRegistered {
      *
      * @return the Bukkit permissions
      */
-    @NotNull String[] permissions() default {};
+    String[] permissions() default {};
 
     /**
      * Name array of Source Action flags needed for your command.
@@ -76,5 +74,5 @@ public @interface CommandRegistered {
      *
      * @return the source action flags
      */
-    @NotNull String[] sourceActionFlags() default {};
+    String[] sourceActionFlags() default {};
 }

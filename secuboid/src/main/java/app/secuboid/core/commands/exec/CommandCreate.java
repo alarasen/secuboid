@@ -41,7 +41,6 @@ import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.active.ActiveSelectionModifyImpl;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -56,14 +55,14 @@ public class CommandCreate implements CommandExec {
 
     private static final String COMMAND_SELECT = "/sd select";
 
-    private final @NotNull ChatGetterService chatGetterService;
-    private final @NotNull LandService landService;
-    private final @NotNull MessageManagerService messageManagerService;
-    private final @NotNull RecipientService recipientService;
+    private final ChatGetterService chatGetterService;
+    private final LandService landService;
+    private final MessageManagerService messageManagerService;
+    private final RecipientService recipientService;
 
-    public CommandCreate(@NotNull ChatGetterService chatGetterService, @NotNull LandService landService,
-                         @NotNull MessageManagerService messageManagerService,
-                         @NotNull RecipientService recipientService) {
+    public CommandCreate(ChatGetterService chatGetterService, LandService landService,
+                         MessageManagerService messageManagerService,
+                         RecipientService recipientService) {
         this.chatGetterService = chatGetterService;
         this.landService = landService;
         this.messageManagerService = messageManagerService;
@@ -71,7 +70,7 @@ public class CommandCreate implements CommandExec {
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         SenderSelection selection = ((CommandSenderInfoImpl) commandSenderInfo).getSelection();
         ActiveSelection activeSelection = selection.getActiveSelection();
         CommandSender sender = commandSenderInfo.sender();
@@ -102,8 +101,8 @@ public class CommandCreate implements CommandExec {
         landNameCallback(commandSenderInfo, activeSelectionModify, subArgs[0]);
     }
 
-    private void landNameCallback(@NotNull CommandSenderInfo commandSenderInfo,
-                                  @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName) {
+    private void landNameCallback(CommandSenderInfo commandSenderInfo,
+                                  ActiveSelectionModify activeSelectionModify, String landName) {
         if (landName.contains(" ")) {
             CommandSender sender = commandSenderInfo.sender();
             messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.selectionCreateNoSpace());
@@ -120,9 +119,9 @@ public class CommandCreate implements CommandExec {
         }
     }
 
-    private void landOwnerCallback(@NotNull CommandSenderInfo commandSenderInfo,
-                                   @NotNull ActiveSelectionModify activeSelectionModify, @NotNull String landName,
-                                   @NotNull RecipientResult result) {
+    private void landOwnerCallback(CommandSenderInfo commandSenderInfo,
+                                   ActiveSelectionModify activeSelectionModify, String landName,
+                                   RecipientResult result) {
         RecipientExec owner = result.recipientExec();
 
         if (result.code() != RecipientResultCode.SUCCESS || owner == null) {
@@ -137,7 +136,7 @@ public class CommandCreate implements CommandExec {
         landService.create(worldLand, landName, owner, areaForm, r -> landCreateCallback(commandSenderInfo, r));
     }
 
-    public void landCreateCallback(@NotNull CommandSenderInfo commandSenderInfo, @NotNull LandResult landResult) {
+    public void landCreateCallback(CommandSenderInfo commandSenderInfo, LandResult landResult) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (landResult.code() != LandResultCode.SUCCESS || landResult.areaLand() == null) {

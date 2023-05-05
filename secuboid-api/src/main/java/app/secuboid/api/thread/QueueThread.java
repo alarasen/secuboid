@@ -17,9 +17,6 @@
  */
 package app.secuboid.api.thread;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;
 
@@ -45,7 +42,7 @@ public interface QueueThread<T, R> {
      *
      * @param t the element to send
      */
-    void addElement(@NotNull T t);
+    void addElement(T t);
 
     /**
      * Adds an element and blocking queue for sync.
@@ -54,7 +51,7 @@ public interface QueueThread<T, R> {
      * @param resultQueue the blocking queue for result
      * @param isSet       is only one or a set?
      */
-    void addElement(@NotNull T t, @NotNull BlockingQueue<Object> resultQueue, boolean isSet);
+    void addElement(T t, BlockingQueue<Object> resultQueue, boolean isSet);
 
     /**
      * Adds an element with callback.
@@ -62,7 +59,7 @@ public interface QueueThread<T, R> {
      * @param t        the element to send
      * @param callback the callback or null
      */
-    void addElement(@NotNull T t, @Nullable Consumer<R> callback);
+    void addElement(T t, Consumer<R> callback);
 
     /**
      * Waits for the last element and stop.

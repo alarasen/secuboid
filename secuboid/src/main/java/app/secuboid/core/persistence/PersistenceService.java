@@ -22,8 +22,6 @@ import app.secuboid.api.services.Service;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.hibernate.Session;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,14 +30,14 @@ public class PersistenceService implements Service {
 
     private static final String PERSISTENCE_THREAD_NOT_RUNNING_MSG = "PersistenceSessionService thread not running";
 
-    private final @NotNull JavaPlugin javaPlugin;
-    private final @NotNull BukkitScheduler scheduler;
-    private final @NotNull PersistenceSessionService persistenceSessionService;
+    private final JavaPlugin javaPlugin;
+    private final BukkitScheduler scheduler;
+    private final PersistenceSessionService persistenceSessionService;
 
-    private @Nullable PersistenceThread persistenceThread;
+    private PersistenceThread persistenceThread;
 
-    public PersistenceService(@NotNull JavaPlugin javaPlugin, @NotNull BukkitScheduler scheduler,
-                              @NotNull PersistenceSessionService persistenceSessionService) {
+    public PersistenceService(JavaPlugin javaPlugin, BukkitScheduler scheduler,
+                              PersistenceSessionService persistenceSessionService) {
         this.javaPlugin = javaPlugin;
         this.scheduler = scheduler;
         this.persistenceSessionService = persistenceSessionService;
@@ -54,19 +52,16 @@ public class PersistenceService implements Service {
 
     @Override
     public void onDisable(boolean isServerShutdown) {
-        assert persistenceThread != null : PERSISTENCE_THREAD_NOT_RUNNING_MSG;
         persistenceThread.shutdown();
         persistenceThread = null;
     }
 
-    public <R> void exec(@NotNull Function<Session, R> sessionFunction, @Nullable Consumer<R> callback) {
-        assert persistenceThread != null : PERSISTENCE_THREAD_NOT_RUNNING_MSG;
+    public <R> void exec(Function<Session, R> sessionFunction, Consumer<R> callback) {
         PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, callback, false);
         persistenceThread.offer(element);
     }
 
-    public <R> @Nullable R execSync(@NotNull Function<Session, R> sessionFunction) {
-        assert persistenceThread != null : PERSISTENCE_THREAD_NOT_RUNNING_MSG;
+    public <R> R execSync(Function<Session, R> sessionFunction) {
         PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, null, true);
         persistenceThread.offer(element);
 

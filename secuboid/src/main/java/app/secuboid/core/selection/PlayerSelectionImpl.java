@@ -33,7 +33,6 @@ import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -41,29 +40,29 @@ import static app.secuboid.core.config.Config.config;
 
 public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSelection {
 
-    private final @NotNull PlayerInfo playerInfo;
-    private final @NotNull Player player;
+    private final PlayerInfo playerInfo;
+    private final Player player;
 
-    public PlayerSelectionImpl(@NotNull PlayerInfo playerInfo) {
+    public PlayerSelectionImpl(PlayerInfo playerInfo) {
         super(playerInfo.getPlayer());
         this.playerInfo = playerInfo;
         this.player = playerInfo.getPlayer();
     }
 
-    public void createActiveSelectionModifyExpand(@NotNull ScoreboardService scoreboardService,
-                                                  @NotNull WorldLand worldLand,
-                                                  @NotNull Class<? extends AreaForm> areaFormClass) {
+    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService,
+                                                  WorldLand worldLand,
+                                                  Class<? extends AreaForm> areaFormClass) {
         AreaForm areaForm = createAreaForm(areaFormClass);
         createActiveSelectionModifyExpand(scoreboardService, worldLand, areaForm);
     }
 
-    public void createActiveSelectionModifyExpand(@NotNull ScoreboardService scoreboardService,
-                                                  @NotNull WorldLand worldLand, @NotNull AreaForm areaForm) {
+    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService,
+                                                  WorldLand worldLand, AreaForm areaForm) {
         createActiveSelection(scoreboardService, areaForm, true, s -> new ActiveSelectionModifyExpand(worldLand,
                 playerInfo, s));
     }
 
-    public void createActiveSelectionAreaShow(@NotNull ScoreboardService scoreboardService, @NotNull Area area) {
+    public void createActiveSelectionAreaShow(ScoreboardService scoreboardService, Area area) {
         AreaForm areaForm = area.getAreaForm();
         createActiveSelection(scoreboardService, areaForm, false, s -> new ActiveSelectionAreaShow(player, area, s));
     }
@@ -74,7 +73,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         }
     }
 
-    private @NotNull AreaForm createAreaForm(@NotNull Class<? extends AreaForm> areaFormClass) {
+    private AreaForm createAreaForm(Class<? extends AreaForm> areaFormClass) {
         int selectionDefaultStartDiameter = config().getSelectionDefaultStartDiameter();
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
@@ -98,7 +97,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
     }
 
-    private void createActiveSelection(@NotNull ScoreboardService scoreboardService, @NotNull AreaForm areaForm,
+    private void createActiveSelection(ScoreboardService scoreboardService, AreaForm areaForm,
                                        boolean isResizeable,
                                        Function<SelectionForm, ActiveSelection> selectionFormActiveSelectionFunction) {
         SelectionForm selectionForm = createSelectionForm(areaForm, isResizeable);
@@ -106,7 +105,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         ((ActiveSelectionImpl) activeSelection).init(scoreboardService);
     }
 
-    private @NotNull SelectionForm createSelectionForm(@NotNull AreaForm areaForm, boolean isResizeable) {
+    private SelectionForm createSelectionForm(AreaForm areaForm, boolean isResizeable) {
         if (areaForm instanceof CuboidAreaForm cuboidAreaForm) {
             return new SelectionFormCuboid(cuboidAreaForm, player, isResizeable, null, null);
         } else if (areaForm instanceof CylinderAreaForm cylinderAreaForm) {

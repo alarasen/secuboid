@@ -18,7 +18,6 @@
 package app.secuboid.api;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is only the secuboid plugin instance and is used to call the secuboid main instance.
@@ -30,5 +29,5 @@ public abstract class SecuboidPlugin extends JavaPlugin {
      *
      * @return the Secuboid main instance
      */
-    public abstract @NotNull Secuboid getSecuboid();
+    public abstract Secuboid getSecuboid();
 }

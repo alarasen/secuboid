@@ -18,17 +18,16 @@
 package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.ConfigurationSet;
-import org.jetbrains.annotations.NotNull;
 
 public class ConfigurationSetImpl extends LandComponentImpl implements ConfigurationSet {
 
-    public ConfigurationSetImpl(long id, @NotNull String name) {
+    public ConfigurationSetImpl(long id, String name) {
         super(id, name);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public @NotNull String getPathName() {
+    public String getPathName() {
         return PREFIX_CONFIGURATION_SET + name;
     }
 }

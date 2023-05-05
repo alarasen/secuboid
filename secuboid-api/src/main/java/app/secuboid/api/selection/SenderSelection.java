@@ -19,7 +19,6 @@
 package app.secuboid.api.selection;
 
 import app.secuboid.api.selection.active.ActiveSelection;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a sender selection.
@@ -32,7 +31,7 @@ public interface SenderSelection {
      *
      * @return the active selection.
      */
-    @NotNull ActiveSelection getActiveSelection();
+    ActiveSelection getActiveSelection();
 
     /**
      * Checks if a selection is active.

@@ -18,11 +18,9 @@
 
 package app.secuboid.core.players;
 
-import org.jetbrains.annotations.NotNull;
-
 public record ChatPage(
-        @NotNull String subject,
-        @NotNull String text,
+        String subject,
+        String text,
         int totalPages
 ) {
 }

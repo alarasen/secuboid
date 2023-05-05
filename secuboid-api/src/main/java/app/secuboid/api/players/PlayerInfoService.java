@@ -20,8 +20,6 @@ package app.secuboid.api.players;
 import app.secuboid.api.services.Service;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -36,7 +34,7 @@ public interface PlayerInfoService extends Service {
      * @param sender the command sender
      * @return the command sender information
      */
-    @Nullable CommandSenderInfo get(CommandSender sender);
+    CommandSenderInfo get(CommandSender sender);
 
     /**
      * Gets the information for a specific player.
@@ -44,12 +42,12 @@ public interface PlayerInfoService extends Service {
      * @param player the player
      * @return the player information
      */
-    @Nullable PlayerInfo getPlayerInfo(Player player);
+    PlayerInfo getPlayerInfo(Player player);
 
     /**
      * Gets the information for all command senders.
      *
      * @return the player information
      */
-    @NotNull Collection<CommandSenderInfo> getAll();
+    Collection<CommandSenderInfo> getAll();
 }

@@ -22,7 +22,6 @@ import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.utilities.LocalMath;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 public class CuboidAreaFormImpl extends AreaFormImpl implements CuboidAreaForm {
 
@@ -57,7 +56,7 @@ public class CuboidAreaFormImpl extends AreaFormImpl implements CuboidAreaForm {
     }
 
     @Override
-    public @NotNull MessagePath getMessagePath() {
+    public MessagePath getMessagePath() {
         return MessagePaths.areaCuboid(x1, y1, z1, x2, y2, z2);
     }
 

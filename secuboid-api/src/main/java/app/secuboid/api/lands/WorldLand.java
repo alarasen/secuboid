@@ -18,7 +18,6 @@
 package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.areas.Area;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -34,7 +33,7 @@ public interface WorldLand extends Land {
      * @param z the z
      * @return the affected areas
      */
-    @NotNull Set<Area> get(int x, int z);
+    Set<Area> get(int x, int z);
 
     /**
      * Gets the areas from a specific 3D point.
@@ -44,5 +43,5 @@ public interface WorldLand extends Land {
      * @param z the z
      * @return the affected areas
      */
-    @NotNull Set<Area> get(int x, int y, int z);
+    Set<Area> get(int x, int y, int z);
 }

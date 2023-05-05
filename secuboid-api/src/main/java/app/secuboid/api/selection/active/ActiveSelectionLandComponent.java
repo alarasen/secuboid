@@ -19,7 +19,6 @@
 package app.secuboid.api.selection.active;
 
 import app.secuboid.api.lands.LandComponent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an active selection of a land component.
@@ -31,5 +30,5 @@ public interface ActiveSelectionLandComponent extends ActiveSelection {
      *
      * @return the land component
      */
-    @NotNull LandComponent getLandComponent();
+    LandComponent getLandComponent();
 }

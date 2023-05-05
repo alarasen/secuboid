@@ -31,8 +31,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,12 +46,12 @@ public class SecuboidToolService implements Service {
     private static final Enchantment SECUBOID_TOOL_ENCHANTMENT = Enchantment.DURABILITY;
     private static final int SECUBOID_TOOL_ENCHANTMENT_VALUE = 1;
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull MessageManagerService messageManagerService;
+    private final Plugin plugin;
+    private final MessageManagerService messageManagerService;
 
-    private @Nullable NamespacedKey toolNamespacedKey;
+    private NamespacedKey toolNamespacedKey;
 
-    public SecuboidToolService(@NotNull Plugin plugin, @NotNull MessageManagerService messageManagerService) {
+    public SecuboidToolService(Plugin plugin, MessageManagerService messageManagerService) {
         this.plugin = plugin;
         this.messageManagerService = messageManagerService;
 
@@ -65,7 +63,7 @@ public class SecuboidToolService implements Service {
         toolNamespacedKey = new NamespacedKey(plugin, SECUBOID_TOOL_PERSISTENT_DATA_KEY_NAME);
     }
 
-    public void give(@NotNull Player player) {
+    public void give(Player player) {
         if (isPlayerAsSecuboidTool(player)) {
             messageManagerService.sendMessage(player, MessageType.ERROR, MessagePaths.toolAlready());
             return;
@@ -84,9 +82,7 @@ public class SecuboidToolService implements Service {
         messageManagerService.sendMessage(player, MessageType.NORMAL, MessagePaths.toolDone());
     }
 
-    public boolean isSecuboidTool(@Nullable ItemStack itemStack) {
-        assert toolNamespacedKey != null : NOT_ENABLE_YET_MESSAGE;
-
+    public boolean isSecuboidTool(ItemStack itemStack) {
         if (itemStack == null) {
             return false;
         }
@@ -103,14 +99,10 @@ public class SecuboidToolService implements Service {
         return Byte.valueOf(SECUBOID_TOOL_PERSISTENT_DATA_VALUE).equals(value);
     }
 
-    @NotNull
     private ItemStack createTool() {
-        assert toolNamespacedKey != null : NOT_ENABLE_YET_MESSAGE;
-
         ItemStack itemStack = new ItemStack(SECUBOID_TOOL_MATERIAL);
 
         ItemMeta itemMeta = itemStack.getItemMeta();
-        assert itemMeta != null : "Item stack for Secuboid tool is null";
         String name = messageManagerService.get(MessageType.NORMAL, MessagePaths.toolName());
         itemMeta.setDisplayName(name);
         String lore1 = messageManagerService.get(MessageType.NO_COLOR, MessagePaths.toolLore1());
@@ -129,7 +121,7 @@ public class SecuboidToolService implements Service {
         return itemStack;
     }
 
-    private boolean isPlayerAsSecuboidTool(@NotNull Player player) {
+    private boolean isPlayerAsSecuboidTool(Player player) {
         for (ItemStack itemStack : player.getInventory().all(SECUBOID_TOOL_MATERIAL).values()) {
             if (isSecuboidTool(itemStack)) {
                 return true;

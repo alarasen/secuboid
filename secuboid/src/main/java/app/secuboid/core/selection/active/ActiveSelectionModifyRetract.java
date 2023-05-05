@@ -23,21 +23,19 @@ import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.lands.areas.AreaFormImpl;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ActiveSelectionModifyRetract extends ActiveSelectionModifyImpl {
 
-    private @Nullable Location lastOutSideLoc;
+    private Location lastOutSideLoc;
 
-    public ActiveSelectionModifyRetract(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
+    public ActiveSelectionModifyRetract(WorldLand worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
 
         lastOutSideLoc = null;
     }
 
     @Override
-    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
+    protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
         AreaForm areaForm = selectionForm.getAreaForm();
         boolean isChanged = false;
         boolean isPlayerInside = areaForm.isLocationInsideSquare(playerLoc.getBlockX(), playerLoc.getBlockZ());

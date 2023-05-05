@@ -21,19 +21,18 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.selection.active.ActiveSelectionWorld;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionWorldImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionWorld {
 
-    protected final @NotNull WorldLand worldLand;
+    protected final WorldLand worldLand;
 
-    public ActiveSelectionWorldImpl(@NotNull CommandSender commandSender, @NotNull WorldLand worldLand) {
+    public ActiveSelectionWorldImpl(CommandSender commandSender, WorldLand worldLand) {
         super(commandSender, worldLand);
         this.worldLand = worldLand;
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand() {
+    public WorldLand getWorldLand() {
         return worldLand;
     }
 

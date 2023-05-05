@@ -26,7 +26,6 @@ import app.secuboid.api.registration.RecipientRegistered;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.api.services.Service;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -35,10 +34,10 @@ import static java.util.logging.Level.SEVERE;
 
 public class RegistrationServiceImpl implements RegistrationService {
 
-    private final @NotNull Map<Plugin, List<Service>> pluginToServices;
-    private final @NotNull Map<CommandExec, CommandRegistered> commandExecToCommandRegistered;
-    private final @NotNull Set<FlagType> flagTypes;
-    private final @NotNull Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered;
+    private final Map<Plugin, List<Service>> pluginToServices;
+    private final Map<CommandExec, CommandRegistered> commandExecToCommandRegistered;
+    private final Set<FlagType> flagTypes;
+    private final Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered;
     private boolean isRegistrationClosed;
 
     public RegistrationServiceImpl() {
@@ -58,7 +57,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerService(@NotNull Plugin plugin, @NotNull Service service) {
+    public void registerService(Plugin plugin, Service service) {
         if (isRegistrationClosedMessage("service", service.getClass().getName())) {
             return;
         }
@@ -67,7 +66,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerCommand(@NotNull CommandExec commandExec) {
+    public void registerCommand(CommandExec commandExec) {
         Class<? extends CommandExec> clazz = commandExec.getClass();
         if (isRegistrationClosedMessage("command exec class", clazz.getName())) {
             return;
@@ -84,7 +83,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerFlagType(@NotNull Class<?> clazz) {
+    public void registerFlagType(Class<?> clazz) {
         if (isRegistrationClosedMessage("flag types class", clazz.getName())) {
             return;
         }
@@ -102,7 +101,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerFlagType(@NotNull FlagType flagType) {
+    public void registerFlagType(FlagType flagType) {
         if (isRegistrationClosedMessage("flag type", flagType.name())) {
             return;
         }
@@ -111,7 +110,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void registerRecipient(@NotNull RecipientExec recipientExec) {
+    public void registerRecipient(RecipientExec recipientExec) {
         Class<? extends RecipientExec> clazz = recipientExec.getClass();
         if (isRegistrationClosedMessage("recipient exec class", clazz.getName())) {
             return;
@@ -127,23 +126,23 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
     }
 
-    public @NotNull Map<Plugin, List<Service>> getPluginToServices() {
+    public Map<Plugin, List<Service>> getPluginToServices() {
         return pluginToServices;
     }
 
-    public @NotNull Map<CommandExec, CommandRegistered> getCommandExecToCommandRegistered() {
+    public Map<CommandExec, CommandRegistered> getCommandExecToCommandRegistered() {
         return commandExecToCommandRegistered;
     }
 
-    public @NotNull Set<FlagType> getFlagTypes() {
+    public Set<FlagType> getFlagTypes() {
         return flagTypes;
     }
 
-    public @NotNull Map<RecipientExec, RecipientRegistered> getRecipientExecToRecipientRegistered() {
+    public Map<RecipientExec, RecipientRegistered> getRecipientExecToRecipientRegistered() {
         return recipientExecToRecipientRegistered;
     }
 
-    private boolean isRegistrationClosedMessage(@NotNull String componentName, @NotNull String name) {
+    private boolean isRegistrationClosedMessage(String componentName, String name) {
         if (isRegistrationClosed) {
             log().log(SEVERE, "The {} \"{}\" needs to be registered in \"onLoad()\" method or Secuboid plugin not " +
                     "declared as dependence", new Object[]{componentName, name});

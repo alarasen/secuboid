@@ -22,7 +22,6 @@ import app.secuboid.api.thread.QueueThread;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -160,7 +159,7 @@ class QueueThreadTest {
     private static class TestQueueProcessor implements QueueProcessor<Duration, Integer> {
 
         @Override
-        public @NotNull Integer process(@NotNull Duration duration) {
+        public Integer process(Duration duration) {
             if (!duration.isZero()) {
                 await().during(duration);
             }
@@ -168,7 +167,7 @@ class QueueThreadTest {
         }
 
         @Override
-        public @NotNull Set<Integer> processMultiple(@NotNull Duration duration) {
+        public Set<Integer> processMultiple(Duration duration) {
             if (!duration.isZero()) {
                 await().during(duration);
             }

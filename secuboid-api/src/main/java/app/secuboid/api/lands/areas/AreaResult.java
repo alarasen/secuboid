@@ -17,14 +17,11 @@
  */
 package app.secuboid.api.lands.areas;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Used for callback method when an area is created or modified. The area will
  * be returned only if it is a success.
  *
  * @param area the area created if success
  */
-public record AreaResult(@NotNull AreaResultCode code, @Nullable Area area) {
+public record AreaResult(AreaResultCode code, Area area) {
 }

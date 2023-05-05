@@ -20,7 +20,6 @@ package app.secuboid.api.events;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.recipients.RecipientExec;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This events is called when a player is banned from a land.
@@ -37,13 +36,12 @@ public class LandBanEvent extends LandEvent {
      * @param land          the land
      * @param recipientExec recipientExec
      */
-    public LandBanEvent(@NotNull Land land, @NotNull RecipientExec recipientExec) {
+    public LandBanEvent(Land land, RecipientExec recipientExec) {
         super(land);
         this.recipientExec = recipientExec;
     }
 
     @SuppressWarnings("java:S4144")
-    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -53,13 +51,11 @@ public class LandBanEvent extends LandEvent {
      *
      * @return the recipientExec
      */
-    @NotNull
     public RecipientExec getRecipient() {
         return recipientExec;
     }
 
     @Override
-    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }

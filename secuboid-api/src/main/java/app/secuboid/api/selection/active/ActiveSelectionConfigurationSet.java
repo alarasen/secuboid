@@ -19,7 +19,6 @@
 package app.secuboid.api.selection.active;
 
 import app.secuboid.api.lands.ConfigurationSet;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an active selection of a configuration set.
@@ -31,5 +30,5 @@ public interface ActiveSelectionConfigurationSet extends ActiveSelectionLandComp
      *
      * @return the configuration set
      */
-    @NotNull ConfigurationSet getConfigurationSet();
+    ConfigurationSet getConfigurationSet();
 }

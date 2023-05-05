@@ -31,14 +31,6 @@
 
     <dependencies>
 
-        <!-- IDE -->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <!-- IDE End -->
-
         <!-- Internal -->
         <dependency>
             <groupId>app.secuboid</groupId>

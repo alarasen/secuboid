@@ -23,8 +23,6 @@ import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.selection.PlayerSelection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -38,14 +36,14 @@ public interface PlayerInfo extends CommandSenderInfo {
      *
      * @return the player (or null for the console)
      */
-    @NotNull Player getPlayer();
+    Player getPlayer();
 
     /**
      * Gets the player UUID.
      *
      * @return the player UUID
      */
-    @NotNull UUID getUUID();
+    UUID getUUID();
 
     /**
      * Sets the player in Admin Mode
@@ -59,33 +57,33 @@ public interface PlayerInfo extends CommandSenderInfo {
      *
      * @return the last area or null if the player is outside an area
      */
-    @Nullable Area getArea();
+    Area getArea();
 
     /**
      * Gets the land where the player is.
      *
      * @return the last land
      */
-    @NotNull Land getLand();
+    Land getLand();
 
     /**
      * Gets the location path (area or world land) where the player is.
      *
      * @return the last location path (area or world land)
      */
-    @NotNull LocationPath getLocationPath();
+    LocationPath getLocationPath();
 
     /**
      * Gets the world land where the player is.
      *
      * @return the last world land
      */
-    @NotNull WorldLand getWorldLand();
+    WorldLand getWorldLand();
 
     /**
      * Gets the player selection.
      *
      * @return the player selection
      */
-    @NotNull PlayerSelection getPlayerSelection();
+    PlayerSelection getPlayerSelection();
 }

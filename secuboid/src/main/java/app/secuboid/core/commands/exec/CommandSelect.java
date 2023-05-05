@@ -21,7 +21,6 @@ import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.commands.CommandService;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.registration.CommandRegistered;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "select",
@@ -29,14 +28,14 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandSelect implements CommandExec {
 
-    private final @NotNull CommandService commandService;
+    private final CommandService commandService;
 
-    public CommandSelect(@NotNull CommandService commandService) {
+    public CommandSelect(CommandService commandService) {
         this.commandService = commandService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         commandService.executeCommandClass(CommandSelectCuboid.class, commandSenderInfo, subArgs);
     }
 }

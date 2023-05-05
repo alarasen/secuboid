@@ -53,36 +53,35 @@ import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
-import org.jetbrains.annotations.NotNull;
 
 import static app.secuboid.core.config.Config.config;
 
 public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
-    private final @NotNull SecuboidPlugin secuboidPlugin;
+    private final SecuboidPlugin secuboidPlugin;
 
     // Bukkit instances in alphabetical order
-    private final @NotNull PluginManager pluginManager;
+    private final PluginManager pluginManager;
 
     // Secuboid instances in alphabetical order
-    private final @NotNull ChatGetterService chatGetterService;
-    private final @NotNull ChatPageService chatPageService;
-    private final @NotNull CommandService commandService;
-    private final @NotNull CommandListenerService commandListenerService;
-    private final @NotNull FlagTypeService flagTypeService;
-    private final @NotNull LandService landService;
-    private final @NotNull MessageManagerService messageManagerService;
-    private final @NotNull MessageService messageService;
-    private final @NotNull PersistenceSessionService persistenceSessionService;
-    private final @NotNull PersistenceService persistenceService;
-    private final @NotNull PlayerInfoService playerInfoService;
-    private final @NotNull RecipientService recipientService;
-    private final @NotNull RegistrationService registrationService;
-    private final @NotNull ScoreboardService scoreboardService;
-    private final @NotNull SecuboidToolService secuboidToolService;
-    private final @NotNull ServiceService serviceService;
+    private final ChatGetterService chatGetterService;
+    private final ChatPageService chatPageService;
+    private final CommandService commandService;
+    private final CommandListenerService commandListenerService;
+    private final FlagTypeService flagTypeService;
+    private final LandService landService;
+    private final MessageManagerService messageManagerService;
+    private final MessageService messageService;
+    private final PersistenceSessionService persistenceSessionService;
+    private final PersistenceService persistenceService;
+    private final PlayerInfoService playerInfoService;
+    private final RecipientService recipientService;
+    private final RegistrationService registrationService;
+    private final ScoreboardService scoreboardService;
+    private final SecuboidToolService secuboidToolService;
+    private final ServiceService serviceService;
 
-    public SecuboidImpl(@NotNull SecuboidPlugin secuboidPlugin) {
+    public SecuboidImpl(SecuboidPlugin secuboidPlugin) {
         this.secuboidPlugin = secuboidPlugin;
 
         // Bukkit/Spigot instances
@@ -90,7 +89,6 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         pluginManager = server.getPluginManager();
         BukkitScheduler scheduler = server.getScheduler();
         ScoreboardManager scoreboardManager = server.getScoreboardManager();
-        assert scoreboardManager != null : "The scoreboard manager should not be null if the first world is loaded";
 
         // Secuboid instances
         // phase 1 in alphabetical order
@@ -159,42 +157,42 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     // Override getters in alphabetical order
 
     @Override
-    public @NotNull CommandService getCommandService() {
+    public CommandService getCommandService() {
         return commandService;
     }
 
     @Override
-    public @NotNull FlagTypeService getFlagTypeService() {
+    public FlagTypeService getFlagTypeService() {
         return flagTypeService;
     }
 
     @Override
-    public @NotNull LandService getLandService() {
+    public LandService getLandService() {
         return landService;
     }
 
     @Override
-    public @NotNull MessageService getMessageService() {
+    public MessageService getMessageService() {
         return messageService;
     }
 
     @Override
-    public @NotNull PlayerInfoService getPlayerInfoService() {
+    public PlayerInfoService getPlayerInfoService() {
         return playerInfoService;
     }
 
     @Override
-    public @NotNull RecipientService getRecipientService() {
+    public RecipientService getRecipientService() {
         return recipientService;
     }
 
     @Override
-    public @NotNull RegistrationService getRegistrationService() {
+    public RegistrationService getRegistrationService() {
         return registrationService;
     }
 
     @Override
-    public @NotNull ServiceService getServiceManager() {
+    public ServiceService getServiceManager() {
         return serviceService;
     }
 

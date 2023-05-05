@@ -29,8 +29,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Properties;
 
@@ -48,12 +46,12 @@ public class PersistenceSessionService implements Service {
 
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 
-    private final @NotNull JavaPlugin javaPlugin;
+    private final JavaPlugin javaPlugin;
 
     private boolean isLocalHSQL;
-    private @Nullable SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-    public PersistenceSessionService(@NotNull JavaPlugin javaPlugin) {
+    public PersistenceSessionService(JavaPlugin javaPlugin) {
         this.javaPlugin = javaPlugin;
         isLocalHSQL = false;
     }
@@ -116,13 +114,11 @@ public class PersistenceSessionService implements Service {
         }
     }
 
-    @NotNull
     public Session getSession() {
-        assert sessionFactory != null : "The Secuboid datasource is closed or net yet available";
         return sessionFactory.openSession();
     }
 
-    private void shutdownLocalHSQL(@NotNull Session session) {
+    private void shutdownLocalHSQL(Session session) {
         session.beginTransaction();
         session.createNativeMutationQuery("SHUTDOWN").executeUpdate();
     }

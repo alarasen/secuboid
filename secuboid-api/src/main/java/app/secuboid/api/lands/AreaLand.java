@@ -20,8 +20,6 @@ package app.secuboid.api.lands;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -39,7 +37,7 @@ public interface AreaLand extends Land {
      * @param areaForm the area form
      * @param callback the method to call back if success or not
      */
-    void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback);
+    void addArea(AreaForm areaForm, Consumer<AreaResult> callback);
 
     /**
      * Removes the area.
@@ -47,7 +45,7 @@ public interface AreaLand extends Land {
      * @param key      the key
      * @param callback the method to call back if success or not
      */
-    void removeArea(int key, @Nullable Consumer<AreaResult> callback);
+    void removeArea(int key, Consumer<AreaResult> callback);
 
     /**
      * Removes the area.
@@ -55,7 +53,7 @@ public interface AreaLand extends Land {
      * @param area     the area
      * @param callback the method to call back if success or not
      */
-    void removeArea(@NotNull Area area, @Nullable Consumer<AreaResult> callback);
+    void removeArea(Area area, Consumer<AreaResult> callback);
 
     /**
      * Replace area.
@@ -64,7 +62,7 @@ public interface AreaLand extends Land {
      * @param newAreaForm the new areaForm
      * @param callback    the method to call back if success or not
      */
-    void replaceArea(int key, @NotNull AreaForm newAreaForm, @Nullable Consumer<AreaResult> callback);
+    void replaceArea(int key, AreaForm newAreaForm, Consumer<AreaResult> callback);
 
     /**
      * Gets the area from the id.
@@ -72,33 +70,33 @@ public interface AreaLand extends Land {
      * @param id the id
      * @return the area
      */
-    @Nullable Area getArea(long id);
+    Area getArea(long id);
 
     /**
      * Gets the area ids.
      *
      * @return the area ids
      */
-    @NotNull Set<Long> getAreaIds();
+    Set<Long> getAreaIds();
 
     /**
      * Gets the ids and areas map.
      *
      * @return the ids and areas map
      */
-    @NotNull Map<Long, Area> getIdToArea();
+    Map<Long, Area> getIdToArea();
 
     /**
      * Gets the areas.
      *
      * @return the areas
      */
-    @NotNull Collection<Area> getAreas();
+    Collection<Area> getAreas();
 
     /**
      * Gets the parent. A null value means a not yet activated land or an orphan.
      *
      * @return the parent or the land is a world
      */
-    @NotNull Land getParent();
+    Land getParent();
 }

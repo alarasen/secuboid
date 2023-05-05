@@ -21,16 +21,15 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.players.PlayerInfo;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionModifyPassive extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyPassive(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo, @NotNull SelectionForm selectionForm) {
+    public ActiveSelectionModifyPassive(WorldLand worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 
     @Override
-    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
+    protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
         return false;
     }
 }

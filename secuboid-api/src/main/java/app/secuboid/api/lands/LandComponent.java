@@ -20,7 +20,6 @@ package app.secuboid.api.lands;
 import app.secuboid.api.lands.flags.Flags;
 import app.secuboid.api.lands.residents.Residents;
 import app.secuboid.api.storage.rows.WithId;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents every type of land, word, configuration sets, etc.
@@ -37,12 +36,12 @@ public interface LandComponent extends WithId, LocationPath {
      *
      * @return the land flags
      */
-    @NotNull Flags getFlags();
+    Flags getFlags();
 
     /**
      * Gets the land residents.
      *
      * @return the land residents
      */
-    @NotNull Residents getResidents();
+    Residents getResidents();
 }

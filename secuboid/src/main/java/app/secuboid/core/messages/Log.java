@@ -17,9 +17,6 @@
  */
 package app.secuboid.core.messages;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.logging.Logger;
 
 public class Log {
@@ -27,16 +24,16 @@ public class Log {
     private static final String LOGGER_PROPERTY_NAME = "java.util.logging.SimpleFormatter.format";
     private static final String LOGGER_PROPERTY_VALUE = "[%1$tF %1$tT] [%4$-7s] %5$s %n";
 
-    private static @Nullable Logger logger = null;
+    private static Logger logger = null;
 
     private Log() {
     }
 
-    public static void setLog(@Nullable Logger logger) {
+    public static void setLog(Logger logger) {
         Log.logger = logger;
     }
 
-    public static @NotNull Logger log() {
+    public static Logger log() {
         if (logger == null) {
             System.setProperty(LOGGER_PROPERTY_NAME, LOGGER_PROPERTY_VALUE);
             logger = Logger.getGlobal();

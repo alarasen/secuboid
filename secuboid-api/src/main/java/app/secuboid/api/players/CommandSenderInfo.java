@@ -19,10 +19,9 @@ package app.secuboid.api.players;
 
 import app.secuboid.api.selection.SenderSelection;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Contains informations for a command sender.
+ * Contains information for a command sender.
  */
 public interface CommandSenderInfo {
 
@@ -31,14 +30,14 @@ public interface CommandSenderInfo {
      *
      * @return the command sender
      */
-    @NotNull CommandSender sender();
+    CommandSender sender();
 
     /**
      * Gets the player name.
      *
      * @return the player name
      */
-    @NotNull String getName();
+    String getName();
 
     /**
      * Is the player admin mode?
@@ -52,5 +51,5 @@ public interface CommandSenderInfo {
      *
      * @return the sender selection
      */
-    public @NotNull SenderSelection getSelection();
+    public SenderSelection getSelection();
 }

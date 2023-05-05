@@ -26,21 +26,20 @@ import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "info"
 )
 public class CommandInfo implements CommandExec {
 
-    private final @NotNull MessageManagerService messageManagerService;
+    private final MessageManagerService messageManagerService;
 
-    public CommandInfo(@NotNull MessageManagerService messageManagerService) {
+    public CommandInfo(MessageManagerService messageManagerService) {
         this.messageManagerService = messageManagerService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         CommandSender sender = commandSenderInfo.sender();
 
         LocationPath locationPath;

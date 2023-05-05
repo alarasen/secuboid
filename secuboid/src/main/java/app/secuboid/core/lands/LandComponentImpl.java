@@ -22,16 +22,15 @@ import app.secuboid.api.lands.flags.Flags;
 import app.secuboid.api.lands.residents.Residents;
 import app.secuboid.core.lands.flags.FlagsImpl;
 import app.secuboid.core.lands.residents.ResidentsImpl;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public abstract class LandComponentImpl implements LandComponent {
 
-    protected final @NotNull String name;
+    protected final String name;
     private final long id;
-    private final @NotNull Flags flags;
-    private final @NotNull Residents residents;
+    private final Flags flags;
+    private final Residents residents;
 
     protected LandComponentImpl(long id, String name) {
         this.id = id;
@@ -46,7 +45,7 @@ public abstract class LandComponentImpl implements LandComponent {
     }
 
     @Override
-    public final @NotNull String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -57,12 +56,12 @@ public abstract class LandComponentImpl implements LandComponent {
     }
 
     @Override
-    public final @NotNull Flags getFlags() {
+    public final Flags getFlags() {
         return flags;
     }
 
     @Override
-    public final @NotNull Residents getResidents() {
+    public final Residents getResidents() {
         return residents;
     }
 

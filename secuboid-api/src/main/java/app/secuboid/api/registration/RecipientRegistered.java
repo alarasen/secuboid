@@ -18,7 +18,6 @@
 package app.secuboid.api.registration;
 
 import app.secuboid.api.utilities.CharacterCase;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -41,21 +40,21 @@ public @interface RecipientRegistered {
      *
      * @return the name
      */
-    @NotNull String name();
+    String name();
 
     /**
      * The short name for chat and save. Must be unique. Ex: p, everybody, etc.
      *
      * @return the short name
      */
-    @NotNull String shortName();
+    String shortName();
 
     /**
      * The chat color code.
      *
      * @return the chat color code
      */
-    @NotNull String chatColor();
+    String chatColor();
 
     /**
      * Value (additional parameter) needed or not?

@@ -21,11 +21,10 @@ import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.services.Service;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.ServicesManager;
-import org.jetbrains.annotations.NotNull;
 
 public class PermissionGroupService implements Service {
 
-    private final @NotNull ServicesManager servicesManager;
+    private final ServicesManager servicesManager;
 
     private final Permission permission = null;
 

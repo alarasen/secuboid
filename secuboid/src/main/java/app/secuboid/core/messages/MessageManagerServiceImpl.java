@@ -25,8 +25,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,11 +44,11 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     private static final String FILENAME_LANG_SUFFIX = ".yml";
     private static final String LANG_DEFAULT = "en";
 
-    private final @NotNull Plugin plugin;
-    private @Nullable FileConfiguration fileConfiguration;
-    private @Nullable FileConfiguration fileConfigurationFlags;
+    private final Plugin plugin;
+    private FileConfiguration fileConfiguration;
+    private FileConfiguration fileConfigurationFlags;
 
-    public MessageManagerServiceImpl(@NotNull Plugin plugin) {
+    public MessageManagerServiceImpl(Plugin plugin) {
         this.plugin = plugin;
         fileConfiguration = null;
         fileConfigurationFlags = null;
@@ -72,7 +70,7 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     }
 
     @Override
-    public @NotNull String get(@NotNull MessageType messageType, @NotNull MessagePath path) {
+    public String get(MessageType messageType, MessagePath path) {
         if (fileConfiguration == null) {
             String message = format(ERROR_MESSAGE_NOT_LOADED, plugin.getName());
             Log.log().log(SEVERE, message);
@@ -94,26 +92,26 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     }
 
     @Override
-    public void sendMessage(@NotNull CommandSender sender, @NotNull MessageType messageType, @NotNull MessagePath path) {
+    public void sendMessage(CommandSender sender, MessageType messageType, MessagePath path) {
         String message = get(messageType, path);
         sender.sendMessage(message);
     }
 
     @Override
-    public void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path) {
+    public void broadcastMessage(MessageType messageType, MessagePath path) {
         String message = get(messageType, path);
         plugin.getServer().broadcastMessage(message);
     }
 
     @Override
-    public @NotNull TextComponent getTextComponent(@NotNull MessageType messageType, @NotNull MessagePath path) {
+    public TextComponent getTextComponent(MessageType messageType, MessagePath path) {
         String message = get(messageType, path);
 
         return new TextComponent(message);
     }
 
     @Override
-    public @NotNull String getFlagDescription(@NotNull FlagType flagType) {
+    public String getFlagDescription(FlagType flagType) {
         if (fileConfigurationFlags == null) {
             String message = format(ERROR_MESSAGE_NOT_LOADED, plugin.getName());
             Log.log().log(SEVERE, message);
@@ -132,7 +130,7 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     }
 
     @Override
-    public void sendFlagDescription(@NotNull CommandSender sender, @NotNull FlagType flagType) {
+    public void sendFlagDescription(CommandSender sender, FlagType flagType) {
         String description = getFlagDescription(flagType);
         sender.sendMessage(description);
     }

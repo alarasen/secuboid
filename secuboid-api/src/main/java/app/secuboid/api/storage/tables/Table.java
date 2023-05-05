@@ -20,7 +20,6 @@ package app.secuboid.api.storage.tables;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.storage.rows.Row;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,7 +38,7 @@ public interface Table<R extends Row> {
      * @return the set of rows
      * @throws SQLException the SQL exception
      */
-    default @NotNull Set<R> selectAll(@NotNull Connection conn) throws SQLException {
+    default Set<R> selectAll(Connection conn) throws SQLException {
         throw new SecuboidRuntimeException("SQL SELECT ALL Not implemented!");
     }
 
@@ -52,7 +51,7 @@ public interface Table<R extends Row> {
      * @return the row
      * @throws SQLException the SQL exception
      */
-    default @NotNull R insert(@NotNull Connection conn, @NotNull R row) throws SQLException {
+    default R insert(Connection conn, R row) throws SQLException {
         throw new SecuboidRuntimeException("SQL INSERT Not implemented!");
     }
 
@@ -64,7 +63,7 @@ public interface Table<R extends Row> {
      * @return the row
      * @throws SQLException the SQL exception
      */
-    default @NotNull R update(@NotNull Connection conn, @NotNull R row) throws SQLException {
+    default R update(Connection conn, R row) throws SQLException {
         throw new SecuboidRuntimeException("SQL UPDATE Not implemented!");
     }
 
@@ -76,7 +75,7 @@ public interface Table<R extends Row> {
      * @return the row
      * @throws SQLException the SQL exception
      */
-    default @NotNull R delete(@NotNull Connection conn, @NotNull R row) throws SQLException {
+    default R delete(Connection conn, R row) throws SQLException {
         throw new SecuboidRuntimeException("SQL DELETE Not implemented!");
     }
 }

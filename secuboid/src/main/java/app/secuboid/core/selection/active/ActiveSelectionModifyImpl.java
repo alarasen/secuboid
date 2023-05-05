@@ -24,20 +24,18 @@ import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl implements ActiveSelectionModify {
 
-    protected final @NotNull WorldLand worldLand;
-    protected final @NotNull PlayerInfo playerInfo;
-    protected final @NotNull Player player;
-    protected final @NotNull SelectionForm selectionForm;
-    private @Nullable SelectionScoreboard selectionScoreboard;
-    private @Nullable Location playerLastLoc;
+    protected final WorldLand worldLand;
+    protected final PlayerInfo playerInfo;
+    protected final Player player;
+    protected final SelectionForm selectionForm;
+    private SelectionScoreboard selectionScoreboard;
+    private Location playerLastLoc;
 
-    protected ActiveSelectionModifyImpl(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo,
-                                        @NotNull SelectionForm selectionForm) {
+    protected ActiveSelectionModifyImpl(WorldLand worldLand, PlayerInfo playerInfo,
+                                        SelectionForm selectionForm) {
         super(playerInfo.getPlayer());
         this.worldLand = worldLand;
         this.playerInfo = playerInfo;
@@ -49,7 +47,7 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
     }
 
     @Override
-    public void init(@NotNull ScoreboardService scoreboardService) {
+    public void init(ScoreboardService scoreboardService) {
         playerLastLoc = player.getLocation();
         selectionForm.refreshVisualSelection();
         selectionScoreboard = new SelectionScoreboardActive(scoreboardService, player, selectionForm.areaForm,
@@ -57,7 +55,7 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
         selectionScoreboard.init();
     }
 
-    public @NotNull SelectionForm getSelectionForm() {
+    public SelectionForm getSelectionForm() {
         return selectionForm;
     }
 
@@ -91,9 +89,9 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand() {
+    public WorldLand getWorldLand() {
         return worldLand;
     }
 
-    protected abstract boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc);
+    protected abstract boolean playerMoveSelectionCheckChanged(Location playerLoc);
 }

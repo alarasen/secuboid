@@ -30,8 +30,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import static org.bukkit.event.EventPriority.NORMAL;
 import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
@@ -39,16 +37,16 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 
 public class SecuboidToolListener implements Listener {
 
-    private final @NotNull PlayerInfoService playerInfoService;
-    private final @NotNull SecuboidToolService secuboidToolService;
+    private final PlayerInfoService playerInfoService;
+    private final SecuboidToolService secuboidToolService;
 
-    public SecuboidToolListener(@NotNull PlayerInfoService playerInfoService, @NotNull SecuboidToolService secuboidToolService) {
+    public SecuboidToolListener(PlayerInfoService playerInfoService, SecuboidToolService secuboidToolService) {
         this.playerInfoService = playerInfoService;
         this.secuboidToolService = secuboidToolService;
     }
 
     @EventHandler(priority = NORMAL)
-    public void onPlayerInteractNormal(@NotNull PlayerInteractEvent event) {
+    public void onPlayerInteractNormal(PlayerInteractEvent event) {
         ItemStack itemStack = event.getItem();
 
         if (!isSecuboidTool(itemStack)) {
@@ -59,7 +57,6 @@ public class SecuboidToolListener implements Listener {
 
         Player player = event.getPlayer();
         PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
-        assert playerInfo != null;
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();
         Action action = event.getAction();
 
@@ -71,7 +68,7 @@ public class SecuboidToolListener implements Listener {
     }
 
     @EventHandler(priority = NORMAL)
-    public void onEntityDamageByEntityEventNormal(@NotNull EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntityEventNormal(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 
         if (entity instanceof Player player) {
@@ -86,17 +83,17 @@ public class SecuboidToolListener implements Listener {
         }
     }
 
-    private boolean isSecuboidTool(@Nullable ItemStack itemStack) {
+    private boolean isSecuboidTool(ItemStack itemStack) {
         return secuboidToolService.isSecuboidTool(itemStack);
     }
 
-    private void leftClick(@NotNull PlayerInfo playerInfo, @NotNull PlayerSelection playerSelection) {
+    private void leftClick(PlayerInfo playerInfo, PlayerSelection playerSelection) {
         if (!playerSelection.hasSelection()) {
             // todo select here
         }
     }
 
-    private void rightClick(@NotNull PlayerInfo playerInfo, @NotNull PlayerSelection playerSelection) {
+    private void rightClick(PlayerInfo playerInfo, PlayerSelection playerSelection) {
 
     }
 }

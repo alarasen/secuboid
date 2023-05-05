@@ -21,7 +21,6 @@ import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.services.Service;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Message manager for language files inside the plugin jar. At least,
@@ -36,7 +35,7 @@ public interface MessageManagerService extends Service {
      * @param path        the yaml path with arguments
      * @return the message
      */
-    @NotNull String get(@NotNull MessageType messageType, @NotNull MessagePath path);
+    String get(MessageType messageType, MessagePath path);
 
     /**
      * Sends a message to this sender.
@@ -45,7 +44,7 @@ public interface MessageManagerService extends Service {
      * @param messageType the message type
      * @param path        the yaml path with arguments
      */
-    void sendMessage(@NotNull CommandSender sender, @NotNull MessageType messageType, @NotNull MessagePath path);
+    void sendMessage(CommandSender sender, MessageType messageType, MessagePath path);
 
     /**
      * Broadcasts a message to all connected players.
@@ -53,7 +52,7 @@ public interface MessageManagerService extends Service {
      * @param messageType the message type
      * @param path        the yaml path with arguments
      */
-    void broadcastMessage(@NotNull MessageType messageType, @NotNull MessagePath path);
+    void broadcastMessage(MessageType messageType, MessagePath path);
 
     /**
      * Gets a text component (Bukkit) from a message path. You can use this when you need a clickable action
@@ -62,7 +61,7 @@ public interface MessageManagerService extends Service {
      * @param path        the yaml path with arguments
      * @return the text component
      */
-    @NotNull TextComponent getTextComponent(@NotNull MessageType messageType, @NotNull MessagePath path);
+    TextComponent getTextComponent(MessageType messageType, MessagePath path);
 
     /**
      * Gets the flag description.
@@ -70,7 +69,7 @@ public interface MessageManagerService extends Service {
      * @param flagType the flag type
      * @return the flag description
      */
-    @NotNull String getFlagDescription(@NotNull FlagType flagType);
+    String getFlagDescription(FlagType flagType);
 
     /**
      * Sends the flag description to this sender.
@@ -78,5 +77,5 @@ public interface MessageManagerService extends Service {
      * @param sender   the command sender (player or console)
      * @param flagType the flag type
      */
-    void sendFlagDescription(@NotNull CommandSender sender, @NotNull FlagType flagType);
+    void sendFlagDescription(CommandSender sender, FlagType flagType);
 }

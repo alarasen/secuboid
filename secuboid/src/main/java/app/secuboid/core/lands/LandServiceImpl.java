@@ -28,8 +28,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -45,13 +43,13 @@ public class LandServiceImpl implements LandService {
 
     private static final String DEFAULT_WORLD_NAME = "world";
 
-    private final @NotNull Server server;
+    private final Server server;
 
-    private final @NotNull Map<String, WorldLand> worldNameToWorldLand;
-    private final @NotNull Map<Long, LandComponent> idToLandComponent;
-    private final @NotNull Map<String, Set<LandComponent>> nameToLandComponents;
+    private final Map<String, WorldLand> worldNameToWorldLand;
+    private final Map<Long, LandComponent> idToLandComponent;
+    private final Map<String, Set<LandComponent>> nameToLandComponents;
 
-    public LandServiceImpl(@NotNull Server server) {
+    public LandServiceImpl(Server server) {
         this.server = server;
 
         worldNameToWorldLand = new HashMap<>();
@@ -70,7 +68,7 @@ public class LandServiceImpl implements LandService {
     }
 
 
-    public void loadWorldSync(@NotNull World world) {
+    public void loadWorldSync(World world) {
 //        String worldName = world.getName();
 //
 //        if (worldNameToWorldLand.containsKey(worldName)) {
@@ -90,8 +88,8 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public void create(@NotNull Land parent, @NotNull String landName, @NotNull RecipientExec owner,
-                       @NotNull AreaForm areaForm, @Nullable Consumer<LandResult> callback) {
+    public void create(Land parent, String landName, RecipientExec owner,
+                       AreaForm areaForm, Consumer<LandResult> callback) {
         String nameLower = landName.toLowerCase();
 
         LandResultCode code = validateName(parent, nameLower);
@@ -108,42 +106,42 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public void removeForce(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
+    public void removeForce(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeRecursive(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
+    public void removeRecursive(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void remove(@NotNull AreaLand land, @Nullable Consumer<LandResult> callback) {
+    public void remove(AreaLand land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void rename(@NotNull AreaLand land, @NotNull String newName, @Nullable Consumer<LandResult> callback) {
+    public void rename(AreaLand land, String newName, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void setParent(@NotNull AreaLand land, @NotNull Land newParent, @Nullable Consumer<LandResult> callback) {
+    public void setParent(AreaLand land, Land newParent, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public @Nullable LandComponent getLandComponent(long id) {
+    public LandComponent getLandComponent(long id) {
         return idToLandComponent.get(id);
     }
 
     @Override
-    public @NotNull Land get(@NotNull Location loc) {
+    public Land get(Location loc) {
         Area area = getArea(loc);
 
         if (area != null) {
@@ -154,7 +152,7 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public @NotNull Set<AreaLand> getAreaLands(@NotNull World world, int x, int z) {
+    public Set<AreaLand> getAreaLands(World world, int x, int z) {
         WorldLand worldLand = getWorldLand(world);
         Set<Area> areas = worldLand.get(x, z);
 
@@ -162,28 +160,28 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public @NotNull Set<AreaLand> getAreaLands(@NotNull Location loc) {
+    public Set<AreaLand> getAreaLands(Location loc) {
         Set<Area> areas = getAreas(loc);
 
         return getAreaLandsFromAreas(areas);
     }
 
     @Override
-    public @NotNull Set<Area> getAreas(@NotNull World world, int x, int z) {
+    public Set<Area> getAreas(World world, int x, int z) {
         WorldLand worldLand = getWorldLand(world);
 
         return worldLand.get(x, z);
     }
 
     @Override
-    public @NotNull Set<Area> getAreas(@NotNull Location loc) {
+    public Set<Area> getAreas(Location loc) {
         WorldLand worldLand = getWorldLand(loc);
 
         return worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override
-    public @Nullable Area getArea(@NotNull Location loc) {
+    public Area getArea(Location loc) {
         WorldLand worldLand = getWorldLand(loc);
         Set<Area> areas = worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
@@ -192,17 +190,17 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public @NotNull LocationPath getLocationPath(@NotNull Location loc) {
+    public LocationPath getLocationPath(Location loc) {
         return Optional.ofNullable((LocationPath) getArea(loc)).orElse(get(loc));
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand(@NotNull Location loc) {
+    public WorldLand getWorldLand(Location loc) {
         return getWorldLand(getWorldFromLocation(loc));
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand(@NotNull World world) {
+    public WorldLand getWorldLand(World world) {
         return worldNameToWorldLand.get(world.getName());
     }
 
@@ -226,7 +224,7 @@ public class LandServiceImpl implements LandService {
 //        }
     }
 
-//    private boolean loadLandComponentAndIsToRetry(@NotNull LandRow landRow) {
+//    private boolean loadLandComponentAndIsToRetry(LandRow landRow) {
 //        Long parentId = landRow.parentId();
 //        Land parent = null;
 //
@@ -258,7 +256,7 @@ public class LandServiceImpl implements LandService {
 //        }
     }
 
-//    private void loadArea(@NotNull AreaRow areaRow) {
+//    private void loadArea(AreaRow areaRow) {
 //        LandComponent landComponent = idToLandComponent.get(areaRow.landId());
 //
 //        if (!(landComponent instanceof AreaLand)) {
@@ -270,7 +268,7 @@ public class LandServiceImpl implements LandService {
 //        ((AreaLandImpl) landComponent).addAreaToLand(areaRow);
 //    }
 
-    private @Nullable LandResultCode validateName(@NotNull Land parent, @NotNull String nameLower) {
+    private LandResultCode validateName(Land parent, String nameLower) {
         if (!NameUtil.validateName(nameLower)) {
             return LandResultCode.NAME_INVALID;
         }
@@ -283,14 +281,14 @@ public class LandServiceImpl implements LandService {
         return null;
     }
 
-//    private void createInsertCallback(@NotNull LandRow landRow, @NotNull Land parent, @NotNull AreaForm areaForm,
-//                                      @Nullable Consumer<LandResult> callback) {
+//    private void createInsertCallback(LandRow landRow, Land parent, AreaForm areaForm,
+//                                      Consumer<LandResult> callback) {
 //        AreaLandImpl areaLand = new AreaLandImpl(landRow.id(), landRow.name(), parent);
 //        areaLand.addArea(areaForm, r -> createAddAreaCallback(areaLand, r, callback));
 //    }
 
-    private void createAddAreaCallback(@NotNull AreaLand areaLand, @NotNull AreaResult areaResult,
-                                       @Nullable Consumer<LandResult> callback) {
+    private void createAddAreaCallback(AreaLand areaLand, AreaResult areaResult,
+                                       Consumer<LandResult> callback) {
         if (areaResult.code() != AreaResultCode.SUCCESS) {
             if (callback != null) {
                 callback.accept(new LandResult(UNKNOWN, null, null));
@@ -308,7 +306,7 @@ public class LandServiceImpl implements LandService {
         }
     }
 
-    private void putLandComponentToMap(@NotNull LandComponent landComponent) {
+    private void putLandComponentToMap(LandComponent landComponent) {
         String name = landComponent.getName();
 
         idToLandComponent.put(landComponent.id(), landComponent);
@@ -319,7 +317,7 @@ public class LandServiceImpl implements LandService {
         }
     }
 
-    private void removeLandComponentFromMap(@NotNull LandComponent landComponent) {
+    private void removeLandComponentFromMap(LandComponent landComponent) {
         String name = landComponent.getName();
 
         idToLandComponent.remove(landComponent.id());
@@ -334,11 +332,11 @@ public class LandServiceImpl implements LandService {
         }
     }
 
-    private @NotNull Set<AreaLand> getAreaLandsFromAreas(@NotNull Set<Area> areas) {
+    private Set<AreaLand> getAreaLandsFromAreas(Set<Area> areas) {
         return areas.stream().map(Area::getLand).collect(Collectors.toSet());
     }
 
-    private @NotNull World getWorldFromLocation(@NotNull Location loc) {
+    private World getWorldFromLocation(Location loc) {
         World world = loc.getWorld();
 
         if (world != null)
@@ -349,8 +347,6 @@ public class LandServiceImpl implements LandService {
         if (world == null) {
             world = Bukkit.getWorlds().get(0);
         }
-
-        assert world != null : "A location is sent without any world. No world is available";
 
         log().log(Level.WARNING, "A location is sent without any world. Assuming: {}", world.getName());
 

@@ -19,8 +19,6 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,7 +26,7 @@ import java.util.Map;
 
 public abstract class LandImpl extends LandComponentImpl implements Land {
 
-    private final @NotNull Map<String, AreaLand> nameLowerToChild;
+    private final Map<String, AreaLand> nameLowerToChild;
 
     LandImpl(long id, String name) {
         super(id, name);
@@ -40,7 +38,7 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public boolean isDescendantsOf(@NotNull Land land) {
+    public boolean isDescendantsOf(Land land) {
         for (AreaLand currentLand : land.getChildren()) {
             if (this.equals(currentLand)) {
                 return true;
@@ -51,12 +49,12 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public @Nullable AreaLand getChild(@NotNull String name) {
+    public AreaLand getChild(String name) {
         return nameLowerToChild.get(name.toLowerCase());
     }
 
     @Override
-    public @NotNull Collection<AreaLand> getChildren() {
+    public Collection<AreaLand> getChildren() {
         return nameLowerToChild.values();
     }
 }

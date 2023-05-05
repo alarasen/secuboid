@@ -23,17 +23,16 @@ import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.core.lands.areas.AreaFormImpl;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionModifyExpand extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyExpand(@NotNull WorldLand worldLand, @NotNull PlayerInfo playerInfo,
-                                       @NotNull SelectionForm selectionForm) {
+    public ActiveSelectionModifyExpand(WorldLand worldLand, PlayerInfo playerInfo,
+                                       SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 
     @Override
-    protected boolean playerMoveSelectionCheckChanged(@NotNull Location playerLoc) {
+    protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
         AreaForm areaForm = selectionForm.getAreaForm();
         boolean isChanged = false;
 

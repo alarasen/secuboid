@@ -23,15 +23,14 @@ import app.secuboid.permission.group.PermissionGroupService;
 import app.secuboid.permission.group.SecuboidPermissionGroupPlugin;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.ServicesManager;
-import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPermissionGroup implements SecuboidComponent {
 
-    final private @NotNull Permission permission;
+    final private Permission permission;
 
-    final private @NotNull PermissionGroupService permissionGroupService;
+    final private PermissionGroupService permissionGroupService;
 
-    public SecuboidPermissionGroup(@NotNull SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin) {
+    public SecuboidPermissionGroup(SecuboidPermissionGroupPlugin secuboidPermissionGroupPlugin) {
         ServicesManager servicesManager = secuboidPermissionGroupPlugin.getServer().getServicesManager();
         permissionGroupService = new PermissionGroupService(servicesManager);
         permission = permissionGroupService.getPermission();

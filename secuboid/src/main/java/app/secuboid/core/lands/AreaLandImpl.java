@@ -24,20 +24,18 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 
 public class AreaLandImpl extends LandImpl implements AreaLand {
 
-    private final @NotNull WorldLand worldLand;
-    private final @NotNull Land parent;
-    private final @NotNull Map<Long, Area> idToArea;
+    private final WorldLand worldLand;
+    private final Land parent;
+    private final Map<Long, Area> idToArea;
 
 
-    public AreaLandImpl(long id, @NotNull String name, @NotNull Land parent) {
+    public AreaLandImpl(long id, String name, Land parent) {
         super(id, name);
 
         worldLand = parent.getWorldLand();
@@ -47,12 +45,12 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public @NotNull String getPathName() {
+    public String getPathName() {
         return parent.getPathName() + SEPARATOR_LAND + name;
     }
 
     @Override
-    public @NotNull WorldLand getWorldLand() {
+    public WorldLand getWorldLand() {
         return worldLand;
     }
 
@@ -79,7 +77,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public boolean isLocationInside(@NotNull Location loc) {
+    public boolean isLocationInside(Location loc) {
         if (!getWorldLand().isLocationInside(loc)) {
             return false;
         }
@@ -94,7 +92,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public void addArea(@NotNull AreaForm areaForm, @Nullable Consumer<AreaResult> callback) {
+    public void addArea(AreaForm areaForm, Consumer<AreaResult> callback) {
         // TODO add area
         //AreaRow areaRow = new AreaRow(NON_EXISTING_ID, id(), ((AreaFormImpl) areaForm).getAreaType(),
         //        areaForm.getX1(), areaForm.getY1(), areaForm.getZ1(), areaForm.getX2(), areaForm.getY2(),
@@ -104,46 +102,46 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
     }
 
     @Override
-    public void removeArea(int key, @Nullable Consumer<AreaResult> callback) {
+    public void removeArea(int key, Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void removeArea(@NotNull Area area, @Nullable Consumer<AreaResult> callback) {
+    public void removeArea(Area area, Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void replaceArea(int key, @NotNull AreaForm newAreaForm, @Nullable Consumer<AreaResult> callback) {
+    public void replaceArea(int key, AreaForm newAreaForm, Consumer<AreaResult> callback) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public @Nullable Area getArea(long id) {
+    public Area getArea(long id) {
         return idToArea.get(id);
     }
 
     @Override
-    public @NotNull Set<Long> getAreaIds() {
+    public Set<Long> getAreaIds() {
         return idToArea.keySet();
     }
 
     @Override
-    public @NotNull Map<Long, Area> getIdToArea() {
+    public Map<Long, Area> getIdToArea() {
         return Collections.unmodifiableMap(idToArea);
     }
 
     @Override
-    public @NotNull Collection<Area> getAreas() {
+    public Collection<Area> getAreas() {
         return idToArea.values();
     }
 
     @Override
-    public @NotNull Land getParent() {
+    public Land getParent() {
         return parent;
     }
 
-//    private void addAreaCallback(@NotNull AreaRow areaRow, @Nullable Consumer<AreaResult> callback) {
+//    private void addAreaCallback(AreaRow areaRow, Consumer<AreaResult> callback) {
 //        Area area = addAreaToLand(areaRow);
 //
 //        if (callback != null) {
@@ -151,7 +149,7 @@ public class AreaLandImpl extends LandImpl implements AreaLand {
 //        }
 //    }
 
-//    public @NotNull Area addAreaToLand(@NotNull AreaRow areaRow) {
+//    public Area addAreaToLand(AreaRow areaRow) {
 //        Area area = AreaType.newArea(areaRow, this);
 //        idToArea.put(area.id(), area);
 //        ((WorldLandImpl) getWorldLand()).add(area);

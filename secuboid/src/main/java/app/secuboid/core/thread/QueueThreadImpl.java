@@ -20,8 +20,6 @@ package app.secuboid.core.thread;
 import app.secuboid.api.thread.QueueProcessor;
 import app.secuboid.api.thread.QueueThread;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.concurrent.BlockingQueue;
@@ -44,8 +42,8 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
 
     private QueueThreadRun<T, R> thread;
 
-    public QueueThreadImpl(@NotNull Plugin plugin, @NotNull String threadName,
-                           @NotNull QueueProcessor<T, R> queueProcessor) {
+    public QueueThreadImpl(Plugin plugin, String threadName,
+                           QueueProcessor<T, R> queueProcessor) {
         this.plugin = plugin;
         this.threadName = threadName;
         this.queueProcessor = queueProcessor;
@@ -73,19 +71,19 @@ public class QueueThreadImpl<T, R> implements QueueThread<T, R> {
     }
 
     @Override
-    public void addElement(@NotNull T t) {
+    public void addElement(T t) {
         QueueThreadElement<T, R> element = new QueueThreadElement<>(t, null, null, false);
         taskQueue.add(element);
     }
 
     @Override
-    public void addElement(@NotNull T t, @NotNull BlockingQueue<Object> resultQueue, boolean isSet) {
+    public void addElement(T t, BlockingQueue<Object> resultQueue, boolean isSet) {
         QueueThreadElement<T, R> element = new QueueThreadElement<>(t, resultQueue, null, isSet);
         taskQueue.add(element);
     }
 
     @Override
-    public void addElement(@NotNull T t, @Nullable Consumer<R> callback) {
+    public void addElement(T t, Consumer<R> callback) {
         QueueThreadElement<T, R> element = new QueueThreadElement<>(t, null, callback, false);
         taskQueue.add(element);
     }

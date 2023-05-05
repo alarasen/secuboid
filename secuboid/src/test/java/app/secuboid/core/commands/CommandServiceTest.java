@@ -86,7 +86,7 @@ class CommandServiceTest {
 //        }
 //
 //        @Override
-//        public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+//        public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
 //            CommandSender sender = commandSenderInfo.sender();
 //            sender.sendMessage("done!");
 //        }
@@ -103,7 +103,7 @@ class CommandServiceTest {
 //        }
 //
 //        @Override
-//        public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, String[] subArgs) {
+//        public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
 //            CommandSender sender = commandSenderInfo.sender();
 //            sender.sendMessage("done sub!");
 //        }

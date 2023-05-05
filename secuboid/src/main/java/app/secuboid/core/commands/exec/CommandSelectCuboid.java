@@ -26,7 +26,6 @@ import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.PlayerSelectionImpl;
-import org.jetbrains.annotations.NotNull;
 
 @CommandRegistered(
         name = "select cuboid",
@@ -36,14 +35,14 @@ import org.jetbrains.annotations.NotNull;
 )
 public class CommandSelectCuboid implements CommandExec {
 
-    private final @NotNull ScoreboardService scoreboardService;
+    private final ScoreboardService scoreboardService;
 
-    public CommandSelectCuboid(@NotNull ScoreboardService scoreboardService) {
+    public CommandSelectCuboid(ScoreboardService scoreboardService) {
         this.scoreboardService = scoreboardService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
         WorldLand worldLand = playerInfo.getWorldLand();
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();

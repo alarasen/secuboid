@@ -20,11 +20,10 @@ package app.secuboid.permission.group;
 
 import app.secuboid.permission.group.recipients.SecuboidPermissionGroup;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class SecuboidPermissionGroupPlugin extends JavaPlugin {
 
-    private final @NotNull SecuboidPermissionGroup secuboidPermissionGroup;
+    private final SecuboidPermissionGroup secuboidPermissionGroup;
 
     @SuppressWarnings("java:S3010")
     public SecuboidPermissionGroupPlugin() {

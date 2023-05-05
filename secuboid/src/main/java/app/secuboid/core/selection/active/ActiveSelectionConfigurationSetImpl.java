@@ -21,20 +21,19 @@ package app.secuboid.core.selection.active;
 import app.secuboid.api.lands.ConfigurationSet;
 import app.secuboid.api.selection.active.ActiveSelectionConfigurationSet;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public class ActiveSelectionConfigurationSetImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionConfigurationSet {
 
-    protected final @NotNull ConfigurationSet configurationSet;
+    protected final ConfigurationSet configurationSet;
 
-    public ActiveSelectionConfigurationSetImpl(@NotNull CommandSender commandSender,
-                                               @NotNull ConfigurationSet configurationSet) {
+    public ActiveSelectionConfigurationSetImpl(CommandSender commandSender,
+                                               ConfigurationSet configurationSet) {
         super(commandSender, configurationSet);
         this.configurationSet = configurationSet;
     }
 
     @Override
-    public @NotNull ConfigurationSet getConfigurationSet() {
+    public ConfigurationSet getConfigurationSet() {
         return configurationSet;
     }
 }

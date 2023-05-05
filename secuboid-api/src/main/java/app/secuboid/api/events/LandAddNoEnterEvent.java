@@ -20,7 +20,6 @@ package app.secuboid.api.events;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.recipients.RecipientExec;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This events is called when a player container is added to a disallow inside a
@@ -38,13 +37,12 @@ public class LandAddNoEnterEvent extends LandEvent {
      * @param land          the land
      * @param recipientExec the recipientExec added
      */
-    public LandAddNoEnterEvent(@NotNull Land land, @NotNull RecipientExec recipientExec) {
+    public LandAddNoEnterEvent(Land land, RecipientExec recipientExec) {
         super(land);
         this.recipientExec = recipientExec;
     }
 
     @SuppressWarnings("java:S4144")
-    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -54,12 +52,11 @@ public class LandAddNoEnterEvent extends LandEvent {
      *
      * @return the recipientExec
      */
-    public @NotNull RecipientExec getRecipient() {
+    public RecipientExec getRecipient() {
         return recipientExec;
     }
 
     @Override
-    @NotNull
     public HandlerList getHandlers() {
         return handlers;
     }

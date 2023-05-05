@@ -18,8 +18,6 @@
 package app.secuboid.api.flagtypes;
 
 import app.secuboid.api.services.Service;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -34,7 +32,6 @@ public interface FlagTypeService extends Service {
      * @param name the name
      * @return the flag type
      */
-    @Nullable
     FlagType getFlagType(String name);
 
     /**
@@ -42,6 +39,5 @@ public interface FlagTypeService extends Service {
      *
      * @return the flag type names
      */
-    @NotNull
     Set<String> getFlagTypeNames();
 }

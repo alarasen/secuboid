@@ -24,22 +24,21 @@ import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.services.Service;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
-import org.jetbrains.annotations.NotNull;
 
 public class ScoreboardService implements Service {
 
     private static final String SCOREBOARD_PREFIX = "secuboid-";
 
-    private final @NotNull ScoreboardManager scoreboardManager;
-    private final @NotNull MessageManagerService messageManagerService;
+    private final ScoreboardManager scoreboardManager;
+    private final MessageManagerService messageManagerService;
 
-    public ScoreboardService(@NotNull ScoreboardManager scoreboardManager,
-                             @NotNull MessageManagerService messageManagerService) {
+    public ScoreboardService(ScoreboardManager scoreboardManager,
+                             MessageManagerService messageManagerService) {
         this.scoreboardManager = scoreboardManager;
         this.messageManagerService = messageManagerService;
     }
 
-    public SecuboidScoreboard create(@NotNull Player player, @NotNull String displayName, @NotNull String... lines) {
+    public SecuboidScoreboard create(Player player, String displayName, String... lines) {
         Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
         String name = SCOREBOARD_PREFIX + player.getName();
         Objective objective = scoreboard.registerNewObjective(name, Criteria.DUMMY, displayName, RenderType.INTEGER);
@@ -57,11 +56,11 @@ public class ScoreboardService implements Service {
         return new SecuboidScoreboard(player, scoreboard, objective, lines);
     }
 
-    public @NotNull String getMessage(@NotNull MessageType messageType, @NotNull MessagePath path) {
+    public String getMessage(MessageType messageType, MessagePath path) {
         return messageManagerService.get(messageType, path);
     }
 
-    public void changeLine(@NotNull SecuboidScoreboard secuboidScoreboard, int lineNb, @NotNull String newLine) {
+    public void changeLine(SecuboidScoreboard secuboidScoreboard, int lineNb, String newLine) {
         Scoreboard scoreboard = secuboidScoreboard.scoreboard();
         Objective objective = secuboidScoreboard.objective();
         String[] lines = secuboidScoreboard.lines();
@@ -72,7 +71,7 @@ public class ScoreboardService implements Service {
         lines[lineNb] = newLine;
     }
 
-    public void hide(@NotNull SecuboidScoreboard secuboidScoreboard) {
+    public void hide(SecuboidScoreboard secuboidScoreboard) {
         Player player = secuboidScoreboard.player();
 
         if (secuboidScoreboard.player().isOnline()) {

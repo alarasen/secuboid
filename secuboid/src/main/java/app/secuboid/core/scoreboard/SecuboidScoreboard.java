@@ -20,16 +20,15 @@ package app.secuboid.core.scoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public record SecuboidScoreboard(
-        @NotNull Player player,
-        @NotNull Scoreboard scoreboard,
-        @NotNull Objective objective,
-        @NotNull String[] lines
+        Player player,
+        Scoreboard scoreboard,
+        Objective objective,
+        String[] lines
 ) {
 
     @Override

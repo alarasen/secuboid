@@ -26,16 +26,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
 
 import static org.bukkit.event.EventPriority.MONITOR;
 
 public class PlayerConnectionListener implements Listener {
 
-    private final @NotNull ChatGetterService chatGetterService;
-    private final @NotNull PlayerInfoService playerInfoService;
+    private final ChatGetterService chatGetterService;
+    private final PlayerInfoService playerInfoService;
 
-    public PlayerConnectionListener(@NotNull ChatGetterService chatGetterService, @NotNull PlayerInfoService playerInfoService) {
+    public PlayerConnectionListener(ChatGetterService chatGetterService, PlayerInfoService playerInfoService) {
         this.chatGetterService = chatGetterService;
         this.playerInfoService = playerInfoService;
     }
@@ -50,7 +49,6 @@ public class PlayerConnectionListener implements Listener {
     public void onPlayerQuitMonitor(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         PlayerInfo playerInfo = playerInfoService.getPlayerInfo(player);
-        assert playerInfo != null;
         chatGetterService.remove(playerInfo);
         ((PlayerInfoServiceImpl) playerInfoService).removePlayer(player);
     }

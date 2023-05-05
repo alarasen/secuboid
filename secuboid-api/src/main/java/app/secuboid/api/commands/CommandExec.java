@@ -18,7 +18,6 @@
 package app.secuboid.api.commands;
 
 import app.secuboid.api.players.CommandSenderInfo;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * If you create a command for Secuboid, you should implement this interface and add CommandRegistered annotation.
@@ -34,5 +33,5 @@ public interface CommandExec {
      *                          console)
      * @param subArgs           the argument array (exclude the command itself)
      */
-    void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs);
+    void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs);
 }

@@ -26,7 +26,6 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.core.messages.MessagePaths;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 import static java.lang.Integer.parseInt;
 
@@ -36,16 +35,16 @@ import static java.lang.Integer.parseInt;
 )
 public class CommandPage implements CommandExec {
 
-    private final @NotNull ChatPageService chatPageService;
-    private final @NotNull MessageManagerService messageManagerService;
+    private final ChatPageService chatPageService;
+    private final MessageManagerService messageManagerService;
 
-    public CommandPage(@NotNull ChatPageService chatPageService, @NotNull MessageManagerService messageManagerService) {
+    public CommandPage(ChatPageService chatPageService, MessageManagerService messageManagerService) {
         this.chatPageService = chatPageService;
         this.messageManagerService = messageManagerService;
     }
 
     @Override
-    public void commandExec(@NotNull CommandSenderInfo commandSenderInfo, @NotNull String[] subArgs) {
+    public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         CommandSender sender = commandSenderInfo.sender();
 
         if (subArgs.length == 0) {
