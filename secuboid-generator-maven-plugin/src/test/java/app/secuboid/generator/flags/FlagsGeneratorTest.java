@@ -75,7 +75,7 @@ class FlagsGeneratorTest {
                 InputStream isSource = new ByteArrayInputStream(YAML_STR.getBytes());
 
                 StringReader srJavaTemplate = new StringReader(JAVA_TEMPLATE_STR);
-                BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate); //
+                BufferedReader brJavaTemplate = new BufferedReader(srJavaTemplate);
 
                 BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(swJavaTargets)
         ) {
@@ -85,13 +85,13 @@ class FlagsGeneratorTest {
         String output = swJavaTarget.toString();
 
         assertTrue(output.contains(
-                "public static final FlagType FLAG_ACTION_TEST = new FlagType(\"action-test\", \"Action test\", false, false, false, false);"));
+                "public static final FlagType FLAG_ACTION_TEST = FlagType.newInstance(\"action-test\", \"Action test\", false, false, false, false);"));
         assertTrue(output.contains(
-                "public static final FlagType FLAG_SOURCE_ACTION_TEST = new FlagType(\"source-action-test\", \"Source action test\", true, false, false, false);"));
+                "public static final FlagType FLAG_SOURCE_ACTION_TEST = FlagType.newInstance(\"source-action-test\", \"Source action test\", true, false, false, false);"));
         assertTrue(output.contains(
-                "public static final FlagType FLAG_SOURCE_ACTION_TARGET_TEST = new FlagType(\"source-action-target-test\", \"Source action target test\", true, true, false, false);"));
+                "public static final FlagType FLAG_SOURCE_ACTION_TARGET_TEST = FlagType.newInstance(\"source-action-target-test\", \"Source action target test\", true, true, false, false);"));
         assertTrue(output.contains(
-                "public static final FlagType FLAG_METADATA_TEST = new FlagType(\"metadata-test\", \"Metadata test\", true, false, true, true);"));
+                "public static final FlagType FLAG_METADATA_TEST = FlagType.newInstance(\"metadata-test\", \"Metadata test\", true, false, true, true);"));
 
         String langOutput = swLangTarget.toString();
 

@@ -65,14 +65,14 @@ public abstract class CommonGenerator {
 
         createPaths(targets);
 
-        try ( //
-              InputStream isSource = new FileInputStream(source); //
-              //
-              FileReader frTemplate = new FileReader(fileTemplate); //
-              BufferedReader brTemplate = new BufferedReader(frTemplate); //
-              //
-              FileWriterArray fileWriterArray = new FileWriterArray(targets); //
-              BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(fileWriterArray.getFwTargets()); //
+        try (
+                InputStream isSource = new FileInputStream(source);
+
+                FileReader frTemplate = new FileReader(fileTemplate);
+                BufferedReader brTemplate = new BufferedReader(frTemplate);
+
+                FileWriterArray fileWriterArray = new FileWriterArray(targets);
+                BufferedWriterArray bufferedWriterArray = new BufferedWriterArray(fileWriterArray.getFwTargets());
         ) {
             generate(isSource, brTemplate, bufferedWriterArray);
 

@@ -19,6 +19,7 @@
 package app.secuboid.core.persistence;
 
 import app.secuboid.api.services.Service;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.hibernate.Session;
@@ -26,27 +27,21 @@ import org.hibernate.Session;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 public class PersistenceService implements Service {
 
-    private static final String PERSISTENCE_THREAD_NOT_RUNNING_MSG = "PersistenceSessionService thread not running";
+    private static final String THREAD_NAME = "Secuboid PersistenceSessionService";
 
     private final JavaPlugin javaPlugin;
     private final BukkitScheduler scheduler;
     private final PersistenceSessionService persistenceSessionService;
 
-    private PersistenceThread persistenceThread;
-
-    public PersistenceService(JavaPlugin javaPlugin, BukkitScheduler scheduler,
-                              PersistenceSessionService persistenceSessionService) {
-        this.javaPlugin = javaPlugin;
-        this.scheduler = scheduler;
-        this.persistenceSessionService = persistenceSessionService;
-        persistenceThread = null;
-    }
+    private PersistenceThread persistenceThread = null;
 
     @Override
     public void onEnable(boolean isServerBoot) {
         persistenceThread = new PersistenceThread(javaPlugin, scheduler, persistenceSessionService);
+        persistenceThread.setName(THREAD_NAME);
         persistenceThread.start();
     }
 

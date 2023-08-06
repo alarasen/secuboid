@@ -20,14 +20,16 @@ package app.secuboid.core.commands;
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.registration.CommandRegistered;
+import lombok.Data;
 
 import java.util.Map;
 import java.util.Set;
 
-record CommandContainer(
-        CommandExec commandExec,
-        CommandRegistered commandRegistered,
-        Set<FlagType> FlagTypes,
-        Map<String, CommandContainer> nameToSubCommand
-) {
+@Data
+class CommandContainer {
+
+    private final CommandExec commandExec;
+    private final CommandRegistered commandRegistered;
+    private final Set<FlagType> flagTypes;
+    private final Map<String, CommandContainer> nameToSubCommand;
 }

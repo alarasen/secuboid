@@ -17,44 +17,53 @@
  */
 package app.secuboid.api.messages;
 
-import java.util.Arrays;
-import java.util.Objects;
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * This is the record to gets a message from the yaml. The goal here is to
  * avoid a message to a not existing path.
- *
- * @param yamlPath     the yaml path
- * @param replacedTags the tags to replace
- * @param args         the arguments to put in place of tags
  */
-public record MessagePath(
-        String yamlPath,
-        String[] replacedTags,
-        Object[] args) {
+public interface MessagePath {
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MessagePath that = (MessagePath) o;
-        return yamlPath.equals(that.yamlPath) && Arrays.equals(replacedTags, that.replacedTags) && Arrays.equals(args, that.args);
+    /**
+     * Creates a new instance of message path.
+     *
+     * @param yamlPath     the yaml path
+     * @param replacedTags the tags to replace
+     * @param args         the arguments to put in place of tags
+     * @return a new instance
+     */
+    static MessagePath newInstance(String yamlPath, String[] replacedTags, Object[] args) {
+        try {
+            Class<?> clazz = Class.forName("app.secuboid.core.messages.MessagePathImpl");
+            return (MessagePath) clazz.getDeclaredConstructor(String.class, String[].class, Object[].class)
+                    .newInstance(yamlPath, replacedTags, args);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new SecuboidRuntimeException("Problem with \"app.secuboid.core.messages.MessagePathImpl\" new instance", e);
+        }
     }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(yamlPath);
-        result = 31 * result + Arrays.hashCode(replacedTags);
-        result = 31 * result + Arrays.hashCode(args);
-        return result;
-    }
+    /**
+     * Gets the yaml path.
+     *
+     * @return the yaml path
+     */
+    String getYamlPath();
 
-    @Override
-    public String toString() {
-        return "MessagePath{" +
-                "yamlPath='" + yamlPath + '\'' +
-                ", replacedTags=" + Arrays.toString(replacedTags) +
-                ", args=" + Arrays.toString(args) +
-                '}';
-    }
+    /**
+     * Gets the tags to replace.
+     *
+     * @return the tags to replace
+     */
+    String[] getReplacedTags();
+
+    /**
+     * Gets the arguments to put in place of tags.
+     *
+     * @return the arguments to put in place of tags
+     */
+    Object[] getArgs();
 }

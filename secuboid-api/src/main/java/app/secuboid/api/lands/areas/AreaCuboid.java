@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,17 +16,10 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.storage.rows;
+package app.secuboid.api.lands.areas;
 
 /**
- * Represents any Secuboid object that contains a id. It is used to remember the row id.
+ * Represents a cuboid area.
  */
-public interface WithId {
-
-    /**
-     * Gets the object id.
-     *
-     * @return the id
-     */
-    long id();
+public interface AreaCuboid extends Area {
 }

@@ -17,12 +17,14 @@
  */
 package app.secuboid.generator.messages;
 
+import lombok.Data;
+
 import java.util.List;
 
-record MessageRecord(
-        String methodName,
-        List<String> parameters,
-        String path,
-        List<String> tags
-) {
+@Data
+class MessageRecord {
+    private final String methodName;
+    private final List<String> parameters;
+    private final String path;
+    private final List<String> tags;
 }

@@ -17,14 +17,12 @@
  */
 package app.secuboid.core.lands.flags;
 
-import app.secuboid.api.lands.LandComponent;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.flags.Flags;
+import lombok.Data;
 
+@Data
 public class FlagsImpl implements Flags {
 
-    private final LandComponent land;
-
-    public FlagsImpl(LandComponent land) {
-        this.land = land;
-    }
+    private final Land land;
 }

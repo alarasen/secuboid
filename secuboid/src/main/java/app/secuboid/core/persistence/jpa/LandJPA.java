@@ -19,12 +19,7 @@
 package app.secuboid.core.persistence.jpa;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Set;
+import lombok.*;
 
 @Data
 @Builder
@@ -42,16 +37,11 @@ public class LandJPA {
     @Column(name = "name", nullable = false, length = 45)
     private String name;
 
-    @Column(name = "type", nullable = false, length = 1)
+    @Column(name = "type", length = 1, nullable = false)
     private String type;
 
     @OneToOne
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
     private LandJPA parentLandJPA;
-
-    @OneToMany(mappedBy = "landJPA", cascade = CascadeType.ALL)
-    private Set<AreaJPA> areaJPASet;
-
-    @OneToMany(mappedBy = "landJPA", cascade = CascadeType.ALL)
-    private Set<ResidentJPA> residentJPASet;
 }

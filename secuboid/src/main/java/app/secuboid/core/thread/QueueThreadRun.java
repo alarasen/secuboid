@@ -60,7 +60,7 @@ class QueueThreadRun<T, R> extends Thread {
         QueueThreadElement<T, R> element;
 
         // Loop unit there is no empty (stop thread request) queueProcessor.
-        while ((element = taskQueue.take()).t() != null) {
+        while ((element = taskQueue.take()).getT() != null) {
 
             Object result;
             if (element.isSet()) {
@@ -70,15 +70,15 @@ class QueueThreadRun<T, R> extends Thread {
             }
 
 
-            if (result != null && element.resultQueue() != null) {
-                element.resultQueue().put(result);
+            if (result != null && element.getResultQueue() != null) {
+                element.getResultQueue().put(result);
             }
         }
     }
 
     private R processElement(QueueThreadElement<T, R> element) {
-        T t = element.t();
-        Consumer<R> callback = element.callback();
+        T t = element.getT();
+        Consumer<R> callback = element.getCallback();
 
         if (t == null) {
             log().log(SEVERE, "An element in thread has a 't' null: {}", element);
@@ -107,7 +107,7 @@ class QueueThreadRun<T, R> extends Thread {
     }
 
     private Set<R> processElements(QueueThreadElement<T, R> element) {
-        T t = element.t();
+        T t = element.getT();
 
         if (t == null) {
             log().log(SEVERE, "An element in thread has a 't' null: {}", element);

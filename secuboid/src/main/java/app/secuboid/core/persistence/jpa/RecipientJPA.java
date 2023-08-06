@@ -24,7 +24,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -48,7 +47,4 @@ public class RecipientJPA {
 
     @Column(name = "uuid")
     private UUID uuid;
-
-    @OneToMany(mappedBy = "recipientJPA", cascade = CascadeType.ALL)
-    private Set<ResidentJPA> residentJPASet;
 }

@@ -18,11 +18,11 @@
 package app.secuboid.core.commands.exec;
 
 import app.secuboid.api.commands.CommandExec;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LandResult;
 import app.secuboid.api.lands.LandResultCode;
 import app.secuboid.api.lands.LandService;
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.players.CommandSenderInfo;
@@ -40,6 +40,7 @@ import app.secuboid.core.messages.ChatGetterService;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.players.CommandSenderInfoImpl;
 import app.secuboid.core.selection.active.ActiveSelectionModifyImpl;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.command.CommandSender;
 
 import java.util.UUID;
@@ -51,6 +52,7 @@ import static app.secuboid.api.recipients.RecipientService.PLAYER;
         name = "create",
         sourceActionFlags = "land-create"
 )
+@RequiredArgsConstructor
 public class CommandCreate implements CommandExec {
 
     private static final String COMMAND_SELECT = "/sd select";
@@ -59,15 +61,6 @@ public class CommandCreate implements CommandExec {
     private final LandService landService;
     private final MessageManagerService messageManagerService;
     private final RecipientService recipientService;
-
-    public CommandCreate(ChatGetterService chatGetterService, LandService landService,
-                         MessageManagerService messageManagerService,
-                         RecipientService recipientService) {
-        this.chatGetterService = chatGetterService;
-        this.landService = landService;
-        this.messageManagerService = messageManagerService;
-        this.recipientService = recipientService;
-    }
 
     @Override
     public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
@@ -122,30 +115,32 @@ public class CommandCreate implements CommandExec {
     private void landOwnerCallback(CommandSenderInfo commandSenderInfo,
                                    ActiveSelectionModify activeSelectionModify, String landName,
                                    RecipientResult result) {
-        RecipientExec owner = result.recipientExec();
+        RecipientExec owner = result.getRecipientExec();
+        RecipientResultCode code = result.getCode();
 
-        if (result.code() != RecipientResultCode.SUCCESS || owner == null) {
+        if (code != RecipientResultCode.SUCCESS || owner == null) {
             CommandSender sender = commandSenderInfo.sender();
-            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(result.code()));
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(code));
             return;
         }
 
         // TODO get parent
-        WorldLand worldLand = activeSelectionModify.getWorldLand();
-        AreaForm areaForm = ((ActiveSelectionModifyImpl) activeSelectionModify).getSelectionForm().getAreaForm();
-        landService.create(worldLand, landName, owner, areaForm, r -> landCreateCallback(commandSenderInfo, r));
+        Land worldLand = activeSelectionModify.getWorldLand();
+        Area area = ((ActiveSelectionModifyImpl) activeSelectionModify).getSelectionForm().getArea();
+        landService.create(worldLand, landName, owner, area, r -> landCreateCallback(commandSenderInfo, r));
     }
 
     public void landCreateCallback(CommandSenderInfo commandSenderInfo, LandResult landResult) {
         CommandSender sender = commandSenderInfo.sender();
+        LandResultCode code = landResult.getCode();
 
-        if (landResult.code() != LandResultCode.SUCCESS || landResult.areaLand() == null) {
-            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(landResult.code()));
+        if (code != LandResultCode.SUCCESS || landResult.getArea() == null) {
+            messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.generalError(code));
             return;
         }
 
         messageManagerService.sendMessage(sender, MessageType.NORMAL,
-                MessagePaths.selectionCreateCreated(landResult.areaLand().getName()));
+                MessagePaths.selectionCreateCreated(landResult.getArea().getId()));
         SenderSelection senderSelection = commandSenderInfo.getSelection();
         senderSelection.removeSelection();
     }

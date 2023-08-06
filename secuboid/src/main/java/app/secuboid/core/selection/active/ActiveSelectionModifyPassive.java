@@ -18,13 +18,13 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.players.PlayerInfo;
 import org.bukkit.Location;
 
 public class ActiveSelectionModifyPassive extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyPassive(WorldLand worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
+    public ActiveSelectionModifyPassive(Land worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 

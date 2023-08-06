@@ -17,11 +17,13 @@
  */
 package app.secuboid.generator.config;
 
-record ConfigRecord(
-        String javaType,
-        String varName,
-        String getFunction,
-        String path,
-        String defaultValue
-) {
+import lombok.Data;
+
+@Data
+class ConfigRecord {
+    private final String javaType;
+    private final String varName;
+    private final String getFunction;
+    private final String path;
+    private final String defaultValue;
 }

@@ -21,6 +21,7 @@ import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.services.Service;
 import app.secuboid.core.messages.MessagePaths;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -35,9 +36,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class SecuboidToolService implements Service {
-
-    private static final String NOT_ENABLE_YET_MESSAGE = "Secuboid tool service not yet enabled";
 
     private static final Material SECUBOID_TOOL_MATERIAL = Material.WOODEN_SHOVEL;
     private static final PersistentDataType<Byte, Byte> SECUBOID_TOOL_PERSISTENT_DATA_TYPE = PersistentDataType.BYTE;
@@ -49,14 +49,7 @@ public class SecuboidToolService implements Service {
     private final Plugin plugin;
     private final MessageManagerService messageManagerService;
 
-    private NamespacedKey toolNamespacedKey;
-
-    public SecuboidToolService(Plugin plugin, MessageManagerService messageManagerService) {
-        this.plugin = plugin;
-        this.messageManagerService = messageManagerService;
-
-        toolNamespacedKey = null;
-    }
+    private NamespacedKey toolNamespacedKey = null;
 
     @Override
     public void onEnable(boolean isServerBoot) {

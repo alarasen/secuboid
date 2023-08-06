@@ -33,12 +33,12 @@ import lombok.NoArgsConstructor;
 public class ResidentJPA {
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "land_id", nullable = false)
     private LandJPA landJPA;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "recipient_id", nullable = false)
     private RecipientJPA recipientJPA;
 

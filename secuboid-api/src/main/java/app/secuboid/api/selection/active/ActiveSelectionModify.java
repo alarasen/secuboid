@@ -18,7 +18,7 @@
 
 package app.secuboid.api.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 
 /**
  * Represents an active selection of an area creation or modify.
@@ -30,5 +30,5 @@ public interface ActiveSelectionModify extends ActiveSelection {
      *
      * @return the world land
      */
-    WorldLand getWorldLand();
+    Land getWorldLand();
 }

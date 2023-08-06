@@ -16,24 +16,52 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.recipients;
+package app.secuboid.api.lands.areas;
+
+import java.util.stream.Stream;
 
 /**
- * Used for callback method when a recipientExec is created.
+ * Represents an area type.
  */
-public interface RecipientResult {
+@SuppressWarnings("LombokGetterMayBeUsed")
+public enum AreaType {
 
     /**
-     * Gets the result code.
-     *
-     * @return the result code
+     * Cuboid area
      */
-    RecipientResultCode getCode();
+    CUBOID("c"),
 
     /**
-     * Gets the recipient exec if success.
-     *
-     * @return the recipient exec if success
+     * Cylinder area
      */
-    RecipientExec getRecipientExec();
+    CYLINDER("y");
+
+    private final String value;
+
+    private AreaType(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Gets the type from value.
+     *
+     * @param value value
+     * @return the type
+     */
+    public static AreaType of(String value) {
+        return Stream.of(AreaType.values())
+                .filter(e -> e.value.equals(value))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+
+    }
+
+    /**
+     * Gets the value.
+     *
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
 }

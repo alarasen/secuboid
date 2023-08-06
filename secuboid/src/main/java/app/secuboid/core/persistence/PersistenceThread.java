@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence;
 
+import lombok.AllArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.hibernate.Session;
@@ -32,28 +33,15 @@ import java.util.function.Function;
 import static app.secuboid.core.messages.Log.log;
 import static java.util.logging.Level.SEVERE;
 
+@AllArgsConstructor
 public class PersistenceThread extends Thread {
-
-    private static final String THREAD_NAME = "Secuboid PersistenceSessionService";
 
     private final JavaPlugin javaPlugin;
     private final BukkitScheduler scheduler;
     private final PersistenceSessionService persistenceSessionService;
-    private final BlockingQueue<PersistenceElement<?>> queue;
-    private final BlockingQueue<Object> threadSyncQueue;
 
-
-    PersistenceThread(JavaPlugin javaPlugin, BukkitScheduler scheduler,
-                      PersistenceSessionService persistenceSessionService) {
-        this.javaPlugin = javaPlugin;
-        this.scheduler = scheduler;
-        this.persistenceSessionService = persistenceSessionService;
-
-        queue = new LinkedBlockingQueue<>();
-        threadSyncQueue = new LinkedBlockingQueue<>(1);
-
-        setName(THREAD_NAME);
-    }
+    private final BlockingQueue<PersistenceElement<?>> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Object> threadSyncQueue = new LinkedBlockingQueue<>(1);
 
     void shutdown() {
         interrupt();
@@ -114,14 +102,14 @@ public class PersistenceThread extends Thread {
     }
 
     private <R> void process(PersistenceElement<R> element) {
-        Function<Session, R> sessionFunction = element.sessionFunction();
+        Function<Session, R> sessionFunction = element.getSessionFunction();
 
         R result;
         try (Session session = persistenceSessionService.getSession()) {
             result = sessionFunction.apply(session);
         }
 
-        Consumer<R> callback = element.callback();
+        Consumer<R> callback = element.getCallback();
         if (callback != null) {
             callMainThread(callback, result);
         }

@@ -18,46 +18,46 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.lands.areas.AreaFormImpl;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import org.bukkit.Location;
 
 public class ActiveSelectionModifyMove extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyMove(WorldLand worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
+    public ActiveSelectionModifyMove(Land worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 
     @Override
     protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
-        AreaForm areaForm = selectionForm.getAreaForm();
+        Area area = selectionForm.getArea();
         boolean isChanged = false;
 
         // Move with player
-        if (playerLoc.getBlockX() - 1 < areaForm.getX1()) {
-            int diffX = areaForm.getX1() - playerLoc.getBlockX() + 1;
-            ((AreaFormImpl) areaForm).setX1(areaForm.getX1() - diffX);
-            ((AreaFormImpl) areaForm).setX2(areaForm.getX2() - diffX);
+        if (playerLoc.getBlockX() - 1 < area.getX1()) {
+            int diffX = area.getX1() - playerLoc.getBlockX() + 1;
+            ((AreaJPA) area).setX1(area.getX1() - diffX);
+            ((AreaJPA) area).setX2(area.getX2() - diffX);
             isChanged = true;
         }
-        if (playerLoc.getBlockX() + 1 > areaForm.getX2()) {
-            int diffX = areaForm.getX2() - playerLoc.getBlockX() - 1;
-            ((AreaFormImpl) areaForm).setX1(areaForm.getX1() - diffX);
-            ((AreaFormImpl) areaForm).setX2(areaForm.getX2() - diffX);
+        if (playerLoc.getBlockX() + 1 > area.getX2()) {
+            int diffX = area.getX2() - playerLoc.getBlockX() - 1;
+            ((AreaJPA) area).setX1(area.getX1() - diffX);
+            ((AreaJPA) area).setX2(area.getX2() - diffX);
             isChanged = true;
         }
-        if (playerLoc.getBlockZ() - 1 < areaForm.getZ1()) {
-            int diffZ = areaForm.getZ1() - playerLoc.getBlockZ() + 1;
-            ((AreaFormImpl) areaForm).setZ1(areaForm.getZ1() - diffZ);
-            ((AreaFormImpl) areaForm).setZ2(areaForm.getZ2() - diffZ);
+        if (playerLoc.getBlockZ() - 1 < area.getZ1()) {
+            int diffZ = area.getZ1() - playerLoc.getBlockZ() + 1;
+            ((AreaJPA) area).setZ1(area.getZ1() - diffZ);
+            ((AreaJPA) area).setZ2(area.getZ2() - diffZ);
             isChanged = true;
         }
-        if (playerLoc.getBlockZ() + 1 > areaForm.getZ2()) {
-            int diffZ = areaForm.getZ2() - playerLoc.getBlockZ() - 1;
-            ((AreaFormImpl) areaForm).setZ1(areaForm.getZ1() - diffZ);
-            ((AreaFormImpl) areaForm).setZ2(areaForm.getZ2() - diffZ);
+        if (playerLoc.getBlockZ() + 1 > area.getZ2()) {
+            int diffZ = area.getZ2() - playerLoc.getBlockZ() - 1;
+            ((AreaJPA) area).setZ1(area.getZ1() - diffZ);
+            ((AreaJPA) area).setZ2(area.getZ2() - diffZ);
             isChanged = true;
         }
 

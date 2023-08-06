@@ -22,7 +22,7 @@ import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.selection.active.ActiveSelectionArea;
 import org.bukkit.command.CommandSender;
 
-public class ActiveSelectionAreaImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionArea {
+public class ActiveSelectionAreaImpl extends ActiveSelectionLandImpl implements ActiveSelectionArea {
 
     protected final Area area;
 

@@ -18,10 +18,11 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.api.messages.MessageType;
 import app.secuboid.api.selection.active.ActiveSelectionModify;
+import app.secuboid.core.lands.areas.AreaImpl;
 import app.secuboid.core.messages.MessagePaths;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import org.bukkit.entity.Player;
@@ -41,14 +42,14 @@ class SelectionScoreboardActive extends SelectionScoreboard {
             ActiveSelectionModifyPassive.class, "passive",
             ActiveSelectionModifyRetract.class, "retract");
 
-    private final AreaForm areaForm;
+    private final Area area;
     private final Class<? extends ActiveSelectionModify> activeSelectionModifyClass;
 
     SelectionScoreboardActive(ScoreboardService scoreboardService, Player player,
-                              AreaForm areaForm, Class<?
+                              Area area, Class<?
             extends ActiveSelectionModify> activeSelectionModifyClass) {
         super(scoreboardService, player);
-        this.areaForm = areaForm;
+        this.area = area;
         this.activeSelectionModifyClass = activeSelectionModifyClass;
     }
 
@@ -59,8 +60,8 @@ class SelectionScoreboardActive extends SelectionScoreboard {
         String[] lines = new String[5];
         lines[0] = scoreboardService.getMessage(MessageType.NORMAL,
                 MessagePaths.selectionScoreboardActiveSelectionType(selectionTypeMsg));
-        lines[1] = scoreboardService.getMessage(MessageType.NORMAL, areaForm.getMessagePath());
-        long volume = areaForm.getVolume();
+        lines[1] = scoreboardService.getMessage(MessageType.NORMAL, ((AreaImpl) area).getMessagePath());
+        long volume = area.getVolume();
         lines[2] = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
         lines[3] = "";
         lines[4] = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveTypeWhenDone(COMMAND_CREATE));
@@ -75,8 +76,8 @@ class SelectionScoreboardActive extends SelectionScoreboard {
             return;
         }
 
-        long volume = areaForm.getVolume();
-        String line1 = scoreboardService.getMessage(MessageType.NORMAL, areaForm.getMessagePath());
+        long volume = area.getVolume();
+        String line1 = scoreboardService.getMessage(MessageType.NORMAL, ((AreaImpl) area).getMessagePath());
         scoreboardService.changeLine(scoreboard, 1, line1);
         String line2 = scoreboardService.getMessage(MessageType.NORMAL, MessagePaths.selectionScoreboardActiveVolume(volume));
         scoreboardService.changeLine(scoreboard, 2, line2);
@@ -86,7 +87,7 @@ class SelectionScoreboardActive extends SelectionScoreboard {
         String msgTag = CLASS_TO_MESSAGE_TAG.get(activeSelectionModifyClass);
 
         String path = MESSAGE_PATH_MOVE_TYPE_PREFIX + msgTag;
-        MessagePath messagePath = new MessagePath(path, new String[]{}, new Object[]{});
+        MessagePath messagePath = MessagePath.newInstance(path, new String[]{}, new Object[]{});
         return scoreboardService.getMessage(MessageType.NO_COLOR, messagePath);
     }
 }

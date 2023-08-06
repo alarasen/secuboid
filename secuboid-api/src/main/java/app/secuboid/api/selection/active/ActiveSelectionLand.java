@@ -15,33 +15,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands;
 
-import app.secuboid.api.lands.flags.Flags;
-import app.secuboid.api.lands.residents.Residents;
-import app.secuboid.api.storage.rows.WithId;
+package app.secuboid.api.selection.active;
+
+import app.secuboid.api.lands.Land;
 
 /**
- * Represents every type of land, word, configuration sets, etc.
+ * Represents an active selection of a land.
  */
-public interface LandComponent extends WithId, LocationPath {
+public interface ActiveSelectionLand extends ActiveSelection {
 
     /**
-     * Erase the land configuration and sets the land default values.
-     */
-    void setDefault();
-
-    /**
-     * Gets the land flags.
+     * Gets the land.
      *
-     * @return the land flags
+     * @return the land
      */
-    Flags getFlags();
-
-    /**
-     * Gets the land residents.
-     *
-     * @return the land residents
-     */
-    Residents getResidents();
+    Land getLand();
 }

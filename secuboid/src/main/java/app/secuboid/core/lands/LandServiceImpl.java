@@ -19,17 +19,21 @@ package app.secuboid.core.lands;
 
 import app.secuboid.api.lands.*;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.lands.areas.AreaResult;
 import app.secuboid.api.lands.areas.AreaResultCode;
+import app.secuboid.api.lands.areas.AreaService;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.core.utilities.NameUtil;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -37,33 +41,26 @@ import java.util.stream.Collectors;
 import static app.secuboid.api.lands.LandResultCode.SUCCESS;
 import static app.secuboid.api.lands.LandResultCode.UNKNOWN;
 import static app.secuboid.core.messages.Log.log;
-import static java.lang.String.format;
 
+@RequiredArgsConstructor
 public class LandServiceImpl implements LandService {
 
     private static final String DEFAULT_WORLD_NAME = "world";
 
     private final Server server;
+    private final AreaService areaService;
 
-    private final Map<String, WorldLand> worldNameToWorldLand;
-    private final Map<Long, LandComponent> idToLandComponent;
-    private final Map<String, Set<LandComponent>> nameToLandComponents;
-
-    public LandServiceImpl(Server server) {
-        this.server = server;
-
-        worldNameToWorldLand = new HashMap<>();
-        idToLandComponent = new HashMap<>();
-        nameToLandComponents = new HashMap<>();
-    }
+    private final Map<String, Land> worldNameToLand = new HashMap<>();
+    private final Map<Long, Land> idToLand = new HashMap<>();
+    private final Map<String, Set<Land>> nameToLands = new HashMap<>();
 
     @Override
     public void onEnable(boolean isServerBoot) {
-        worldNameToWorldLand.clear();
-        idToLandComponent.clear();
-        nameToLandComponents.clear();
+        worldNameToLand.clear();
+        idToLand.clear();
+        nameToLands.clear();
 
-        loadLandComponents();
+        loadLands();
         loadAreas();
     }
 
@@ -88,14 +85,13 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public void create(Land parent, String landName, RecipientExec owner,
-                       AreaForm areaForm, Consumer<LandResult> callback) {
+    public void create(Land parent, String landName, RecipientExec owner, Area area, Consumer<LandResult> callback) {
         String nameLower = landName.toLowerCase();
 
         LandResultCode code = validateName(parent, nameLower);
         if (code != null) {
             if (callback != null) {
-                LandResult landResult = new LandResult(code, null, null);
+                LandResult landResult = new LandResultImpl(code, null, null);
                 callback.accept(landResult);
             }
             return;
@@ -106,43 +102,43 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public void removeForce(AreaLand land, Consumer<LandResult> callback) {
+    public void removeForce(Land land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void removeRecursive(AreaLand land, Consumer<LandResult> callback) {
+    public void removeRecursive(Land land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void remove(AreaLand land, Consumer<LandResult> callback) {
+    public void remove(Land land, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void rename(AreaLand land, String newName, Consumer<LandResult> callback) {
+    public void rename(Land land, String newName, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void setParent(AreaLand land, Land newParent, Consumer<LandResult> callback) {
+    public void setParent(Land land, Land newParent, Consumer<LandResult> callback) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public LandComponent getLandComponent(long id) {
-        return idToLandComponent.get(id);
+    public Land get(long id) {
+        return idToLand.get(id);
     }
 
     @Override
     public Land get(Location loc) {
-        Area area = getArea(loc);
+        Area area = areaService.getArea(loc);
 
         if (area != null) {
             return area.getLand();
@@ -152,59 +148,36 @@ public class LandServiceImpl implements LandService {
     }
 
     @Override
-    public Set<AreaLand> getAreaLands(World world, int x, int z) {
-        WorldLand worldLand = getWorldLand(world);
-        Set<Area> areas = worldLand.get(x, z);
+    public Set<Land> getLands(World world, int x, int z) {
+        Set<Area> areas = areaService.getAreas(world, x, z);
 
-        return getAreaLandsFromAreas(areas);
+        return getLandsFromAreas(areas);
     }
 
     @Override
-    public Set<AreaLand> getAreaLands(Location loc) {
-        Set<Area> areas = getAreas(loc);
+    public Set<Land> getLands(Location loc) {
+        Set<Area> areas = areaService.getAreas(loc);
 
-        return getAreaLandsFromAreas(areas);
-    }
-
-    @Override
-    public Set<Area> getAreas(World world, int x, int z) {
-        WorldLand worldLand = getWorldLand(world);
-
-        return worldLand.get(x, z);
-    }
-
-    @Override
-    public Set<Area> getAreas(Location loc) {
-        WorldLand worldLand = getWorldLand(loc);
-
-        return worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-    }
-
-    @Override
-    public Area getArea(Location loc) {
-        WorldLand worldLand = getWorldLand(loc);
-        Set<Area> areas = worldLand.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-
-        // TODO Area priority/child system
-        return areas.stream().findAny().orElse(null);
+        return getLandsFromAreas(areas);
     }
 
     @Override
     public LocationPath getLocationPath(Location loc) {
-        return Optional.ofNullable((LocationPath) getArea(loc)).orElse(get(loc));
+        // TODO return Optional.ofNullable((LocationPath) getArea(loc)).orElse(get(loc));
+        return null;
     }
 
     @Override
-    public WorldLand getWorldLand(Location loc) {
+    public Land getWorldLand(Location loc) {
         return getWorldLand(getWorldFromLocation(loc));
     }
 
     @Override
-    public WorldLand getWorldLand(World world) {
-        return worldNameToWorldLand.get(world.getName());
+    public Land getWorldLand(World world) {
+        return worldNameToLand.get(world.getName());
     }
 
-    private void loadLandComponents() {
+    private void loadLands() {
 //        // TODO Set<LandRow> landRows = getStorageManager().selectAllSync(LandRow.class);
 //        Set<LandRow> landRows = Collections.emptySet();
 //
@@ -273,7 +246,7 @@ public class LandServiceImpl implements LandService {
             return LandResultCode.NAME_INVALID;
         }
 
-        parent.getChild(nameLower);
+        // TODO validate if name exists
         if (!NameUtil.validateName(nameLower)) {
             return LandResultCode.NAME_EXIST;
         }
@@ -287,52 +260,51 @@ public class LandServiceImpl implements LandService {
 //        areaLand.addArea(areaForm, r -> createAddAreaCallback(areaLand, r, callback));
 //    }
 
-    private void createAddAreaCallback(AreaLand areaLand, AreaResult areaResult,
-                                       Consumer<LandResult> callback) {
-        if (areaResult.code() != AreaResultCode.SUCCESS) {
+    private void createAddAreaCallback(Land land, AreaResult areaResult, Consumer<LandResult> callback) {
+        if (areaResult.getCode() != AreaResultCode.SUCCESS) {
             if (callback != null) {
-                callback.accept(new LandResult(UNKNOWN, null, null));
+                callback.accept(new LandResultImpl(UNKNOWN, null, null));
             }
-            log().warning(() -> format("This land cannot be create because an error with the area [id=%s, " +
-                    "name=%s]", areaLand.id(), areaLand.getName()));
+            log().warning(() -> String.format("This land cannot be create because an error with the area [id=%s, " +
+                    "name=%s]", land.getId(), land.getName()));
             return;
         }
 
-        putLandComponentToMap(areaLand);
-        ((LandImpl) areaLand.getParent()).setChild(areaLand);
+        putLandToMap(land);
+        // TODO ((LandImpl) land.getParent()).setChild(areaLand);
 
         if (callback != null) {
-            callback.accept(new LandResult(SUCCESS, areaLand, areaResult.area()));
+            callback.accept(new LandResultImpl(SUCCESS, land, areaResult.getArea()));
         }
     }
 
-    private void putLandComponentToMap(LandComponent landComponent) {
-        String name = landComponent.getName();
+    private void putLandToMap(Land land) {
+        String name = land.getName();
 
-        idToLandComponent.put(landComponent.id(), landComponent);
-        nameToLandComponents.computeIfAbsent(name, k -> new HashSet<>()).add(landComponent);
+        idToLand.put(land.getId(), land);
+        nameToLands.computeIfAbsent(name, k -> new HashSet<>()).add(land);
 
-        if (landComponent instanceof WorldLand worldLand) {
-            worldNameToWorldLand.put(name, worldLand);
+        if (land.getType() == LandType.WORLD) {
+            worldNameToLand.put(name, land);
         }
     }
 
-    private void removeLandComponentFromMap(LandComponent landComponent) {
-        String name = landComponent.getName();
+    private void removeLandFromMap(Land land) {
+        String name = land.getName();
 
-        idToLandComponent.remove(landComponent.id());
+        idToLand.remove(land.getId());
 
-        nameToLandComponents.computeIfPresent(name, (k, v) -> {
-            v.remove(landComponent);
+        nameToLands.computeIfPresent(name, (k, v) -> {
+            v.remove(land);
             return !v.isEmpty() ? v : null;
         });
 
-        if (landComponent instanceof WorldLand) {
-            worldNameToWorldLand.remove(name);
+        if (land.getType() == LandType.WORLD) {
+            worldNameToLand.remove(name);
         }
     }
 
-    private Set<AreaLand> getAreaLandsFromAreas(Set<Area> areas) {
+    private Set<Land> getLandsFromAreas(Set<Area> areas) {
         return areas.stream().map(Area::getLand).collect(Collectors.toSet());
     }
 

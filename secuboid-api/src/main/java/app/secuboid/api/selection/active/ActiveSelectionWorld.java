@@ -18,17 +18,17 @@
 
 package app.secuboid.api.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 
 /**
  * Represents an active selection of a world.
  */
-public interface ActiveSelectionWorld extends ActiveSelectionLandComponent {
+public interface ActiveSelectionWorld extends ActiveSelectionLand {
 
     /**
      * Gets the world land.
      *
      * @return the world land
      */
-    WorldLand getWorldLand();
+    Land getWorldLand();
 }

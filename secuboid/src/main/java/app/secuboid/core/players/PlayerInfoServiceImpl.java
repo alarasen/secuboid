@@ -21,10 +21,12 @@ import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LandService;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaService;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.ConsoleCommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.players.PlayerInfoService;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -35,23 +37,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class PlayerInfoServiceImpl implements PlayerInfoService {
 
     private final Server server;
+    private final AreaService areaService;
     private final LandService landService;
 
-    private final Map<CommandSender, CommandSenderInfo> senderToInfo;
-
-    public PlayerInfoServiceImpl(Server server, LandService landService) {
-        this.server = server;
-        this.landService = landService;
-
-        senderToInfo = new HashMap<>();
-    }
+    private final Map<CommandSender, CommandSenderInfo> senderToInfo = new HashMap<>();
 
     public void addPlayer(Player player) {
         Location lastLocation = player.getLocation();
-        Area area = landService.getArea(lastLocation);
+        Area area = areaService.getArea(lastLocation);
         Land land = landService.get(lastLocation);
         LocationPath locationPath = landService.getLocationPath(lastLocation);
         PlayerInfo playerInfo = new PlayerInfoImpl(player, lastLocation, area, land, locationPath);
@@ -71,7 +68,7 @@ public class PlayerInfoServiceImpl implements PlayerInfoService {
     public void updatePlayerPosition(PlayerInfo playerInfo, Location toLocation) {
 
         // TODO land change Events
-        Area area = landService.getArea(toLocation);
+        Area area = areaService.getArea(toLocation);
         Land land = landService.get(toLocation);
         LocationPath locationPath = landService.getLocationPath(toLocation);
         ((PlayerInfoImpl) playerInfo).updatePlayerPosition(toLocation, area, land, locationPath);

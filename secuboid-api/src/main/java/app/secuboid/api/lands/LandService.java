@@ -18,7 +18,6 @@
 package app.secuboid.api.lands;
 
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.services.Service;
 import org.bukkit.Location;
@@ -27,6 +26,9 @@ import org.bukkit.World;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Services about lands.
+ */
 public interface LandService extends Service {
 
     /**
@@ -35,11 +37,10 @@ public interface LandService extends Service {
      * @param parent   the parent or world
      * @param landName the land name
      * @param owner    the owner
-     * @param areaForm the area form
+     * @param area     the area
      * @param callback the method to call back if success or not
      */
-    void create(Land parent, String landName, RecipientExec owner,
-                AreaForm areaForm, Consumer<LandResult> callback);
+    void create(Land parent, String landName, RecipientExec owner, Area area, Consumer<LandResult> callback);
 
     /**
      * Removes the land and force if the land has children. The children will be
@@ -48,7 +49,7 @@ public interface LandService extends Service {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void removeForce(AreaLand land, Consumer<LandResult> callback);
+    void removeForce(Land land, Consumer<LandResult> callback);
 
     /**
      * Removes the land and children recursively.
@@ -56,7 +57,7 @@ public interface LandService extends Service {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void removeRecursive(AreaLand land, Consumer<LandResult> callback);
+    void removeRecursive(Land land, Consumer<LandResult> callback);
 
     /**
      * Removes the land.
@@ -64,7 +65,7 @@ public interface LandService extends Service {
      * @param land     the land
      * @param callback the method to call back if success or not
      */
-    void remove(AreaLand land, Consumer<LandResult> callback);
+    void remove(Land land, Consumer<LandResult> callback);
 
     /**
      * Rename land.
@@ -73,7 +74,7 @@ public interface LandService extends Service {
      * @param newName  the new name
      * @param callback the method to call back if success or not
      */
-    void rename(AreaLand land, String newName, Consumer<LandResult> callback);
+    void rename(Land land, String newName, Consumer<LandResult> callback);
 
     /**
      * Sets the land parent.
@@ -82,15 +83,15 @@ public interface LandService extends Service {
      * @param newParent the land parent
      * @param callback  the method to call back if success or not
      */
-    void setParent(AreaLand land, Land newParent, Consumer<LandResult> callback);
+    void setParent(Land land, Land newParent, Consumer<LandResult> callback);
 
     /**
-     * Gets the land component.
+     * Gets the land.
      *
      * @param id the id
-     * @return the land component
+     * @return the land
      */
-    LandComponent getLandComponent(long id);
+    Land get(long id);
 
     /**
      * Gets the land.
@@ -100,48 +101,22 @@ public interface LandService extends Service {
     Land get(Location loc);
 
     /**
-     * Gets all area lands available from a 2D location.
+     * Gets all lands available from a 2D location.
      *
      * @param world the world
      * @param x     the x
      * @param z     the z
-     * @return the area lands
+     * @return the lands
      */
-    Set<AreaLand> getAreaLands(World world, int x, int z);
+    Set<Land> getLands(World world, int x, int z);
 
     /**
-     * Gets all area lands available from a location.
+     * Gets all lands available from a location.
      *
      * @param loc the location
-     * @return the area lands
+     * @return the lands
      */
-    Set<AreaLand> getAreaLands(Location loc);
-
-    /**
-     * Gets the areas. This method ignore Y value.
-     *
-     * @param world the world
-     * @param x     the x
-     * @param z     the z
-     * @return the areas
-     */
-    Set<Area> getAreas(World world, int x, int z);
-
-    /**
-     * Gets all areas from a location.
-     *
-     * @param loc the loc
-     * @return the areas
-     */
-    Set<Area> getAreas(Location loc);
-
-    /**
-     * Gets the active area from the location.
-     *
-     * @param loc the loc
-     * @return the last area or null if the location is outside an area
-     */
-    Area getArea(Location loc);
+    Set<Land> getLands(Location loc);
 
     /**
      * Gets the active location path (area or world land) from the location.
@@ -156,7 +131,7 @@ public interface LandService extends Service {
      * @param loc the loc
      * @return the world land
      */
-    WorldLand getWorldLand(Location loc);
+    Land getWorldLand(Location loc);
 
     /**
      * Gets the world land from the world.
@@ -164,5 +139,5 @@ public interface LandService extends Service {
      * @param world the world
      * @return the world land
      */
-    WorldLand getWorldLand(World world);
+    Land getWorldLand(World world);
 }

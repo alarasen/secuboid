@@ -18,17 +18,17 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.lands.areas.AreaFormImpl;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import org.bukkit.Location;
 
 public class ActiveSelectionModifyRetract extends ActiveSelectionModifyImpl {
 
     private Location lastOutSideLoc;
 
-    public ActiveSelectionModifyRetract(WorldLand worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
+    public ActiveSelectionModifyRetract(Land worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
 
         lastOutSideLoc = null;
@@ -36,41 +36,41 @@ public class ActiveSelectionModifyRetract extends ActiveSelectionModifyImpl {
 
     @Override
     protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
-        AreaForm areaForm = selectionForm.getAreaForm();
+        Area area = selectionForm.getArea();
         boolean isChanged = false;
-        boolean isPlayerInside = areaForm.isLocationInsideSquare(playerLoc.getBlockX(), playerLoc.getBlockZ());
+        boolean isPlayerInside = area.isLocationInsideSquare(playerLoc.getBlockX(), playerLoc.getBlockZ());
         if (!isPlayerInside) {
             lastOutSideLoc = playerLoc;
         }
 
         // Check where the player is inside the land
         if (isPlayerInside && lastOutSideLoc != null) {
-            if (lastOutSideLoc.getBlockX() < areaForm.getX1() && playerLoc.getBlockX() >= areaForm.getX1()) {
-                ((AreaFormImpl) areaForm).setX1(playerLoc.getBlockX() + 1);
+            if (lastOutSideLoc.getBlockX() < area.getX1() && playerLoc.getBlockX() >= area.getX1()) {
+                ((AreaJPA) area).setX1(playerLoc.getBlockX() + 1);
                 isChanged = true;
-            } else if (lastOutSideLoc.getBlockX() > areaForm.getX2() && playerLoc.getBlockX() <= areaForm.getX2()) {
-                ((AreaFormImpl) areaForm).setX2(playerLoc.getBlockX() - 1);
+            } else if (lastOutSideLoc.getBlockX() > area.getX2() && playerLoc.getBlockX() <= area.getX2()) {
+                ((AreaJPA) area).setX2(playerLoc.getBlockX() - 1);
                 isChanged = true;
             }
 
-            if (lastOutSideLoc.getBlockZ() < areaForm.getZ1() && playerLoc.getBlockZ() >= areaForm.getZ1()) {
-                ((AreaFormImpl) areaForm).setZ1(playerLoc.getBlockZ() + 1);
+            if (lastOutSideLoc.getBlockZ() < area.getZ1() && playerLoc.getBlockZ() >= area.getZ1()) {
+                ((AreaJPA) area).setZ1(playerLoc.getBlockZ() + 1);
                 isChanged = true;
-            } else if (lastOutSideLoc.getBlockZ() > areaForm.getZ2() && playerLoc.getBlockZ() <= areaForm.getZ2()) {
-                ((AreaFormImpl) areaForm).setZ2(playerLoc.getBlockZ() - 1);
+            } else if (lastOutSideLoc.getBlockZ() > area.getZ2() && playerLoc.getBlockZ() <= area.getZ2()) {
+                ((AreaJPA) area).setZ2(playerLoc.getBlockZ() - 1);
                 isChanged = true;
             }
         }
 
         // Negative size, put to player location
-        if (areaForm.getX1() > areaForm.getX2()) {
-            ((AreaFormImpl) areaForm).setX1(playerLoc.getBlockX());
-            ((AreaFormImpl) areaForm).setX2(playerLoc.getBlockX());
+        if (area.getX1() > area.getX2()) {
+            ((AreaJPA) area).setX1(playerLoc.getBlockX());
+            ((AreaJPA) area).setX2(playerLoc.getBlockX());
         }
 
-        if (areaForm.getZ1() > areaForm.getZ2()) {
-            ((AreaFormImpl) areaForm).setZ1(playerLoc.getBlockZ());
-            ((AreaFormImpl) areaForm).setZ2(playerLoc.getBlockZ());
+        if (area.getZ1() > area.getZ2()) {
+            ((AreaJPA) area).setZ1(playerLoc.getBlockZ());
+            ((AreaJPA) area).setZ2(playerLoc.getBlockZ());
         }
 
         return isChanged;

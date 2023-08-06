@@ -19,7 +19,6 @@ package app.secuboid.api.players;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LocationPath;
-import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.selection.PlayerSelection;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * Contains informations for a specific player.
+ * Contains information for a specific player.
  */
 public interface PlayerInfo extends CommandSenderInfo {
 
@@ -78,7 +77,7 @@ public interface PlayerInfo extends CommandSenderInfo {
      *
      * @return the last world land
      */
-    WorldLand getWorldLand();
+    Land getWorldLand();
 
     /**
      * Gets the player selection.

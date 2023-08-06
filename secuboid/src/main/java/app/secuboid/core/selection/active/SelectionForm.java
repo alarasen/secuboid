@@ -20,7 +20,6 @@ package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.AreaForm;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -31,7 +30,7 @@ public abstract class SelectionForm {
     protected static final Material MATERIAL_COLLISION = Material.REDSTONE_BLOCK;
     protected static final Material MATERIAL_AREA = Material.IRON_BLOCK;
 
-    protected final AreaForm areaForm;
+    protected final Area area;
     protected final Player player;
     protected final boolean isResizeable;
     protected final Land originLand;
@@ -41,9 +40,8 @@ public abstract class SelectionForm {
     protected ChangedBlocks changedBlocks;
     protected boolean hasCollision;
 
-    SelectionForm(AreaForm areaForm, Player player, boolean isResizeable, Land originLand,
-                  Area originArea) {
-        this.areaForm = areaForm;
+    SelectionForm(Area area, Player player, boolean isResizeable, Land originLand, Area originArea) {
+        this.area = area;
         this.player = player;
         this.isResizeable = isResizeable;
         this.originLand = originLand;
@@ -54,8 +52,8 @@ public abstract class SelectionForm {
         hasCollision = false;
     }
 
-    public final AreaForm getAreaForm() {
-        return areaForm;
+    public final Area getArea() {
+        return area;
     }
 
     public final Player getPlayer() {
@@ -85,12 +83,12 @@ public abstract class SelectionForm {
     abstract void refreshVisualSelection();
 
     protected int getStepX() {
-        int result = ((areaForm.getX2() - areaForm.getX1()) / 32);
+        int result = ((area.getX2() - area.getX1()) / 32);
         return Math.max(result, 1);
     }
 
     protected int getStepZ() {
-        int result = ((areaForm.getZ2() - areaForm.getZ1()) / 32);
+        int result = ((area.getZ2() - area.getZ1()) / 32);
         return Math.max(result, 1);
     }
 }

@@ -75,9 +75,9 @@ class CommandServiceTest {
 //        verify(sender, times(1)).sendMessage("done!");
 //    }
 //
-//    @CommandRegistered( //
-//            pluginClass = SecuboidPlugin.class, //
-//            name = "test" //
+//    @CommandRegistered(
+//            pluginClass = SecuboidPlugin.class,
+//            name = "test"
 //    )
 //    private static class CommandTest implements CommandExec {
 //
@@ -92,9 +92,9 @@ class CommandServiceTest {
 //        }
 //    }
 //
-//    @CommandRegistered( //
-//            pluginClass = SecuboidPlugin.class, //
-//            name = "test sub" //
+//    @CommandRegistered(
+//            pluginClass = SecuboidPlugin.class,
+//            name = "test sub"
 //    )
 //    private static class CommandTestSub implements CommandExec {
 //

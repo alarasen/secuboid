@@ -77,7 +77,7 @@ public class MessageManagerServiceImpl implements MessageManagerService {
             return message;
         }
 
-        String yamlPath = path.yamlPath();
+        String yamlPath = path.getYamlPath();
         String format = fileConfiguration.getString(yamlPath);
 
         if (format == null) {
@@ -86,8 +86,8 @@ public class MessageManagerServiceImpl implements MessageManagerService {
             return message;
         }
 
-        String[] tags = path.replacedTags();
-        Object[] args = path.args();
+        String[] tags = path.getReplacedTags();
+        Object[] args = path.getArgs();
         return formatMessage(messageType, format, tags, args);
     }
 
@@ -118,7 +118,7 @@ public class MessageManagerServiceImpl implements MessageManagerService {
             return message;
         }
 
-        String name = flagType.name();
+        String name = flagType.getName();
         String description = fileConfigurationFlags.getString(name);
         if (description == null) {
             String message = format("Flag description not found: %s", name);

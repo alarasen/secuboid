@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,32 +15,69 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.lands;
 
-import app.secuboid.api.lands.AreaLand;
 import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.LandType;
+import app.secuboid.api.lands.areas.Area;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.bukkit.Location;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
-public abstract class LandImpl extends LandComponentImpl implements Land {
+@Data
+@Builder
+public class LandImpl implements Land {
 
-    private final Map<String, AreaLand> nameLowerToChild;
+    private final long id;
+    private final String name;
+    private final LandType type;
 
-    LandImpl(long id, String name) {
-        super(id, name);
-        nameLowerToChild = new HashMap<>();
-    }
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @Builder.Default
+    private final Set<Area> areas = new HashSet<>();
 
-    public void setChild(AreaLand areaLand) {
-        nameLowerToChild.put(areaLand.getName(), areaLand);
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @Builder.Default
+    private Land parent = null;
+
+
+    @Override
+    public String getPathName() {
+        return switch (type) {
+            case LAND -> Optional.ofNullable(parent).map(Land::getPathName).orElse("") + SEPARATOR_LAND + name;
+            case CONFIGURATION_SET -> PREFIX_CONFIGURATION_SET + name;
+            case WORLD -> SEPARATOR_LAND + name;
+        };
     }
 
     @Override
-    public boolean isDescendantsOf(Land land) {
-        for (AreaLand currentLand : land.getChildren()) {
-            if (this.equals(currentLand)) {
+    public Set<Land> getChildren() {
+        // TODO Implements
+        return null;
+    }
+
+    @Override
+    public Land getWorldLand() {
+        if (type == LandType.WORLD) {
+            return this;
+        }
+
+        return Optional.ofNullable(parent).map(Land::getWorldLand).orElse(null);
+    }
+
+    @Override
+    public boolean isLocationInside(int x, int z) {
+        for (Area area : areas) {
+            if (area.isLocationInside(x, z)) {
                 return true;
             }
         }
@@ -49,12 +86,28 @@ public abstract class LandImpl extends LandComponentImpl implements Land {
     }
 
     @Override
-    public AreaLand getChild(String name) {
-        return nameLowerToChild.get(name.toLowerCase());
+    public boolean isLocationInside(int x, int y, int z) {
+        for (Area area : areas) {
+            if (area.isLocationInside(x, y, z)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
-    public Collection<AreaLand> getChildren() {
-        return nameLowerToChild.values();
+    public boolean isLocationInside(Location loc) {
+        if (!getWorldLand().isLocationInside(loc)) {
+            return false;
+        }
+
+        for (Area area : areas) {
+            if (area.isLocationInside(loc)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

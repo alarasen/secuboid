@@ -18,22 +18,21 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.ConfigurationSet;
-import app.secuboid.api.selection.active.ActiveSelectionConfigurationSet;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.selection.active.ActiveSelectionLand;
 import org.bukkit.command.CommandSender;
 
-public class ActiveSelectionConfigurationSetImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionConfigurationSet {
+public abstract class ActiveSelectionLandImpl extends ActiveSelectionImpl implements ActiveSelectionLand {
 
-    protected final ConfigurationSet configurationSet;
+    protected final Land land;
 
-    public ActiveSelectionConfigurationSetImpl(CommandSender commandSender,
-                                               ConfigurationSet configurationSet) {
-        super(commandSender, configurationSet);
-        this.configurationSet = configurationSet;
+    protected ActiveSelectionLandImpl(CommandSender commandSender, Land land) {
+        super(commandSender);
+        this.land = land;
     }
 
     @Override
-    public ConfigurationSet getConfigurationSet() {
-        return configurationSet;
+    public Land getLand() {
+        return land;
     }
 }

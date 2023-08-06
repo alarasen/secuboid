@@ -18,7 +18,7 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.selection.active.ActiveSelectionModify;
 import app.secuboid.core.scoreboard.ScoreboardService;
@@ -27,14 +27,14 @@ import org.bukkit.entity.Player;
 
 public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl implements ActiveSelectionModify {
 
-    protected final WorldLand worldLand;
+    protected final Land worldLand;
     protected final PlayerInfo playerInfo;
     protected final Player player;
     protected final SelectionForm selectionForm;
     private SelectionScoreboard selectionScoreboard;
     private Location playerLastLoc;
 
-    protected ActiveSelectionModifyImpl(WorldLand worldLand, PlayerInfo playerInfo,
+    protected ActiveSelectionModifyImpl(Land worldLand, PlayerInfo playerInfo,
                                         SelectionForm selectionForm) {
         super(playerInfo.getPlayer());
         this.worldLand = worldLand;
@@ -50,7 +50,7 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
     public void init(ScoreboardService scoreboardService) {
         playerLastLoc = player.getLocation();
         selectionForm.refreshVisualSelection();
-        selectionScoreboard = new SelectionScoreboardActive(scoreboardService, player, selectionForm.areaForm,
+        selectionScoreboard = new SelectionScoreboardActive(scoreboardService, player, selectionForm.area,
                 this.getClass());
         selectionScoreboard.init();
     }
@@ -89,7 +89,7 @@ public abstract class ActiveSelectionModifyImpl extends ActiveSelectionImpl impl
     }
 
     @Override
-    public WorldLand getWorldLand() {
+    public Land getWorldLand() {
         return worldLand;
     }
 

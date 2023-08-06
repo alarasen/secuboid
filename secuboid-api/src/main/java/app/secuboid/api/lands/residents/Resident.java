@@ -17,18 +17,32 @@
  */
 package app.secuboid.api.lands.residents;
 
-import app.secuboid.api.lands.LandComponent;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.recipients.RecipientExec;
 
 /**
  * Represents a resident.
- *
- * @param landComponent the land component
- * @param recipientExec the recipientExec
- * @param level         the level
  */
-public record Resident(
-        LandComponent landComponent,
-        RecipientExec recipientExec,
-        int level) {
+public interface Resident {
+
+    /**
+     * Gets the land.
+     *
+     * @return the land
+     */
+    Land getLand();
+
+    /**
+     * Gets the recipient exec.
+     *
+     * @return the recipient exec
+     */
+    RecipientExec getRecipientExec();
+
+    /**
+     * Gets the level.
+     *
+     * @return the level
+     */
+    int getLevel();
 }

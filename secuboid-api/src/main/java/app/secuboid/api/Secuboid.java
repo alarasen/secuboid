@@ -85,5 +85,5 @@ public interface Secuboid {
      *
      * @return the service manager
      */
-    ServiceService getServiceManager();
+    ServiceService getServiceService();
 }

@@ -18,14 +18,16 @@
 
 package app.secuboid.core.persistence;
 
+import lombok.Data;
 import org.hibernate.Session;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-record PersistenceElement<R>(
-        Function<Session, R> sessionFunction,
-        Consumer<R> callback,
-        boolean isSync
-) {
+@Data
+class PersistenceElement<R> {
+
+    private final Function<Session, R> sessionFunction;
+    private final Consumer<R> callback;
+    private final boolean isSync;
 }

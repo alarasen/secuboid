@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,12 +15,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.api.lands.areas;
 
 /**
- * Represents a cylinder area form.
+ * Represents a cylinder area.
  */
-public interface CylinderAreaForm extends AreaForm {
+public interface AreaCylinder extends Area {
 
     /**
      * Gets the rx.

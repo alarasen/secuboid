@@ -18,21 +18,21 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.selection.active.ActiveSelectionWorld;
 import org.bukkit.command.CommandSender;
 
-public class ActiveSelectionWorldImpl extends ActiveSelectionLandComponentImpl implements ActiveSelectionWorld {
+public class ActiveSelectionWorldImpl extends ActiveSelectionLandImpl implements ActiveSelectionWorld {
 
-    protected final WorldLand worldLand;
+    protected final Land worldLand;
 
-    public ActiveSelectionWorldImpl(CommandSender commandSender, WorldLand worldLand) {
+    public ActiveSelectionWorldImpl(CommandSender commandSender, Land worldLand) {
         super(commandSender, worldLand);
         this.worldLand = worldLand;
     }
 
     @Override
-    public WorldLand getWorldLand() {
+    public Land getWorldLand() {
         return worldLand;
     }
 

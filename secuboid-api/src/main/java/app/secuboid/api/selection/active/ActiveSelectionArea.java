@@ -23,7 +23,7 @@ import app.secuboid.api.lands.areas.Area;
 /**
  * Represents an active selection of an area.
  */
-public interface ActiveSelectionArea extends ActiveSelectionLandComponent {
+public interface ActiveSelectionArea extends ActiveSelectionLand {
 
     /**
      * Gets the selected area.

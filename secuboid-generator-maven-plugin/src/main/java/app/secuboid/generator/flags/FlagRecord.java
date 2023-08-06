@@ -17,13 +17,17 @@
  */
 package app.secuboid.generator.flags;
 
+import lombok.Data;
+
 import java.util.Map;
 
-record FlagRecord(
-        String name,
-        Map<String, String> langToDescription,
-        boolean needSource,
-        boolean needTarget,
-        boolean needMetadata,
-        boolean isHidden) {
+@Data
+class FlagRecord {
+
+    final String name;
+    final Map<String, String> langToDescription;
+    final boolean needSource;
+    final boolean needTarget;
+    final boolean needMetadata;
+    final boolean isHidden;
 }

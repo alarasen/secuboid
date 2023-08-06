@@ -19,11 +19,16 @@
 package app.secuboid.core.thread;
 
 
+import lombok.Data;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Consumer;
 
-record QueueThreadElement<T, R>(T t,
-                                BlockingQueue<Object> resultQueue,
-                                Consumer<R> callback,
-                                boolean isSet) {
+@Data
+class QueueThreadElement<T, R> {
+
+    private final T t;
+    private final BlockingQueue<Object> resultQueue;
+    private final Consumer<R> callback;
+    private final boolean isSet;
 }

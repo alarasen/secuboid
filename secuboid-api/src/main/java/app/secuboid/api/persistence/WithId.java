@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,33 +15,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands;
 
-import app.secuboid.api.lands.areas.Area;
-
-import java.util.Set;
+package app.secuboid.api.persistence;
 
 /**
- * Represents a land in the entire world.
+ * Represents any Secuboid object that contains an id. It is used to remember the row id.
  */
-public interface WorldLand extends Land {
+public interface WithId {
 
     /**
-     * Gets the areas from a specific 2D point.
-     *
-     * @param x the x
-     * @param z the z
-     * @return the affected areas
+     * Represents a non-existing id or not yet in the database.
      */
-    Set<Area> get(int x, int z);
+    public static final long NON_EXISTING_ID = -1L;
 
     /**
-     * Gets the areas from a specific 3D point.
+     * Gets the object id.
      *
-     * @param x the x
-     * @param y the y
-     * @param z the z
-     * @return the affected areas
+     * @return the id
      */
-    Set<Area> get(int x, int y, int z);
+    long getId();
 }

@@ -37,28 +37,34 @@ public class AreaJPA {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "type", length = 1, nullable = false)
+    private String type;
+
+    @ManyToOne
     @JoinColumn(name = "land_id", nullable = false)
     private LandJPA landJPA;
 
-    @Column(name = "type", nullable = false, length = 1)
-    private String type;
-
     @Column(name = "x1", nullable = false)
-    private int x1;
+    @Builder.Default
+    private int x1 = Integer.MIN_VALUE;
 
     @Column(name = "y1", nullable = false)
-    private int y1;
+    @Builder.Default
+    private int y1 = Integer.MIN_VALUE;
 
     @Column(name = "z1", nullable = false)
-    private int z1;
+    @Builder.Default
+    private int z1 = Integer.MIN_VALUE;
 
     @Column(name = "x2", nullable = false)
-    private int x2;
+    @Builder.Default
+    private int x2 = Integer.MAX_VALUE;
 
     @Column(name = "y2", nullable = false)
-    private int y2;
+    @Builder.Default
+    private int y2 = Integer.MAX_VALUE;
 
     @Column(name = "z2", nullable = false)
-    private int z2;
+    @Builder.Default
+    private int z2 = Integer.MAX_VALUE;
 }

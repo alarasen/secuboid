@@ -19,33 +19,37 @@ package app.secuboid.core.players;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LocationPath;
-import app.secuboid.api.lands.WorldLand;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.api.selection.SenderSelection;
 import app.secuboid.core.selection.PlayerSelectionImpl;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@Getter
 public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo {
 
     private final Player player;
     private final PlayerSelection playerSelection;
 
+    @Setter
     private boolean adminMode;
 
+    @Setter
     private long lastUpdateTimeMillis;
     private Location lastLocation;
     private Area area;
     private Land land;
     private LocationPath locationPath;
-    private boolean isTpCancel;
+    @Setter
+    private boolean tpCancel;
 
-    PlayerInfoImpl(Player player, Location lastLocation, Area area, Land land,
-                   LocationPath locationPath) {
+    PlayerInfoImpl(Player player, Location lastLocation, Area area, Land land, LocationPath locationPath) {
         super(player);
         this.player = player;
         playerSelection = new PlayerSelectionImpl(this);
@@ -56,22 +60,16 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
         this.area = area;
         this.land = land;
         this.locationPath = locationPath;
-        isTpCancel = false;
+        tpCancel = false;
     }
 
-    public void updatePlayerPosition(Location lastLocation, Area area, Land land,
-                                     LocationPath locationPath) {
+    public void updatePlayerPosition(Location lastLocation, Area area, Land land, LocationPath locationPath) {
         this.lastLocation = lastLocation;
         this.area = area;
         this.land = land;
         this.locationPath = locationPath;
 
         ((PlayerSelectionImpl) playerSelection).updateSelectionFromLocation();
-    }
-
-    @Override
-    public Player getPlayer() {
-        return player;
     }
 
     @Override
@@ -92,27 +90,6 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public void setAdminMode(boolean value) {
-        adminMode = value;
-    }
-
-    public long getLastUpdateTimeMillis() {
-        return lastUpdateTimeMillis;
-    }
-
-    public void setLastUpdateTimeMillis(long lastUpdateTimeMillis) {
-        this.lastUpdateTimeMillis = lastUpdateTimeMillis;
-    }
-
-    public boolean hasTpCancel() {
-        return isTpCancel;
-    }
-
-    public void setTpCancel(boolean tpCancel) {
-        this.isTpCancel = tpCancel;
-    }
-
-    @Override
     public Area getArea() {
         return area;
     }
@@ -128,17 +105,12 @@ public class PlayerInfoImpl extends CommandSenderInfoImpl implements PlayerInfo 
     }
 
     @Override
-    public WorldLand getWorldLand() {
+    public Land getWorldLand() {
         return land.getWorldLand();
     }
 
     @Override
     public SenderSelection getSelection() {
-        return playerSelection;
-    }
-
-    @Override
-    public PlayerSelection getPlayerSelection() {
         return playerSelection;
     }
 }

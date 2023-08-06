@@ -21,28 +21,24 @@ import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.flagtypes.FlagTypeService;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.core.registration.RegistrationServiceImpl;
+import lombok.AllArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@AllArgsConstructor
 public class FlagTypeServiceImpl implements FlagTypeService {
 
     private final RegistrationService registrationService;
 
-    private final Map<String, FlagType> nameToFlagType;
-
-    public FlagTypeServiceImpl(RegistrationService registrationService) {
-        this.registrationService = registrationService;
-
-        nameToFlagType = new HashMap<>();
-    }
+    private final Map<String, FlagType> nameToFlagType = new HashMap<>();
 
     @Override
     public void onEnable(boolean isServerBoot) {
         if (isServerBoot) {
             Set<FlagType> flagTypes = ((RegistrationServiceImpl) registrationService).getFlagTypes();
-            flagTypes.forEach(f -> nameToFlagType.put(f.name(), f));
+            flagTypes.forEach(f -> nameToFlagType.put(f.getName(), f));
         }
     }
 

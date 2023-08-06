@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,23 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.core.lands.residents;
 
-import app.secuboid.api.lands.LandComponent;
-import app.secuboid.api.lands.residents.Resident;
-import app.secuboid.api.lands.residents.Residents;
+package app.secuboid.core.lands.areas;
 
-import java.util.HashSet;
-import java.util.Set;
+import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaResult;
+import app.secuboid.api.lands.areas.AreaResultCode;
+import lombok.Data;
 
-public class ResidentsImpl implements Residents {
+@Data
+public class AreaResultImpl implements AreaResult {
 
-    private final LandComponent land;
-
-    private final Set<Resident> residents;
-
-    public ResidentsImpl(LandComponent land) {
-        this.land = land;
-        residents = new HashSet<>();
-    }
+    private final AreaResultCode code;
+    private final Area area;
 }

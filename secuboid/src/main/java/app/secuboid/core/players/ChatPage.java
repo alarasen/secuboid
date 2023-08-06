@@ -18,9 +18,11 @@
 
 package app.secuboid.core.players;
 
-public record ChatPage(
-        String subject,
-        String text,
-        int totalPages
-) {
+import lombok.Data;
+
+@Data
+public class ChatPage {
+    private final String subject;
+    private final String text;
+    private final int totalPages;
 }

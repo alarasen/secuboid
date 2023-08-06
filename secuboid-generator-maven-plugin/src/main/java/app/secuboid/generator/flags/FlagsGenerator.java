@@ -106,9 +106,9 @@ public class FlagsGenerator extends CommonGenerator {
 
         Map<String, Object> flagNode = (Map<String, Object>) value;
 
-        Map<String, String> langToDescription = ((Map<String, Object>) flagNode.get("description")) //
-                .entrySet() //
-                .stream() //
+        Map<String, String> langToDescription = ((Map<String, Object>) flagNode.get("description"))
+                .entrySet()
+                .stream()
                 .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().toString()));
 
         boolean needSource = getOrDefault(flagNode, "need-source", true);
@@ -133,23 +133,23 @@ public class FlagsGenerator extends CommonGenerator {
     }
 
     private void generateFlag(BufferedWriter bwJavaTarget, FlagRecord flagRecord) throws IOException {
-        String nameUpper = toConstant("FLAG_" + flagRecord.name());
+        String nameUpper = toConstant("FLAG_" + flagRecord.getName());
 
-        bwJavaTarget //
-                .append("    public static final FlagType ") //
-                .append(nameUpper) //
-                .append(" = new FlagType(\"") //
-                .append(flagRecord.name()) //
-                .append("\", \"") //
-                .append(flagRecord.langToDescription().get("en")) //
-                .append("\", ") //
-                .append(Boolean.toString(flagRecord.needSource())) //
-                .append(", ") //
-                .append(Boolean.toString(flagRecord.needTarget())) //
-                .append(", ") //
-                .append(Boolean.toString(flagRecord.needMetadata())) //
-                .append(", ") //
-                .append(Boolean.toString(flagRecord.isHidden())) //
+        bwJavaTarget
+                .append("    public static final FlagType ")
+                .append(nameUpper)
+                .append(" = FlagType.newInstance(\"")
+                .append(flagRecord.getName())
+                .append("\", \"")
+                .append(flagRecord.getLangToDescription().get("en"))
+                .append("\", ")
+                .append(Boolean.toString(flagRecord.isNeedSource()))
+                .append(", ")
+                .append(Boolean.toString(flagRecord.isNeedTarget()))
+                .append(", ")
+                .append(Boolean.toString(flagRecord.isNeedMetadata()))
+                .append(", ")
+                .append(Boolean.toString(flagRecord.isHidden()))
                 .append(");");
 
         bwJavaTarget.newLine();
@@ -157,8 +157,8 @@ public class FlagsGenerator extends CommonGenerator {
 
     private void generateLanguageFlags(String language, BufferedWriter bwLangTarget) throws IOException {
         for (FlagRecord flagRecord : flagRecords) {
-            String name = flagRecord.name();
-            String description = flagRecord.langToDescription().get(language);
+            String name = flagRecord.getName();
+            String description = flagRecord.getLangToDescription().get(language);
             if (description != null) {
                 generateLanguageFlag(bwLangTarget, name, description);
             }
@@ -166,9 +166,9 @@ public class FlagsGenerator extends CommonGenerator {
     }
 
     private void generateLanguageFlag(BufferedWriter bwLangTarget, String name, String description) throws IOException {
-        bwLangTarget //
-                .append(name) //
-                .append(": ") //
+        bwLangTarget
+                .append(name)
+                .append(": ")
                 .append(description);
 
         bwLangTarget.newLine();

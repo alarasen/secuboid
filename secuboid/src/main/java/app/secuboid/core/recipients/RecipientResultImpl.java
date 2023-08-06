@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.storage.rows;
 
-/**
- * Represents a row from a table.
- */
-public interface Row {
+package app.secuboid.core.recipients;
+
+import app.secuboid.api.recipients.RecipientExec;
+import app.secuboid.api.recipients.RecipientResult;
+import app.secuboid.api.recipients.RecipientResultCode;
+import lombok.Data;
+
+@Data
+public class RecipientResultImpl implements RecipientResult {
+
+    private final RecipientResultCode code;
+    private final RecipientExec recipientExec;
 }

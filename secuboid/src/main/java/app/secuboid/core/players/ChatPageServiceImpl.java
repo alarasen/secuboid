@@ -67,13 +67,13 @@ public class ChatPageServiceImpl implements ChatPageService {
             return;
         }
 
-        ChatPaginator.ChatPage page = ChatPaginator.paginate(chatPage.text(), pageNumber, PAGE_WIDTH, PAGE_HEIGHT);
+        ChatPaginator.ChatPage page = ChatPaginator.paginate(chatPage.getText(), pageNumber, PAGE_WIDTH, PAGE_HEIGHT);
         show(sender, chatPage, page, pageNumber);
     }
 
     @Override
     public int getTotalPages(CommandSenderInfo commandSenderInfo) {
-        return Optional.ofNullable(commandSenderInfoToChatPage.get(commandSenderInfo)).map(ChatPage::totalPages).orElse(0);
+        return Optional.ofNullable(commandSenderInfoToChatPage.get(commandSenderInfo)).map(ChatPage::getTotalPages).orElse(0);
     }
 
     @Override
@@ -83,14 +83,14 @@ public class ChatPageServiceImpl implements ChatPageService {
 
     private void show(CommandSender sender, ChatPage chatPage, ChatPaginator.ChatPage page
             , int pageNumber) {
-        int totalPages = chatPage.totalPages();
+        int totalPages = chatPage.getTotalPages();
 
         if (pageNumber < 1 || pageNumber > totalPages) {
             messageManagerService.sendMessage(sender, MessageType.ERROR, MessagePaths.chatPageNotFound(1, totalPages));
             return;
         }
 
-        messageManagerService.sendMessage(sender, MessageType.TITLE, MessagePaths.chatPageHeader(chatPage.subject(),
+        messageManagerService.sendMessage(sender, MessageType.TITLE, MessagePaths.chatPageHeader(chatPage.getSubject(),
                 pageNumber, totalPages));
         sender.sendMessage(page.getLines());
 

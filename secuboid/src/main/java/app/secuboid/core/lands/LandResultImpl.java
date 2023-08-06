@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,11 +15,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package app.secuboid.api.lands;
 
-/**
- * Represents a configurable set.
- */
-public interface ConfigurationSet extends LandComponent {
+package app.secuboid.core.lands;
 
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.LandResult;
+import app.secuboid.api.lands.LandResultCode;
+import app.secuboid.api.lands.areas.Area;
+import lombok.Data;
+
+@Data
+public class LandResultImpl implements LandResult {
+
+    private final LandResultCode code;
+    private final Land land;
+    private final Area area;
 }

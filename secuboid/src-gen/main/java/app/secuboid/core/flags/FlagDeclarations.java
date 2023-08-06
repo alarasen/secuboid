@@ -24,7 +24,7 @@ public class FlagDeclarations {
     private FlagDeclarations() {
     }
 
-    public static final FlagType FLAG_BUILD = new FlagType("build", "Build and destroy", true, false, false, false);
+    public static final FlagType FLAG_BUILD = FlagType.newInstance("build", "Build and destroy", true, false, false, false);
 
-    public static final FlagType FLAG_LAND_CREATE = new FlagType("land-create", "Create a land", true, false, false, false);
+    public static final FlagType FLAG_LAND_CREATE = FlagType.newInstance("land-create", "Create a land", true, false, false, false);
 }

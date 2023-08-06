@@ -18,8 +18,8 @@
 package app.secuboid.core.commands.exec;
 
 import app.secuboid.api.commands.CommandExec;
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.CuboidAreaForm;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.registration.CommandRegistered;
@@ -44,10 +44,10 @@ public class CommandSelectCuboid implements CommandExec {
     @Override
     public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
         PlayerInfo playerInfo = (PlayerInfo) commandSenderInfo;
-        WorldLand worldLand = playerInfo.getWorldLand();
+        Land worldLand = playerInfo.getWorldLand();
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();
 
         ((PlayerSelectionImpl) playerSelection).createActiveSelectionModifyExpand(scoreboardService, worldLand,
-                CuboidAreaForm.class);
+                AreaType.CUBOID);
     }
 }

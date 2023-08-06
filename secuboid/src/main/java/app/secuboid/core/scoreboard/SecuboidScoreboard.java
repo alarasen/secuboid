@@ -17,42 +17,15 @@
  */
 package app.secuboid.core.scoreboard;
 
+import lombok.Data;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-public record SecuboidScoreboard(
-        Player player,
-        Scoreboard scoreboard,
-        Objective objective,
-        String[] lines
-) {
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SecuboidScoreboard that = (SecuboidScoreboard) o;
-        return player.equals(that.player) && scoreboard.equals(that.scoreboard) && objective.equals(that.objective) && Arrays.equals(lines, that.lines);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(player, scoreboard, objective);
-        result = 31 * result + Arrays.hashCode(lines);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "SecuboidScoreboard{" +
-                "player=" + player +
-                ", scoreboard=" + scoreboard +
-                ", objective=" + objective +
-                ", lines=" + Arrays.toString(lines) +
-                '}';
-    }
+@Data
+public class SecuboidScoreboard {
+    private final Player player;
+    private final Scoreboard scoreboard;
+    private final Objective objective;
+    private final String[] lines;
 }

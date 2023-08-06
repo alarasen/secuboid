@@ -25,17 +25,10 @@ import app.secuboid.api.recipients.RecipientService;
 import app.secuboid.api.recipients.RecipientType;
 import app.secuboid.api.registration.RecipientRegistered;
 import app.secuboid.api.registration.RegistrationService;
-import app.secuboid.core.registration.RegistrationServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import static app.secuboid.api.recipients.RecipientResultCode.*;
-import static app.secuboid.api.storage.rows.RowWithId.NON_EXISTING_ID;
-import static app.secuboid.core.messages.Log.log;
-import static java.lang.String.format;
-import static java.util.logging.Level.WARNING;
 
 public class RecipientServiceImpl implements RecipientService {
 
@@ -64,20 +57,20 @@ public class RecipientServiceImpl implements RecipientService {
     }
 
     public void grab(String name, String value, Consumer<RecipientResult> callback) {
-        String nameLower = name.toLowerCase();
-
-        // Pre-validation
-        RecipientResult result = grabInstanceWithResult(NON_EXISTING_ID, nameLower, value);
-        if (result.code() != SUCCESS || result.recipientExec() == null) {
-            if (callback != null) {
-                callback.accept(result);
-            } else {
-                log().log(WARNING, () -> format("Non success parameter Value [name=%s, value=%s, " +
-                        "result=%s]", name, value, result));
-            }
-            return;
-        }
-
+//        String nameLower = name.toLowerCase();
+//
+//        // Pre-validation
+//        RecipientResult result = grabInstanceWithResult(NON_EXISTING_ID, nameLower, value);
+//        if (result.code() != SUCCESS || result.recipientExec() == null) {
+//            if (callback != null) {
+//                callback.accept(result);
+//            } else {
+//                log().log(WARNING, () -> format("Non success parameter Value [name=%s, value=%s, " +
+//                        "result=%s]", name, value, result));
+//            }
+//            return;
+//        }
+//
 //        RecipientExec recipientExec = result.recipientExec();
 //        long id = recipientExec.id();
 //
@@ -98,18 +91,18 @@ public class RecipientServiceImpl implements RecipientService {
     }
 
     private void loadRecipientTypes() {
-        if (!nameLowerToType.isEmpty() || !typeToAnnotation.isEmpty()) {
-            return;
-        }
-
-        Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered = ((RegistrationServiceImpl) registrationService).getRecipientExecToRecipientRegistered();
-
-        recipientExecToRecipientRegistered.forEach((c, a) -> {
-            RecipientType type = new RecipientType(c, a);
-            typeToAnnotation.put(type, a);
-            nameLowerToType.put(a.shortName(), type);
-            nameLowerToType.put(a.name(), type);
-        });
+//        if (!nameLowerToType.isEmpty() || !typeToAnnotation.isEmpty()) {
+//            return;
+//        }
+//
+//        Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered = ((RegistrationServiceImpl) registrationService).getRecipientExecToRecipientRegistered();
+//
+//        recipientExecToRecipientRegistered.forEach((c, a) -> {
+//            RecipientType type = new RecipientType(c, a);
+//            typeToAnnotation.put(type, a);
+//            nameLowerToType.put(a.shortName(), type);
+//            nameLowerToType.put(a.name(), type);
+//        });
     }
 
     private void loadRecipients() {
@@ -144,53 +137,53 @@ public class RecipientServiceImpl implements RecipientService {
 //        }
 //    }
 
-    private RecipientResult grabInstanceWithResult(long id, String nameLower,
-                                                   String value) {
-        RecipientType type = nameLowerToType.get(nameLower);
-
-        if (type == null) {
-            return new RecipientResult(INVALID_PARAMETER, null);
-        }
-
-        RecipientRegistered annotation = typeToAnnotation.get(type);
-
-        boolean needsValue = annotation.needsValue();
-        if ((needsValue && value == null) || (!needsValue && value != null)) {
-            return new RecipientResult(INVALID_VALUE, null);
-        }
-
-        String modifiedValue;
-        if (!needsValue) {
-            modifiedValue = null;
-        } else {
-            modifiedValue = switch (annotation.characterCase()) {
-                case LOWERCASE -> value.toLowerCase();
-                case UPPERCASE -> value.toUpperCase();
-                case CASE_SENSITIVE -> value;
-            };
-        }
-
-        RecipientExec recipientExec;
-
-        if (id == NON_EXISTING_ID) {
-            recipientExec = typeToValueToRecipientGet(type, modifiedValue);
-            if (recipientExec != null) {
-                return new RecipientResult(SUCCESS, recipientExec);
-            }
-        }
-
-        try {
-            recipientExec = createInstance(type, id, modifiedValue);
-        } catch (RecipientException e) {
-            return new RecipientResult(INVALID_VALUE, null);
-        }
-
-        if (id != NON_EXISTING_ID) {
-            typeToValueToRecipientAdd(recipientExec);
-        }
-
-        return new RecipientResult(SUCCESS, recipientExec);
-    }
+//    private RecipientResult grabInstanceWithResult(long id, String nameLower,
+//                                                   String value) {
+//        RecipientType type = nameLowerToType.get(nameLower);
+//
+//        if (type == null) {
+//            return new RecipientResult(INVALID_PARAMETER, null);
+//        }
+//
+//        RecipientRegistered annotation = typeToAnnotation.get(type);
+//
+//        boolean needsValue = annotation.needsValue();
+//        if ((needsValue && value == null) || (!needsValue && value != null)) {
+//            return new RecipientResult(INVALID_VALUE, null);
+//        }
+//
+//        String modifiedValue;
+//        if (!needsValue) {
+//            modifiedValue = null;
+//        } else {
+//            modifiedValue = switch (annotation.characterCase()) {
+//                case LOWERCASE -> value.toLowerCase();
+//                case UPPERCASE -> value.toUpperCase();
+//                case CASE_SENSITIVE -> value;
+//            };
+//        }
+//
+//        RecipientExec recipientExec;
+//
+//        if (id == NON_EXISTING_ID) {
+//            recipientExec = typeToValueToRecipientGet(type, modifiedValue);
+//            if (recipientExec != null) {
+//                return new RecipientResult(SUCCESS, recipientExec);
+//            }
+//        }
+//
+//        try {
+//            recipientExec = createInstance(type, id, modifiedValue);
+//        } catch (RecipientException e) {
+//            return new RecipientResult(INVALID_VALUE, null);
+//        }
+//
+//        if (id != NON_EXISTING_ID) {
+//            typeToValueToRecipientAdd(recipientExec);
+//        }
+//
+//        return new RecipientResult(SUCCESS, recipientExec);
+//    }
 
     @SuppressWarnings("java:S2139")
     private RecipientExec createInstance(RecipientType type, long id,

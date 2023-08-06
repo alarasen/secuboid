@@ -61,9 +61,9 @@ public class ScoreboardService implements Service {
     }
 
     public void changeLine(SecuboidScoreboard secuboidScoreboard, int lineNb, String newLine) {
-        Scoreboard scoreboard = secuboidScoreboard.scoreboard();
-        Objective objective = secuboidScoreboard.objective();
-        String[] lines = secuboidScoreboard.lines();
+        Scoreboard scoreboard = secuboidScoreboard.getScoreboard();
+        Objective objective = secuboidScoreboard.getObjective();
+        String[] lines = secuboidScoreboard.getLines();
 
         scoreboard.resetScores(lines[lineNb]);
         Score score = objective.getScore(newLine);
@@ -72,9 +72,9 @@ public class ScoreboardService implements Service {
     }
 
     public void hide(SecuboidScoreboard secuboidScoreboard) {
-        Player player = secuboidScoreboard.player();
+        Player player = secuboidScoreboard.getPlayer();
 
-        if (secuboidScoreboard.player().isOnline()) {
+        if (secuboidScoreboard.getPlayer().isOnline()) {
             player.setScoreboard(scoreboardManager.getMainScoreboard());
         }
     }

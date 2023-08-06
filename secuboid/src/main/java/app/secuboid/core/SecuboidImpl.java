@@ -23,6 +23,7 @@ import app.secuboid.api.SecuboidPlugin;
 import app.secuboid.api.commands.CommandService;
 import app.secuboid.api.flagtypes.FlagTypeService;
 import app.secuboid.api.lands.LandService;
+import app.secuboid.api.lands.areas.AreaService;
 import app.secuboid.api.messages.MessageManagerService;
 import app.secuboid.api.messages.MessageService;
 import app.secuboid.api.players.ChatPageService;
@@ -37,6 +38,7 @@ import app.secuboid.core.flags.FlagDeclarations;
 import app.secuboid.core.flagtypes.FlagTypeServiceImpl;
 import app.secuboid.core.items.SecuboidToolService;
 import app.secuboid.core.lands.LandServiceImpl;
+import app.secuboid.core.lands.areas.AreaServiceImpl;
 import app.secuboid.core.listeners.*;
 import app.secuboid.core.messages.ChatGetterService;
 import app.secuboid.core.messages.Log;
@@ -49,6 +51,7 @@ import app.secuboid.core.recipients.RecipientServiceImpl;
 import app.secuboid.core.registration.RegistrationServiceImpl;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.services.ServiceServiceImpl;
+import lombok.Getter;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -56,6 +59,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import static app.secuboid.core.config.Config.config;
 
+@Getter
 public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     private final SecuboidPlugin secuboidPlugin;
@@ -64,6 +68,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     private final PluginManager pluginManager;
 
     // Secuboid instances in alphabetical order
+    private final AreaService areaService;
     private final ChatGetterService chatGetterService;
     private final ChatPageService chatPageService;
     private final CommandService commandService;
@@ -92,21 +97,22 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
         // Secuboid instances
         // phase 1 in alphabetical order
+        areaService = new AreaServiceImpl();
         chatGetterService = new ChatGetterService(secuboidPlugin, scheduler);
-        landService = new LandServiceImpl(server);
         messageService = new MessageServiceImpl();
         persistenceSessionService = new PersistenceSessionService(secuboidPlugin);
         registrationService = new RegistrationServiceImpl();
 
         // phase 2 in alphabetical order
         flagTypeService = new FlagTypeServiceImpl(registrationService);
+        landService = new LandServiceImpl(server, areaService);
         messageManagerService = messageService.grab(secuboidPlugin);
         persistenceService = new PersistenceService(secuboidPlugin, scheduler, persistenceSessionService);
-        playerInfoService = new PlayerInfoServiceImpl(server, landService);
         recipientService = new RecipientServiceImpl(registrationService);
         serviceService = new ServiceServiceImpl(registrationService);
 
         // phase 3 in alphabetical order
+        playerInfoService = new PlayerInfoServiceImpl(server, areaService, landService);
         chatPageService = new ChatPageServiceImpl(messageManagerService);
         scoreboardService = new ScoreboardService(scoreboardManager, messageManagerService);
         secuboidToolService = new SecuboidToolService(secuboidPlugin, messageManagerService);
@@ -154,48 +160,6 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         ((ServiceServiceImpl) serviceService).onEnableReload();
     }
 
-    // Override getters in alphabetical order
-
-    @Override
-    public CommandService getCommandService() {
-        return commandService;
-    }
-
-    @Override
-    public FlagTypeService getFlagTypeService() {
-        return flagTypeService;
-    }
-
-    @Override
-    public LandService getLandService() {
-        return landService;
-    }
-
-    @Override
-    public MessageService getMessageService() {
-        return messageService;
-    }
-
-    @Override
-    public PlayerInfoService getPlayerInfoService() {
-        return playerInfoService;
-    }
-
-    @Override
-    public RecipientService getRecipientService() {
-        return recipientService;
-    }
-
-    @Override
-    public RegistrationService getRegistrationService() {
-        return registrationService;
-    }
-
-    @Override
-    public ServiceService getServiceManager() {
-        return serviceService;
-    }
-
     private void registerServices() {
 
         // Register services
@@ -210,6 +174,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         registrationService.registerService(secuboidPlugin, persistenceService);
 
         // phase 4 in alphabetical order
+        registrationService.registerService(secuboidPlugin, areaService);
         registrationService.registerService(secuboidPlugin, chatGetterService);
         registrationService.registerService(secuboidPlugin, commandListenerService);
         registrationService.registerService(secuboidPlugin, commandService);

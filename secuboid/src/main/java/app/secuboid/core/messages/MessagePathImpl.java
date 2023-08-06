@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,22 +16,15 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.storage.rows;
+package app.secuboid.core.messages;
 
-/**
- * Represents a row with an ID. The id can be null only before the insert to database.
- */
-public interface RowWithId extends Row {
+import app.secuboid.api.messages.MessagePath;
+import lombok.Data;
 
-    /**
-     * Represents a non-existing id, when the id is not yet know.
-     */
-    public static final long NON_EXISTING_ID = -1L;
+@Data
+public class MessagePathImpl implements MessagePath {
 
-    /**
-     * Gets the row id. Can be {@link #NON_EXISTING_ID} only before the insert.
-     *
-     * @return the row id or {@link #NON_EXISTING_ID}
-     */
-    long id();
+    private final String yamlPath;
+    private final String[] replacedTags;
+    private final Object[] args;
 }

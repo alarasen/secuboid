@@ -19,14 +19,12 @@ package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.CylinderAreaForm;
 import org.bukkit.entity.Player;
 
 public class SelectionFormCylinder extends SelectionForm {
 
-    public SelectionFormCylinder(CylinderAreaForm cylinderAreaForm, Player player,
-                                 boolean isResizeable, Land originLand, Area originArea) {
-        super(cylinderAreaForm, player, isResizeable, originLand, originArea);
+    public SelectionFormCylinder(Area cylinderArea, Player player, boolean isResizeable, Land originLand, Area originArea) {
+        super(cylinderArea, player, isResizeable, originLand, originArea);
     }
 
     @Override

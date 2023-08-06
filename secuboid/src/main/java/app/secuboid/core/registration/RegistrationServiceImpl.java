@@ -102,7 +102,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public void registerFlagType(FlagType flagType) {
-        if (isRegistrationClosedMessage("flag type", flagType.name())) {
+        if (isRegistrationClosedMessage("flag type", flagType.getName())) {
             return;
         }
 

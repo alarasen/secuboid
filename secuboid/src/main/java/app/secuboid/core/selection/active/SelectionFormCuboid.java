@@ -19,7 +19,6 @@ package app.secuboid.core.selection.active;
 
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.CuboidAreaForm;
 import app.secuboid.core.utilities.PlayerUtil;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
@@ -27,9 +26,8 @@ import org.bukkit.entity.Player;
 
 public class SelectionFormCuboid extends SelectionForm {
 
-    public SelectionFormCuboid(CuboidAreaForm cuboidAreaForm, Player player,
-                               boolean isResizeable, Land originLand, Area originArea) {
-        super(cuboidAreaForm, player, isResizeable, originLand, originArea);
+    public SelectionFormCuboid(Area cuboidArea, Player player, boolean isResizeable, Land originLand, Area originArea) {
+        super(cuboidArea, player, isResizeable, originLand, originArea);
     }
 
     @Override
@@ -89,27 +87,27 @@ public class SelectionFormCuboid extends SelectionForm {
         int stepX = getStepX();
         int stepZ = getStepZ();
 
-        int posX = areaForm.getX1() - stepX;
+        int posX = area.getX1() - stepX;
 
-        while (posX < areaForm.getX2()) {
+        while (posX < area.getX2()) {
             posX += stepX;
 
             // Force to do not skip the X line
-            if (posX > areaForm.getX2()) {
-                posX = areaForm.getX2();
+            if (posX > area.getX2()) {
+                posX = area.getX2();
             }
 
-            int posZ = areaForm.getZ1() - stepZ;
+            int posZ = area.getZ1() - stepZ;
 
-            while (posZ < areaForm.getZ2()) {
+            while (posZ < area.getZ2()) {
                 posZ += stepZ;
 
                 // Force to do not skip the Z line
-                if (posZ > areaForm.getZ2()) {
-                    posZ = areaForm.getZ2();
+                if (posZ > area.getZ2()) {
+                    posZ = area.getZ2();
                 }
-                if (posX == areaForm.getX1() || posX == areaForm.getX2() || posZ == areaForm.getZ1() ||
-                        posZ == areaForm.getZ2()) {
+                if (posX == area.getX1() || posX == area.getX2() || posZ == area.getZ1() ||
+                        posZ == area.getZ2()) {
 
                     double posY = PlayerUtil.getYNearPlayer(player, posX, posZ) - 1d;
                     Location newLoc = new Location(world, posX, posY, posZ);
@@ -118,7 +116,7 @@ public class SelectionFormCuboid extends SelectionForm {
 
                 } else {
                     // Square center, skip!
-                    posZ = areaForm.getZ2() - 1;
+                    posZ = area.getZ2() - 1;
                 }
             }
         }

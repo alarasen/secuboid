@@ -17,21 +17,73 @@
  */
 package app.secuboid.api.lands;
 
+import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.persistence.WithId;
 import org.bukkit.Location;
 
-import java.util.Collection;
+import java.util.Set;
 
 /**
- * All lands world relative.
+ * Represents every type of land, word, configuration sets, etc.
  */
-public interface Land extends LandComponent {
+public interface Land extends LocationPath, WithId {
 
     /**
-     * Gets the world land from this land (or itself if it is already a world land.
+     * Gets the name
+     *
+     * @return the name
+     */
+    String getName();
+
+    /**
+     * Gets the land type (Land, World land, Configuration set).
+     *
+     * @return the land type
+     */
+    LandType getType();
+
+    /**
+     * Gets the parent.
+     *
+     * @return the parent or null
+     */
+    Land getParent();
+
+    /**
+     * Gets the children.
+     *
+     * @return the children
+     */
+    Set<Land> getChildren();
+
+    /**
+     * Gets the areas. Only a normal land contains areas.
+     *
+     * @return the areas if this is a normal land or an empty set.
+     */
+    Set<Area> getAreas();
+
+//    /**
+//     * Gets the land flags.
+//     *
+//     * @return the land flags
+//     */
+//    Flags getFlags();
+
+//    /**
+//     * Gets the land residents.
+//     *
+//     * @return the land residents
+//     */
+//    Residents getResidents();
+//
+
+    /**
+     * Gets the world land from this land or itself if it is already a world land.
      *
      * @return the world land
      */
-    WorldLand getWorldLand();
+    Land getWorldLand();
 
     /**
      * Check if the location is inside the land. This method does not check for Y
@@ -61,26 +113,26 @@ public interface Land extends LandComponent {
      */
     boolean isLocationInside(int x, int y, int z);
 
-    /**
-     * Checks if this actual land is descendant of the land.
-     *
-     * @param Land the area land
-     * @return true, if is descendants
-     */
-    boolean isDescendantsOf(Land Land);
-
-    /**
-     * Gets the child.
-     *
-     * @param name the land name
-     * @return the child
-     */
-    AreaLand getChild(String name);
-
-    /**
-     * Gets the children.
-     *
-     * @return the children
-     */
-    Collection<AreaLand> getChildren();
+//    /**
+//     * Checks if this actual land is descendant of the land.
+//     *
+//     * @param Land the area land
+//     * @return true, if is descendants
+//     */
+//    boolean isDescendantsOf(Land Land);
+//
+//    /**
+//     * Gets the child.
+//     *
+//     * @param name the land name
+//     * @return the child
+//     */
+//    AreaLand getChild(String name);
+//
+//    /**
+//     * Gets the children.
+//     *
+//     * @return the children
+//     */
+//    Collection<AreaLand> getChildren();
 }

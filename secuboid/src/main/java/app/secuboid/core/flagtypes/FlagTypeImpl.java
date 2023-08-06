@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,19 +16,18 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.selection.active;
+package app.secuboid.core.flagtypes;
 
-import app.secuboid.api.lands.ConfigurationSet;
+import app.secuboid.api.flagtypes.FlagType;
+import lombok.Data;
 
-/**
- * Represents an active selection of a configuration set.
- */
-public interface ActiveSelectionConfigurationSet extends ActiveSelectionLandComponent {
+@Data
+public class FlagTypeImpl implements FlagType {
 
-    /**
-     * Gets the configuration set.
-     *
-     * @return the configuration set
-     */
-    ConfigurationSet getConfigurationSet();
+    private final String name;
+    private final String description;
+    private final boolean needSource;
+    private final boolean needTarget;
+    private final boolean needMetadata;
+    private final boolean hidden;
 }

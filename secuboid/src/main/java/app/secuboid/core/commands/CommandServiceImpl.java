@@ -110,7 +110,7 @@ public class CommandServiceImpl implements CommandService {
 
             if (curCommandContainer != null) {
                 commandContainer = curCommandContainer;
-                curNameToCommand = commandContainer.nameToSubCommand();
+                curNameToCommand = commandContainer.getNameToSubCommand();
             }
 
             commandPathCounter++;
@@ -128,7 +128,7 @@ public class CommandServiceImpl implements CommandService {
 
     private void executeCommand(CommandContainer commandContainer,
                                 CommandSenderInfo commandSenderInfo, String[] subArgs) {
-        CommandExec commandExec = commandContainer.commandExec();
+        CommandExec commandExec = commandContainer.getCommandExec();
 
         if (!(commandExec instanceof CommandPage)) {
             chatPageService.remove(commandSenderInfo);
@@ -155,7 +155,7 @@ public class CommandServiceImpl implements CommandService {
                 Log.log().log(SEVERE, () -> "There is an error on registered command parent name: " + commandName);
                 return;
             }
-            curNameToCommand = curCommandContainer.nameToSubCommand();
+            curNameToCommand = curCommandContainer.getNameToSubCommand();
         }
 
         String subName = nameSplit[nameSplitLengthMinusOne];

@@ -17,30 +17,29 @@
  */
 package app.secuboid.api.lands.areas;
 
-import app.secuboid.api.lands.AreaLand;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LocationPath;
-import app.secuboid.api.messages.MessagePath;
-import app.secuboid.api.storage.rows.WithId;
+import app.secuboid.api.persistence.WithId;
 import org.bukkit.Location;
 
 /**
  * Represents an area of any type.
  */
-public interface Area extends WithId, LocationPath {
-
-    /**
-     * Gets the area form.
-     *
-     * @return the area form
-     */
-    AreaForm getAreaForm();
+public interface Area extends LocationPath, WithId {
 
     /**
      * Gets the land.
      *
      * @return the land
      */
-    AreaLand getLand();
+    Land getLand();
+
+    /**
+     * Gets the area type (Cuboid, Cylinder, ...).
+     *
+     * @return the area type
+     */
+    AreaType getType();
 
     /**
      * Gets the x1.
@@ -87,7 +86,7 @@ public interface Area extends WithId, LocationPath {
     /**
      * Gets the area (surface).
      *
-     * @return the area
+     * @return the area (surface)
      */
     long getArea();
 
@@ -135,11 +134,4 @@ public interface Area extends WithId, LocationPath {
      * @return if true or false
      */
     boolean isLocationInsideSquare(int x, int z);
-
-    /**
-     * Gets the message path (format) for this area.
-     *
-     * @return the message path
-     */
-    MessagePath getMessagePath();
 }

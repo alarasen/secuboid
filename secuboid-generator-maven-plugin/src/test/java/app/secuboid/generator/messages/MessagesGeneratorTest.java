@@ -69,18 +69,18 @@ class MessagesGeneratorTest {
 
         assertTrue(output.contains("public static MessagePath simple() {"));
         assertTrue(output
-                .contains("    return new MessagePath(\"simple\", new String[] {}, new Object[] {});"));
+                .contains("    return MessagePath.newInstance(\"simple\", new String[] {}, new Object[] {});"));
         assertTrue(output.contains("public static MessagePath doubleVar() {"));
         assertTrue(output.contains(
-                "    return new MessagePath(\"double-var\", new String[] {}, new Object[] {});"));
+                "    return MessagePath.newInstance(\"double-var\", new String[] {}, new Object[] {});"));
         assertTrue(output.contains("public static MessagePath mainSub1(Object tag1, Object tag2) {"));
         assertTrue(output.contains(
-                "    return new MessagePath(\"main.sub1\", new String[] { \"{{tag-1}}\", \"{{tag-2}}\" }, new Object[] { tag1, tag2 });"));
+                "    return MessagePath.newInstance(\"main.sub1\", new String[] { \"{{tag-1}}\", \"{{tag-2}}\" }, new Object[] { tag1, tag2 });"));
         assertTrue(output.contains("public static MessagePath mainSub2() {"));
         assertTrue(output.contains(
-                "    return new MessagePath(\"main.sub2\", new String[] {}, new Object[] {});"));
+                "    return MessagePath.newInstance(\"main.sub2\", new String[] {}, new Object[] {});"));
         assertTrue(output.contains("public static MessagePath oneTwoThree() {"));
         assertTrue(output.contains(
-                "    return new MessagePath(\"one.two.three\", new String[] {}, new Object[] {});"));
+                "    return MessagePath.newInstance(\"one.two.three\", new String[] {}, new Object[] {});"));
     }
 }

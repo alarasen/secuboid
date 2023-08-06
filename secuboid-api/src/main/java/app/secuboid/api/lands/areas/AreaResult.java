@@ -20,8 +20,20 @@ package app.secuboid.api.lands.areas;
 /**
  * Used for callback method when an area is created or modified. The area will
  * be returned only if it is a success.
- *
- * @param area the area created if success
  */
-public record AreaResult(AreaResultCode code, Area area) {
+public interface AreaResult {
+
+    /**
+     * Gets the result code.
+     *
+     * @return the result code
+     */
+    AreaResultCode getCode();
+
+    /**
+     * Gets the area if success.
+     *
+     * @return the area or null
+     */
+    Area getArea();
 }

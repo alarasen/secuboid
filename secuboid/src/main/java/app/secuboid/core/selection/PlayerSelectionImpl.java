@@ -17,17 +17,14 @@
  */
 package app.secuboid.core.selection;
 
-import app.secuboid.api.exceptions.SecuboidRuntimeException;
-import app.secuboid.api.lands.WorldLand;
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.AreaForm;
-import app.secuboid.api.lands.areas.CuboidAreaForm;
-import app.secuboid.api.lands.areas.CylinderAreaForm;
+import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.api.selection.active.ActiveSelection;
-import app.secuboid.core.lands.areas.CuboidAreaFormImpl;
-import app.secuboid.core.lands.areas.CylinderAreaFormImpl;
+import app.secuboid.core.lands.areas.AreaCuboidImpl;
+import app.secuboid.core.lands.areas.AreaCylinderImpl;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
@@ -49,22 +46,19 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         this.player = playerInfo.getPlayer();
     }
 
-    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService,
-                                                  WorldLand worldLand,
-                                                  Class<? extends AreaForm> areaFormClass) {
-        AreaForm areaForm = createAreaForm(areaFormClass);
-        createActiveSelectionModifyExpand(scoreboardService, worldLand, areaForm);
+    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService, Land worldLand,
+                                                  AreaType areaType) {
+        Area area = createAreaForm(areaType);
+        createActiveSelectionModifyExpand(scoreboardService, worldLand, area);
     }
 
-    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService,
-                                                  WorldLand worldLand, AreaForm areaForm) {
-        createActiveSelection(scoreboardService, areaForm, true, s -> new ActiveSelectionModifyExpand(worldLand,
+    public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService, Land worldLand, Area area) {
+        createActiveSelection(scoreboardService, area, true, s -> new ActiveSelectionModifyExpand(worldLand,
                 playerInfo, s));
     }
 
     public void createActiveSelectionAreaShow(ScoreboardService scoreboardService, Area area) {
-        AreaForm areaForm = area.getAreaForm();
-        createActiveSelection(scoreboardService, areaForm, false, s -> new ActiveSelectionAreaShow(player, area, s));
+        createActiveSelection(scoreboardService, area, false, s -> new ActiveSelectionAreaShow(player, area, s));
     }
 
     public void updateSelectionFromLocation() {
@@ -73,7 +67,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         }
     }
 
-    private AreaForm createAreaForm(Class<? extends AreaForm> areaFormClass) {
+    private Area createAreaForm(AreaType areaType) {
         int selectionDefaultStartDiameter = config().getSelectionDefaultStartDiameter();
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
@@ -88,31 +82,38 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         int z1 = playerZ - (selectionDefaultStartDiameter / 2);
         int z2 = z1 + selectionDefaultStartDiameter;
 
-        if (areaFormClass.isAssignableFrom(CuboidAreaForm.class)) {
-            return new CuboidAreaFormImpl(x1, y1, z1, x2, y2, z2);
-        } else if (areaFormClass.isAssignableFrom(CylinderAreaForm.class)) {
-            return new CylinderAreaFormImpl(x1, y1, z1, x2, y2, z2);
-        }
-
-        throw new SecuboidRuntimeException("Area class not yet implemented: " + areaFormClass.getSimpleName());
+        return switch (areaType) {
+            case CUBOID -> AreaCuboidImpl.builder()
+                    .x1(x1)
+                    .y1(y1)
+                    .z1(z1)
+                    .x2(x2)
+                    .y2(y2)
+                    .z2(z2)
+                    .build();
+            case CYLINDER -> AreaCylinderImpl.builder()
+                    .x1(x1)
+                    .y1(y1)
+                    .z1(z1)
+                    .x2(x2)
+                    .y2(y2)
+                    .z2(z2)
+                    .build();
+        };
     }
 
-    private void createActiveSelection(ScoreboardService scoreboardService, AreaForm areaForm,
-                                       boolean isResizeable,
+    private void createActiveSelection(ScoreboardService scoreboardService, Area area, boolean isResizeable,
                                        Function<SelectionForm, ActiveSelection> selectionFormActiveSelectionFunction) {
-        SelectionForm selectionForm = createSelectionForm(areaForm, isResizeable);
+        SelectionForm selectionForm = createSelectionForm(area, isResizeable);
         activeSelection = selectionFormActiveSelectionFunction.apply(selectionForm);
         ((ActiveSelectionImpl) activeSelection).init(scoreboardService);
     }
 
-    private SelectionForm createSelectionForm(AreaForm areaForm, boolean isResizeable) {
-        if (areaForm instanceof CuboidAreaForm cuboidAreaForm) {
-            return new SelectionFormCuboid(cuboidAreaForm, player, isResizeable, null, null);
-        } else if (areaForm instanceof CylinderAreaForm cylinderAreaForm) {
-            return new SelectionFormCylinder(cylinderAreaForm, player, isResizeable, null, null);
-        }
-
-        throw new SecuboidRuntimeException("Selection form not yet implemented: " + areaForm);
+    private SelectionForm createSelectionForm(Area area, boolean isResizeable) {
+        return switch (area.getType()) {
+            case CUBOID -> new SelectionFormCuboid(area, player, isResizeable, null, null);
+            case CYLINDER -> new SelectionFormCylinder(area, player, isResizeable, null, null);
+        };
     }
 
 }

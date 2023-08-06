@@ -141,11 +141,11 @@ public class ConfigGenerator extends CommonGenerator {
 
     private void generateVars(BufferedWriter bwJavaTarget) throws IOException {
         for (ConfigRecord configRecord : configRecords) {
-            bwJavaTarget //
-                    .append("    private ") //
-                    .append(configRecord.javaType()) //
-                    .append(' ') //
-                    .append(configRecord.varName()) //
+            bwJavaTarget
+                    .append("    private ")
+                    .append(configRecord.getJavaType())
+                    .append(' ')
+                    .append(configRecord.getVarName())
                     .append(';');
 
             bwJavaTarget.newLine();
@@ -154,22 +154,22 @@ public class ConfigGenerator extends CommonGenerator {
 
     private void generateLoads(BufferedWriter bwJavaTarget) throws IOException {
         for (ConfigRecord configRecord : configRecords) {
-            bwJavaTarget //
-                    .append("        fileConfiguration.addDefault(\"") //
-                    .append(configRecord.path()) //
-                    .append("\", ") //
-                    .append(configRecord.defaultValue()) //
+            bwJavaTarget
+                    .append("        fileConfiguration.addDefault(\"")
+                    .append(configRecord.getPath())
+                    .append("\", ")
+                    .append(configRecord.getDefaultValue())
                     .append(");");
 
             bwJavaTarget.newLine();
 
-            bwJavaTarget //
-                    .append("        ") //
-                    .append(configRecord.varName()) //
-                    .append(" = fileConfiguration.") //
-                    .append(configRecord.getFunction()) //
-                    .append("(\"") //
-                    .append(configRecord.path()) //
+            bwJavaTarget
+                    .append("        ")
+                    .append(configRecord.getVarName())
+                    .append(" = fileConfiguration.")
+                    .append(configRecord.getGetFunction())
+                    .append("(\"")
+                    .append(configRecord.getPath())
                     .append("\");");
 
             bwJavaTarget.newLine();

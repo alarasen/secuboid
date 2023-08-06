@@ -22,10 +22,27 @@ import app.secuboid.api.lands.areas.Area;
 /**
  * Used for callback method when a land is created or modified. The land will be
  * returned only if it is a success.
- *
- * @param code     the land result code
- * @param areaLand the land if success
- * @param area     the area created if success
  */
-public record LandResult(LandResultCode code, AreaLand areaLand, Area area) {
+public interface LandResult {
+
+    /**
+     * Gets the result code.
+     *
+     * @return the result code
+     */
+    LandResultCode getCode();
+
+    /**
+     * Gets tne land if success.
+     *
+     * @return the land or null
+     */
+    Land getLand();
+
+    /**
+     * Gets the area if success.
+     *
+     * @return the area or null
+     */
+    Area getArea();
 }

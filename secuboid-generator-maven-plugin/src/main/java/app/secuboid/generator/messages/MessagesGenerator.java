@@ -85,10 +85,10 @@ public class MessagesGenerator extends CommonGenerator {
         String methodName = toCamelCase(path);
         List<String> tags = extractTags(format);
 
-        List<String> parameters = tags //
-                .stream() //
-                .map(s -> s.replaceAll("(\\{\\{|\\}\\})", "")) //
-                .map(this::toCamelCase) //
+        List<String> parameters = tags
+                .stream()
+                .map(s -> s.replaceAll("(\\{\\{|}})", ""))
+                .map(this::toCamelCase)
                 .toList();
 
         messageRecords.add(new MessageRecord(methodName, parameters, path, tags));
@@ -96,7 +96,7 @@ public class MessagesGenerator extends CommonGenerator {
 
     private List<String> extractTags(String format) {
         List<String> tags = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\{\\{[^\\}]*\\}\\}");
+        Pattern pattern = Pattern.compile("\\{\\{[^}]*}}");
         Matcher matcher = pattern.matcher(format);
 
         while (matcher.find()) {
@@ -111,29 +111,29 @@ public class MessagesGenerator extends CommonGenerator {
 
         while (it.hasNext()) {
             MessageRecord messageRecord = it.next();
-            List<String> parameters = messageRecord.parameters();
-            List<String> tags = messageRecord.tags();
+            List<String> parameters = messageRecord.getParameters();
+            List<String> tags = messageRecord.getTags();
 
-            bwJavaTarget //
-                    .append("    public static MessagePath ") //
-                    .append(messageRecord.methodName()) //
-                    .append("(") //
-                    .append(generateParameters(parameters, true)) //
+            bwJavaTarget
+                    .append("    public static MessagePath ")
+                    .append(messageRecord.getMethodName())
+                    .append("(")
+                    .append(generateParameters(parameters, true))
                     .append(") {");
 
             bwJavaTarget.newLine();
 
-            bwJavaTarget //
-                    .append("        return new MessagePath(\"") //
-                    .append(messageRecord.path()) //
-                    .append("\", new String[] {") //
-                    .append(spaceIfNotEmpty(tags)) //
-                    .append(generateTags(tags)) //
-                    .append(spaceIfNotEmpty(tags)) //
-                    .append("}, new Object[] {") //
-                    .append(spaceIfNotEmpty(parameters)) //
-                    .append(generateParameters(parameters, false)) //
-                    .append(spaceIfNotEmpty(parameters)) //
+            bwJavaTarget
+                    .append("        return MessagePath.newInstance(\"")
+                    .append(messageRecord.getPath())
+                    .append("\", new String[] {")
+                    .append(spaceIfNotEmpty(tags))
+                    .append(generateTags(tags))
+                    .append(spaceIfNotEmpty(tags))
+                    .append("}, new Object[] {")
+                    .append(spaceIfNotEmpty(parameters))
+                    .append(generateParameters(parameters, false))
+                    .append(spaceIfNotEmpty(parameters))
                     .append("});");
 
             bwJavaTarget.newLine();
@@ -175,9 +175,9 @@ public class MessagesGenerator extends CommonGenerator {
         Iterator<String> it = tags.iterator();
         while (it.hasNext()) {
             String parameter = it.next();
-            sb //
-                    .append('\"') //
-                    .append(parameter) //
+            sb
+                    .append('\"')
+                    .append(parameter)
                     .append('\"');
 
             if (it.hasNext()) {

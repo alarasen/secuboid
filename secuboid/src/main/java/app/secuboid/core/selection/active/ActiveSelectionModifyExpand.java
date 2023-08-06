@@ -18,39 +18,38 @@
 
 package app.secuboid.core.selection.active;
 
-import app.secuboid.api.lands.WorldLand;
-import app.secuboid.api.lands.areas.AreaForm;
+import app.secuboid.api.lands.Land;
+import app.secuboid.api.lands.areas.Area;
 import app.secuboid.api.players.PlayerInfo;
-import app.secuboid.core.lands.areas.AreaFormImpl;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import org.bukkit.Location;
 
 public class ActiveSelectionModifyExpand extends ActiveSelectionModifyImpl {
 
-    public ActiveSelectionModifyExpand(WorldLand worldLand, PlayerInfo playerInfo,
-                                       SelectionForm selectionForm) {
+    public ActiveSelectionModifyExpand(Land worldLand, PlayerInfo playerInfo, SelectionForm selectionForm) {
         super(worldLand, playerInfo, selectionForm);
     }
 
     @Override
     protected boolean playerMoveSelectionCheckChanged(Location playerLoc) {
-        AreaForm areaForm = selectionForm.getAreaForm();
+        Area area = selectionForm.getArea();
         boolean isChanged = false;
 
         // Check where the player is outside the land
-        if (playerLoc.getBlockX() - 1 < areaForm.getX1()) {
-            ((AreaFormImpl) areaForm).setX1(playerLoc.getBlockX() - 1);
+        if (playerLoc.getBlockX() - 1 < area.getX1()) {
+            ((AreaJPA) area).setX1(playerLoc.getBlockX() - 1);
             isChanged = true;
         }
-        if (playerLoc.getBlockX() + 1 > areaForm.getX2()) {
-            ((AreaFormImpl) areaForm).setX2(playerLoc.getBlockX() + 1);
+        if (playerLoc.getBlockX() + 1 > area.getX2()) {
+            ((AreaJPA) area).setX2(playerLoc.getBlockX() + 1);
             isChanged = true;
         }
-        if (playerLoc.getBlockZ() - 1 < areaForm.getZ1()) {
-            ((AreaFormImpl) areaForm).setZ1(playerLoc.getBlockZ() - 1);
+        if (playerLoc.getBlockZ() - 1 < area.getZ1()) {
+            ((AreaJPA) area).setZ1(playerLoc.getBlockZ() - 1);
             isChanged = true;
         }
-        if (playerLoc.getBlockZ() + 1 > areaForm.getZ2()) {
-            ((AreaFormImpl) areaForm).setZ2(playerLoc.getBlockZ() + 1);
+        if (playerLoc.getBlockZ() + 1 > area.getZ2()) {
+            ((AreaJPA) area).setZ2(playerLoc.getBlockZ() + 1);
             isChanged = true;
         }
 

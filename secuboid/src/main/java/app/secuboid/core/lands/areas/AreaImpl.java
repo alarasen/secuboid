@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -15,128 +15,44 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package app.secuboid.core.lands.areas;
 
-import app.secuboid.api.lands.AreaLand;
+import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.areas.Area;
-import app.secuboid.api.lands.areas.AreaForm;
 import app.secuboid.api.messages.MessagePath;
+import app.secuboid.core.utilities.LocalMath;
 import org.bukkit.Location;
 
-import java.util.Objects;
+import java.util.Optional;
 
-public class AreaImpl implements Area {
+public abstract class AreaImpl implements Area {
 
-    private final long id;
-    private final AreaForm areaForm;
-    private final AreaLand land;
+    public abstract MessagePath getMessagePath();
 
-    public AreaImpl(long id, AreaForm areaForm, AreaLand land) {
-        this.id = id;
-        this.areaForm = areaForm;
-        this.land = land;
-
-        ((AreaFormImpl) areaForm).isResizable = false;
-    }
 
     @Override
-    public long id() {
-        return id;
+    public final String getPathName() {
+        return Optional.ofNullable(getLand()).map(LocationPath::getPathName).orElse("") + SEPARATOR_AREA + getId();
     }
 
     @Override
     public String getName() {
-        return Long.toString(id);
+        return String.valueOf(getId());
     }
 
     @Override
-    public String getPathName() {
-        return land.getPathName() + SEPARATOR_AREA + id;
-    }
-
-    @Override
-    public AreaForm getAreaForm() {
-        return areaForm;
-    }
-
-    @Override
-    public AreaLand getLand() {
-        return land;
-    }
-
-    @Override
-    public int getX1() {
-        return areaForm.getX1();
-    }
-
-    @Override
-    public int getY1() {
-        return areaForm.getY1();
-    }
-
-    @Override
-    public int getZ1() {
-        return areaForm.getZ1();
-    }
-
-    @Override
-    public int getX2() {
-        return areaForm.getX2();
-    }
-
-    @Override
-    public int getY2() {
-        return areaForm.getY2();
-    }
-
-    @Override
-    public int getZ2() {
-        return areaForm.getZ2();
-    }
-
-    public boolean isLocationInside(int x, int z) {
-        return areaForm.isLocationInside(x, z);
-    }
-
     public boolean isLocationInside(int x, int y, int z) {
-        return areaForm.isLocationInside(x, y, z);
+        return isLocationInside(x, z) && LocalMath.isInRange(y, getY1(), getY2());
     }
 
+    @Override
     public boolean isLocationInside(Location loc) {
-        return areaForm.isLocationInside(loc);
+        return isLocationInside(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override
-    public boolean isLocationInsideSquare(int x, int z) {
-        return areaForm.isLocationInsideSquare(x, z);
-    }
-
-    public MessagePath getMessagePath() {
-        return areaForm.getMessagePath();
-    }
-
-    @Override
-    public long getArea() {
-        return areaForm.getArea();
-    }
-
-    @Override
-    public long getVolume() {
-        return areaForm.getVolume();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof AreaImpl areaImpl)) {
-            return false;
-        }
-        return id == areaImpl.id && Objects.equals(areaForm, areaImpl.areaForm) && Objects.equals(land, areaImpl.land);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, areaForm, land);
+    public final boolean isLocationInsideSquare(int x, int z) {
+        return LocalMath.isInRange(x, getX1(), getX2()) && LocalMath.isInRange(z, getZ1(), getZ2());
     }
 }

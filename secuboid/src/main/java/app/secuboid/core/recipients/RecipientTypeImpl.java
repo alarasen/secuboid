@@ -1,5 +1,5 @@
 /*
- *  Secuboid: LandService and Protection plugin for Minecraft server
+ *  Secuboid: Lands and Protection plugin for Minecraft server
  *  Copyright (C) 2014 Tabinol
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,19 +16,16 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.selection.active;
+package app.secuboid.core.recipients;
 
-import app.secuboid.api.lands.LandComponent;
+import app.secuboid.api.recipients.RecipientExec;
+import app.secuboid.api.recipients.RecipientType;
+import app.secuboid.api.registration.RecipientRegistered;
+import lombok.Data;
 
-/**
- * Represents an active selection of a land component.
- */
-public interface ActiveSelectionLandComponent extends ActiveSelection {
-
-    /**
-     * Gets the land component.
-     *
-     * @return the land component
-     */
-    LandComponent getLandComponent();
+@Data
+public class RecipientTypeImpl implements RecipientType {
+    
+    private final RecipientExec recipientExec;
+    private final RecipientRegistered info;
 }

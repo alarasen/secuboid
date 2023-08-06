@@ -26,7 +26,7 @@ class FlagTypeServiceTest {
 //    @BeforeEach
 //    void beforeEach() {
 //        PluginLoader pluginLoader = mock(PluginLoader.class);
-//        FlagType flagType = new FlagType(FLAG_NAME_TEST, FLAG_NAME_TEST, true, false, false, false);
+//        FlagType flagType = FlagType.newInstance(FLAG_NAME_TEST, FLAG_NAME_TEST, true, false, false, false);
 //        when(pluginLoader.getAnnotatedConstants(FlagRegistered.class, FlagType.class))
 //                .thenReturn(Collections.singleton(flagType));
 //
