@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,18 +27,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_recipient", uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value", "uuid"}))
-public class RecipientJPA {
+public class RecipientJPA implements JPA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    @Builder.Default
+    private long id = NON_EXISTING_ID;
 
     @Column(name = "short_name", nullable = false, length = 10)
     private String shortName;

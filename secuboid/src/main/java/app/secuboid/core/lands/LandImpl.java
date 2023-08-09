@@ -21,6 +21,7 @@ package app.secuboid.core.lands;
 import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LandType;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.core.persistence.jpa.LandJPA;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,9 +36,7 @@ import java.util.Set;
 @Builder
 public class LandImpl implements Land {
 
-    private final long id;
-    private final String name;
-    private final LandType type;
+    private final LandJPA jPA;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -49,13 +48,22 @@ public class LandImpl implements Land {
     @Builder.Default
     private Land parent = null;
 
+    @Override
+    public String getName() {
+        return jPA.getName();
+    }
+
+    @Override
+    public LandType getType() {
+        return jPA.getType();
+    }
 
     @Override
     public String getPathName() {
-        return switch (type) {
-            case LAND -> Optional.ofNullable(parent).map(Land::getPathName).orElse("") + SEPARATOR_LAND + name;
-            case CONFIGURATION_SET -> PREFIX_CONFIGURATION_SET + name;
-            case WORLD -> SEPARATOR_LAND + name;
+        return switch (getType()) {
+            case LAND -> Optional.ofNullable(parent).map(Land::getPathName).orElse("") + SEPARATOR_LAND + getName();
+            case CONFIGURATION_SET -> PREFIX_CONFIGURATION_SET + getName();
+            case WORLD -> SEPARATOR_LAND + getName();
         };
     }
 
@@ -67,7 +75,7 @@ public class LandImpl implements Land {
 
     @Override
     public Land getWorldLand() {
-        if (type == LandType.WORLD) {
+        if (getType() == LandType.WORLD) {
             return this;
         }
 

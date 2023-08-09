@@ -19,12 +19,11 @@
 package app.secuboid.core.persistence;
 
 import app.secuboid.api.exceptions.SecuboidRuntimeException;
+import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.api.services.Service;
 import app.secuboid.core.config.Config;
-import app.secuboid.core.persistence.jpa.AreaJPA;
-import app.secuboid.core.persistence.jpa.LandJPA;
-import app.secuboid.core.persistence.jpa.RecipientJPA;
-import app.secuboid.core.persistence.jpa.ResidentJPA;
+import app.secuboid.core.registration.RegistrationServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,6 +33,7 @@ import java.util.Properties;
 
 import static app.secuboid.core.config.Config.config;
 
+@RequiredArgsConstructor
 public class PersistenceSessionService implements Service {
 
     // Also used in Config class
@@ -47,14 +47,10 @@ public class PersistenceSessionService implements Service {
     private static final String TAG_PLUGIN_PATH = "{{plugin-path}}";
 
     private final JavaPlugin javaPlugin;
+    private final RegistrationService registrationService;
 
-    private boolean isLocalHSQL;
-    private SessionFactory sessionFactory;
-
-    public PersistenceSessionService(JavaPlugin javaPlugin) {
-        this.javaPlugin = javaPlugin;
-        isLocalHSQL = false;
-    }
+    private boolean isLocalHSQL = false;
+    private SessionFactory sessionFactory = null;
 
     @Override
     public void onEnable(boolean isServerBoot) {
@@ -90,14 +86,9 @@ public class PersistenceSessionService implements Service {
         properties.setProperty("hibernate.connection.provider_class", CONNECTION_PROVIDER_CLASS);
         properties.setProperty("hibernate.hbm2ddl.auto", HBM2DDL_AUTO_VALUE);
 
-
         Configuration configuration = new Configuration();
         configuration.addProperties(properties);
-        configuration.addAnnotatedClass(AreaJPA.class);
-        configuration.addAnnotatedClass(LandJPA.class);
-        configuration.addAnnotatedClass(RecipientJPA.class);
-        configuration.addAnnotatedClass(ResidentJPA.class);
-
+        ((RegistrationServiceImpl) registrationService).getJpaClasses().forEach(configuration::addAnnotatedClass);
         sessionFactory = configuration.buildSessionFactory();
     }
 

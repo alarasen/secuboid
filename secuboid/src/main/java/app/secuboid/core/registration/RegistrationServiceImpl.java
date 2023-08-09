@@ -20,11 +20,14 @@ package app.secuboid.core.registration;
 
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
+import app.secuboid.api.persistence.JPA;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.registration.RecipientRegistered;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.api.services.Service;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
@@ -32,28 +35,31 @@ import java.util.*;
 import static app.secuboid.core.messages.Log.log;
 import static java.util.logging.Level.SEVERE;
 
+@NoArgsConstructor
+@Getter
 public class RegistrationServiceImpl implements RegistrationService {
 
-    private final Map<Plugin, List<Service>> pluginToServices;
-    private final Map<CommandExec, CommandRegistered> commandExecToCommandRegistered;
-    private final Set<FlagType> flagTypes;
-    private final Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered;
-    private boolean isRegistrationClosed;
-
-    public RegistrationServiceImpl() {
-        pluginToServices = new LinkedHashMap<>();
-        commandExecToCommandRegistered = new HashMap<>();
-        flagTypes = new HashSet<>();
-        recipientExecToRecipientRegistered = new HashMap<>();
-        isRegistrationClosed = false;
-    }
-
+    private final Set<Class<? extends JPA>> jpaClasses = new LinkedHashSet<>();
+    private final Map<Plugin, List<Service>> pluginToServices = new LinkedHashMap<>();
+    private final Map<CommandExec, CommandRegistered> commandExecToCommandRegistered = new HashMap<>();
+    private final Set<FlagType> flagTypes = new HashSet<>();
+    private final Map<RecipientExec, RecipientRegistered> recipientExecToRecipientRegistered = new HashMap<>();
+    private boolean isRegistrationClosed = false;
 
     @Override
     public void onEnable(boolean isServerBoot) {
         if (isServerBoot) {
             isRegistrationClosed = true;
         }
+    }
+
+    @Override
+    public void registerJPA(Class<? extends JPA> jpaClass) {
+        if (isRegistrationClosedMessage("JPA class", jpaClass.getName())) {
+            return;
+        }
+
+        jpaClasses.add(jpaClass);
     }
 
     @Override
@@ -124,22 +130,6 @@ public class RegistrationServiceImpl implements RegistrationService {
             log().log(SEVERE, "The class {} needs to have the \"@CommandRegistered\" annotation",
                     recipientExec.getClass().getName());
         }
-    }
-
-    public Map<Plugin, List<Service>> getPluginToServices() {
-        return pluginToServices;
-    }
-
-    public Map<CommandExec, CommandRegistered> getCommandExecToCommandRegistered() {
-        return commandExecToCommandRegistered;
-    }
-
-    public Set<FlagType> getFlagTypes() {
-        return flagTypes;
-    }
-
-    public Map<RecipientExec, RecipientRegistered> getRecipientExecToRecipientRegistered() {
-        return recipientExecToRecipientRegistered;
     }
 
     private boolean isRegistrationClosedMessage(String componentName, String name) {

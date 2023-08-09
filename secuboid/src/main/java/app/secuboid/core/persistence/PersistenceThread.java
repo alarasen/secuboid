@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence;
 
+import app.secuboid.api.persistence.JPA;
 import lombok.AllArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -53,28 +54,18 @@ public class PersistenceThread extends Thread {
         }
     }
 
-    <R> void offer(PersistenceElement<R> element) {
+    <R extends JPA> void offer(PersistenceElement<R> element) {
         if (!queue.offer(element)) {
             log().severe("The persistenceSessionService queue is full. Possible data loss!");
         }
     }
 
-    @SuppressWarnings("unchecked")
-    <R> R take() {
-        Object result;
+    void take() {
         try {
-            result = threadSyncQueue.take();
+            threadSyncQueue.take();
         } catch (InterruptedException e) {
             log().log(SEVERE, "Interrupted! Possible data loss!", e);
             Thread.currentThread().interrupt();
-            return null;
-        }
-
-        try {
-            return (R) result;
-        } catch (ClassCastException e) {
-            log().log(SEVERE, e, () -> "Wrong return type: " + result);
-            return null;
         }
     }
 
@@ -101,7 +92,7 @@ public class PersistenceThread extends Thread {
         log().info("Flushing the persistenceSessionService queue done!");
     }
 
-    private <R> void process(PersistenceElement<R> element) {
+    private <R extends JPA> void process(PersistenceElement<R> element) {
         Function<Session, R> sessionFunction = element.getSessionFunction();
 
         R result;

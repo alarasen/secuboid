@@ -45,6 +45,10 @@ import app.secuboid.core.messages.Log;
 import app.secuboid.core.messages.MessageServiceImpl;
 import app.secuboid.core.persistence.PersistenceService;
 import app.secuboid.core.persistence.PersistenceSessionService;
+import app.secuboid.core.persistence.jpa.AreaJPA;
+import app.secuboid.core.persistence.jpa.LandJPA;
+import app.secuboid.core.persistence.jpa.RecipientJPA;
+import app.secuboid.core.persistence.jpa.ResidentJPA;
 import app.secuboid.core.players.ChatPageServiceImpl;
 import app.secuboid.core.players.PlayerInfoServiceImpl;
 import app.secuboid.core.recipients.RecipientServiceImpl;
@@ -100,33 +104,38 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         areaService = new AreaServiceImpl();
         chatGetterService = new ChatGetterService(secuboidPlugin, scheduler);
         messageService = new MessageServiceImpl();
-        persistenceSessionService = new PersistenceSessionService(secuboidPlugin);
         registrationService = new RegistrationServiceImpl();
 
         // phase 2 in alphabetical order
-        flagTypeService = new FlagTypeServiceImpl(registrationService);
-        landService = new LandServiceImpl(server, areaService);
-        messageManagerService = messageService.grab(secuboidPlugin);
+        persistenceSessionService = new PersistenceSessionService(secuboidPlugin, registrationService);
+
+        // phase 3 in alphabetical order
         persistenceService = new PersistenceService(secuboidPlugin, scheduler, persistenceSessionService);
+
+        // phase 4 in alphabetical order
+        flagTypeService = new FlagTypeServiceImpl(registrationService);
+        landService = new LandServiceImpl(server, areaService, persistenceService);
+        messageManagerService = messageService.grab(secuboidPlugin);
         recipientService = new RecipientServiceImpl(registrationService);
         serviceService = new ServiceServiceImpl(registrationService);
 
-        // phase 3 in alphabetical order
+        // phase 5 in alphabetical order
         playerInfoService = new PlayerInfoServiceImpl(server, areaService, landService);
         chatPageService = new ChatPageServiceImpl(messageManagerService);
         scoreboardService = new ScoreboardService(scoreboardManager, messageManagerService);
         secuboidToolService = new SecuboidToolService(secuboidPlugin, messageManagerService);
 
-        // phase 4 in alphabetical order
+        // phase 6 in alphabetical order
         commandService = new CommandServiceImpl(chatPageService, registrationService);
 
-        // phase 5 in alphabetical order
+        // phase 7 in alphabetical order
         commandListenerService = new CommandListenerService(secuboidPlugin, commandService, playerInfoService);
     }
 
     @Override
     public void onLoad() {
         Log.setLog(secuboidPlugin.getLogger());
+        registerJPAs();
         registerServices();
         registerCommands();
         registerFlagTypes();
@@ -158,6 +167,15 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     public void reload() {
         ((ServiceServiceImpl) serviceService).onDisableReload();
         ((ServiceServiceImpl) serviceService).onEnableReload();
+    }
+
+    private void registerJPAs() {
+
+        // Register JPAs in alphabetical order
+        registrationService.registerJPA(AreaJPA.class);
+        registrationService.registerJPA(LandJPA.class);
+        registrationService.registerJPA(RecipientJPA.class);
+        registrationService.registerJPA(ResidentJPA.class);
     }
 
     private void registerServices() {

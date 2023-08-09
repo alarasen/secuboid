@@ -18,8 +18,12 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.lands.LandType;
+import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.*;
+
+import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 
 @Data
 @Builder
@@ -27,21 +31,35 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_land")
-public class LandJPA {
+public class LandJPA implements JPA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    @Builder.Default
+    private long id = NON_EXISTING_ID;
 
     @Column(name = "name", nullable = false, length = 45)
     private String name;
 
     @Column(name = "type", length = 1, nullable = false)
-    private String type;
+    private String typeValue;
 
-    @OneToOne
-    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @Transient
+    private LandType type;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
     @EqualsAndHashCode.Exclude
     private LandJPA parentLandJPA;
+
+    @PostLoad
+    void fillTransient() {
+        type = LandType.of(typeValue);
+    }
+
+    @PrePersist
+    void fillPersistent() {
+        typeValue = type.getValue();
+    }
 }

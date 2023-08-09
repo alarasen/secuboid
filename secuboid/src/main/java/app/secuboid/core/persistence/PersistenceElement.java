@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence;
 
+import app.secuboid.api.persistence.JPA;
 import lombok.Data;
 import org.hibernate.Session;
 
@@ -25,7 +26,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Data
-class PersistenceElement<R> {
+class PersistenceElement<R extends JPA> {
 
     private final Function<Session, R> sessionFunction;
     private final Consumer<R> callback;

@@ -23,8 +23,8 @@ import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.selection.PlayerSelection;
 import app.secuboid.api.selection.active.ActiveSelection;
-import app.secuboid.core.lands.areas.AreaCuboidImpl;
-import app.secuboid.core.lands.areas.AreaCylinderImpl;
+import app.secuboid.core.lands.areas.AreaImpl;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.active.*;
 import org.bukkit.Location;
@@ -82,24 +82,17 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         int z1 = playerZ - (selectionDefaultStartDiameter / 2);
         int z2 = z1 + selectionDefaultStartDiameter;
 
-        return switch (areaType) {
-            case CUBOID -> AreaCuboidImpl.builder()
-                    .x1(x1)
-                    .y1(y1)
-                    .z1(z1)
-                    .x2(x2)
-                    .y2(y2)
-                    .z2(z2)
-                    .build();
-            case CYLINDER -> AreaCylinderImpl.builder()
-                    .x1(x1)
-                    .y1(y1)
-                    .z1(z1)
-                    .x2(x2)
-                    .y2(y2)
-                    .z2(z2)
-                    .build();
-        };
+        AreaJPA areaJPA = AreaJPA.builder()
+                .type(areaType)
+                .x1(x1)
+                .y1(y1)
+                .z1(z1)
+                .x2(x2)
+                .y2(y2)
+                .z2(z2)
+                .build();
+
+        return AreaImpl.newInstance(areaType, areaJPA, null);
     }
 
     private void createActiveSelection(ScoreboardService scoreboardService, Area area, boolean isResizeable,

@@ -19,8 +19,10 @@
 package app.secuboid.it;
 
 import app.secuboid.api.SecuboidPlugin;
+import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.core.persistence.PersistenceSessionService;
 import app.secuboid.core.persistence.jpa.RecipientJPA;
+import app.secuboid.core.registration.RegistrationServiceImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +48,9 @@ class PersistenceIT {
     void beforeEach() {
         JavaPlugin javaPlugin = mock(SecuboidPlugin.class);
         when(javaPlugin.getDataFolder()).thenReturn(new File(pluginTempDir, PLUGIN_NAME));
-        persistenceSessionService = new PersistenceSessionService(javaPlugin);
+        RegistrationService registrationService = new RegistrationServiceImpl();
+        registrationService.registerJPA(RecipientJPA.class);
+        persistenceSessionService = new PersistenceSessionService(javaPlugin, registrationService);
         persistenceSessionService.onEnable(true);
     }
 

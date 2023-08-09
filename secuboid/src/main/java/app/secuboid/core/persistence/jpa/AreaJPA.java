@@ -18,11 +18,15 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.lands.areas.AreaType;
+import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 
 @Data
 @Builder
@@ -30,15 +34,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_area")
-public class AreaJPA {
+public class AreaJPA implements JPA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    @Builder.Default
+    private long id = NON_EXISTING_ID;
 
     @Column(name = "type", length = 1, nullable = false)
-    private String type;
+    private String typeValue;
+
+    @Transient
+    private AreaType type;
 
     @ManyToOne
     @JoinColumn(name = "land_id", nullable = false)
@@ -67,4 +75,14 @@ public class AreaJPA {
     @Column(name = "z2", nullable = false)
     @Builder.Default
     private int z2 = Integer.MAX_VALUE;
+
+    @PostLoad
+    void fillTransient() {
+        type = AreaType.of(typeValue);
+    }
+
+    @PrePersist
+    void fillPersistent() {
+        typeValue = type.getValue();
+    }
 }

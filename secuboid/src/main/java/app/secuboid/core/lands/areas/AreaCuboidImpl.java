@@ -23,27 +23,20 @@ import app.secuboid.api.lands.areas.AreaCuboid;
 import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import app.secuboid.core.utilities.LocalMath;
-import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Builder
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
 public class AreaCuboidImpl extends AreaImpl implements AreaCuboid {
 
-    private final long id;
-
-    @Builder.Default
-    private final Land land = null;
-
-    private final int x1;
-    private final int y1;
-    private final int z1;
-    private final int x2;
-    private final int y2;
-    private final int z2;
+    public AreaCuboidImpl(AreaJPA areaJPA, Land land) {
+        super(areaJPA, land);
+    }
 
     @Override
     public AreaType getType() {
@@ -52,22 +45,22 @@ public class AreaCuboidImpl extends AreaImpl implements AreaCuboid {
 
     @Override
     public long getArea() {
-        return (x2 - x1 + 1L) * (z2 - z1 + 1L);
+        return (getX2() - getX1() + 1L) * (getZ2() - getZ1() + 1L);
     }
 
     @Override
     public long getVolume() {
-        return getArea() * (y2 - y1 + 1);
+        return getArea() * (getY2() - getY1() + 1);
     }
 
     @Override
     public boolean isLocationInside(int x, int z) {
-        return LocalMath.isInRange(x, x1, x2)
-                && LocalMath.isInRange(z, z1, z2);
+        return LocalMath.isInRange(x, getX1(), getX2())
+                && LocalMath.isInRange(z, getZ1(), getZ2());
     }
 
     @Override
     public MessagePath getMessagePath() {
-        return MessagePaths.areaCuboid(x1, y1, z1, x2, y2, z2);
+        return MessagePaths.areaCuboid(getX1(), getY1(), getZ1(), getX2(), getY2(), getZ2());
     }
 }

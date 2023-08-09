@@ -18,18 +18,68 @@
 
 package app.secuboid.core.lands.areas;
 
+import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.lands.areas.Area;
+import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.messages.MessagePath;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import app.secuboid.core.utilities.LocalMath;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.bukkit.Location;
 
 import java.util.Optional;
 
+@AllArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
 public abstract class AreaImpl implements Area {
+
+    protected final AreaJPA jPA;
+    protected final Land land;
+
+    public static Area newInstance(AreaType type, AreaJPA areaJPA, Land land) {
+        return switch (type) {
+            case CUBOID -> new AreaCuboidImpl(areaJPA, land);
+            case CYLINDER -> new AreaCylinderImpl(areaJPA, land);
+        };
+    }
 
     public abstract MessagePath getMessagePath();
 
+    @Override
+    public int getX1() {
+        return jPA.getX1();
+    }
+
+    @Override
+    public int getY1() {
+        return jPA.getY1();
+    }
+
+    @Override
+    public int getZ1() {
+        return jPA.getZ1();
+    }
+
+    @Override
+    public int getX2() {
+        return jPA.getX2();
+    }
+
+    @Override
+    public int getY2() {
+        return jPA.getY2();
+    }
+
+    @Override
+    public int getZ2() {
+        return jPA.getZ2();
+    }
 
     @Override
     public final String getPathName() {

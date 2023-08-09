@@ -19,28 +19,14 @@
 package app.secuboid.api.persistence;
 
 /**
- * Represents any Secuboid object that contains an id and a JPA. It is used to remember the row id and JPA object.
+ * Represents any JPA.
  */
-public interface WithId {
-
-    /**
-     * Represents a non-existing id or not yet in the database.
-     */
-    public static final long NON_EXISTING_ID = -1L;
+public interface JPA {
 
     /**
      * Gets the object id.
      *
      * @return the id
      */
-    default long getId() {
-        return getJPA().getId();
-    }
-
-    /**
-     * Gets tne JPA object.
-     *
-     * @return the JPA object
-     */
-    JPA getJPA();
+    long getId();
 }

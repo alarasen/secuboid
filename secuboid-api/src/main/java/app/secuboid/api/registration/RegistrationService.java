@@ -20,6 +20,7 @@ package app.secuboid.api.registration;
 
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
+import app.secuboid.api.persistence.JPA;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.services.Service;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +29,14 @@ import org.bukkit.plugin.Plugin;
  * All service, command, flag and recipient executors must be registered here.
  */
 public interface RegistrationService extends Service {
+
+    /**
+     * Register a JPA with Hibernate and Jakarta annotation with {@link app.secuboid.api.persistence.JPA}
+     * implementation. This is done in call order.
+     *
+     * @param jpaClass the jpa class
+     */
+    void registerJPA(Class<? extends JPA> jpaClass);
 
     /**
      * Register a service with {@link app.secuboid.api.services.Service}. The registration order is important here.

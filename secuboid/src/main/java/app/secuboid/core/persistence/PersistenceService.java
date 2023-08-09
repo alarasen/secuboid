@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence;
 
+import app.secuboid.api.persistence.JPA;
 import app.secuboid.api.services.Service;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,15 +52,20 @@ public class PersistenceService implements Service {
         persistenceThread = null;
     }
 
-    public <R> void exec(Function<Session, R> sessionFunction, Consumer<R> callback) {
+    public <R extends JPA> void exec(Function<Session, R> sessionFunction, Consumer<R> callback) {
         PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, callback, false);
         persistenceThread.offer(element);
     }
 
-    public <R> R execSync(Function<Session, R> sessionFunction) {
-        PersistenceElement<R> element = new PersistenceElement<>(sessionFunction, null, true);
+    public void execSync(Consumer<Session> sessionConsumer) {
+        Function<Session, JPA> sessionFunction = session -> {
+            sessionConsumer.accept(session);
+            return null;
+        };
+
+        PersistenceElement<JPA> element = new PersistenceElement<>(sessionFunction, null, true);
         persistenceThread.offer(element);
 
-        return persistenceThread.take();
+        persistenceThread.take();
     }
 }

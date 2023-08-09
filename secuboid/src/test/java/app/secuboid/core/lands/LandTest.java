@@ -21,6 +21,8 @@ import app.secuboid.api.lands.Land;
 import app.secuboid.api.lands.LandType;
 import app.secuboid.api.lands.areas.Area;
 import app.secuboid.core.lands.areas.AreaCuboidImpl;
+import app.secuboid.core.persistence.jpa.AreaJPA;
+import app.secuboid.core.persistence.jpa.LandJPA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,14 +40,18 @@ class LandTest {
     @BeforeEach
     void beforeEach() {
         worldLand = LandImpl.builder()
-                .id(1L)
-                .type(LandType.WORLD)
-                .name("world001")
+                .jPA(LandJPA.builder()
+                        .id(1L)
+                        .type(LandType.WORLD)
+                        .name("world001")
+                        .build())
                 .build();
         areaLand = LandImpl.builder()
-                .id(NON_EXISTING_ID)
-                .type(LandType.LAND)
-                .name("test001")
+                .jPA(LandJPA.builder()
+                        .id(NON_EXISTING_ID)
+                        .type(LandType.LAND)
+                        .name("test001")
+                        .build())
                 .parent(worldLand)
                 .build();
     }
@@ -62,7 +68,7 @@ class LandTest {
 
     @Test
     void when_get_path_area_then_return_slash_world_name_slash_land_name_area_id() {
-        Area area = AreaCuboidImpl.builder()
+        Area area = new AreaCuboidImpl(AreaJPA.builder()
                 .id(ID_AREA_1)
                 .x1(0)
                 .y1(0)
@@ -70,8 +76,7 @@ class LandTest {
                 .x2(99)
                 .y2(255)
                 .z2(99)
-                .land(areaLand)
-                .build();
+                .build(), areaLand);
         worldLand.getAreas().add(area);
 
         assertEquals("/world001/test001:1", area.getPathName());

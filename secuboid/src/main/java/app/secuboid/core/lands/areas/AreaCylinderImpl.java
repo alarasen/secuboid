@@ -23,26 +23,15 @@ import app.secuboid.api.lands.areas.AreaCylinder;
 import app.secuboid.api.lands.areas.AreaType;
 import app.secuboid.api.messages.MessagePath;
 import app.secuboid.core.messages.MessagePaths;
-import lombok.Builder;
+import app.secuboid.core.persistence.jpa.AreaJPA;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class AreaCylinderImpl extends AreaImpl implements AreaCylinder {
-
-    private final long id;
-
-    private final Land land;
-
-    private final int x1;
-    private final int y1;
-    private final int z1;
-    private final int x2;
-    private final int y2;
-    private final int z2;
 
     @EqualsAndHashCode.Exclude
     private boolean isSetValues = false;
@@ -55,36 +44,14 @@ public class AreaCylinderImpl extends AreaImpl implements AreaCylinder {
     @EqualsAndHashCode.Exclude
     private double originK = 0;
 
-    @Builder
-    public AreaCylinderImpl(long id, Land land, int x1, int y1, int z1, int x2, int y2, int z2) {
-        this.id = id;
-        this.land = land;
-        this.x1 = x1;
-        this.y1 = y1;
-        this.z1 = z1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.z2 = z2;
-    }
+    public AreaCylinderImpl(AreaJPA areaJPA, Land land) {
+        super(areaJPA, land);
 
-    public double getRX() {
-        initValuesIfNeeded();
-        return rX;
-    }
-
-    public double getRZ() {
-        initValuesIfNeeded();
-        return rZ;
-    }
-
-    public double getOriginH() {
-        initValuesIfNeeded();
-        return originH;
-    }
-
-    public double getOriginK() {
-        initValuesIfNeeded();
-        return originK;
+        rX = (double) (getX2() - getX1()) / 2;
+        rZ = (double) (getZ2() - getZ1()) / 2;
+        originH = getX1() + rX;
+        originK = getZ1() + rZ;
+        isSetValues = true;
     }
 
     @Override
@@ -94,62 +61,42 @@ public class AreaCylinderImpl extends AreaImpl implements AreaCylinder {
 
     @Override
     public int getZPosFromX(int x) {
-        initValuesIfNeeded();
         return (int) Math.round(originK + (rZ * Math.sqrt((rX + x - originH) * (rX - x + originH))) / getRX());
     }
 
     @Override
     public int getZNegFromX(int x) {
-        initValuesIfNeeded();
         return (int) Math.round(originK - (rZ * Math.sqrt((rX + x - originH) * (rX - x + originH))) / getRX());
     }
 
     @Override
     public int getXPosFromZ(int z) {
-        initValuesIfNeeded();
         return (int) Math.round(originH + (rX * Math.sqrt((rZ + z - originK) * (rZ - z + originK))) / getRZ());
     }
 
     @Override
     public int getXNegFromZ(int z) {
-        initValuesIfNeeded();
         return (int) Math.round(originH - (rX * Math.sqrt((rZ + z - originK) * (rZ - z + originK))) / getRZ());
     }
 
     @Override
     public long getArea() {
-        initValuesIfNeeded();
         return Math.round(rX * rZ * Math.PI);
     }
 
     @Override
     public long getVolume() {
-        initValuesIfNeeded();
-        return Math.round(rX * rZ * Math.PI * (y2 - y1 + 1));
+        return Math.round(rX * rZ * Math.PI * (getY2() - getY1() + 1));
     }
 
     @Override
     public boolean isLocationInside(int x, int z) {
-        initValuesIfNeeded();
         return ((Math.pow((x - originH), 2) / Math.pow(rX, 2))
                 + (Math.pow((z - originK), 2) / Math.pow(rZ, 2))) < 1;
     }
 
     @Override
     public MessagePath getMessagePath() {
-        initValuesIfNeeded();
         return MessagePaths.areaCylinder(originH, originK, rX, getRZ());
-    }
-
-    private void initValuesIfNeeded() {
-        if (isSetValues) {
-            return;
-        }
-
-        rX = (double) (x2 - x1) / 2;
-        rZ = (double) (z2 - z1) / 2;
-        originH = x1 + rX;
-        originK = z1 + rZ;
-        isSetValues = true;
     }
 }

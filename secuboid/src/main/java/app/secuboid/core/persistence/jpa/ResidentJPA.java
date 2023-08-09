@@ -18,11 +18,14 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 
 @Data
 @Builder
@@ -30,9 +33,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_resident")
-public class ResidentJPA {
+public class ResidentJPA implements JPA {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @Builder.Default
+    private long id = NON_EXISTING_ID;
+
     @ManyToOne
     @JoinColumn(name = "land_id", nullable = false)
     private LandJPA landJPA;

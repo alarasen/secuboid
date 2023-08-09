@@ -23,12 +23,15 @@ import app.secuboid.api.lands.areas.AreaResult;
 import app.secuboid.api.lands.areas.AreaResultCode;
 import app.secuboid.api.lands.areas.AreaService;
 import app.secuboid.api.recipients.RecipientExec;
+import app.secuboid.core.persistence.PersistenceService;
+import app.secuboid.core.persistence.jpa.LandJPA;
 import app.secuboid.core.utilities.NameUtil;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.hibernate.Transaction;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,6 +52,7 @@ public class LandServiceImpl implements LandService {
 
     private final Server server;
     private final AreaService areaService;
+    private final PersistenceService persistenceService;
 
     private final Map<String, Land> worldNameToLand = new HashMap<>();
     private final Map<Long, Land> idToLand = new HashMap<>();
@@ -66,22 +70,27 @@ public class LandServiceImpl implements LandService {
 
 
     public void loadWorldSync(World world) {
-//        String worldName = world.getName();
-//
-//        if (worldNameToWorldLand.containsKey(worldName)) {
-//            return;
-//        }
-//
-//        LandRow inputLandRow = new LandRow(NON_EXISTING_ID, worldName, WORLD_LAND, null);
-//        LandRow landRow = getStorageManager().insertSync(inputLandRow);
-//        if (landRow == null) {
-//            log().log(SEVERE, "Unable to create the world \"{}\" because there is no answer from the database",
-//                    worldName);
-//            return;
-//        }
-//
-//        WorldLand worldLand = new WorldLandImpl(landRow.id(), worldName);
-//        putLandComponentToMap(worldLand);
+        String worldName = world.getName();
+
+        if (worldNameToLand.containsKey(worldName)) {
+            return;
+        }
+
+        LandJPA landJPA = LandJPA.builder()
+                .name(worldName)
+                .build();
+
+        persistenceService.execSync(session -> {
+            Transaction transaction = session.beginTransaction();
+            session.persist(landJPA);
+            session.flush();
+            transaction.commit();
+        });
+
+        Land worldLand = LandImpl.builder()
+                .jPA(landJPA)
+                .build();
+        putLandToMap(worldLand);
     }
 
     @Override
@@ -97,8 +106,19 @@ public class LandServiceImpl implements LandService {
             return;
         }
 
-//        LandRow landRow = new LandRow(NON_EXISTING_ID, nameLower, AREA_LAND, parent.id());
-//        getStorageManager().insert(landRow, r -> createInsertCallback(r, parent, areaForm, callback));
+        LandJPA landJPA = LandJPA.builder()
+                .type(LandType.LAND)
+                .name(nameLower)
+                .parentLandJPA(((LandImpl) parent).getJPA())
+                .build();
+
+        persistenceService.exec(session -> {
+            Transaction transaction = session.beginTransaction();
+            session.persist(landJPA);
+            session.flush();
+            transaction.commit();
+            return landJPA;
+        }, r -> createInsertCallback(landJPA, parent, area, callback));
     }
 
     @Override
@@ -254,11 +274,10 @@ public class LandServiceImpl implements LandService {
         return null;
     }
 
-//    private void createInsertCallback(LandRow landRow, Land parent, AreaForm areaForm,
-//                                      Consumer<LandResult> callback) {
+    private void createInsertCallback(LandJPA landJPA, Land parent, Area area, Consumer<LandResult> callback) {
 //        AreaLandImpl areaLand = new AreaLandImpl(landRow.id(), landRow.name(), parent);
 //        areaLand.addArea(areaForm, r -> createAddAreaCallback(areaLand, r, callback));
-//    }
+    }
 
     private void createAddAreaCallback(Land land, AreaResult areaResult, Consumer<LandResult> callback) {
         if (areaResult.getCode() != AreaResultCode.SUCCESS) {
