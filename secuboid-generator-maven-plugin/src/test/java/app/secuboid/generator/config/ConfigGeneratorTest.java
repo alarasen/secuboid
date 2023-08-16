@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ConfigGeneratorTest {
 
     private static final String YAML_STR = """
-            integer-configService: 123
-            double-configService: 2.3
-            boolean-configService: true
-            string-configService: bonjour "tous"
+            integer-config: 123
+            double-config: 2.3
+            boolean-config: true
+            string-config: bonjour "tous"
             string-list: ["un", "deux", "trois"]
             main:
               sub: yes
@@ -76,12 +76,12 @@ class ConfigGeneratorTest {
         assertTrue(output.contains("private String stringConfig;"));
         assertTrue(output.contains("private List<String> stringList;"));
 
-        assertTrue(output.contains("doubleConfig = fileConfiguration.getDouble(\"double-configService\");"));
-        assertTrue(output.contains("fileConfiguration.addDefault(\"boolean-configService\", true);"));
-        assertTrue(output.contains("booleanConfig = fileConfiguration.getBoolean(\"boolean-configService\");"));
+        assertTrue(output.contains("doubleConfig = fileConfiguration.getDouble(\"double-config\");"));
+        assertTrue(output.contains("fileConfiguration.addDefault(\"boolean-config\", true);"));
+        assertTrue(output.contains("booleanConfig = fileConfiguration.getBoolean(\"boolean-config\");"));
         assertTrue(output.contains(
-                "fileConfiguration.addDefault(\"string-configService\", \"bonjour \\\"tous\\\"\");"));
-        assertTrue(output.contains("stringConfig = fileConfiguration.getString(\"string-configService\");"));
+                "fileConfiguration.addDefault(\"string-config\", \"bonjour \\\"tous\\\"\");"));
+        assertTrue(output.contains("stringConfig = fileConfiguration.getString(\"string-config\");"));
         assertTrue(output.contains(
                 "fileConfiguration.addDefault(\"string-list\", Arrays.asList(\"un\", \"deux\", \"trois\"));"));
         assertTrue(output.contains("stringList = fileConfiguration.getStringList(\"string-list\");"));
