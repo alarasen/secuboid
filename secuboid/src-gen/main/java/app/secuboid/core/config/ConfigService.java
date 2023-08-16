@@ -17,36 +17,46 @@
  */
 package app.secuboid.core.config;
 
+import app.secuboid.api.services.Service;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class Config {
+@RequiredArgsConstructor
+public class ConfigService implements Service {
 
-    private static final Config INSTANCE = new Config();
+    private final JavaPlugin javaPlugin;
 
     private String lang;
-    private String databaseUrl;
+    private String databaseHost;
+    private int databasePort;
+    private String databaseDatabase;
     private String databaseUser;
     private String databasePassword;
     private int selectionDefaultStartDiameter;
 
-    private Config() {
-        // Empty configuration on server start
-        FileConfiguration fileConfiguration = new YamlConfiguration();
-        load(fileConfiguration);
+    @Override
+    public void onEnable(boolean isServerBoot) {
+        if (isServerBoot) {
+            javaPlugin.saveDefaultConfig();
+        } else {
+            javaPlugin.reloadConfig();
+        }
+
+        load(javaPlugin.getConfig());
     }
 
-    public static Config config() {
-        return INSTANCE;
-    }
-
-    public void load(FileConfiguration fileConfiguration) {
+    private void load(FileConfiguration fileConfiguration) {
         fileConfiguration.addDefault("lang", "en");
         lang = fileConfiguration.getString("lang");
-        fileConfiguration.addDefault("database.url", "jdbc:hsqldb:file:{{plugin-path}}/storage/db");
-        databaseUrl = fileConfiguration.getString("database.url");
+        fileConfiguration.addDefault("database.host", "localhost");
+        databaseHost = fileConfiguration.getString("database.host");
+        fileConfiguration.addDefault("database.port", 3306);
+        databasePort = fileConfiguration.getInt("database.port");
+        fileConfiguration.addDefault("database.database", "secuboid");
+        databaseDatabase = fileConfiguration.getString("database.database");
         fileConfiguration.addDefault("database.user", "secuboid");
         databaseUser = fileConfiguration.getString("database.user");
         fileConfiguration.addDefault("database.password", "secuboid");

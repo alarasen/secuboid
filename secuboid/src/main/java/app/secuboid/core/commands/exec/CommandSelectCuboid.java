@@ -24,8 +24,10 @@ import app.secuboid.api.players.CommandSenderInfo;
 import app.secuboid.api.players.PlayerInfo;
 import app.secuboid.api.registration.CommandRegistered;
 import app.secuboid.api.selection.PlayerSelection;
+import app.secuboid.core.config.ConfigService;
 import app.secuboid.core.scoreboard.ScoreboardService;
 import app.secuboid.core.selection.PlayerSelectionImpl;
+import lombok.RequiredArgsConstructor;
 
 @CommandRegistered(
         name = "select cuboid",
@@ -33,13 +35,11 @@ import app.secuboid.core.selection.PlayerSelectionImpl;
         allowConsole = false,
         sourceActionFlags = "land-create"
 )
+@RequiredArgsConstructor
 public class CommandSelectCuboid implements CommandExec {
 
+    private final ConfigService configService;
     private final ScoreboardService scoreboardService;
-
-    public CommandSelectCuboid(ScoreboardService scoreboardService) {
-        this.scoreboardService = scoreboardService;
-    }
 
     @Override
     public void commandExec(CommandSenderInfo commandSenderInfo, String[] subArgs) {
@@ -47,7 +47,8 @@ public class CommandSelectCuboid implements CommandExec {
         Land worldLand = playerInfo.getWorldLand();
         PlayerSelection playerSelection = playerInfo.getPlayerSelection();
 
+        int startDiameter = configService.getSelectionDefaultStartDiameter();
         ((PlayerSelectionImpl) playerSelection).createActiveSelectionModifyExpand(scoreboardService, worldLand,
-                AreaType.CUBOID);
+                AreaType.CUBOID, startDiameter);
     }
 }

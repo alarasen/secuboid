@@ -60,12 +60,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <scope>compile</scope>
@@ -152,18 +146,19 @@
                 <version>${revision}</version>
                 <executions>
                     <execution>
-                        <id>generate-config</id>
+                        <id>generate-configService</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate-config</goal>
                         </goals>
                         <configuration>
-                            <configSource>${project.basedir}/src/main/resources-filtered/config.yml</configSource>
+                            <configSource>${project.basedir}/src/main/resources-filtered/config.yml
+                            </configSource>
                             <configJavaTemplate>
-                                ${project.basedir}/src-template/main/java/app/secuboid/core/config/Config.java.template
+                                ${project.basedir}/src-template/main/java/app/secuboid/core/config/ConfigService.java.template
                             </configJavaTemplate>
                             <configJavaTarget>
-                                ${project.basedir}/src-gen/main/java/app/secuboid/core/config/Config.java
+                                ${project.basedir}/src-gen/main/java/app/secuboid/core/config/ConfigService.java
                             </configJavaTarget>
                         </configuration>
                     </execution>
@@ -255,7 +250,6 @@
                                     <include>org.antlr:antlr4-runtime</include>
                                     <include>org.bstats:*</include>
                                     <include>org.hibernate.*:*</include>
-                                    <include>org.hsqldb:hsqldb</include>
                                     <include>org.jboss.logging:jboss-logging</include>
                                     <include>org.mariadb.jdbc:mariadb-java-client</include>
                                     <include>com.zaxxer:HikariCP</include>
@@ -285,10 +279,6 @@
                                 <relocation>
                                     <pattern>org.hibernate</pattern>
                                     <shadedPattern>app.secuboid.hibernate</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.hsqldb</pattern>
-                                    <shadedPattern>app.secuboid.hsqldb</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.jboss.logging</pattern>

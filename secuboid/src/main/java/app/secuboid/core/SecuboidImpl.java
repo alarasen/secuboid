@@ -34,6 +34,7 @@ import app.secuboid.api.services.ServiceService;
 import app.secuboid.core.commands.CommandListenerService;
 import app.secuboid.core.commands.CommandServiceImpl;
 import app.secuboid.core.commands.exec.*;
+import app.secuboid.core.config.ConfigService;
 import app.secuboid.core.flags.FlagDeclarations;
 import app.secuboid.core.flagtypes.FlagTypeServiceImpl;
 import app.secuboid.core.items.SecuboidToolService;
@@ -61,8 +62,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import static app.secuboid.core.config.Config.config;
-
 @Getter
 public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
@@ -77,6 +76,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
     private final ChatPageService chatPageService;
     private final CommandService commandService;
     private final CommandListenerService commandListenerService;
+    private final ConfigService configService;
     private final FlagTypeService flagTypeService;
     private final LandService landService;
     private final MessageManagerService messageManagerService;
@@ -101,13 +101,14 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
         // Secuboid instances
         // phase 1 in alphabetical order
+        configService = new ConfigService(secuboidPlugin);
         areaService = new AreaServiceImpl();
         chatGetterService = new ChatGetterService(secuboidPlugin, scheduler);
-        messageService = new MessageServiceImpl();
         registrationService = new RegistrationServiceImpl();
 
         // phase 2 in alphabetical order
-        persistenceSessionService = new PersistenceSessionService(secuboidPlugin, registrationService);
+        messageService = new MessageServiceImpl(configService);
+        persistenceSessionService = new PersistenceSessionService(configService, registrationService);
 
         // phase 3 in alphabetical order
         persistenceService = new PersistenceService(secuboidPlugin, scheduler, persistenceSessionService);
@@ -144,13 +145,6 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     @Override
     public void onEnable(boolean isServerBoot) {
-        if (isServerBoot) {
-            secuboidPlugin.saveDefaultConfig();
-        } else {
-            secuboidPlugin.reloadConfig();
-        }
-        config().load(secuboidPlugin.getConfig());
-
         serviceService.onEnable(secuboidPlugin);
 
         if (isServerBoot) {
@@ -186,12 +180,15 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         registrationService.registerService(secuboidPlugin, serviceService);
 
         // phase 2 in alphabetical order
-        registrationService.registerService(secuboidPlugin, persistenceSessionService);
+        registrationService.registerService(secuboidPlugin, configService);
 
         // phase 3 in alphabetical order
-        registrationService.registerService(secuboidPlugin, persistenceService);
+        registrationService.registerService(secuboidPlugin, persistenceSessionService);
 
         // phase 4 in alphabetical order
+        registrationService.registerService(secuboidPlugin, persistenceService);
+
+        // phase 5 in alphabetical order
         registrationService.registerService(secuboidPlugin, areaService);
         registrationService.registerService(secuboidPlugin, chatGetterService);
         registrationService.registerService(secuboidPlugin, commandListenerService);
@@ -202,16 +199,16 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         registrationService.registerService(secuboidPlugin, recipientService);
         registrationService.registerService(secuboidPlugin, secuboidToolService);
 
-        // Phase 5 in alphabetical order
+        // Phase 6 in alphabetical order
         registrationService.registerService(secuboidPlugin, scoreboardService);
 
-        // Phase 6 in alphabetical order
+        // Phase 7 in alphabetical order
         registrationService.registerService(secuboidPlugin, landService);
 
-        // Phase 7 in alphabetical order
+        // Phase 8 in alphabetical order
         registrationService.registerService(secuboidPlugin, playerInfoService);
 
-        // Phase 8 in alphabetical order
+        // Phase 9 in alphabetical order
         registrationService.registerService(secuboidPlugin, chatPageService);
 
     }
@@ -226,7 +223,7 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
         registrationService.registerCommand(new CommandPage(chatPageService, messageManagerService));
         registrationService.registerCommand(new CommandReload(this, messageManagerService));
         registrationService.registerCommand(new CommandSelect(commandService));
-        registrationService.registerCommand(new CommandSelectCuboid(scoreboardService));
+        registrationService.registerCommand(new CommandSelectCuboid(configService, scoreboardService));
         registrationService.registerCommand(new CommandSelectHere(scoreboardService));
         registrationService.registerCommand(new CommandTool(secuboidToolService));
     }

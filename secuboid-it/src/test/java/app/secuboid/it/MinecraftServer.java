@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static app.secuboid.it.DatabaseContainer.mariaDBContainer;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -99,17 +100,18 @@ public class MinecraftServer {
     private SecuboidPluginImpl mockSecuboidPluginImpl() {
         String pluginName = "Secuboid";
         String mainClass = "app.secuboid.core.SecuboidPluginImpl";
-        File secuboidPluginYmlFile = new File("../secuboid/src/main/resources-filtered/secuboid-plugin.yml");
 
-        return pluginCommonMock(SecuboidPluginImpl.class, pluginName, mainClass, secuboidPluginYmlFile);
+        return pluginCommonMock(SecuboidPluginImpl.class, pluginName, mainClass);
     }
 
-    public <P extends JavaPlugin> P pluginCommonMock(Class<P> clazz, String pluginName, String mainClass,
-                                                     File secuboidPluginYmlFile) {
+    public <P extends JavaPlugin> P pluginCommonMock(Class<P> clazz, String pluginName, String mainClass) {
         P javaPlugin = mock(clazz);
 
         when(javaPlugin.getLogger()).thenReturn(Log.log());
-        when(javaPlugin.getConfig()).thenReturn(new YamlConfiguration());
+
+        YamlConfiguration yamlConfiguration = getYamlConfiguration();
+        when(javaPlugin.getConfig()).thenReturn(yamlConfiguration);
+
         when(javaPlugin.getDescription()).thenReturn(new PluginDescriptionFile(pluginName, PLUGIN_VERSION, mainClass));
         when(javaPlugin.getDataFolder()).thenReturn(new File(pluginTempDir, pluginName));
         when(javaPlugin.getName()).thenReturn(pluginName);
@@ -121,6 +123,17 @@ public class MinecraftServer {
         when(javaPlugin.getCommand(anyString())).thenReturn(pluginCommand);
 
         return javaPlugin;
+    }
+
+    private YamlConfiguration getYamlConfiguration() {
+        YamlConfiguration yamlConfiguration = new YamlConfiguration();
+        yamlConfiguration.addDefault("database.host", mariaDBContainer.getHost());
+        yamlConfiguration.addDefault("database.port", mariaDBContainer.getFirstMappedPort());
+        yamlConfiguration.addDefault("database.database", mariaDBContainer.getDatabaseName());
+        yamlConfiguration.addDefault("database.user", mariaDBContainer.getUsername());
+        yamlConfiguration.addDefault("database.password", mariaDBContainer.getPassword());
+
+        return yamlConfiguration;
     }
 
     private Server mockServer() {

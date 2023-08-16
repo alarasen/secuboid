@@ -17,28 +17,32 @@
  */
 package app.secuboid.core.config;
 
+import app.secuboid.api.services.Service;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class Config {
+@RequiredArgsConstructor
+public class ConfigService implements Service {
 
-    private static final Config INSTANCE = new Config();
+    private final JavaPlugin javaPlugin;
 
     {{generatedVars}}
 
-    private Config() {
-        // Empty configuration on server start
-        FileConfiguration fileConfiguration = new YamlConfiguration();
-        load(fileConfiguration);
+    @Override
+    public void onEnable(boolean isServerBoot) {
+        if (isServerBoot) {
+            javaPlugin.saveDefaultConfig();
+        } else {
+            javaPlugin.reloadConfig();
+        }
+
+        load(javaPlugin.getConfig());
     }
 
-    public static Config config() {
-        return INSTANCE;
-    }
-
-    public void load(FileConfiguration fileConfiguration) {
+    private void load(FileConfiguration fileConfiguration) {
         {{generatedLoads}}
     }
 }

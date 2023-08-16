@@ -16,26 +16,11 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.core.messages;
+package app.secuboid.it;
 
-import app.secuboid.api.messages.MessageManagerService;
-import app.secuboid.api.messages.MessageService;
-import app.secuboid.core.config.ConfigService;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.plugin.Plugin;
+import org.testcontainers.containers.MariaDBContainer;
 
-import java.util.HashMap;
-import java.util.Map;
+public class DatabaseContainer {
 
-@RequiredArgsConstructor
-public class MessageServiceImpl implements MessageService {
-
-    private final ConfigService configService;
-
-    private final Map<Plugin, MessageManagerService> pluginToMessageManager = new HashMap<>();
-
-    @Override
-    public MessageManagerService grab(Plugin plugin) {
-        return pluginToMessageManager.computeIfAbsent(plugin, p -> new MessageManagerServiceImpl(p, configService));
-    }
+    public static MariaDBContainer<?> mariaDBContainer = new MariaDBContainer<>("mariadb");
 }

@@ -20,6 +20,8 @@ package app.secuboid.core.messages;
 import app.secuboid.api.flagtypes.FlagType;
 import app.secuboid.api.lands.LocationPath;
 import app.secuboid.api.messages.*;
+import app.secuboid.core.config.ConfigService;
+import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,11 +33,11 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import static app.secuboid.core.config.Config.config;
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 
+@RequiredArgsConstructor
 public class MessageManagerServiceImpl implements MessageManagerService {
 
     private static final String ERROR_MESSAGE_NOT_LOADED = "Message not yet loaded for the plugin %s";
@@ -45,19 +47,15 @@ public class MessageManagerServiceImpl implements MessageManagerService {
     private static final String LANG_DEFAULT = "en";
 
     private final Plugin plugin;
-    private FileConfiguration fileConfiguration;
-    private FileConfiguration fileConfigurationFlags;
+    private final ConfigService configService;
 
-    public MessageManagerServiceImpl(Plugin plugin) {
-        this.plugin = plugin;
-        fileConfiguration = null;
-        fileConfigurationFlags = null;
-    }
+    private FileConfiguration fileConfiguration = null;
+    private FileConfiguration fileConfigurationFlags = null;
 
     @Override
     public void onEnable(boolean isServerBoot) {
 
-        String lang = config().getLang();
+        String lang = configService.getLang();
 
         String langFilename = getFilePath(FILENAME_LANG_PREFIX, lang);
         String defaultLangFilename = getFilePath(FILENAME_LANG_PREFIX, LANG_DEFAULT);

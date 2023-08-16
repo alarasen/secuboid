@@ -33,8 +33,6 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
-import static app.secuboid.core.config.Config.config;
-
 public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSelection {
 
     private final PlayerInfo playerInfo;
@@ -47,8 +45,8 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
     }
 
     public void createActiveSelectionModifyExpand(ScoreboardService scoreboardService, Land worldLand,
-                                                  AreaType areaType) {
-        Area area = createAreaForm(areaType);
+                                                  AreaType areaType, int startDiameter) {
+        Area area = createAreaForm(areaType, startDiameter);
         createActiveSelectionModifyExpand(scoreboardService, worldLand, area);
     }
 
@@ -67,8 +65,7 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         }
     }
 
-    private Area createAreaForm(AreaType areaType) {
-        int selectionDefaultStartDiameter = config().getSelectionDefaultStartDiameter();
+    private Area createAreaForm(AreaType areaType, int startDiameter) {
         Location loc = player.getLocation();
         int playerX = loc.getBlockX();
         int playerZ = loc.getBlockZ();
@@ -77,10 +74,10 @@ public class PlayerSelectionImpl extends SenderSelectionImpl implements PlayerSe
         World world = player.getWorld();
         int y1 = world.getMinHeight();
         int y2 = world.getMaxHeight();
-        int x1 = playerX - (selectionDefaultStartDiameter / 2);
-        int x2 = x1 + selectionDefaultStartDiameter;
-        int z1 = playerZ - (selectionDefaultStartDiameter / 2);
-        int z2 = z1 + selectionDefaultStartDiameter;
+        int x1 = playerX - (startDiameter / 2);
+        int x2 = x1 + startDiameter;
+        int z1 = playerZ - (startDiameter / 2);
+        int z2 = z1 + startDiameter;
 
         AreaJPA areaJPA = AreaJPA.builder()
                 .type(areaType)

@@ -6,8 +6,10 @@
 
 # Secuboid 2 (Upcoming version INCOMPLETE NOT FOR PRODUCTION)
 
-Secuboid is a complete land (region) protection plugin. It has a lot of functionalities. You can make cuboid landService,
-cylinder landService. The player can make his own land with economy, rent or sell his land. There is also a very complete list
+Secuboid is a complete land (region) protection plugin. It has a lot of functionalities. You can make cuboid
+landService,
+cylinder landService. The player can make his own land with economy, rent or sell his land. There is also a very
+complete list
 of flags and permissions.
 
 ## Help needed
@@ -30,12 +32,13 @@ bstats.org:
 * The Metrics version
 * The number and type of Secuboid landService/areas and some basic configurations
 
-Opting out of this service can be done by editing plugins/Plugin Metrics/config.yml and changing opt-out to true.
+Opting out of this service can be done by editing plugins/Plugin Metrics/configService.yml and changing opt-out to true.
 
 # History
 
 The Secuboid project began in 2014 on the "Factoid" name. The goal was to have a complete protection plugin with an
-unlimited possibilities of configuration for landService and worlds. We also wanted to add an inventory system for landService,
+unlimited possibilities of configuration for landService and worlds. We also wanted to add an inventory system for
+landService,
 worlds and game modes.
 
 ## Former developers

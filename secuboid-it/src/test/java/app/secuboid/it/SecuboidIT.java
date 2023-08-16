@@ -37,6 +37,8 @@ class SecuboidIT {
 
     @BeforeAll
     static void beforeAll() {
+        DatabaseContainer.mariaDBContainer.start();
+
         minecraftServer = new MinecraftServer(pluginTempDir);
         minecraftServer.load();
         minecraftServer.enable();
@@ -46,6 +48,8 @@ class SecuboidIT {
     @AfterAll
     static void afterAll() {
         minecraftServer.disable();
+
+        DatabaseContainer.mariaDBContainer.stop();
     }
 
     @Test
