@@ -27,6 +27,7 @@ import app.secuboid.core.messages.Log;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -127,11 +128,12 @@ public class MinecraftServer {
 
     private YamlConfiguration getYamlConfiguration() {
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.addDefault("database.host", mariaDBContainer.getHost());
-        yamlConfiguration.addDefault("database.port", mariaDBContainer.getFirstMappedPort());
-        yamlConfiguration.addDefault("database.database", mariaDBContainer.getDatabaseName());
-        yamlConfiguration.addDefault("database.user", mariaDBContainer.getUsername());
-        yamlConfiguration.addDefault("database.password", mariaDBContainer.getPassword());
+        ConfigurationSection databaseSection = yamlConfiguration.createSection("database");
+        databaseSection.set("host", mariaDBContainer.getHost());
+        databaseSection.set("port", mariaDBContainer.getFirstMappedPort());
+        databaseSection.set("database", mariaDBContainer.getDatabaseName());
+        databaseSection.set("user", mariaDBContainer.getUsername());
+        databaseSection.set("password", mariaDBContainer.getPassword());
 
         return yamlConfiguration;
     }
