@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence;
 
+import app.secuboid.api.exceptions.SecuboidRuntimeException;
 import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.api.services.Service;
 import app.secuboid.core.config.ConfigService;
@@ -32,10 +33,8 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class PersistenceSessionService implements Service {
 
-    public static final String DIALECT = "org.hibernate.dialect.MySQLDialect";
     public static final String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
     public static final String CONNECTION_PROVIDER_CLASS = "org.hibernate.hikaricp.internal.HikariCPConnectionProvider";
-    public static final String HBM2DDL_AUTO_VALUE = "update";
 
     private final ConfigService configService;
     private final RegistrationService registrationService;
@@ -44,11 +43,21 @@ public class PersistenceSessionService implements Service {
 
     @Override
     public void onEnable(boolean isServerBoot) {
-        Properties properties = getProperties();
+        try {
+            Class.forName(DRIVER_CLASS);
+        } catch (ClassNotFoundException e) {
+            throw new SecuboidRuntimeException("MariaDB driver not found: " + DRIVER_CLASS, e);
+        }
+        
+        String url = String.format("jdbc:mariadb://%s:%s/%s", configService.getDatabaseHost(), configService.getDatabasePort(),
+                configService.getDatabaseDatabase());
 
+        new CreateDatabase(registrationService, url, configService.getDatabaseUser(), configService.getDatabasePassword()).createDatabases();
+
+        Properties properties = getProperties(url);
         Configuration configuration = new Configuration();
         configuration.addProperties(properties);
-        ((RegistrationServiceImpl) registrationService).getJpaClasses().forEach(configuration::addAnnotatedClass);
+        ((RegistrationServiceImpl) registrationService).getJpaClassToCreateTable().keySet().forEach(configuration::addAnnotatedClass);
         sessionFactory = configuration.buildSessionFactory();
     }
 
@@ -64,19 +73,14 @@ public class PersistenceSessionService implements Service {
         return sessionFactory.openSession();
     }
 
-    private Properties getProperties() {
-        String url = String.format("jdbc:mariadb://%s:%s/%s", configService.getDatabaseHost(), configService.getDatabasePort(),
-                configService.getDatabaseDatabase());
-
+    private Properties getProperties(String url) {
         Properties properties = new Properties();
 
-        properties.setProperty("hibernate.dialect", DIALECT);
         properties.setProperty("hibernate.connection.driver_class", DRIVER_CLASS);
         properties.setProperty("hibernate.connection.url", url);
         properties.setProperty("hibernate.connection.username", configService.getDatabaseUser());
         properties.setProperty("hibernate.connection.password", configService.getDatabasePassword());
         properties.setProperty("hibernate.connection.provider_class", CONNECTION_PROVIDER_CLASS);
-        properties.setProperty("hibernate.hbm2ddl.auto", HBM2DDL_AUTO_VALUE);
         return properties;
     }
 }

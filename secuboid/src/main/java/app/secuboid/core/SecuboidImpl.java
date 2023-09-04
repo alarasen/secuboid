@@ -165,10 +165,14 @@ public class SecuboidImpl implements Secuboid, SecuboidComponent {
 
     private void registerJPAs() {
 
-        // Register JPAs in alphabetical order
-        registrationService.registerJPA(AreaJPA.class);
-        registrationService.registerJPA(LandJPA.class);
+        // Register JPAs
+
+        // phase 1 in alphabetical order
         registrationService.registerJPA(RecipientJPA.class);
+        registrationService.registerJPA(LandJPA.class);
+
+        // phase 2 in alphabetical order
+        registrationService.registerJPA(AreaJPA.class);
         registrationService.registerJPA(ResidentJPA.class);
     }
 

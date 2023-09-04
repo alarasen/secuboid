@@ -16,17 +16,25 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app.secuboid.api.persistence;
+package app.secuboid.core.persistence;
 
-/**
- * Represents any JPA. Should have {@link CreateTable} annotation.
- */
-public interface JPA {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    /**
-     * Gets the object id.
-     *
-     * @return the id
-     */
-    long getId();
+import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class TableVersion {
+
+    @Builder.Default
+    private long id = NON_EXISTING_ID;
+
+    private String clazz;
+
+    private int version;
 }

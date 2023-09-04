@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.persistence.CreateTable;
 import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,19 @@ import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_resident")
+@CreateTable({"""
+        CREATE TABLE `secuboid_resident` (
+          `level` int(11) NOT NULL,
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `recipient_id` bigint(20) NOT NULL,
+          `land_id` bigint(20) NOT NULL,
+          PRIMARY KEY (`id`,`level`,`recipient_id`),
+          KEY `FK_resident_recipient_id` (`recipient_id`),
+          KEY `FK_resident_land_if` (`land_id`),
+          CONSTRAINT `FK_resident_land_if` FOREIGN KEY (`land_id`) REFERENCES `secuboid_land` (`id`),
+          CONSTRAINT `FK_resident_recipient_id` FOREIGN KEY (`recipient_id`) REFERENCES `secuboid_recipient` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+        """})
 public class ResidentJPA implements JPA {
 
     @Id

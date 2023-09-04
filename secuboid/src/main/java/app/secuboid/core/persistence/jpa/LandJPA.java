@@ -19,6 +19,7 @@
 package app.secuboid.core.persistence.jpa;
 
 import app.secuboid.api.lands.LandType;
+import app.secuboid.api.persistence.CreateTable;
 import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,17 @@ import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_land")
+@CreateTable({"""
+        CREATE TABLE `secuboid_land` (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `name` varchar(45) NOT NULL,
+          `type` varchar(1) NOT NULL,
+          `parent_id` bigint(20) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          KEY `FK_land_parent_id` (`parent_id`),
+          CONSTRAINT `FK_land_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `secuboid_land` (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+        """})
 public class LandJPA implements JPA {
 
     @Id

@@ -48,8 +48,10 @@ public class PersistenceService implements Service {
 
     @Override
     public void onDisable(boolean isServerShutdown) {
-        persistenceThread.shutdown();
-        persistenceThread = null;
+        if (persistenceThread != null) {
+            persistenceThread.shutdown();
+            persistenceThread = null;
+        }
     }
 
     public <R extends JPA> void exec(Function<Session, R> sessionFunction, Consumer<R> callback) {

@@ -20,6 +20,7 @@ package app.secuboid.core.registration;
 
 import app.secuboid.api.commands.CommandExec;
 import app.secuboid.api.flagtypes.FlagType;
+import app.secuboid.api.persistence.CreateTable;
 import app.secuboid.api.persistence.JPA;
 import app.secuboid.api.recipients.RecipientExec;
 import app.secuboid.api.registration.CommandRegistered;
@@ -39,7 +40,7 @@ import static java.util.logging.Level.SEVERE;
 @Getter
 public class RegistrationServiceImpl implements RegistrationService {
 
-    private final Set<Class<? extends JPA>> jpaClasses = new LinkedHashSet<>();
+    private final Map<Class<? extends JPA>, CreateTable> jpaClassToCreateTable = new LinkedHashMap<>();
     private final Map<Plugin, List<Service>> pluginToServices = new LinkedHashMap<>();
     private final Map<CommandExec, CommandRegistered> commandExecToCommandRegistered = new HashMap<>();
     private final Set<FlagType> flagTypes = new HashSet<>();
@@ -59,7 +60,14 @@ public class RegistrationServiceImpl implements RegistrationService {
             return;
         }
 
-        jpaClasses.add(jpaClass);
+        CreateTable createTable = jpaClass.getAnnotation(CreateTable.class);
+
+        if (createTable != null) {
+            jpaClassToCreateTable.put(jpaClass, createTable);
+        } else {
+            log().log(SEVERE, "The class {} needs to have the \"@CreateTable\" annotation",
+                    jpaClass.getName());
+        }
     }
 
     @Override

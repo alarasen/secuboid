@@ -18,6 +18,7 @@
 
 package app.secuboid.core.persistence.jpa;
 
+import app.secuboid.api.persistence.CreateTable;
 import app.secuboid.api.persistence.JPA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,16 @@ import static app.secuboid.api.persistence.WithId.NON_EXISTING_ID;
 @AllArgsConstructor
 @Entity
 @Table(name = "secuboid_recipient", uniqueConstraints = @UniqueConstraint(columnNames = {"short_name", "value", "uuid"}))
+@CreateTable({"""
+        CREATE TABLE `secuboid_recipient` (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `short_name` varchar(10) NOT NULL,
+          `uuid` binary(16) DEFAULT NULL,
+          `value` varchar(255) DEFAULT NULL,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `UK_recipient_001` (`short_name`,`value`,`uuid`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+        """})
 public class RecipientJPA implements JPA {
 
     @Id

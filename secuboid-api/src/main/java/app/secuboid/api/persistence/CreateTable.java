@@ -18,15 +18,22 @@
 
 package app.secuboid.api.persistence;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Represents any JPA. Should have {@link CreateTable} annotation.
+ * SQL statements and order to create/update the table.
  */
-public interface JPA {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface CreateTable {
 
     /**
-     * Gets the object id.
+     * Create table statement. Add an ALTER TABLE if you need to make a modification on the latest version.
      *
-     * @return the id
+     * @return the statements
      */
-    long getId();
+    String[] value();
 }
