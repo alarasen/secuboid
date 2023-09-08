@@ -26,6 +26,7 @@ import app.secuboid.api.registration.RegistrationService;
 import app.secuboid.core.commands.exec.CommandPage;
 import app.secuboid.core.messages.Log;
 import app.secuboid.core.registration.RegistrationServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -37,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.logging.Level.SEVERE;
 
+@RequiredArgsConstructor
 public class CommandServiceImpl implements CommandService {
 
     private static final int COMMANDS_SEPARATOR = ' ';
@@ -44,17 +46,8 @@ public class CommandServiceImpl implements CommandService {
     private final ChatPageService chatPageService;
     private final RegistrationService registrationService;
 
-    private final Map<String, CommandContainer> nameToCommandContainer;
-    private final Map<Class<? extends CommandExec>, CommandContainer> classToCommandContainer;
-
-    public CommandServiceImpl(ChatPageService chatPageService,
-                              RegistrationService registrationService) {
-        this.chatPageService = chatPageService;
-        this.registrationService = registrationService;
-
-        nameToCommandContainer = new HashMap<>();
-        classToCommandContainer = new HashMap<>();
-    }
+    private final Map<String, CommandContainer> nameToCommandContainer = new HashMap<>();
+    private final Map<Class<? extends CommandExec>, CommandContainer> classToCommandContainer = new HashMap<>();
 
     @Override
     public void onEnable(boolean isServerBoot) {

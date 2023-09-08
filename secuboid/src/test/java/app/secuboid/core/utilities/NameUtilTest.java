@@ -32,7 +32,7 @@ class NameUtilTest {
             "-minus",
             "minus-"
     })
-    void when_unvalid_then_return_false(String arg) {
+    void when_invalid_then_return_false(String arg) {
         assertFalse(NameUtil.validateName(arg));
     }
 
