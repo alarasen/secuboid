@@ -34,7 +34,7 @@
         <spigot.version>1.20.1</spigot.version>
         <spigot.suffixversion>-R0.1-SNAPSHOT</spigot.suffixversion>
         <hibernate.version>6.3.1.Final</hibernate.version>
-        <junit-jupiter.version>5.10.0</junit-jupiter.version>
+        <junit-jupiter.version>5.10.1</junit-jupiter.version>
         <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
         <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
