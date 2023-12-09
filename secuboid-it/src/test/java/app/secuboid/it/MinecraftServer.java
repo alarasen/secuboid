@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static app.secuboid.it.DatabaseContainer.mariaDBContainer;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -148,6 +149,7 @@ public class MinecraftServer {
         when(server.getServicesManager()).thenReturn(mock(ServicesManager.class));
         when(server.getScheduler()).thenReturn(mock(BukkitScheduler.class));
         when(server.getScoreboardManager()).thenReturn(mock(ScoreboardManager.class));
+        when(server.getRegistry(any())).thenReturn(null);
 
         return server;
     }
