@@ -22,8 +22,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.testcontainers.containers.MariaDBContainer;
 
 import java.io.File;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,9 +49,8 @@ class SecuboidIT {
 
     @AfterAll
     static void afterAll() {
-        minecraftServer.disable();
-
-        DatabaseContainer.mariaDBContainer.stop();
+        Optional.ofNullable(minecraftServer).ifPresent(MinecraftServer::disable);
+        Optional.ofNullable(DatabaseContainer.mariaDBContainer).ifPresent(MariaDBContainer::stop);
     }
 
     @Test

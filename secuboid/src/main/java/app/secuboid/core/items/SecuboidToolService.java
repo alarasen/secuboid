@@ -43,7 +43,6 @@ public class SecuboidToolService implements Service {
     private static final PersistentDataType<Byte, Byte> SECUBOID_TOOL_PERSISTENT_DATA_TYPE = PersistentDataType.BYTE;
     private static final String SECUBOID_TOOL_PERSISTENT_DATA_KEY_NAME = "secuboid-tool";
     private static final byte SECUBOID_TOOL_PERSISTENT_DATA_VALUE = 1;
-    private static final Enchantment SECUBOID_TOOL_ENCHANTMENT = Enchantment.DURABILITY;
     private static final int SECUBOID_TOOL_ENCHANTMENT_VALUE = 1;
 
     private final Plugin plugin;
@@ -109,7 +108,7 @@ public class SecuboidToolService implements Service {
 
         itemStack.setItemMeta(itemMeta);
 
-        itemStack.addEnchantment(SECUBOID_TOOL_ENCHANTMENT, SECUBOID_TOOL_ENCHANTMENT_VALUE);
+        itemStack.addEnchantment(Enchantment.DURABILITY, SECUBOID_TOOL_ENCHANTMENT_VALUE);
 
         return itemStack;
     }
